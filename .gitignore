@@ -1,0 +1,5 @@
+node_modules/*
+graphql.schema.json
+src/generated/graphql.tsx
+.env
+.envrc

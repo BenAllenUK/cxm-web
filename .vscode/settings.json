@@ -1,0 +1,11 @@
+{
+"editor.codeActionsOnSave": {
+    "source.fixAll.tslint": true
+  },
+  "files.autoSave": "onFocusChange",
+  "editor.formatOnSave": true,
+  "editor.detectIndentation": false,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "editor.tabSize": 2,
+}
