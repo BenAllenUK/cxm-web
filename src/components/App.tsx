@@ -2,9 +2,10 @@ import * as React from 'react'
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import { WebSocketLink } from '@apollo/client/link/ws'
+import styled from 'styled-components'
 
-import Header from './Header'
-import EditorActivity from './editor-activity/EditorActivity'
+import Sidebar from './core/sidebar/Sidebar'
+import Workflow from './workflow/Workflow'
 /* 
 import { useAuth0 } from './Auth/react-auth0-spa'
 
@@ -14,6 +15,10 @@ const { loading, logout } = useAuth0()
   }
 
 */
+
+const Container = styled.div`
+  display: flex;
+`
 
 const createApolloClient = (authToken: string) => {
   return new ApolloClient({
@@ -37,10 +42,10 @@ const App = ({ idToken }: { idToken: string }) => {
 
   return (
     <ApolloProvider client={client}>
-      <div>
-        <Header logoutHandler={() => {}} />
-        <EditorActivity />
-      </div>
+      <Container>
+        <Sidebar />
+        <Workflow />
+      </Container>
     </ApolloProvider>
   )
 }

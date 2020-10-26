@@ -5,11 +5,11 @@ import { useMutation, useSubscription } from '@apollo/react-hooks'
 import {
   GetEditorActivitySubscription,
   UpdateEditorActivityMutation,
-} from '../../generated/graphql'
+} from '../../../../generated/graphql'
 import ReactTooltip from 'react-tooltip'
 
 const UPDATE_EDITOR_ACTIVITY = gql`
-  mutation updateEditorActivity($segmentId: Int, $userId: Int, $now: timestamptz!) {
+  mutation updateEditorActivity($segmentId: Int!, $userId: Int!, $now: timestamptz!) {
     update_editor_activities(
       where: { segment_id: { _eq: $segmentId }, user_id: { _eq: $userId } }
       _set: { created_at: $now }
@@ -44,6 +44,7 @@ type EditorItem = {
 const EditorContainer = styled.div`
   display: flex;
   justify-content: flex-end;
+  padding: 5px;
 `
 
 const EditorImage = styled.img`
@@ -80,8 +81,8 @@ const EditorActivity = () => {
     return () => clearInterval(onlineIndicator)
   })
 
-  if (loading) {
-    return <div>Loading...</div>
+  if (loading || !data) {
+    return null
   }
   if (error || !data) {
     console.log(error)
@@ -89,15 +90,11 @@ const EditorActivity = () => {
   }
 
   const onlineUsersList = data.editor_activities.map((editor: EditorItem, index: number) => (
-    <div key={index}>
-      {false ? (
+    <div key={index} data-tip={editor.user.name} data-for="editor-activity-info">
+      {true ? (
         <EditorImage src={editor.user.image} />
       ) : (
-        <EditorImageDisabled
-          data-tip={editor.user.name}
-          data-for="editor-activity-info"
-          src={editor.user.image}
-        />
+        <EditorImageDisabled src={editor.user.image} />
       )}
     </div>
   ))
