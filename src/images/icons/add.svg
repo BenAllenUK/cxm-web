@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 58 (84663) - https://sketch.com -->
-    <title>icon/add</title>
-    <desc>Created with Sketch.</desc>
     <g id="icon/add" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M22,10 L14,10 L14,10 L14,2 C14,0.8954305 13.1045695,-2.02906125e-16 12,0 C10.8954305,2.02906125e-16 10,0.8954305 10,2 L10,10 L10,10 L2,10 C0.8954305,10 -1.3527075e-16,10.8954305 0,12 C1.3527075e-16,13.1045695 0.8954305,14 2,14 L10,14 L10,14 L10,22 C10,23.1045695 10.8954305,24 12,24 C13.1045695,24 14,23.1045695 14,22 L14,14 L14,14 L22,14 C23.1045695,14 24,13.1045695 24,12 C24,10.8954305 23.1045695,10 22,10 Z" id="Path" fill="#7C7C7C" fill-rule="nonzero"></path>
     </g>

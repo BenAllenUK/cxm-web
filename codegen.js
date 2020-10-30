@@ -3,7 +3,7 @@ module.exports = {
     {
       'https://cxm.hasura.app/v1/graphql': {
         headers: {
-          Authorization: 'Bearer ' + process.env.AUTH_TOKEN,
+          'X-Hasura-admin-secret': process.env.ADMIN_SECRET,
         },
       },
     },

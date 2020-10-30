@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { ReactComponent as MoreIcon } from '../../../../images/icons/more.svg'
 import { ReactComponent as ShareIcon } from '../../../../images/icons/share.svg'
 import { ReactComponent as HistoryIcon } from '../../../../images/icons/history.svg'

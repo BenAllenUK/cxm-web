@@ -23,7 +23,8 @@
       "dom",
       "dom.iterable",
       "esnext"
-    ]
+    ],
+    "baseUrl": "src"
   },
   "include": [
     "src"

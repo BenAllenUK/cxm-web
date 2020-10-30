@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 58 (84663) - https://sketch.com -->
-    <title>icon/menu</title>
-    <desc>Created with Sketch.</desc>
     <g id="icon/menu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M2,11 L0,11 L0,9 L2,9 L2,11 Z M2,5 L0,5 L0,7 L2,7 L2,5 Z M2,1 L0,1 L0,3 L2,3 L2,1 Z M3.5,1 L3.5,3 L12,3 L12,1 L3.5,1 Z M3.5,7 L12,7 L12,5 L3.5,5 L3.5,7 Z M3.5,11 L12,11 L12,9 L3.5,9 L3.5,11 Z" id="Shape" fill="#7C7C7C" fill-rule="nonzero"></path>
     </g>

@@ -13,6 +13,7 @@
     "apollo-client": "^2.6.10",
     "apollo-link-http": "^1.5.17",
     "apollo-link-ws": "^1.0.20",
+    "date-fns": "^2.16.1",
     "graphql": "^15.3.0",
     "graphql-tag": "^2.11.0",
     "moment": "2.24.0",

@@ -3,31 +3,33 @@ import * as React from 'react'
 import { Route, Router } from 'react-router-dom'
 
 import './styles/App.css'
-import App from './components/App'
-
 import history from './utils/history'
 
-/* 
-0AUTH:
-import { Auth0Provider } from './components/Auth/react-auth0-spa'
-import { AUTH_CONFIG } from './config/auth0-variables'
+import { Auth0Provider } from './components/auth/Auth0'
+const AUTH_CONFIG = {
+  domain: 'dev-6j8frbt8.eu.auth0.com',
+  clientId: 'jgsSJzhw4CJk9XHUm7toh2j21f8eZ0L0',
+  callbackUrl: 'http://localhost:3000',
+}
 
 const onRedirectCallback = (appState: any) => {
   history.push(appState && appState.targetUrl ? appState.targetUrl : window.location.pathname)
 }
 
-// <Auth0Provider
-        //   domain={AUTH_CONFIG.domain}
-        //   client_id={AUTH_CONFIG.clientId}
-        //   redirect_uri={AUTH_CONFIG.callbackUrl}
-        //   onRedirectCallback={onRedirectCallback}
-        // />
-
-        */
-
 const mainRoutes = (
   <Router history={history}>
-    <Route path="/" render={(props) => <App idToken={'1234'} />} />
+    <Route
+      path="/"
+      render={(props) => (
+        <Auth0Provider
+          domain={AUTH_CONFIG.domain}
+          client_id={AUTH_CONFIG.clientId}
+          redirect_uri={AUTH_CONFIG.callbackUrl}
+          onRedirectCallback={onRedirectCallback}
+          audience="cxm"
+        />
+      )}
+    />
   </Router>
 )
 

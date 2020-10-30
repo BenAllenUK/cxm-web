@@ -1,5 +1,5 @@
 import * as React from 'react'
-import EditorActivity from './editor-activity/EditorActivity'
+import UserActivity from './user-activity/UserActivity'
 import styled from 'styled-components'
 import Controls from './controls/Controls'
 
@@ -12,12 +12,14 @@ const Nav = styled.nav`
   display: flex;
 `
 
-const Header = () => (
-  <Nav>
-    <div style={{ flex: 1 }}></div>
-    <EditorActivity />
-    <Controls />
-  </Nav>
-)
+const Header = () => {
+  return (
+    <Nav>
+      <div style={{ flex: 1 }}></div>
+      <UserActivity />
+      <Controls />
+    </Nav>
+  )
+}
 
 export default Header

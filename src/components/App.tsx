@@ -4,17 +4,9 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import styled from 'styled-components'
 
-import Sidebar from './core/sidebar/Sidebar'
 import Workflow from './workflow/Workflow'
-/* 
-import { useAuth0 } from './Auth/react-auth0-spa'
 
-const { loading, logout } = useAuth0()
-  if (loading) {
-    return <div>Loading...</div>
-  }
-
-*/
+import { useAuth0 } from './auth/Auth0'
 
 const Container = styled.div`
   display: flex;
@@ -37,15 +29,44 @@ const createApolloClient = (authToken: string) => {
   })
 }
 
-const App = ({ idToken }: { idToken: string }) => {
+interface IUserData {
+  id: number | null
+  organisationId: number | null
+  projectId: number | null
+}
+
+export const UserContext = React.createContext<IUserData>({
+  id: null,
+  organisationId: null,
+  projectId: null,
+})
+
+const App = ({
+  idToken,
+  userId,
+  organisationId,
+}: {
+  idToken: string
+  userId: number
+  organisationId: number
+}) => {
+  const { loading, logout } = useAuth0()
+  console.log({ idToken })
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
   const client = createApolloClient(idToken)
+
+  const userContext = { id: userId, organisationId, projectId: null }
 
   return (
     <ApolloProvider client={client}>
-      <Container>
-        <Sidebar />
-        <Workflow />
-      </Container>
+      <UserContext.Provider value={userContext}>
+        <Container>
+          <Workflow />
+        </Container>
+      </UserContext.Provider>
     </ApolloProvider>
   )
 }
