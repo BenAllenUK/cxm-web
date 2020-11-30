@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
-import { ReactComponent as MenuIcon } from '../../../images/icons/menu.svg'
-import { ReactComponent as SearchIcon } from '../../../images/icons/search.svg'
-import { GetCampaignsQuery } from '../../../generated/graphql'
+import { ReactComponent as MenuIcon } from 'images/icons/menu.svg'
+import { ReactComponent as SearchIcon } from 'images/icons/search.svg'
+import { GetCampaignsQuery } from 'generated/graphql'
 import {
   Menu,
   ProjectItem,

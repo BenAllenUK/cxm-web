@@ -10,6 +10,8 @@ const Colors = {
 
   line: '#ECECEC',
 
+  controls: '#C0C0BE',
+
   background: '#FFF',
 }
 

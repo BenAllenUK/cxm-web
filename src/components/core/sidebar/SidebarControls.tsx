@@ -1,9 +1,9 @@
-import React, { SyntheticEvent } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { ReactComponent as ArrowIcon } from '../../../images/icons/arrow-filled-right.svg'
-import { ReactComponent as PlusIcon } from '../../../images/icons/plus.svg'
-import { ReactComponent as MoreIcon } from '../../../images/icons/more.svg'
-import Colors, { hexToRGB } from '../../../config/colors'
+import { ReactComponent as ArrowIcon } from 'images/icons/arrow-filled-right.svg'
+import { ReactComponent as PlusIcon } from 'images/icons/plus.svg'
+import { ReactComponent as MoreIcon } from 'images/icons/more.svg'
+import Colors, { hexToRGB } from 'config/colors'
 
 export const Menu = styled.div`
   width: 400px;

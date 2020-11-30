@@ -56,6 +56,7 @@ const Container = styled.div`
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid ${Colors.line};
   border-right: none;
+  z-index: 1;
 `
 
 export default TextControls

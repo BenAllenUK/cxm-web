@@ -51,11 +51,11 @@ class Content extends React.Component<IProps, IState> {
       case BlockType.H1:
       case BlockType.H2:
       case BlockType.H3:
-        const itemtext: BlockDataText = item as BlockDataText
+        const itemText: BlockDataText = item as BlockDataText
         return (
           <BlockText
             key={`${i}`}
-            content={itemtext}
+            content={itemText}
             onUpdate={(arg0) => this.onUpdateBlock(i, arg0)}
             onDelete={() => this.onDeleteBlock(i)}
             onBlockDoubleClick={(pos) => this.onBlockDoubleClick(i, pos)}
