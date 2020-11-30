@@ -6,6 +6,9 @@ import './styles/App.css'
 import history from './utils/history'
 
 import { Auth0Provider } from './components/auth/Auth0'
+import Editor from 'components/editor'
+import Store from 'store'
+
 const AUTH_CONFIG = {
   domain: 'dev-6j8frbt8.eu.auth0.com',
   clientId: 'jgsSJzhw4CJk9XHUm7toh2j21f8eZ0L0',
@@ -33,4 +36,9 @@ const mainRoutes = (
   </Router>
 )
 
-ReactDOM.render(mainRoutes, document.getElementById('root'))
+ReactDOM.render(
+  <Store>
+    <Editor />
+  </Store>,
+  document.getElementById('root')
+)

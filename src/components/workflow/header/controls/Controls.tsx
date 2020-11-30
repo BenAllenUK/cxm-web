@@ -4,7 +4,7 @@ import { ReactComponent as ShareIcon } from '../../../../images/icons/share.svg'
 import { ReactComponent as HistoryIcon } from '../../../../images/icons/history.svg'
 import styled from 'styled-components'
 import ReactTooltip from 'react-tooltip'
-import Colors from '../../../../config/Colors'
+import Colors from '../../../../config/colors'
 
 const ButtonContainer = styled.a`
   border-radius: 5px;

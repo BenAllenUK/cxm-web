@@ -2,10 +2,13 @@ const Colors = {
   primary: '#EAEDF7',
   primaryHighlight: '#fbfbfb',
 
+  primaryText: '#37352F',
+
   text1: '#3B3B3B',
 
   text2: '#7C7C7C',
-  text2rgba: 'rgba(124, 124, 124, 1)',
+
+  line: '#ECECEC',
 
   background: '#FFF',
 }

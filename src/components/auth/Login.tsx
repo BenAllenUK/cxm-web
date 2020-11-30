@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useAuth0 } from './Auth0'
 import styled from 'styled-components'
-import Colors from '../../config/Colors'
+import Colors from '../../config/colors'
 
 const Background = styled.div`
   display: flex;

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { ReactComponent as ArrowIcon } from '../../../images/icons/arrow-filled-right.svg'
 import { ReactComponent as PlusIcon } from '../../../images/icons/plus.svg'
 import { ReactComponent as MoreIcon } from '../../../images/icons/more.svg'
-import Colors, { hexToRGB } from '../../../config/Colors'
+import Colors, { hexToRGB } from '../../../config/colors'
 
 export const Menu = styled.div`
   width: 400px;
@@ -130,6 +130,7 @@ export const CampaignItemContainer = styled.div`
   font-weight: 500;
   color: ${Colors.text2};
   user-select: none;
+  pointer: cursor;
 
   :hover {
     background-color: #fbfcff;

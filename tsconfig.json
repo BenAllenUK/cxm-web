@@ -19,17 +19,10 @@
     "noUnusedParameters": false,
     "noImplicitAny": true,
     "downlevelIteration": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "baseUrl": "src"
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "baseUrl": "src",
+    "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "./node_modules/**/*"
-  ]
+  "include": ["src"],
+  "exclude": ["./node_modules/**/*"]
 }
