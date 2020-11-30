@@ -5,7 +5,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family: 'SF UI Display';
   font-size: 14px;
-  background: url('/images/grid.png');
+  background: url('grid.png');
 }
 
 * {
@@ -15,7 +15,7 @@ body {
 
 @font-face {
   font-family: 'Means';
-  src: url('/means.woff2') format('woff2');
+  src: url('means.woff2') format('woff2');
 }
 
 button {

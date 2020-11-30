@@ -130,6 +130,7 @@ export const CampaignItemContainer = styled.div`
   font-weight: 500;
   color: ${Colors.text2};
   user-select: none;
+  cursor: pointer;
 
   :hover {
     background-color: #fbfcff;

@@ -33,7 +33,6 @@ const Workflow = () => {
   const [workflow, setWorkflow] = useState<IWorkflowData>({ segmentId: null, campaignId: null })
 
   const setSegment = (segmentId: number) => {
-    console.log(segmentId)
     setWorkflow({ ...workflow, segmentId })
   }
 

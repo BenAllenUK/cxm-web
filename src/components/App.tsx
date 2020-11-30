@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import Workflow from './workflow/Workflow'
 
 import { useAuth0 } from './auth/Auth0'
+import Editor from './editor'
 
 const Container = styled.div`
   display: flex;
@@ -64,7 +65,8 @@ const App = ({
     <ApolloProvider client={client}>
       <UserContext.Provider value={userContext}>
         <Container>
-          <Workflow />
+          {/* <Workflow /> */}
+          <Editor />
         </Container>
       </UserContext.Provider>
     </ApolloProvider>

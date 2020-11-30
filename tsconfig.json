@@ -24,7 +24,8 @@
       "dom.iterable",
       "esnext"
     ],
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src"

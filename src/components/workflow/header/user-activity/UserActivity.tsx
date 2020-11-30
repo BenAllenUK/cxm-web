@@ -83,7 +83,7 @@ const UserActivity = () => {
       updateUserActivity({
         variables: { segmentId, userId, now: new Date() },
       })
-    }, 2000)
+    }, 10000)
     return () => clearInterval(onlineIndicator)
   })
 
