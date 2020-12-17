@@ -2,7 +2,7 @@ const Colors = {
   primary: '#EAEDF7',
   primaryHighlight: '#fbfbfb',
 
-  primaryText: '#37352F',
+  primaryText: 'rgb(55, 53, 47)',
 
   text1: '#3B3B3B',
 

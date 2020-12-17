@@ -1,25 +1,45 @@
 import { Point } from 'types'
 
 export const types = {
-  TEXT_STYLE_MODAL_OPEN: '@/editor/TEXT_STYLE_MODAL_OPEN',
-  TEXT_STYLE_MODAL_CLOSE: '@/editor/TEXT_STYLE_MODAL_CLOSE',
+  TEXT_CONTROL_MODAL_OPEN: '@/editor/TEXT_CONTROL_MODAL_OPEN',
+  TEXT_CONTROL_MODAL_CLOSE: '@/editor/TEXT_CONTROL_MODAL_CLOSE',
+
+  BLOCK_CONTROL_MODAL_OPEN: '@/editor/BLOCK_CONTROL_MODAL_OPEN',
+  BLOCK_CONTROL_MODAL_CLOSE: '@/editor/BLOCK_CONTROL_MODAL_CLOSE',
 }
 
-function textStyleModalOpen(position: Point) {
+function textControlOpen(position: Point) {
   return {
-    type: types.TEXT_STYLE_MODAL_OPEN,
+    type: types.TEXT_CONTROL_MODAL_OPEN,
     payload: position,
   }
 }
 
-function textStyleModalClose() {
+function textControlClose() {
   return {
-    type: types.TEXT_STYLE_MODAL_CLOSE,
+    type: types.TEXT_CONTROL_MODAL_CLOSE,
+    payload: {},
+  }
+}
+
+function blockControlOpen(position: Point) {
+  return {
+    type: types.BLOCK_CONTROL_MODAL_OPEN,
+    payload: position,
+  }
+}
+
+function blockControlClose() {
+  return {
+    type: types.BLOCK_CONTROL_MODAL_CLOSE,
     payload: {},
   }
 }
 
 export default {
-  textStyleModalOpen,
-  textStyleModalClose,
+  textControlOpen,
+  textControlClose,
+
+  blockControlOpen,
+  blockControlClose,
 }

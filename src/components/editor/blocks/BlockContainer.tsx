@@ -5,49 +5,79 @@ import { ReactComponent as DragIcon } from 'images/icons/drag.svg'
 import { ReactComponent as AddIcon } from 'images/icons/add.svg'
 import IconButton from 'components/core/ui/IconButton'
 import Colors from 'config/colors'
+import { SortableHandle } from 'react-sortable-hoc'
+
+const AddButton = (props: React.HTMLAttributes<HTMLDivElement>) => (
+  <IconButton style={{ cursor: 'pointer', height: 16 }} {...props}>
+    <AddIcon style={{ fill: Colors.controls, width: 16, height: 16 }} />
+  </IconButton>
+)
+
+const DragButton = SortableHandle(() => (
+  <IconButton style={{ cursor: 'grab', height: 16 }}>
+    <DragIcon style={{ fill: Colors.controls, width: 14, height: 14 }} />
+  </IconButton>
+))
 
 class BlockContainer extends React.Component<IProps> {
-  onBlockDoubleClick = (event: React.MouseEvent) => {
-    const { onBlockDoubleClick } = this.props
-    if (!onBlockDoubleClick) return
+  onDoubleClick = (event: React.MouseEvent) => {
+    const { onDoubleClick } = this.props
+    onDoubleClick({ x: event.clientX, y: event.clientY })
+  }
 
-    onBlockDoubleClick({ x: event.clientX, y: event.clientY })
+  onClick = () => {
+    const { onClick } = this.props
+
+    onClick()
   }
 
   render() {
-    const { children } = this.props
+    const { children, onAddClick, initialHeight } = this.props
     return (
-      <Container onDoubleClick={this.onBlockDoubleClick}>
-        <Controls>
-          <IconButton style={{ cursor: 'pointer' }}>
-            <AddIcon style={{ fill: Colors.controls, width: 16, height: 16 }} />
-          </IconButton>
-          <IconButton style={{ cursor: 'grab' }}>
-            <DragIcon style={{ fill: Colors.controls, width: 14, height: 14 }} />
-          </IconButton>
-        </Controls>
-        {children}
+      <Container>
+        <Block onClick={this.onClick} onDoubleClick={this.onDoubleClick}>
+          <Controls className="block-container-controls" style={{ height: initialHeight }}>
+            <AddButton onClick={onAddClick} />
+            <DragButton />
+          </Controls>
+          {children}
+        </Block>
       </Container>
     )
   }
 }
 
 interface IProps {
-  onBlockDoubleClick?: (pos: Point) => void
+  initialHeight: number
+  onClick: () => void
+  onDoubleClick: (pos: Point) => void
+  sortMode?: boolean
+  onAddClick: () => void
 }
 
 const Container = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
+
+  :hover .block-container-controls {
+    visibility: visible;
+  }
+`
+
+const Block = styled.div`
+  max-width: 900px;
+  margin: 0 auto;
   position: relative;
 `
 
 const Controls = styled.div`
   position: absolute;
   left: -45px;
-  top: 5px;
+  top: 0px;
   display: flex;
   flex-direction: row;
+  visibility: hidden;
+  align-items: center;
 `
 
 export default BlockContainer

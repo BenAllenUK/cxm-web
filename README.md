@@ -42,3 +42,21 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+# Architecture
+
+
+This project is split into sub modules.
+
+- Core
+  - Components: `src/components/ui`
+- Auth
+  - Components: `src/components/auth`
+- Editor (WYSIWYG editor)
+  - Components: `src/components/editor`
+  - Types: `src/types/editor`
+  - Actions: `src/actions/editor`
+  - Reducer: `src/actions/reducer`
+- Workflow
+- 

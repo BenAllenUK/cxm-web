@@ -1,30 +1,20 @@
 import Colors from 'config/colors'
 import React from 'react'
 import styled from 'styled-components'
-import StyleButton, { StyleTypes } from './controls/StyleButton'
-import LinkButton from './controls/LinkButton'
+import StyleButton, { StyleTypes } from './StyleButton'
+import LinkButton from './LinkButton'
 import { Point } from 'types'
 
-const MODAL_OFFSET = 20
-
 class TextControls extends React.Component<IProps> {
-  ref: any = React.createRef<HTMLElement>()
-
-  calculatePosition(position: Point) {
-    if (!this.ref.current) return
-    const width = this.ref.current.offsetWidth
-    const height = this.ref.current.offsetHeight
-    return {
-      left: position.x - width / 2,
-      top: position.y - height - MODAL_OFFSET,
-    }
-  }
-
   render() {
     const { position } = this.props
-    const containerPositionStyle = this.calculatePosition(position)
     return (
-      <Container ref={this.ref} style={containerPositionStyle}>
+      <Container
+        style={{
+          left: position.x,
+          top: position.y,
+        }}
+      >
         <StyleButton type={StyleTypes.BOLD} />
         <StyleButton type={StyleTypes.ITALIC} />
         <StyleButton type={StyleTypes.UNDERLINE} />
@@ -57,6 +47,7 @@ const Container = styled.div`
   border: 1px solid ${Colors.line};
   border-right: none;
   z-index: 1;
+  transform: translate(-50%, -150%);
 `
 
 export default TextControls

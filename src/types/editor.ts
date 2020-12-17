@@ -1,10 +1,14 @@
 import { Point } from 'types'
 
 export interface IBlockProps {
+  sortMode?: boolean
   disabled?: boolean
-  onUpdate?: (arg0: BlockData) => void
-  onDelete?: () => void
-  onBlockDoubleClick?: (arg0: Point) => void
+  onNew: () => void
+  onAddClick: () => void
+  onUpdate: (arg0: BlockData) => void
+  onDelete: () => void
+  onClick: () => void
+  onDoubleClick: (arg0: Point) => void
 }
 
 export enum BlockType {

@@ -1,13 +1,18 @@
 import React from 'react'
 import { BlockDataText, BlockType, IBlockProps } from 'types/editor'
-import TextInput from 'components/core/ui/TextInput'
+import TextInput, { TextInputEvent } from 'components/core/ui/TextInput'
 import BlockContainer from './BlockContainer'
 
 class BlockText extends React.Component<IProps> {
-  onValueChange = (event: any) => {
-    const { onUpdate, content } = this.props
+  onValueChange = (event: TextInputEvent) => {
+    const { onUpdate, onNew, content } = this.props
 
-    if (!onUpdate) return
+    const inputEvent = event.nativeEvent as InputEvent
+    if (inputEvent.inputType === 'insertParagraph') {
+      console.log(inputEvent.inputType)
+      onNew()
+      return
+    }
 
     const block = {
       ...content,
@@ -19,8 +24,6 @@ class BlockText extends React.Component<IProps> {
 
   onDelete = () => {
     const { onDelete } = this.props
-    if (!onDelete) return
-
     onDelete()
   }
 
@@ -37,11 +40,31 @@ class BlockText extends React.Component<IProps> {
     }
   }
 
+  initialHeight = (type: BlockType) => {
+    switch (type) {
+      case BlockType.H1:
+        return 38
+      case BlockType.H2:
+        return 29
+      case BlockType.H3:
+        return 23
+      default:
+        return 19
+    }
+  }
+
   render() {
-    const { content, onBlockDoubleClick } = this.props
+    const { content, onClick, onDoubleClick, onAddClick, sortMode } = this.props
     const html = this.renderHtml(content)
+    const initialHeight = this.initialHeight(content.type)
     return (
-      <BlockContainer onBlockDoubleClick={onBlockDoubleClick}>
+      <BlockContainer
+        initialHeight={initialHeight}
+        onClick={onClick}
+        onAddClick={onAddClick}
+        onDoubleClick={onDoubleClick}
+        sortMode={sortMode}
+      >
         <TextInput html={html} onChange={this.onValueChange} />
       </BlockContainer>
     )

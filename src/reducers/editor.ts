@@ -3,30 +3,51 @@ import { types } from 'actions/editor'
 import { Point } from 'types'
 
 export interface IEditorState {
-  textStyleModalOpen: boolean
-  textStyleModalSourcePosition: Point
+  textControlOpen: boolean
+  textControlPosition: Point
+
+  blockControlOpen: boolean
+  blockControlPosition: Point
 }
 
 const initialState = {
-  textStyleModalOpen: false,
-  textStyleModalSourcePosition: { x: 0, y: 0 },
+  textControlOpen: false,
+  textControlPosition: { x: 0, y: 0 },
+
+  blockControlOpen: false,
+  blockControlPosition: { x: 0, y: 0 },
 }
 
 export default function editor(state: IEditorState = initialState, action: IAction) {
   switch (action.type) {
-    case types.TEXT_STYLE_MODAL_OPEN: {
+    case types.TEXT_CONTROL_MODAL_OPEN: {
       const position = action.payload
       return {
         ...state,
-        textStyleModalOpen: true,
-        textStyleModalSourcePosition: position,
+        textControlOpen: true,
+        textControlPosition: position,
       }
     }
-    case types.TEXT_STYLE_MODAL_CLOSE: {
+    case types.TEXT_CONTROL_MODAL_CLOSE: {
       return {
         ...state,
-        textStyleModalOpen: false,
-        textStyleModalSourcePosition: { x: 0, y: 0 },
+        textControlOpen: false,
+        textControlPosition: { x: 0, y: 0 },
+      }
+    }
+    case types.BLOCK_CONTROL_MODAL_OPEN: {
+      const position = action.payload
+      return {
+        ...state,
+        blockControlOpen: true,
+        blockControlPosition: position,
+      }
+    }
+    case types.BLOCK_CONTROL_MODAL_CLOSE: {
+      return {
+        ...state,
+        blockControlOpen: false,
+        blockControlPosition: { x: 0, y: 0 },
       }
     }
     default:

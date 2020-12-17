@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import Sidebar from 'components/core/sidebar/Sidebar'
 import Content from './Content'
 import { BlockType } from 'types/editor'
 
@@ -9,7 +8,7 @@ const Container = styled.div`
   width: 100%;
   display: flex;
 `
-
+// TAKE IN AN INPUT
 const blocks = [
   { type: BlockType.H1, value: 'Header 1' },
   { type: BlockType.H2, value: 'Header 2' },
@@ -22,9 +21,9 @@ const blocks = [
 ]
 
 const Editor = () => {
+  // TODO: Receive updated version
   return (
     <>
-      {/* <Sidebar /> */}
       <Container>
         <Content blocks={blocks} />
       </Container>

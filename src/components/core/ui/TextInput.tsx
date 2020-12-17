@@ -103,7 +103,7 @@ export default class TextInput extends React.Component<Props> {
 
 const DivText = styled.div`
   color: ${Colors.primaryText};
-  font-size: 14px;
+  font-size: 16px;
   font-family: 'SF Pro Display';
   overflow: auto;
   background: none;

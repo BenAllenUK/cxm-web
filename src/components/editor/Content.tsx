@@ -1,32 +1,67 @@
-import Colors from 'config/colors'
-import React from 'react'
-import styled from 'styled-components'
-import BlockText from './blocks/BlockText'
-import TextControls from './TextControls'
-import { BlockData, BlockType, BlockDataText } from 'types/editor'
+import React, { RefObject } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
+import { SortableContainer, SortableElement, SortEvent, SortStart } from 'react-sortable-hoc'
+import arrayMove from 'array-move'
+import styled from 'styled-components'
+
+import Colors from 'config/colors'
+import BlockText from './blocks/BlockText'
+import TextControls from './text-controls'
+import { BlockData, BlockType, BlockDataText } from 'types/editor'
+
 import { IAppState } from 'reducers'
 import editor from 'actions/editor'
 import { Point } from 'types'
+import BlockControls from './block-controls'
 
 class Content extends React.Component<IProps, IState> {
   state = {
     blocks: this.props.blocks,
+    sortingIndex: null,
+  }
+
+  blockRefs: RefObject<HTMLDivElement>[] = []
+  bodyRef?: RefObject<HTMLDivElement>
+
+  constructor(props: IProps) {
+    super(props)
   }
 
   // TODO: Add timer to commit blocks to store
 
-  onAddBlockPress = () => {}
+  onAddClick = (index: number) => {
+    const { actions } = this.props
+
+    //@ts-ignore
+    const { top: blockTop } = this.blockRefs[index].getBoundingClientRect()
+    //@ts-ignore
+    const { top: bodyTop } = this.bodyRef.getBoundingClientRect()
+    const diffTop = blockTop - bodyTop
+    actions.editor.blockControlOpen({ x: 300, y: diffTop })
+  }
+
+  onBlockClick = (index: number) => {
+    const { actions } = this.props
+    const { textControlOpen } = this.props
+    if (textControlOpen) {
+      actions.editor.textControlClose()
+    }
+  }
 
   onBlockDoubleClick = (index: number, pos: Point) => {
     const { actions } = this.props
-    actions.editor.textStyleModalOpen(pos)
+    actions.editor.textControlOpen(pos)
   }
 
-  onDeleteBlock = (index: number) => {
+  onCreateBlock = (index: number) => {
     this.setState((state) => {
-      const blocks = [...state.blocks.filter((_, i) => i !== index)]
+      const blocks = [...state.blocks]
+      blocks.splice(index + 1, 0, {
+        type: BlockType.TEXT,
+        value: '',
+      })
+
       return {
         ...state,
         blocks,
@@ -45,7 +80,46 @@ class Content extends React.Component<IProps, IState> {
     })
   }
 
+  onDeleteBlock = (index: number) => {
+    this.setState((state) => {
+      const blocks = [...state.blocks.filter((_, i) => i !== index)]
+      return {
+        ...state,
+        blocks,
+      }
+    })
+  }
+
+  onSortStart = (sort: SortStart, event: SortEvent) => {
+    this.setState((state) => ({ ...state, sortingIndex: sort.index }))
+  }
+
+  onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
+    this.setState(({ blocks }) => ({
+      blocks: arrayMove(blocks, oldIndex, newIndex),
+      sortingIndex: null,
+    }))
+  }
+
   renderBlock = (item: BlockData, i: number) => {
+    return (
+      <Item index={i} key={`${i}`}>
+        <div
+          ref={(ref) => {
+            if (!ref) return
+            //@ts-ignore
+            this.blockRefs[i] = ref
+          }}
+        >
+          {this.renderBlockItem(item, i)}
+        </div>
+      </Item>
+    )
+  }
+
+  renderBlockItem = (item: BlockData, i: number) => {
+    const { sortingIndex } = this.state
+    const sortMode = i === sortingIndex
     switch (item.type) {
       case BlockType.TEXT:
       case BlockType.H1:
@@ -54,23 +128,44 @@ class Content extends React.Component<IProps, IState> {
         const itemText: BlockDataText = item as BlockDataText
         return (
           <BlockText
-            key={`${i}`}
+            sortMode={sortMode}
             content={itemText}
+            onAddClick={() => this.onAddClick(i)}
+            onNew={() => this.onCreateBlock(i)}
             onUpdate={(arg0) => this.onUpdateBlock(i, arg0)}
             onDelete={() => this.onDeleteBlock(i)}
-            onBlockDoubleClick={(pos) => this.onBlockDoubleClick(i, pos)}
+            onDoubleClick={(pos) => this.onBlockDoubleClick(i, pos)}
+            onClick={() => this.onBlockClick(i)}
           />
         )
+      default:
+        return <div />
     }
   }
 
   render() {
     const { blocks } = this.state
-    const { textStyleSourcePosition, textStyleOpen } = this.props
+    const {
+      textControlPosition,
+      textControlOpen,
+      blockControlOpen,
+      blockControlPosition,
+    } = this.props
+
     return (
-      <Body>
-        {textStyleOpen && <TextControls position={textStyleSourcePosition} />}
-        <Form>{blocks.map((item, i) => this.renderBlock(item, i))}</Form>
+      <Body
+        ref={(ref) => {
+          if (!ref) return
+          // @ts-ignore
+          this.bodyRef = ref
+        }}
+      >
+        {textControlOpen && <TextControls position={textControlPosition} />}
+        {blockControlOpen && <BlockControls position={blockControlPosition} />}
+
+        <List onSortStart={this.onSortStart} onSortEnd={this.onSortEnd} useDragHandle={true}>
+          {blocks.map((item, i) => this.renderBlock(item, i))}
+        </List>
       </Body>
     )
   }
@@ -82,11 +177,15 @@ const Body = styled.div`
   height: 100vh;
 `
 
-const Form = styled.div`
+const StyledList = styled.div`
   margin: 0 auto;
-  max-width: 600px;
   margin-top: 100px;
 `
+
+const ItemContainer = styled.div``
+
+const List = SortableContainer(StyledList)
+const Item = SortableElement(ItemContainer)
 
 interface IProps extends ReduxProps<typeof mapStateToProps, typeof mapDispatchToProps> {
   blocks: BlockData[]
@@ -94,12 +193,15 @@ interface IProps extends ReduxProps<typeof mapStateToProps, typeof mapDispatchTo
 
 interface IState {
   blocks: BlockData[]
+  sortingIndex: number | null
 }
 
 function mapStateToProps(state: IAppState) {
   return {
-    textStyleOpen: state.editor.textStyleModalOpen,
-    textStyleSourcePosition: state.editor.textStyleModalSourcePosition,
+    textControlOpen: state.editor.textControlOpen,
+    textControlPosition: state.editor.textControlPosition,
+    blockControlOpen: state.editor.blockControlOpen,
+    blockControlPosition: state.editor.blockControlPosition,
   }
 }
 
