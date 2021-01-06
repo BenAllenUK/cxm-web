@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { RefObject } from 'react'
 import styled from 'styled-components'
 import { Point } from 'types'
 import { ReactComponent as DragIcon } from 'images/icons/drag.svg'
@@ -6,6 +6,7 @@ import { ReactComponent as AddIcon } from 'images/icons/add.svg'
 import IconButton from 'components/core/ui/IconButton'
 import Colors from 'config/colors'
 import { SortableHandle } from 'react-sortable-hoc'
+import { BLOCK_CONTAINER_VERTICAL_PADDING } from '.'
 
 const AddButton = (props: React.HTMLAttributes<HTMLDivElement>) => (
   <IconButton style={{ cursor: 'pointer', height: 16 }} {...props}>
@@ -32,14 +33,20 @@ class BlockContainer extends React.Component<IProps> {
   }
 
   render() {
-    const { children, onAddClick, initialHeight } = this.props
+    const { children, onAddClick, initialHeight, enableHandle } = this.props
     return (
-      <Container>
-        <Block onClick={this.onClick} onDoubleClick={this.onDoubleClick}>
-          <Controls className="block-container-controls" style={{ height: initialHeight }}>
-            <AddButton onClick={onAddClick} />
-            <DragButton />
-          </Controls>
+      <Container onClick={this.onClick} onDoubleClick={this.onDoubleClick}>
+        <Block>
+          {enableHandle && (
+            <Controls className="block-container-controls" style={{ height: initialHeight }}>
+              <AddButton
+                data-tip={'Click to add a block below'}
+                data-for="editor"
+                onClick={onAddClick}
+              />
+              <DragButton />
+            </Controls>
+          )}
           {children}
         </Block>
       </Container>
@@ -51,13 +58,13 @@ interface IProps {
   initialHeight: number
   onClick: () => void
   onDoubleClick: (pos: Point) => void
-  sortMode?: boolean
+  enableHandle?: boolean
   onAddClick: () => void
 }
 
 const Container = styled.div`
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: ${BLOCK_CONTAINER_VERTICAL_PADDING}px;
+  margin-bottom: ${BLOCK_CONTAINER_VERTICAL_PADDING}px;
 
   :hover .block-container-controls {
     visibility: visible;

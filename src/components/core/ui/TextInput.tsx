@@ -28,30 +28,72 @@ function replaceCaret(el: HTMLElement) {
 /**
  * A simple component for an html element with editable contents.
  */
-export default class TextInput extends React.Component<Props> {
+export default class TextInput extends React.Component<Props, State> {
   lastHtml: string = this.props.html
-  el: any = React.createRef<HTMLElement>()
+  el?: HTMLDivElement
 
-  getEl = () => this.el.current
+  state = {
+    isFocused: false,
+  }
+
+  getEl = () => {
+    return this.el
+  }
+
+  onFocus = (e: React.FocusEvent) => {
+    this.setState({ isFocused: true })
+    return this.emitChange(e)
+  }
+
+  onBlur = (e: React.FocusEvent) => {
+    this.setState({ isFocused: false })
+    return this.emitChange(e)
+  }
+
+  onKeyUp = (e: React.KeyboardEvent) => {
+    return this.emitChange(e)
+  }
+
+  onKeyDown = (e: React.KeyboardEvent) => {
+    return this.emitChange(e)
+  }
 
   render() {
-    const { html, ...props } = this.props
+    const {
+      focusedPlaceholder,
+      blurredPlaceholder,
+      html,
+      innerRef: refCallback,
+      disabled,
+      ...props
+    } = this.props
+    const { isFocused } = this.state
+    const focusedPlaceholderText = focusedPlaceholder || ''
+    const blurredPlaceholderText = blurredPlaceholder || ''
+
     return (
       <DivText
         {...props}
-        ref={this.el}
+        placeholder={isFocused ? focusedPlaceholderText : blurredPlaceholderText}
+        ref={(ref) => {
+          if (!refCallback || !ref) return
+          this.el = ref
+          refCallback(ref)
+          return ref
+        }}
         onInput={this.emitChange}
-        onBlur={this.props.onBlur || this.emitChange}
-        onKeyUp={this.props.onKeyUp || this.emitChange}
-        onKeyDown={this.props.onKeyDown || this.emitChange}
-        contentEditable={!this.props.disabled}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
+        onKeyUp={this.onKeyUp}
+        onKeyDown={this.onKeyDown}
+        contentEditable={!disabled}
         dangerouslySetInnerHTML={{ __html: html }}
       />
     )
   }
 
-  shouldComponentUpdate(nextProps: Props): boolean {
-    const { props } = this
+  shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+    const { props, state } = this
     const el = this.getEl()
 
     // We need not rerender if the change of props simply reflects the user's edits.
@@ -64,6 +106,18 @@ export default class TextInput extends React.Component<Props> {
     if (normalizeHtml(nextProps.html) !== normalizeHtml(el.innerHTML)) {
       return true
     }
+
+    if (nextState.isFocused !== state.isFocused) {
+      return true
+    }
+
+    // if (nextProps.blurredPlaceholder !== props.blurredPlaceholder) {
+    //   return true
+    // }
+
+    // if (nextProps.focusedPlaceholder !== props.focusedPlaceholder) {
+    //   return true
+    // }
 
     // Handle additional properties
     return props.disabled !== nextProps.disabled || props.className !== nextProps.className
@@ -113,6 +167,13 @@ const DivText = styled.div`
   box-shadow: none;
   outline: none;
   resize: none;
+
+  &:empty:before {
+    content: attr(placeholder);
+  }
+  &[placeholder]:empty:before {
+    color: ${Colors.controls};
+  }
 `
 
 export type TextInputEvent = React.SyntheticEvent<any, Event> & { target: { value: string } }
@@ -120,8 +181,16 @@ type Modify<T, R> = Pick<T, Exclude<keyof T, keyof R>> & R
 type DivProps = Modify<JSX.IntrinsicElements['div'], { onChange: (event: TextInputEvent) => void }>
 
 export interface Props extends DivProps {
+  focusedPlaceholder?: string
+  blurredPlaceholder?: string
+  innerRef?: (ref: HTMLDivElement | null) => void
   html: string
   disabled?: boolean
   className?: string
   style?: Object
+  tabIndex?: number
+}
+
+export interface State {
+  isFocused: boolean
 }

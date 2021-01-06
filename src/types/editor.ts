@@ -1,33 +1,20 @@
-import { Point } from 'types'
-
-export interface IBlockProps {
-  sortMode?: boolean
-  disabled?: boolean
-  onNew: () => void
-  onAddClick: () => void
-  onUpdate: (arg0: BlockData) => void
-  onDelete: () => void
-  onClick: () => void
-  onDoubleClick: (arg0: Point) => void
-}
-
 export enum BlockType {
   IMAGE = 'IMAGE',
   TEXT = 'TEXT',
   H1 = 'H1',
   H2 = 'H2',
   H3 = 'H3',
-  TABLE_INLINE = 'TABLE-INLINE',
-  LIST_CHECK = 'LIST-CHECK',
-  LIST_BULLET = 'LIST-BULLET',
-  LIST_NUMBER = 'LIST-NUMBER',
-  QUOTE = 'QUOTE',
-  DIVIDER = 'DIVIDER',
-  CALLOUT = 'CALLOUT',
-  VIDEO = 'VIDEO',
-  CODE = 'CODE',
-  TWEET = 'TWEET',
-  GOOGLE_MAPS = 'GOOGLE-MAPS',
+  LIST_BULLET = 'LIST_BULLET',
+  // TABLE_INLINE = 'TABLE-INLINE',
+  // LIST_CHECK = 'LIST_CHECK',
+  // LIST_NUMBER = 'LIST_NUMBER',
+  // QUOTE = 'QUOTE',
+  // DIVIDER = 'DIVIDER',
+  // CALLOUT = 'CALLOUT',
+  // VIDEO = 'VIDEO',
+  // CODE = 'CODE',
+  // TWEET = 'TWEET',
+  // GOOGLE_MAPS = 'GOOGLE-MAPS',
 }
 
 export type BlockData =
@@ -57,9 +44,9 @@ export type BlockDataText = BlockDataDefault & {
 }
 
 export type BlockDataImage = BlockDataDefault & {
-  url: string
+  source: string
   alt: string
-  type: BlockDataImageType
+  imageType: BlockDataImageType
 }
 
 export enum BlockDataImageType {

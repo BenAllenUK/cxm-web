@@ -11,6 +11,7 @@ import sagas from 'sagas'
 const persistConfig = {
   key: 'root',
   storage: storage,
+  blacklist: ['editor'],
 }
 
 const customLogger = (store: any) => (next: any) => (action: any) => {

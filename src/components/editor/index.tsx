@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Content from './Content'
 import { BlockType } from 'types/editor'
+import ReactTooltip from 'react-tooltip'
 
 const Container = styled.div`
   position: relative;
@@ -27,6 +28,7 @@ const Editor = () => {
       <Container>
         <Content blocks={blocks} />
       </Container>
+      <ReactTooltip place="bottom" id="editor" getContent={(dataTip) => dataTip} effect="solid" />
     </>
   )
 }

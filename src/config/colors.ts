@@ -12,6 +12,8 @@ const Colors = {
 
   controls: '#C0C0BE',
 
+  border: 'rgba(15, 15, 15, 0.1)',
+
   background: '#FFF',
 }
 
