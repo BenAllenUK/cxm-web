@@ -14,6 +14,11 @@ import {
 
 export const BLOCK_CONTAINER_VERTICAL_PADDING = 10
 
+export const DEFAULT_BLOCK = {
+  type: BlockType.TEXT,
+  value: '',
+}
+
 export function isBlockEmpty(block: BlockData) {
   switch (block.type) {
     case BlockType.H1:

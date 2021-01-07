@@ -12,7 +12,6 @@ class BlockText extends React.Component<IProps> {
 
     const inputEvent = event.nativeEvent as InputEvent
     if (inputEvent.inputType === 'insertParagraph') {
-      onNew()
       return
     }
 
@@ -70,22 +69,15 @@ class BlockText extends React.Component<IProps> {
     }
   }
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.onKeyPress)
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.onKeyPress)
-  }
-
-  onKeyPress = (e: KeyboardEvent) => {
-    const { content, onDelete } = this.props
+  onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const { content, onDelete, onNew } = this.props
     if (e.key === 'Backspace' && content.value.length === 0) {
       onDelete()
-      return
-    }
-    if (e.key === 'Enter') {
-      console.log('new')
+      e.preventDefault()
+    } else if (e.key === 'Enter') {
+      onNew()
+      // TODO: Disable when menu is open
+      e.preventDefault()
     }
   }
 
@@ -98,6 +90,8 @@ class BlockText extends React.Component<IProps> {
       enableHandle,
       innerRef,
       tabIndex,
+      onFocus,
+      onBlur,
     } = this.props
     const html = content.value
 
@@ -122,6 +116,9 @@ class BlockText extends React.Component<IProps> {
           innerRef={innerRef}
           html={html}
           onChange={this.onValueChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          onKeyDown={this.onKeyDown}
         />
       </BlockContainer>
     )
@@ -142,26 +139,22 @@ interface IProps {
   content: BlockDataText
   filteringMode: boolean
   onCommandUpdate: (arg0: string) => void
+  onFocus: () => void
+  onBlur: () => void
 }
 
 const H1TextStyle = {
   fontSize: '2em',
-  marginBlockStart: '0.67em',
-  marginBlockEnd: '0.67em',
   fontWeight: 'bold',
 }
 
 const H2TextStyle = {
   fontSize: '1.5em',
-  marginBlockStart: '0.83em',
-  marginBlockEnd: '0.83em',
   fontWeight: 'bold',
 }
 
 const H3TextStyle = {
   fontSize: '1.17em',
-  marginBlockStart: '1em',
-  marginBlockEnd: '1em',
   fontWeight: 'bold',
 }
 

@@ -40,22 +40,32 @@ export default class TextInput extends React.Component<Props, State> {
     return this.el
   }
 
-  onFocus = (e: React.FocusEvent) => {
+  onFocus = (e: React.FocusEvent<HTMLDivElement>) => {
+    const { onFocus } = this.props
+    onFocus && onFocus(e)
+    this.emitChange(e)
+
     this.setState({ isFocused: true })
-    return this.emitChange(e)
   }
 
-  onBlur = (e: React.FocusEvent) => {
+  onBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    const { onBlur } = this.props
+    onBlur && onBlur(e)
+    this.emitChange(e)
+
     this.setState({ isFocused: false })
-    return this.emitChange(e)
   }
 
-  onKeyUp = (e: React.KeyboardEvent) => {
-    return this.emitChange(e)
+  onKeyUp = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const { onKeyUp } = this.props
+    onKeyUp && onKeyUp(e)
+    this.emitChange(e)
   }
 
-  onKeyDown = (e: React.KeyboardEvent) => {
-    return this.emitChange(e)
+  onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const { onKeyDown } = this.props
+    onKeyDown && onKeyDown(e)
+    this.emitChange(e)
   }
 
   render() {

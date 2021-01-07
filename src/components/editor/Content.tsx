@@ -11,6 +11,7 @@ import {
   BlockInitialHeight,
   BlockTypeLabels,
   BLOCK_CONTAINER_VERTICAL_PADDING,
+  DEFAULT_BLOCK,
   isBlockEmpty,
 } from './blocks'
 import TextControls from './text-controls'
@@ -27,7 +28,7 @@ class Content extends React.Component<IProps, IState> {
     blocks: this.props.blocks,
     sortingIndex: null,
     filterControlsText: null,
-    blockControlIndex: -1,
+    blockControlsFocusedIndex: -1,
   }
 
   blockRefs: HTMLDivElement[] = []
@@ -38,17 +39,20 @@ class Content extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    document.addEventListener('keydown', this.onKeyPress)
+    document.addEventListener('keyup', this.onKeyPress)
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.onKeyPress)
+    document.removeEventListener('keyup', this.onKeyPress)
   }
 
   onKeyPress = (e: KeyboardEvent) => {
     console.log(e.key)
-    if (e.key == 'Tab') {
+    if (e.key === 'Tab') {
       this.closeBlockControl()
+    } else if (e.key === 'Enter') {
+      const { blockControlsFocusedIndex } = this.state
+      // this.onCreateBlock(blockControlsFocusedIndex)
     }
   }
 
@@ -87,14 +91,21 @@ class Content extends React.Component<IProps, IState> {
   }
 
   onBlockItemClick = (key: BlockType) => {
-    const { blockControlIndex: index } = this.state
+    const { blockControlsFocusedIndex: index } = this.state
+    console.log('item click')
 
     if (index === -1) return
+
+    console.log(index)
+    this.setState({ filterControlsText: null })
 
     this.setState((prevState) => {
       const blocks = [...prevState.blocks]
 
+      blocks[index] = { ...DEFAULT_BLOCK }
+      // TODO: Insert empty block
       blocks[index].type = key
+
       return {
         ...prevState,
         blocks,
@@ -114,10 +125,7 @@ class Content extends React.Component<IProps, IState> {
     this.setState(
       (state) => {
         const blocks = [...state.blocks]
-        blocks.splice(index + 1, 0, {
-          type: BlockType.TEXT,
-          value: '',
-        })
+        blocks.splice(index + 1, 0, { ...DEFAULT_BLOCK })
 
         return {
           ...state,
@@ -143,21 +151,15 @@ class Content extends React.Component<IProps, IState> {
   }
 
   onDeleteBlock = (index: number) => {
-    this.setState(
-      (state) => {
-        const blocks = [...state.blocks.filter((_, i) => i !== index)]
-        return {
-          ...state,
-          blocks,
-        }
-      },
-      () => {
-        // TODO: Can we remove this timer
-        setTimeout(() => {
-          this.blockRefs[index - 1].focus()
-        }, 100)
+    this.blockRefs[index - 1].focus()
+
+    this.setState((state) => {
+      const blocks = [...state.blocks.filter((_, i) => i !== index)]
+      return {
+        ...state,
+        blocks,
       }
-    )
+    })
   }
 
   onSortStart = (sort: SortStart, event: SortEvent) => {
@@ -168,6 +170,15 @@ class Content extends React.Component<IProps, IState> {
     this.setState(({ blocks }) => ({
       blocks: arrayMove(blocks, oldIndex, newIndex),
     }))
+  }
+
+  onBlockFocus = (index: number) => {
+    console.log('focus,', { index })
+    this.setState((state) => ({ ...state, blockControlsFocusedIndex: index }))
+  }
+
+  onBlockBlur = (index: number) => {
+    console.log('blur,', { index })
   }
 
   onCommandUpdate = (index: number, value: string) => {
@@ -216,7 +227,7 @@ class Content extends React.Component<IProps, IState> {
       y: diffTop + initialHeight + BLOCK_CONTAINER_VERTICAL_PADDING,
     })
 
-    this.setState((state) => ({ ...state, blockControlIndex: index }))
+    this.setState((state) => ({ ...state, blockControlsFocusedIndex: index }))
   }
 
   closeBlockControl = () => {
@@ -255,6 +266,8 @@ class Content extends React.Component<IProps, IState> {
             onUpdate={(arg0) => this.onUpdateBlock(i, arg0)}
             onDelete={() => this.onDeleteBlock(i)}
             onDoubleClick={(pos) => this.onBlockDoubleClick(i, pos)}
+            onFocus={() => this.onBlockFocus(i)}
+            onBlur={() => this.onBlockBlur(i)}
             onClick={() => this.onBlockClick(i)}
             filteringMode={blockControlOpen}
             onCommandUpdate={(value) => this.onCommandUpdate(i, value)}
@@ -321,7 +334,7 @@ interface IProps extends ReduxProps<typeof mapStateToProps, typeof mapDispatchTo
 interface IState {
   blocks: BlockData[]
   filterControlsText: string | null
-  blockControlIndex: number
+  blockControlsFocusedIndex: number
 }
 
 function mapStateToProps(state: IAppState) {
