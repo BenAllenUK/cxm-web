@@ -257,6 +257,7 @@ class Content extends React.Component<IProps, IState> {
             }}
             tabIndex={i}
             enableHandle={!blockControlOpen}
+            enableEnterToAdd={!blockControlOpen}
             content={itemText}
             onAddClick={() => this.onAddClick(i)}
             onNew={() => this.onCreateBlock(i)}

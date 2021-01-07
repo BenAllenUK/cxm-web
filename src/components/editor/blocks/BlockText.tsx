@@ -70,13 +70,12 @@ class BlockText extends React.Component<IProps> {
   }
 
   onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const { content, onDelete, onNew } = this.props
+    const { content, onDelete, onNew, enableEnterToAdd } = this.props
     if (e.key === 'Backspace' && content.value.length === 0) {
       onDelete()
       e.preventDefault()
-    } else if (e.key === 'Enter') {
+    } else if (e.key === 'Enter' && enableEnterToAdd) {
       onNew()
-      // TODO: Disable when menu is open
       e.preventDefault()
     }
   }
@@ -126,6 +125,7 @@ class BlockText extends React.Component<IProps> {
 }
 
 interface IProps {
+  enableEnterToAdd?: boolean
   tabIndex?: number
   innerRef?: (ref: any | null) => void
   enableHandle?: boolean

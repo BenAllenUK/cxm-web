@@ -35,8 +35,9 @@ class BlockControls extends React.Component<IProps, IState> {
 
     let items = this.getItems()
 
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && selectedIndex > -1) {
       onClick(items[selectedIndex].id)
+      e.preventDefault()
       return
     }
 
