@@ -1,18 +1,75 @@
 import Colors from 'config/colors'
+import { closestIndexTo } from 'date-fns/fp'
 import React from 'react'
 import styled from 'styled-components'
 import { Point } from 'types'
 import { BlockType } from 'types/editor'
 import { BlockTypeLabels } from '../blocks'
 
-class BlockControls extends React.Component<IProps> {
-  render() {
-    const { position, filterText, onClick } = this.props
+class BlockControls extends React.Component<IProps, IState> {
+  state = {
+    selectedIndex: 0,
+  }
+
+  itemRefs: HTMLDivElement[] = []
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyPress)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyPress)
+  }
+
+  onItemMouseOver = (selectedIndex: number) => {
+    this.setState({ selectedIndex })
+  }
+
+  onMouseOut = () => {
+    this.setState({ selectedIndex: -1 })
+  }
+
+  onKeyPress = (e: KeyboardEvent) => {
+    const { onClick } = this.props
+    const { selectedIndex } = this.state
+
+    let items = this.getItems()
+
+    if (e.key === 'Enter') {
+      onClick(items[selectedIndex].id)
+      return
+    }
+
+    let index = 0
+    if (e.key === 'ArrowUp') {
+      index = selectedIndex > -1 ? selectedIndex - 1 : -1
+    } else if (e.key === 'ArrowDown') {
+      index = selectedIndex < items.length - 1 ? selectedIndex + 1 : items.length - 1
+    }
+
+    this.setState({
+      selectedIndex: index,
+    })
+
+    if (index > -1) {
+      this.itemRefs[index].scrollIntoView(false)
+    }
+  }
+
+  getItems() {
+    const { filterText } = this.props
     let items = Object.values(BlockTypeLabels)
 
     if (filterText) {
       items = items.filter((items) => items.title.toLowerCase().indexOf(filterText) > -1)
     }
+    return items
+  }
+
+  render() {
+    const { position, onClick } = this.props
+    const { selectedIndex } = this.state
+    let items = this.getItems()
 
     return (
       <Container
@@ -20,9 +77,19 @@ class BlockControls extends React.Component<IProps> {
           left: position.x,
           top: position.y,
         }}
+        onMouseOut={this.onMouseOut}
       >
-        {items.map((item, index) => (
-          <Item onClick={() => onClick(item.id)} key={index}>
+        {items.map((item, i) => (
+          <Item
+            onClick={() => onClick(item.id)}
+            onMouseOver={() => this.onItemMouseOver(i)}
+            key={i}
+            style={i === selectedIndex ? { backgroundColor: Colors.line } : {}}
+            ref={(ref) => {
+              if (!ref) return
+              this.itemRefs[i] = ref
+            }}
+          >
             <Image src={item.image} />
             <Description>
               <Title>{item.title}</Title>
@@ -33,6 +100,10 @@ class BlockControls extends React.Component<IProps> {
       </Container>
     )
   }
+}
+
+interface IState {
+  selectedIndex: number
 }
 
 interface IProps {
@@ -67,10 +138,6 @@ const Item = styled.div`
   cursor: pointer;
   align-items: center;
   justify-content: flex-start;
-
-  :hover {
-    background-color: ${Colors.line};
-  }
 `
 
 const Description = styled.div`

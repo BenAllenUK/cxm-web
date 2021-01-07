@@ -59,6 +59,7 @@ export default class TextInput extends React.Component<Props, State> {
   onKeyUp = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const { onKeyUp } = this.props
     onKeyUp && onKeyUp(e)
+
     this.emitChange(e)
   }
 

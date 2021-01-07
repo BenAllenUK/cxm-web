@@ -50,9 +50,6 @@ class Content extends React.Component<IProps, IState> {
     console.log(e.key)
     if (e.key === 'Tab') {
       this.closeBlockControl()
-    } else if (e.key === 'Enter') {
-      const { blockControlsFocusedIndex } = this.state
-      // this.onCreateBlock(blockControlsFocusedIndex)
     }
   }
 
@@ -92,11 +89,9 @@ class Content extends React.Component<IProps, IState> {
 
   onBlockItemClick = (key: BlockType) => {
     const { blockControlsFocusedIndex: index } = this.state
-    console.log('item click')
 
     if (index === -1) return
 
-    console.log(index)
     this.setState({ filterControlsText: null })
 
     this.setState((prevState) => {
@@ -173,12 +168,14 @@ class Content extends React.Component<IProps, IState> {
   }
 
   onBlockFocus = (index: number) => {
-    console.log('focus,', { index })
     this.setState((state) => ({ ...state, blockControlsFocusedIndex: index }))
+    // TODO: Lock block
+    // Disable auto undo/redo
   }
 
   onBlockBlur = (index: number) => {
-    console.log('blur,', { index })
+    // TODO: Update content
+    // Enable undo/redo
   }
 
   onCommandUpdate = (index: number, value: string) => {
