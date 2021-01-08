@@ -1,0 +1,13 @@
+/blog/:id:
+  get:
+    summary: Returns a blog post
+    description: Optional extended description in CommonMark or HTML.
+    responses:
+      '200': # status code
+        description: A JSON object of the blog
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string

@@ -1,10 +1,9 @@
-import React, { RefObject } from 'react'
-import styled from 'styled-components'
-import { BlockData, BlockDataText, BlockType } from 'types/editor'
-import TextInput, { TextInputEvent } from 'components/core/ui/TextInput'
+import React from 'react'
+
+import TextInput, { TextInputEvent } from 'components/common/TextInput'
+import { BlockData, BlockDataText, BlockType } from '../../types'
 import BlockContainer from './BlockContainer'
-import { Point } from 'types'
-import { BlockInitialHeight, BlockTypeLabels } from '.'
+import { BlockInitialHeight } from '.'
 
 class BlockText extends React.Component<IProps> {
   onValueChange = (event: TextInputEvent) => {
@@ -20,8 +19,6 @@ class BlockText extends React.Component<IProps> {
       ...content,
       value,
     }
-
-    console.log(value)
 
     onUpdate(block)
 
@@ -135,7 +132,7 @@ interface IProps {
   onUpdate: (arg0: BlockData) => void
   onDelete: () => void
   onClick: () => void
-  onDoubleClick: (arg0: Point) => void
+  onDoubleClick: (arg0: { x: number; y: number }) => void
   content: BlockDataText
   filteringMode: boolean
   onCommandUpdate: (arg0: string) => void

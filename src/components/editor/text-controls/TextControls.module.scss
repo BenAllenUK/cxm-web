@@ -1,0 +1,47 @@
+@import 'styles/variables';
+
+.container {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  background-color: $background-color;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid $line-color;
+  border-right: none;
+  z-index: 1;
+  transform: translate(-50%, -150%);
+}
+
+.linkButton {
+  padding: 10px;
+  border-right: 1px solid $line-color;
+  cursor: pointer;
+
+  :hover {
+    background-color: $line-color;
+  }
+}
+
+.styleButton {
+  padding: 10px;
+  border-right: 1px solid $line-color;
+  cursor: pointer;
+
+  :hover {
+    background-color: $line-color;
+  }
+}
+
+.italic {
+  font-style: italic;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.strikeThrough {
+  text-decoration: line-through;
+}

@@ -1,6 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
-import Colors from 'config/colors'
+import styles from './TextControls.module.scss'
 
 export enum StyleTypes {
   BOLD,
@@ -13,13 +12,13 @@ class StyleButton extends React.Component<IProps> {
   renderName = (type: StyleTypes) => {
     switch (type) {
       case StyleTypes.BOLD:
-        return <BoldIcon>B</BoldIcon>
+        return <div>B</div>
       case StyleTypes.ITALIC:
-        return <ItalicIcon>I</ItalicIcon>
+        return <div className={styles.italic}>I</div>
       case StyleTypes.UNDERLINE:
-        return <UnderlineIcon>U</UnderlineIcon>
+        return <div className={styles.underline}>U</div>
       case StyleTypes.STRIKE_THROUGH:
-        return <StrickThroughIcon>S</StrickThroughIcon>
+        return <div className={styles.strikeThrough}>S</div>
     }
   }
 
@@ -43,7 +42,8 @@ class StyleButton extends React.Component<IProps> {
     const cmd = this.commandType(type)
     const name = this.renderName(type)
     return (
-      <Button
+      <div
+        className={styles.styleButton}
         key={cmd}
         onMouseDown={(evt) => {
           evt.preventDefault()
@@ -51,34 +51,10 @@ class StyleButton extends React.Component<IProps> {
         }}
       >
         {name}
-      </Button>
+      </div>
     )
   }
 }
-
-const Button = styled.button`
-  padding: 10px;
-  border-right: 1px solid ${Colors.line};
-  cursor: pointer;
-
-  :hover {
-    background-color: ${Colors.line};
-  }
-`
-
-const BoldIcon = styled.span``
-
-const ItalicIcon = styled.span`
-  font-style: italic;
-`
-
-const UnderlineIcon = styled.span`
-  text-decoration: underline;
-`
-
-const StrickThroughIcon = styled.span`
-  text-decoration: line-through;
-`
 
 interface IProps {
   type: StyleTypes

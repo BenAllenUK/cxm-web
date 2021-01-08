@@ -1,28 +1,24 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
     "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react",
-    "noResolve": false,
-    "sourceMap": true,
-    "allowJs": true,
+    "jsx": "preserve",
     "noUnusedLocals": false,
+    "baseUrl": "src",
     "noUnusedParameters": false,
     "noImplicitAny": true,
-    "downlevelIteration": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "baseUrl": "src",
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "exclude": ["./node_modules/**/*"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/api.js"],
+  "exclude": ["node_modules"]
 }

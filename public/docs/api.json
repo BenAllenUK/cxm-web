@@ -1,0 +1,38 @@
+{
+  "info": {
+    "title": "Hello World",
+    "version": "1.0.0",
+    "description": "A sample API"
+  },
+  "host": "cxm.com",
+  "basePath": "/",
+  "swagger": "2.0",
+  "paths": {
+    "/blog/:id": {
+      "get": {
+        "summary": "Returns a blog post",
+        "description": "Optional extended description in CommonMark or HTML.",
+        "responses": {
+          "200": {
+            "description": "A JSON object of the blog",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {},
+  "responses": {},
+  "parameters": {},
+  "securityDefinitions": {},
+  "tags": []
+}

@@ -1,26 +1,32 @@
-import React, { RefObject } from 'react'
-import styled from 'styled-components'
-import { Point } from 'types'
-import { ReactComponent as DragIcon } from 'images/icons/drag.svg'
-import { ReactComponent as AddIcon } from 'images/icons/add.svg'
-import IconButton from 'components/core/ui/IconButton'
-import Colors from 'config/colors'
+import React from 'react'
+
+import IconButton from 'components/common/IconButton'
+
 import { SortableHandle } from 'react-sortable-hoc'
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from '.'
 
+import AddIcon from 'images/icons/add.svg'
+import DragIcon from 'images/icons/drag.svg'
+
+import styles from './BlockContainer.module.scss'
+
 const AddButton = (props: React.HTMLAttributes<HTMLDivElement>) => (
   <IconButton style={{ cursor: 'pointer', height: 16 }} {...props}>
-    <AddIcon style={{ fill: Colors.controls, width: 16, height: 16 }} />
+    <AddIcon className={styles.add} width={16} height={16} />
   </IconButton>
 )
 
 const DragButton = SortableHandle(() => (
   <IconButton style={{ cursor: 'grab', height: 16 }}>
-    <DragIcon style={{ fill: Colors.controls, width: 14, height: 14 }} />
+    <DragIcon className={styles.add} width={16} height={16} />
   </IconButton>
 ))
 
-class BlockContainer extends React.Component<IProps> {
+class BlockContainer extends React.Component<IProps, IState> {
+  state = {
+    showControls: false,
+  }
+
   onDoubleClick = (event: React.MouseEvent) => {
     const { onDoubleClick } = this.props
     onDoubleClick({ x: event.clientX, y: event.clientY })
@@ -28,28 +34,46 @@ class BlockContainer extends React.Component<IProps> {
 
   onClick = () => {
     const { onClick } = this.props
-
     onClick()
+  }
+
+  onMouseEnter = () => {
+    this.setState({ showControls: true })
+  }
+
+  onMouseLeave = () => {
+    this.setState({ showControls: false })
   }
 
   render() {
     const { children, onAddClick, initialHeight, enableHandle } = this.props
+    const { showControls } = this.state
     return (
-      <Container onClick={this.onClick} onDoubleClick={this.onDoubleClick}>
-        <Block>
-          {enableHandle && (
-            <Controls className="block-container-controls" style={{ height: initialHeight }}>
+      <div
+        className={styles.container}
+        style={{
+          marginTop: BLOCK_CONTAINER_VERTICAL_PADDING,
+          marginBottom: BLOCK_CONTAINER_VERTICAL_PADDING,
+        }}
+        onClick={this.onClick}
+        onDoubleClick={this.onDoubleClick}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+      >
+        <div className={styles.block}>
+          {enableHandle && showControls && (
+            <div className={styles.controls} style={{ height: initialHeight }}>
               <AddButton
                 data-tip={'Click to add a block below'}
                 data-for="editor"
                 onClick={onAddClick}
               />
               <DragButton />
-            </Controls>
+            </div>
           )}
           {children}
-        </Block>
-      </Container>
+        </div>
+      </div>
     )
   }
 }
@@ -57,34 +81,13 @@ class BlockContainer extends React.Component<IProps> {
 interface IProps {
   initialHeight: number
   onClick: () => void
-  onDoubleClick: (pos: Point) => void
+  onDoubleClick: (pos: { x: number; y: number }) => void
   enableHandle?: boolean
   onAddClick: () => void
 }
 
-const Container = styled.div`
-  margin-top: ${BLOCK_CONTAINER_VERTICAL_PADDING}px;
-  margin-bottom: ${BLOCK_CONTAINER_VERTICAL_PADDING}px;
-
-  :hover .block-container-controls {
-    visibility: visible;
-  }
-`
-
-const Block = styled.div`
-  max-width: 900px;
-  margin: 0 auto;
-  position: relative;
-`
-
-const Controls = styled.div`
-  position: absolute;
-  left: -45px;
-  top: 0px;
-  display: flex;
-  flex-direction: row;
-  visibility: hidden;
-  align-items: center;
-`
+interface IState {
+  showControls: boolean
+}
 
 export default BlockContainer

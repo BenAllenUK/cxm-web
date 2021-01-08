@@ -1,0 +1,15 @@
+@import 'styles/variables';
+
+.container {
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 3px;
+}
+
+.container:hover {
+  background-color: $line-color;
+  color: $background-color;
+}

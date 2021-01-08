@@ -1,21 +1,25 @@
 import { IAction } from 'actions'
 import { types } from 'actions/editor'
-import { Point } from 'types'
+import { BlockData } from 'components/types'
 
 export interface IEditorState {
   textControlOpen: boolean
-  textControlPosition: Point
+  textControlPosition: { x: number; y: number }
 
   blockControlOpen: boolean
-  blockControlPosition: Point
+  blockControlPosition: { x: number; y: number }
+
+  blocks: BlockData[]
 }
 
-const initialState = {
+export const initialState = {
   textControlOpen: false,
   textControlPosition: { x: 0, y: 0 },
 
   blockControlOpen: false,
   blockControlPosition: { x: 0, y: 0 },
+
+  blocks: [],
 }
 
 export default function editor(state: IEditorState = initialState, action: IAction) {

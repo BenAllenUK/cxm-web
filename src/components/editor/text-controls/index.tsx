@@ -1,15 +1,16 @@
-import Colors from 'config/colors'
 import React from 'react'
-import styled from 'styled-components'
+
 import StyleButton, { StyleTypes } from './StyleButton'
 import LinkButton from './LinkButton'
-import { Point } from 'types'
+
+import styles from './TextControls.module.scss'
 
 class TextControls extends React.Component<IProps> {
   render() {
     const { position } = this.props
     return (
-      <Container
+      <div
+        className={styles.container}
         style={{
           left: position.x,
           top: position.y,
@@ -27,27 +28,13 @@ class TextControls extends React.Component<IProps> {
           arg="https://github.com/lovasoa/react-contenteditable"
           name="hyperlink"
         /> */}
-      </Container>
+      </div>
     )
   }
 }
 
 interface IProps {
-  position: Point
+  position: { x: number; y: number }
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: absolute;
-  top: 100px;
-  left: 100px;
-  background-color: ${Colors.background};
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid ${Colors.line};
-  border-right: none;
-  z-index: 1;
-  transform: translate(-50%, -150%);
-`
 
 export default TextControls

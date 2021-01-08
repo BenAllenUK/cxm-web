@@ -1,3 +1,4 @@
 export enum ModalTypes {
-  BasicKey = 1,
-}
+    BasicKey = 1,
+  }
+  

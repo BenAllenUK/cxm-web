@@ -1,0 +1,22 @@
+@import 'styles/variables';
+
+.container {
+  color: $primary-text-color;
+  font-size: 16px;
+  font-family: 'SF Pro Display';
+  overflow: auto;
+  background: none;
+  border: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  outline: none;
+  resize: none;
+
+  &:empty:before {
+    content: attr(placeholder);
+  }
+  &[placeholder]:empty:before {
+    color: $controls-color;
+  }
+}

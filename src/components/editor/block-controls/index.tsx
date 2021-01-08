@@ -1,10 +1,10 @@
-import Colors from 'config/colors'
-import { closestIndexTo } from 'date-fns/fp'
 import React from 'react'
-import styled from 'styled-components'
-import { Point } from 'types'
-import { BlockType } from 'types/editor'
+
+import { BlockType } from '../../types'
 import { BlockTypeLabels } from '../blocks'
+import Colors from 'config/colors'
+import Image from 'next/image'
+import styles from './BlockControls.module.scss'
 
 class BlockControls extends React.Component<IProps, IState> {
   state = {
@@ -21,11 +21,11 @@ class BlockControls extends React.Component<IProps, IState> {
     document.removeEventListener('keydown', this.onKeyPress)
   }
 
-  onItemMouseOver = (selectedIndex: number) => {
+  onItemMouseEnter = (selectedIndex: number) => {
     this.setState({ selectedIndex })
   }
 
-  onMouseOut = () => {
+  onMouseLeave = () => {
     this.setState({ selectedIndex: -1 })
   }
 
@@ -73,17 +73,19 @@ class BlockControls extends React.Component<IProps, IState> {
     let items = this.getItems()
 
     return (
-      <Container
+      <div
         style={{
           left: position.x,
           top: position.y,
         }}
-        onMouseOut={this.onMouseOut}
+        onMouseLeave={this.onMouseLeave}
+        className={styles.container}
       >
         {items.map((item, i) => (
-          <Item
+          <div
+            className={styles.item}
             onClick={() => onClick(item.id)}
-            onMouseOver={() => this.onItemMouseOver(i)}
+            onMouseEnter={() => this.onItemMouseEnter(i)}
             key={i}
             style={i === selectedIndex ? { backgroundColor: Colors.line } : {}}
             ref={(ref) => {
@@ -91,14 +93,14 @@ class BlockControls extends React.Component<IProps, IState> {
               this.itemRefs[i] = ref
             }}
           >
-            <Image src={item.image} />
-            <Description>
-              <Title>{item.title}</Title>
-              <SubTitle>{item.subtitle}</SubTitle>
-            </Description>
-          </Item>
+            <Image className={styles.image} width={46} height={46} src={item.image} />
+            <div className={styles.description}>
+              <div className={styles.title}>{item.title}</div>
+              <div className={styles.subtitle}>{item.subtitle}</div>
+            </div>
+          </div>
         ))}
-      </Container>
+      </div>
     )
   }
 }
@@ -108,72 +110,9 @@ interface IState {
 }
 
 interface IProps {
-  position: Point
+  position: { x: number; y: number }
   filterText?: string | null
   onClick: (key: BlockType) => void
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 200px;
-  left: 200px;
-  background-color: ${Colors.background};
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid ${Colors.line};
-  border-right: none;
-  z-index: 1;
-  width: 320px;
-  max-height: 300px;
-  overflow: scroll;
-  border-radius: 5px;
-`
-
-const Item = styled.div`
-  display: flex;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  cursor: pointer;
-  align-items: center;
-  justify-content: flex-start;
-`
-
-const Description = styled.div`
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  justify-content: center;
-  padding: 5px;
-  padding-left: 8px;
-`
-
-const Image = styled.img`
-  border-radius: 5px;
-  height: 46px;
-  width: 46px;
-  border: 1px solid ${Colors.border};
-`
-
-const Title = styled.span`
-  font-size: 14px;
-  color: ${Colors.text1};
-  text-align: left;
-  margin-bottom: 2px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-`
-
-const SubTitle = styled.span`
-  font-size: 12px;
-  color: ${Colors.text2};
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-`
 
 export default BlockControls

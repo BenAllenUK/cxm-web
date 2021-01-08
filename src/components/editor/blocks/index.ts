@@ -1,16 +1,10 @@
-import H1Preview from 'images/preview/h1.png'
-import H2Preview from 'images/preview/h2.png'
-import H3Preview from 'images/preview/h3.png'
-import ImagePreview from 'images/preview/image.png'
-import ListBulletPreview from 'images/preview/list_bullet.png'
-import TextPreview from 'images/preview/text.png'
 import {
   BlockData,
   BlockDataText,
   BlockType,
   BlockDataListBullet,
   BlockDataImage,
-} from 'types/editor'
+} from '../../types'
 
 export const BLOCK_CONTAINER_VERTICAL_PADDING = 10
 
@@ -47,36 +41,36 @@ export const BlockTypeLabels = {
     id: BlockType.TEXT,
     title: 'Text',
     subtitle: 'Start writing with plain text.',
-    image: TextPreview,
+    image: '/preview/text.png',
   },
   [BlockType.H1]: {
     id: BlockType.H1,
     title: 'Heading 1',
     subtitle: 'Big section heading.',
-    image: H1Preview,
+    image: '/preview/h1.png',
   },
   [BlockType.H2]: {
     id: BlockType.H2,
     title: 'Heading 2',
     subtitle: 'Medium section heading.',
-    image: H2Preview,
+    image: '/preview/h2.png',
   },
   [BlockType.H3]: {
     id: BlockType.H3,
     title: 'Heading 3',
     subtitle: 'Small section heading.',
-    image: H3Preview,
+    image: '/preview/h3.png',
   },
   [BlockType.LIST_BULLET]: {
     id: BlockType.LIST_BULLET,
     title: 'Bulleted list',
     subtitle: 'Create a simple bullet list.',
-    image: ListBulletPreview,
+    image: '/preview/list_bullet.png',
   },
   [BlockType.IMAGE]: {
     id: BlockType.IMAGE,
     title: 'Image',
     subtitle: 'Upload or embed with a link.',
-    image: ImagePreview,
+    image: '/preview/image.png',
   },
 }

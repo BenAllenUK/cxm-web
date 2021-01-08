@@ -1,0 +1,24 @@
+@import 'styles/variables';
+
+.block {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.controls {
+  position: absolute;
+  left: -45px;
+  top: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.add {
+  fill: $controls-color;
+}
+
+.drag {
+  fill: $controls-color;
+}

@@ -6,7 +6,7 @@ export interface IModalState {
   payload: any
 }
 
-const initialState = {
+export const initialState = {
   modalVisibleKey: null,
   payload: null,
 }

@@ -1,13 +1,13 @@
-import React from 'react'
-import styled from 'styled-components'
-import Colors from 'config/colors'
+import React, { MouseEvent } from 'react'
+import styles from './TextControls.module.scss'
 
 class LinkButton extends React.Component<IProps> {
   render() {
     return (
-      <Button
+      <div
         key={'createLink'}
-        onMouseDown={(evt) => {
+        className={styles.linkButton}
+        onMouseDown={(evt: MouseEvent<HTMLDivElement>) => {
           evt.preventDefault()
           document.execCommand(
             'createLink',
@@ -17,20 +17,10 @@ class LinkButton extends React.Component<IProps> {
         }}
       >
         Link
-      </Button>
+      </div>
     )
   }
 }
-
-const Button = styled.button`
-  padding: 10px;
-  border-right: 1px solid ${Colors.line};
-  cursor: pointer;
-
-  :hover {
-    background-color: ${Colors.line};
-  }
-`
 
 interface IProps {}
 

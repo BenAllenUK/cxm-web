@@ -1,9 +1,8 @@
-import React, { RefObject } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { SortableContainer, SortableElement, SortEvent, SortStart } from 'react-sortable-hoc'
 import arrayMove from 'array-move'
-import styled from 'styled-components'
 
 import Colors from 'config/colors'
 import BlockText from './blocks/BlockText'
@@ -15,13 +14,15 @@ import {
   isBlockEmpty,
 } from './blocks'
 import TextControls from './text-controls'
-import { BlockData, BlockType, BlockDataText } from 'types/editor'
+import { BlockData, BlockType, BlockDataText } from '../types'
 
 import { IAppState } from 'reducers'
 import editor from 'actions/editor'
-import { Point } from 'types'
+
 import BlockControls from './block-controls'
 import ReactTooltip from 'react-tooltip'
+
+import styles from './Content.module.scss'
 
 class Content extends React.Component<IProps, IState> {
   state = {
@@ -34,10 +35,6 @@ class Content extends React.Component<IProps, IState> {
   blockRefs: HTMLDivElement[] = []
   bodyRef?: HTMLDivElement
 
-  constructor(props: IProps) {
-    super(props)
-  }
-
   componentDidMount() {
     document.addEventListener('keyup', this.onKeyPress)
   }
@@ -47,7 +44,6 @@ class Content extends React.Component<IProps, IState> {
   }
 
   onKeyPress = (e: KeyboardEvent) => {
-    console.log(e.key)
     if (e.key === 'Tab') {
       this.closeBlockControl()
     }
@@ -111,7 +107,7 @@ class Content extends React.Component<IProps, IState> {
     this.blockRefs[index].focus()
   }
 
-  onBlockDoubleClick = (index: number, pos: Point) => {
+  onBlockDoubleClick = (index: number, pos: { x: number; y: number }) => {
     const { actions } = this.props
     actions.editor.textControlOpen(pos)
   }
@@ -249,6 +245,7 @@ class Content extends React.Component<IProps, IState> {
       case BlockType.H2:
       case BlockType.H3:
         const itemText: BlockDataText = item as BlockDataText
+
         return (
           <BlockText
             innerRef={(ref) => {
@@ -277,7 +274,7 @@ class Content extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { blocks, filterControlsText } = this.state
+    const { filterControlsText, blocks } = this.state
     const {
       textControlPosition,
       textControlOpen,
@@ -286,7 +283,8 @@ class Content extends React.Component<IProps, IState> {
     } = this.props
 
     return (
-      <Body
+      <div
+        className={styles.body}
         ref={(ref) => {
           if (!ref) return
           this.bodyRef = ref
@@ -304,23 +302,14 @@ class Content extends React.Component<IProps, IState> {
         <List onSortStart={this.onSortStart} onSortEnd={this.onSortEnd} useDragHandle={true}>
           {blocks.map((item, i) => this.renderBlock(item, i))}
         </List>
-      </Body>
+      </div>
     )
   }
 }
 
-const Body = styled.div`
-  background-color: ${Colors.background};
-  width: 100%;
-  height: 100vh;
-`
+const StyledList = ({ children }: any) => <div className={styles.list}>{children}</div>
 
-const StyledList = styled.div`
-  margin: 0 auto;
-  margin-top: 100px;
-`
-
-const ItemContainer = styled.div``
+const ItemContainer = ({ children }: any) => <div className={styles.container}>{children}</div>
 
 const List = SortableContainer(StyledList)
 const Item = SortableElement(ItemContainer)
