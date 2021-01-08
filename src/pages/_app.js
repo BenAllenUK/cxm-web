@@ -4,6 +4,6 @@ export default function App({ Component, pageProps }) {
   return <Component {...pageProps} />
 }
 
-export function reportWebVitals(metric) {
-  console.log(metric)
-}
+// export function reportWebVitals(metric) {
+//   console.log(metric)
+// }

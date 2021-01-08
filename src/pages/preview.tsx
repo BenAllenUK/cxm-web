@@ -33,10 +33,3 @@ export function getStaticProps() {
     },
   }
 }
-
-export async function getStaticPaths() {
-  return {
-    paths: [{ params: { clientId: '1', slug: 'bar' } }],
-    fallback: false,
-  }
-}
