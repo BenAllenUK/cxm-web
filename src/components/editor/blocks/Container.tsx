@@ -8,7 +8,7 @@ import { BLOCK_CONTAINER_VERTICAL_PADDING } from '.'
 import AddIcon from 'images/icons/add.svg'
 import DragIcon from 'images/icons/drag.svg'
 
-import styles from './BlockContainer.module.scss'
+import styles from './Container.module.scss'
 
 const AddButton = (props: React.HTMLAttributes<HTMLDivElement>) => (
   <IconButton style={{ cursor: 'pointer', height: 16 }} {...props}>
@@ -22,7 +22,7 @@ const DragButton = SortableHandle(() => (
   </IconButton>
 ))
 
-class BlockContainer extends React.Component<IProps, IState> {
+class Container extends React.Component<IProps, IState> {
   state = {
     showControls: false,
   }
@@ -50,7 +50,6 @@ class BlockContainer extends React.Component<IProps, IState> {
     const { showControls } = this.state
     return (
       <div
-        className={styles.container}
         style={{
           marginTop: BLOCK_CONTAINER_VERTICAL_PADDING,
           marginBottom: BLOCK_CONTAINER_VERTICAL_PADDING,
@@ -90,4 +89,4 @@ interface IState {
   showControls: boolean
 }
 
-export default BlockContainer
+export default Container

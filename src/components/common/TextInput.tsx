@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { sanitizeHtml } from 'utils/filter'
 import styles from './TextInput.module.scss'
 
 function normalizeHtml(str: string): string {
@@ -68,6 +69,15 @@ export default class TextInput extends React.Component<Props, State> {
     this.emitChange(e)
   }
 
+  onPaste = async (e: React.ClipboardEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    const html = e.clipboardData.getData('text/html') || e.clipboardData.getData('text/plain')
+    const safeHtml = await sanitizeHtml(html)
+    document.execCommand('insertHTML', false, safeHtml)
+  }
+
+  componentDidMount() {}
+
   render() {
     const {
       focusedPlaceholder,
@@ -92,6 +102,7 @@ export default class TextInput extends React.Component<Props, State> {
           refCallback(ref)
           return ref
         }}
+        onPaste={this.onPaste}
         onInput={this.emitChange}
         onFocus={this.onFocus}
         onBlur={this.onBlur}

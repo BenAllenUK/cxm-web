@@ -1,0 +1,24 @@
+@import 'styles/variables';
+
+.container {
+  background-color: $primary;
+  padding: 12px 36px 12px 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
+.container:hover {
+  background-color: $primary-highlight;
+}
+
+.icon {
+  margin-right: 12px;
+  fill: $text2-color;
+}
+
+.text {
+  font-size: 14px;
+  color: $text2-color;
+}

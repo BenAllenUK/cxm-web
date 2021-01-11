@@ -2,17 +2,13 @@ import React from 'react'
 
 import TextInput, { TextInputEvent } from 'components/common/TextInput'
 import { BlockData, BlockDataText, BlockType } from '../../types'
-import BlockContainer from './BlockContainer'
-import { BlockInitialHeight } from '.'
 
-class BlockText extends React.Component<IProps> {
+import { BlockTypeProperties } from '.'
+import styles from './Text.module.scss'
+
+class Text extends React.Component<IProps> {
   onValueChange = (event: TextInputEvent) => {
-    const { onUpdate, onNew, content, onCommandUpdate } = this.props
-
-    const inputEvent = event.nativeEvent as InputEvent
-    if (inputEvent.inputType === 'insertParagraph') {
-      return
-    }
+    const { content, onUpdate, onCommandUpdate } = this.props
 
     const value = event.target.value.replace('&nbsp;', ' ')
     const block = {
@@ -28,13 +24,19 @@ class BlockText extends React.Component<IProps> {
   renderStyle = (content: BlockDataText) => {
     switch (content.type) {
       case BlockType.H1:
-        return H1TextStyle
+        return styles.header1
       case BlockType.H2:
-        return H2TextStyle
+        return styles.header2
       case BlockType.H3:
-        return H3TextStyle
+        return styles.header3
+      case BlockType.QUOTE:
+        return styles.quote
+      case BlockType.CODE:
+        return styles.code
+      case BlockType.CALLOUT:
+        return styles.callout
       default:
-        return {}
+        return styles.text
     }
   }
 
@@ -48,6 +50,10 @@ class BlockText extends React.Component<IProps> {
         return `Heading 2`
       case BlockType.H3:
         return `Heading 3`
+      case BlockType.QUOTE:
+        return `Empty quote`
+      case BlockType.CALLOUT:
+        return `Type something...`
       default:
         return filteringMode ? 'Type to filter' : `Type for '/' commands`
     }
@@ -61,6 +67,10 @@ class BlockText extends React.Component<IProps> {
         return `Heading 2`
       case BlockType.H3:
         return `Heading 3`
+      case BlockType.QUOTE:
+        return `Empty quote`
+      case BlockType.CALLOUT:
+        return `Type something...`
       default:
         return ''
     }
@@ -68,44 +78,45 @@ class BlockText extends React.Component<IProps> {
 
   onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const { content, onDelete, onNew, enableEnterToAdd } = this.props
-    if (e.key === 'Backspace' && content.value.length === 0) {
-      onDelete()
-      e.preventDefault()
-    } else if (e.key === 'Enter' && enableEnterToAdd) {
-      onNew()
-      e.preventDefault()
+
+    switch (e.key) {
+      case 'Backspace':
+        if (content.value.length === 0 && !e.shiftKey) {
+          e.preventDefault()
+          onDelete()
+        }
+        return
+      case 'Enter':
+        if (content.type !== BlockType.CODE) {
+          e.preventDefault()
+          onNew()
+        }
+        return
+      case 'Tab':
+        if (content.type === BlockType.CODE) {
+          document.execCommand('insertHTML', false, '&#009')
+          e.preventDefault()
+        }
+        return
     }
   }
 
   render() {
-    const {
-      content,
-      onClick,
-      onDoubleClick,
-      onAddClick,
-      enableHandle,
-      innerRef,
-      tabIndex,
-      onFocus,
-      onBlur,
-    } = this.props
+    const { content, tabIndex, innerRef, onFocus, onBlur } = this.props
     const html = content.value
 
-    const style = this.renderStyle(content)
+    const className = this.renderStyle(content)
     const focusedPlaceholder = this.renderFocusedPlaceholder(content)
     const blurredPlaceholder = this.renderBlurredPlaceholder(content)
-    const initialHeight = BlockInitialHeight[content.type]
+    const initialHeight = BlockTypeProperties[content.type].initialHeight
 
     return (
-      <BlockContainer
-        initialHeight={initialHeight}
-        onClick={onClick}
-        onAddClick={onAddClick}
-        onDoubleClick={onDoubleClick}
-        enableHandle={enableHandle}
+      <div
+        className={className}
+        style={{ minHeight: initialHeight }}
+        data-gramm_editor={content.type === BlockType.CODE ? 'false' : 'true'}
       >
         <TextInput
-          style={{ minHeight: initialHeight, ...style }}
           focusedPlaceholder={focusedPlaceholder}
           blurredPlaceholder={blurredPlaceholder}
           tabIndex={tabIndex}
@@ -116,43 +127,26 @@ class BlockText extends React.Component<IProps> {
           onBlur={onBlur}
           onKeyDown={this.onKeyDown}
         />
-      </BlockContainer>
+      </div>
     )
   }
 }
 
 interface IProps {
+  innerRef?: (ref: any | null) => void
   enableEnterToAdd?: boolean
   tabIndex?: number
-  innerRef?: (ref: any | null) => void
-  enableHandle?: boolean
+  content: BlockDataText
+  filteringMode: boolean
   disabled?: boolean
+
   onNew: () => void
   onAddClick: () => void
   onUpdate: (arg0: BlockData) => void
   onDelete: () => void
-  onClick: () => void
-  onDoubleClick: (arg0: { x: number; y: number }) => void
-  content: BlockDataText
-  filteringMode: boolean
   onCommandUpdate: (arg0: string) => void
   onFocus: () => void
   onBlur: () => void
 }
 
-const H1TextStyle = {
-  fontSize: '2em',
-  fontWeight: 'bold',
-}
-
-const H2TextStyle = {
-  fontSize: '1.5em',
-  fontWeight: 'bold',
-}
-
-const H3TextStyle = {
-  fontSize: '1.17em',
-  fontWeight: 'bold',
-}
-
-export default BlockText
+export default Text

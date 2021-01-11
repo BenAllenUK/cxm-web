@@ -1,20 +1,27 @@
-p.text {
-  font-size: 14px;
+.header1 {
+  div {
+    font-size: 2em;
+    font-weight: bold;
+  }
 }
 
-h1.text {
-  font-size: 2em;
-  font-weight: bold;
+.header2 {
+  div {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
 }
 
-h2.text {
-  font-size: 1.5em;
-  font-weight: bold;
+.header3 {
+  div {
+    font-size: 1.17em;
+    font-weight: bold;
+  }
 }
 
-h3.text {
-  font-size: 1.17em;
-  font-weight: bold;
+.text {
+  div {
+  }
 }
 
 .quote {
@@ -74,6 +81,7 @@ h3.text {
     tab-size: 2;
     padding: 34px 32px 32px 32px;
     color: rgb(55, 53, 47);
-    white-space: pre;
+    word-break: break-word;
+    white-space: pre-wrap;
   }
 }

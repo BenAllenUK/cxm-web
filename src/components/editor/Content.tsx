@@ -4,17 +4,15 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { SortableContainer, SortableElement, SortEvent, SortStart } from 'react-sortable-hoc'
 import arrayMove from 'array-move'
 
-import Colors from 'config/colors'
-import BlockText from './blocks/BlockText'
+import Text from './blocks/Text'
 import {
-  BlockInitialHeight,
-  BlockTypeLabels,
+  BlockTypeProperties,
   BLOCK_CONTAINER_VERTICAL_PADDING,
   DEFAULT_BLOCK,
   isBlockEmpty,
 } from './blocks'
 import TextControls from './text-controls'
-import { BlockData, BlockType, BlockDataText } from '../types'
+import { BlockData, BlockType, BlockDataText, BlockDataImage } from '../types'
 
 import { IAppState } from 'reducers'
 import editor from 'actions/editor'
@@ -23,6 +21,9 @@ import BlockControls from './block-controls'
 import ReactTooltip from 'react-tooltip'
 
 import styles from './Content.module.scss'
+import Container from './blocks/Container'
+import Image from './blocks/Image'
+import Divider from './blocks/Divider'
 
 class Content extends React.Component<IProps, IState> {
   state = {
@@ -62,7 +63,10 @@ class Content extends React.Component<IProps, IState> {
       const blockRef = this.blockRefs[index]
       this.setState({ filterControlsText: null })
       this.openBlockControl(index)
-      blockRef.focus()
+      const type = blocks[index].type
+      if (BlockTypeProperties[type].isEditable) {
+        blockRef.focus()
+      }
       return
     }
 
@@ -104,7 +108,9 @@ class Content extends React.Component<IProps, IState> {
     })
 
     this.closeBlockControl()
-    this.blockRefs[index].focus()
+    if (BlockTypeProperties[key].isEditable) {
+      this.blockRefs[index].focus()
+    }
   }
 
   onBlockDoubleClick = (index: number, pos: { x: number; y: number }) => {
@@ -142,7 +148,11 @@ class Content extends React.Component<IProps, IState> {
   }
 
   onDeleteBlock = (index: number) => {
-    this.blockRefs[index - 1].focus()
+    const { blocks } = this.state
+    const type = blocks[index].type
+    if (BlockTypeProperties[type].isEditable) {
+      this.blockRefs[index - 1].focus()
+    }
 
     this.setState((state) => {
       const blocks = [...state.blocks.filter((_, i) => i !== index)]
@@ -191,7 +201,7 @@ class Content extends React.Component<IProps, IState> {
 
     const formattedValue = value.indexOf('/') === 0 ? value.slice(1) : value
 
-    const titles = Object.values(BlockTypeLabels).filter(
+    const titles = Object.values(BlockTypeProperties).filter(
       (item) => item.title.toLowerCase().indexOf(formattedValue) > -1
     )
 
@@ -214,7 +224,7 @@ class Content extends React.Component<IProps, IState> {
     const bodyTop = this.bodyRef ? this.bodyRef.getBoundingClientRect().top : 0
     const diffTop = blockTop - bodyTop
     const block = blocks[index]
-    const initialHeight = BlockInitialHeight[block.type]
+    const initialHeight = BlockTypeProperties[block.type].initialHeight
     actions.editor.blockControlOpen({
       x: blockLeft,
       y: diffTop + initialHeight + BLOCK_CONTAINER_VERTICAL_PADDING,
@@ -229,9 +239,19 @@ class Content extends React.Component<IProps, IState> {
   }
 
   renderBlock = (item: BlockData, i: number) => {
+    const { blockControlOpen } = this.props
+    const initialHeight = BlockTypeProperties[item.type].initialHeight
     return (
       <Item index={i} key={`${i}`}>
-        <div id={`block-${i}`}>{this.renderBlockItem(item, i)}</div>
+        <Container
+          initialHeight={initialHeight}
+          onClick={() => this.onBlockClick(i)}
+          onAddClick={() => this.onAddClick(i)}
+          onDoubleClick={(pos) => this.onBlockDoubleClick(i, pos)}
+          enableHandle={!blockControlOpen}
+        >
+          {this.renderBlockItem(item, i)}
+        </Container>
       </Item>
     )
   }
@@ -239,35 +259,42 @@ class Content extends React.Component<IProps, IState> {
   renderBlockItem = (item: BlockData, i: number) => {
     const { blockControlOpen, actions } = this.props
 
+    const refCallback = (ref: any) => {
+      if (!ref) return
+      this.blockRefs[i] = ref
+    }
+
     switch (item.type) {
       case BlockType.TEXT:
       case BlockType.H1:
       case BlockType.H2:
       case BlockType.H3:
+      case BlockType.CALLOUT:
+      case BlockType.CODE:
+      case BlockType.QUOTE:
         const itemText: BlockDataText = item as BlockDataText
 
         return (
-          <BlockText
-            innerRef={(ref) => {
-              if (!ref) return
-              this.blockRefs[i] = ref
-            }}
+          <Text
+            innerRef={refCallback}
             tabIndex={i}
-            enableHandle={!blockControlOpen}
             enableEnterToAdd={!blockControlOpen}
             content={itemText}
+            filteringMode={blockControlOpen}
             onAddClick={() => this.onAddClick(i)}
             onNew={() => this.onCreateBlock(i)}
             onUpdate={(arg0) => this.onUpdateBlock(i, arg0)}
             onDelete={() => this.onDeleteBlock(i)}
-            onDoubleClick={(pos) => this.onBlockDoubleClick(i, pos)}
             onFocus={() => this.onBlockFocus(i)}
             onBlur={() => this.onBlockBlur(i)}
-            onClick={() => this.onBlockClick(i)}
-            filteringMode={blockControlOpen}
             onCommandUpdate={(value) => this.onCommandUpdate(i, value)}
           />
         )
+      case BlockType.IMAGE:
+        const content: BlockDataImage = item as BlockDataImage
+        return <Image innerRef={refCallback} content={content} />
+      case BlockType.DIVIDER:
+        return <Divider innerRef={refCallback} />
       default:
         return <div />
     }

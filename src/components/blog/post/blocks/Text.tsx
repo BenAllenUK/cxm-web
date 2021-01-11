@@ -1,22 +1,40 @@
-import { BlockType } from 'components/types'
+import { BlockDataText, BlockType } from 'components/types'
 import styles from './Text.module.scss'
 
-export default function Text({ content, type }: IProps) {
+export default function Text({ content }: IProps) {
+  const { value, type } = content
   switch (type) {
     case BlockType.H1:
-      return <h1 className={styles.text}>{content}</h1>
+      return <h1 className={styles.text}>{value}</h1>
     case BlockType.H2:
-      return <h2 className={styles.text}>{content}</h2>
+      return <h2 className={styles.text}>{value}</h2>
     case BlockType.H3:
-      return <h3 className={styles.text}>{content}</h3>
+      return <h3 className={styles.text}>{value}</h3>
     case BlockType.TEXT:
-      return <p className={styles.text}>{content}</p>
+      return <p className={styles.text}>{value}</p>
+    case BlockType.CODE:
+      return (
+        <div className={styles.code}>
+          <div>{value}</div>
+        </div>
+      )
+    case BlockType.CALLOUT:
+      return (
+        <div className={styles.callout}>
+          <div>{value}</div>
+        </div>
+      )
+    case BlockType.QUOTE:
+      return (
+        <div className={styles.quote}>
+          <div>{value}</div>
+        </div>
+      )
+    default:
+      return <div />
   }
 }
 
-// const Container = ({ children }) => <div className={styles.text}>{child}</div>
-
 interface IProps {
-  content: string
-  type: BlockType.TEXT | BlockType.H1 | BlockType.H2 | BlockType.H3
+  content: BlockDataText
 }

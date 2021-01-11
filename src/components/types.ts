@@ -8,11 +8,11 @@ export enum BlockType {
   // TABLE_INLINE = 'TABLE-INLINE',
   // LIST_CHECK = 'LIST_CHECK',
   // LIST_NUMBER = 'LIST_NUMBER',
-  // QUOTE = 'QUOTE',
-  // DIVIDER = 'DIVIDER',
-  // CALLOUT = 'CALLOUT',
+  QUOTE = 'QUOTE',
+  DIVIDER = 'DIVIDER',
+  CALLOUT = 'CALLOUT',
   // VIDEO = 'VIDEO',
-  // CODE = 'CODE',
+  CODE = 'CODE',
   // TWEET = 'TWEET',
   // GOOGLE_MAPS = 'GOOGLE-MAPS',
 }
@@ -44,8 +44,8 @@ export type BlockDataText = BlockDataDefault & {
 }
 
 export type BlockDataImage = BlockDataDefault & {
-  source: string
-  alt: string
+  source: string | null
+  alt: string | null
   imageType: BlockDataImageType
 }
 

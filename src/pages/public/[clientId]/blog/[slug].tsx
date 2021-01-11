@@ -18,6 +18,14 @@ export function getStaticProps() {
       value:
         'Keyword cannibalization is one of the major issues that has a detrimental effect on search engine rankings. When multiple pages on your website are targeting exactly the same keyword, they may eventually start competing against each other. Search engines will be forced to make a choice as to which page they should display in search results, and their choice may not be the one you want. If you are already suffering from cannibalization issues, you can use a 301 redirect. ',
     },
+    {
+      type: BlockType.IMAGE,
+      source: '/dummy/a.jpg',
+    },
+    { type: BlockType.DIVIDER, value: 'Divider' },
+    { type: BlockType.CALLOUT, value: 'Callout' },
+    { type: BlockType.QUOTE, value: 'Quote' },
+    { type: BlockType.CODE, value: 'Code' },
   ]
 
   return {
