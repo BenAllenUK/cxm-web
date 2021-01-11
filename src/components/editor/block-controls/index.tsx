@@ -30,7 +30,7 @@ class BlockControls extends React.Component<IProps, IState> {
   }
 
   onKeyPress = (e: KeyboardEvent) => {
-    const { onClick } = this.props
+    const { onClick, filterText } = this.props
     const { selectedIndex } = this.state
 
     let items = this.getItems()

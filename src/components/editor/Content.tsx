@@ -45,12 +45,13 @@ class Content extends React.Component<IProps, IState> {
   }
 
   onKeyPress = (e: KeyboardEvent) => {
+    const { filterControlsText } = this.state
     if (e.key === 'Tab') {
+      this.closeBlockControl()
+    } else if (e.key === 'Backspace' && !filterControlsText) {
       this.closeBlockControl()
     }
   }
-
-  // TODO: Add timer to commit blocks to store
 
   onAddClick = (index: number) => {
     ReactTooltip.hide()
@@ -88,18 +89,20 @@ class Content extends React.Component<IProps, IState> {
   }
 
   onBlockItemClick = (key: BlockType) => {
-    const { blockControlsFocusedIndex: index } = this.state
+    const { blockControlsFocusedIndex: index, filterControlsText } = this.state
 
     if (index === -1) return
 
-    this.setState({ filterControlsText: null })
-
     this.setState((prevState) => {
       const blocks = [...prevState.blocks]
-
-      blocks[index] = { ...DEFAULT_BLOCK }
-      // TODO: Insert empty block
-      blocks[index].type = key
+      console.log(filterControlsText)
+      if (prevState.filterControlsText) {
+        console.log('update block')
+        blocks[index] = { ...DEFAULT_BLOCK }
+        blocks[index].type = key
+      } else {
+        console.log('insert new block')
+      }
 
       return {
         ...prevState,
