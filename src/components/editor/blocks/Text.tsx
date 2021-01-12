@@ -8,7 +8,7 @@ import styles from './Text.module.scss'
 
 class Text extends React.Component<IProps> {
   onValueChange = (event: TextInputEvent) => {
-    const { content, onUpdate, onCommandUpdate } = this.props
+    const { content, onUpdate } = this.props
 
     const value = event.target.value.replace('&nbsp;', ' ')
     const block = {
@@ -17,8 +17,6 @@ class Text extends React.Component<IProps> {
     }
 
     onUpdate(block)
-
-    onCommandUpdate(value.toLowerCase())
   }
 
   renderStyle = (content: BlockDataText) => {
@@ -77,7 +75,7 @@ class Text extends React.Component<IProps> {
   }
 
   onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const { content, onDelete, onNew, enableEnterToAdd } = this.props
+    const { content, onDelete, onNew, filteringMode } = this.props
 
     switch (e.key) {
       case 'Backspace':
@@ -87,7 +85,7 @@ class Text extends React.Component<IProps> {
         }
         return
       case 'Enter':
-        if (content.type !== BlockType.CODE) {
+        if (!filteringMode && content.type !== BlockType.CODE && !e.shiftKey) {
           e.preventDefault()
           onNew()
         }
@@ -134,17 +132,14 @@ class Text extends React.Component<IProps> {
 
 interface IProps {
   innerRef?: (ref: any | null) => void
-  enableEnterToAdd?: boolean
   tabIndex?: number
   content: BlockDataText
   filteringMode: boolean
   disabled?: boolean
 
   onNew: () => void
-  onAddClick: () => void
   onUpdate: (arg0: BlockData) => void
   onDelete: () => void
-  onCommandUpdate: (arg0: string) => void
   onFocus: () => void
   onBlur: () => void
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { BlockType } from '../../types'
-import { BlockTypeProperties } from '../blocks'
+import { getBlockOptions } from '../blocks'
 import Colors from 'config/colors'
 import Image from 'next/image'
 import styles from './BlockControls.module.scss'
@@ -33,7 +33,7 @@ class BlockControls extends React.Component<IProps, IState> {
     const { onClick, filterText } = this.props
     const { selectedIndex } = this.state
 
-    let items = this.getItems()
+    let items = getBlockOptions(filterText)
 
     if (e.key === 'Enter' && selectedIndex > -1) {
       onClick(items[selectedIndex].id)
@@ -57,20 +57,10 @@ class BlockControls extends React.Component<IProps, IState> {
     }
   }
 
-  getItems() {
-    const { filterText } = this.props
-    let items = Object.values(BlockTypeProperties)
-
-    if (filterText) {
-      items = items.filter((items) => items.title.toLowerCase().indexOf(filterText) > -1)
-    }
-    return items
-  }
-
   render() {
-    const { position, onClick } = this.props
+    const { position, filterText, onClick } = this.props
     const { selectedIndex } = this.state
-    let items = this.getItems()
+    let items = getBlockOptions(filterText)
 
     return (
       <div

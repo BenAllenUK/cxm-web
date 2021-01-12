@@ -32,6 +32,15 @@ export function isBlockEmpty(block: BlockData) {
   }
 }
 
+export function getBlockOptions(filterText?: string | null) {
+  let items = Object.values(BlockTypeProperties)
+
+  if (filterText) {
+    items = items.filter((items) => items.title.toLowerCase().indexOf(filterText) > -1)
+  }
+  return items
+}
+
 export const BlockTypeProperties = {
   [BlockType.TEXT]: {
     id: BlockType.TEXT,

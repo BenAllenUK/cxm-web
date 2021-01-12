@@ -47,11 +47,11 @@ export function Sidebar({ sections: savedSections }: IProps) {
     const sectionPath = `[${sectionIndex}].items.`
     const menuPath = menuIndexes.map((i) => `[${i}]`).join('.children.')
     const path = sectionPath + menuPath + '.isOpen'
-    const newSections = produce(sections, (draftSections) => {
-      return update(draftSections, path, (val: boolean) => !val)
-    })
-
-    setSections(newSections)
+    setSections(
+      produce((draftSections) => {
+        update(draftSections, path, (val: boolean) => !val)
+      })
+    )
   }
 
   return (

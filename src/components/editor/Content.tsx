@@ -10,6 +10,7 @@ import {
   BlockTypeProperties,
   BLOCK_CONTAINER_VERTICAL_PADDING,
   DEFAULT_BLOCK,
+  getBlockOptions,
   isBlockEmpty,
 } from './blocks'
 import TextControls from './text-controls'
@@ -25,12 +26,12 @@ import styles from './Content.module.scss'
 import Container from './blocks/Container'
 import Image from './blocks/Image'
 import Divider from './blocks/Divider'
+import produce from 'immer'
 
 class Content extends React.Component<IProps, IState> {
   state = {
     blocks: this.props.blocks,
     sortingIndex: null,
-    filterControlsText: null,
     blockControlsFocusedIndex: -1,
   }
 
@@ -46,11 +47,14 @@ class Content extends React.Component<IProps, IState> {
   }
 
   onKeyPress = (e: KeyboardEvent) => {
-    const { filterControlsText } = this.state
+    const filterText = this.getCurrentFilterText()
     if (e.key === 'Tab') {
       this.closeBlockControl()
-    } else if (e.key === 'Backspace' && !filterControlsText) {
+    } else if (e.key === 'Backspace' && !filterText) {
       this.closeBlockControl()
+    } else if (e.key === '/' && !filterText) {
+      const { blockControlsFocusedIndex } = this.state
+      this.openBlockControl(blockControlsFocusedIndex)
     }
   }
 
@@ -58,24 +62,29 @@ class Content extends React.Component<IProps, IState> {
     ReactTooltip.hide()
 
     const { blocks } = this.state
+    const block = blocks[index]
+    const isEmpty = isBlockEmpty(block)
 
-    const isEmpty = isBlockEmpty(blocks[index])
-
+    // If empty block then update this one instead
     if (isEmpty) {
-      const blockRef = this.blockRefs[index]
-      this.setState({ filterControlsText: null })
       this.openBlockControl(index)
-      const type = blocks[index].type
-      if (BlockTypeProperties[type].isEditable) {
-        blockRef.focus()
-      }
       return
     }
 
     this.onCreateBlock(index, () => {
-      this.setState({ filterControlsText: null })
+      this.nextFocus(index)
       this.openBlockControl(index + 1)
     })
+  }
+
+  manageControls = () => {
+    const { actions } = this.props
+    const filterText = this.getCurrentFilterText()
+    const options = getBlockOptions(filterText)
+    const { blockControlOpen } = this.props
+    if (blockControlOpen && options.length === 0) {
+      actions.editor.blockControlClose()
+    }
   }
 
   onBlockClick = (index: number) => {
@@ -90,81 +99,63 @@ class Content extends React.Component<IProps, IState> {
   }
 
   onBlockItemClick = (key: BlockType) => {
-    const { blockControlsFocusedIndex: index, filterControlsText } = this.state
+    const { blockControlsFocusedIndex: index } = this.state
+
+    const isEditable = BlockTypeProperties[key].isEditable
 
     if (index === -1) return
 
-    this.setState((prevState) => {
-      const blocks = [...prevState.blocks]
-      console.log(filterControlsText)
-      if (prevState.filterControlsText) {
-        console.log('update block')
-        blocks[index] = { ...DEFAULT_BLOCK }
-        blocks[index].type = key
-      } else {
-        console.log('insert new block')
-      }
-
-      return {
-        ...prevState,
-        blocks,
-      }
-    })
+    this.setState(
+      produce((draftState) => {
+        draftState.blocks[index].type = key
+        if (isEditable) {
+          draftState.blocks[index].value = ''
+        }
+      })
+    )
 
     this.closeBlockControl()
-    if (BlockTypeProperties[key].isEditable) {
-      this.blockRefs[index].focus()
-    }
+    this.focus(index)
   }
 
   onBlockDoubleClick = (index: number, pos: { x: number; y: number }) => {
     const { actions } = this.props
-    actions.editor.textControlOpen(pos)
+
+    const bodyLeft = this.bodyRef ? this.bodyRef.getBoundingClientRect().left : 0
+    const diffLeft = pos.x - bodyLeft
+    const newPos = {
+      x: diffLeft,
+      y: pos.y,
+    }
+
+    actions.editor.textControlOpen(newPos)
   }
 
   onCreateBlock = (index: number, onComplete?: () => void) => {
     this.setState(
-      (state) => {
-        const blocks = [...state.blocks]
-        blocks.splice(index + 1, 0, { ...DEFAULT_BLOCK })
-
-        return {
-          ...state,
-          blocks,
-        }
-      },
-      () => {
-        this.blockRefs[index + 1].focus()
-        onComplete && onComplete()
-      }
+      produce((draftState) => {
+        draftState.blocks.splice(index + 1, 0, DEFAULT_BLOCK)
+      }),
+      onComplete
     )
   }
 
-  onUpdateBlock = (i: number, item: BlockData) => {
-    this.setState((prevState, props) => {
-      const blocks = [...prevState.blocks]
-      blocks[i] = item
-      return {
-        ...prevState,
-        blocks,
-      }
-    })
+  onUpdateBlock = (i: number, item: BlockData, onComplete?: () => void) => {
+    this.setState(
+      produce((draftState) => {
+        draftState.blocks[i] = item
+      }),
+      onComplete
+    )
   }
 
-  onDeleteBlock = (index: number) => {
-    const { blocks } = this.state
-    const type = blocks[index].type
-    if (BlockTypeProperties[type].isEditable) {
-      this.blockRefs[index - 1].focus()
-    }
-
-    this.setState((state) => {
-      const blocks = [...state.blocks.filter((_, i) => i !== index)]
-      return {
-        ...state,
-        blocks,
-      }
-    })
+  onDeleteBlock = (index: number, onComplete?: () => void) => {
+    this.setState(
+      produce((draftState) => {
+        draftState.blocks.splice(index, 1)
+      }),
+      onComplete
+    )
   }
 
   onSortStart = (sort: SortStart, event: SortEvent) => {
@@ -188,35 +179,16 @@ class Content extends React.Component<IProps, IState> {
     // Enable undo/redo
   }
 
-  onCommandUpdate = (index: number, value: string) => {
-    const { actions, blockControlOpen } = this.props
+  prevFocus(index: number) {
+    this.blockRefs[index - 1].focus()
+  }
 
-    if (value.length === 0) {
-      this.setState({ filterControlsText: value })
-      return
-    }
+  focus(index: number) {
+    this.blockRefs[index].focus()
+  }
 
-    if (value === '/') {
-      if (!blockControlOpen) {
-        this.openBlockControl(index)
-      }
-      return
-    }
-
-    const formattedValue = value.indexOf('/') === 0 ? value.slice(1) : value
-
-    const titles = Object.values(BlockTypeProperties).filter(
-      (item) => item.title.toLowerCase().indexOf(formattedValue) > -1
-    )
-
-    if (titles.length == 0) {
-      if (blockControlOpen) {
-        this.closeBlockControl()
-      }
-      return
-    }
-
-    this.setState({ filterControlsText: formattedValue })
+  nextFocus(index: number) {
+    this.blockRefs[index + 1].focus()
   }
 
   openBlockControl = (index: number) => {
@@ -225,16 +197,17 @@ class Content extends React.Component<IProps, IState> {
 
     const blockRef = this.blockRefs[index]
     const { top: blockTop, left: blockLeft } = blockRef.getBoundingClientRect()
+    console.log({ blockLeft, blockTop })
     const bodyTop = this.bodyRef ? this.bodyRef.getBoundingClientRect().top : 0
+    const bodyLeft = this.bodyRef ? this.bodyRef.getBoundingClientRect().left : 0
     const diffTop = blockTop - bodyTop
+    const diffLeft = blockLeft - bodyLeft
     const block = blocks[index]
     const initialHeight = BlockTypeProperties[block.type].initialHeight
     actions.editor.blockControlOpen({
-      x: blockLeft,
+      x: diffLeft,
       y: diffTop + initialHeight + BLOCK_CONTAINER_VERTICAL_PADDING,
     })
-
-    this.setState((state) => ({ ...state, blockControlsFocusedIndex: index }))
   }
 
   closeBlockControl = () => {
@@ -275,28 +248,39 @@ class Content extends React.Component<IProps, IState> {
       case BlockType.H3:
       case BlockType.CALLOUT:
       case BlockType.CODE:
-      case BlockType.QUOTE:
-        const itemText: BlockDataText = item as BlockDataText
+      case BlockType.QUOTE: {
+        const content: BlockDataText = item as BlockDataText
 
         return (
           <Text
             innerRef={refCallback}
             tabIndex={i}
-            enableEnterToAdd={!blockControlOpen}
-            content={itemText}
+            content={content}
             filteringMode={blockControlOpen}
-            onAddClick={() => this.onAddClick(i)}
-            onNew={() => this.onCreateBlock(i)}
-            onUpdate={(arg0) => this.onUpdateBlock(i, arg0)}
-            onDelete={() => this.onDeleteBlock(i)}
+            onNew={() =>
+              this.onCreateBlock(i, () => {
+                this.nextFocus(i)
+              })
+            }
+            onUpdate={(item) =>
+              this.onUpdateBlock(i, item, () => {
+                this.manageControls()
+              })
+            }
+            onDelete={() =>
+              this.onDeleteBlock(i, () => {
+                this.prevFocus(i)
+              })
+            }
             onFocus={() => this.onBlockFocus(i)}
             onBlur={() => this.onBlockBlur(i)}
-            onCommandUpdate={(value) => this.onCommandUpdate(i, value)}
           />
         )
-      case BlockType.IMAGE:
+      }
+      case BlockType.IMAGE: {
         const content: BlockDataImage = item as BlockDataImage
         return <Image innerRef={refCallback} content={content} />
+      }
       case BlockType.DIVIDER:
         return <Divider innerRef={refCallback} />
       default:
@@ -304,8 +288,26 @@ class Content extends React.Component<IProps, IState> {
     }
   }
 
+  getCurrentFilterText() {
+    const { blockControlsFocusedIndex, blocks } = this.state
+    if (blocks.length === 0 || blockControlsFocusedIndex < 0) {
+      return null
+    }
+
+    const currentBlock = blocks[blockControlsFocusedIndex]
+    if (!BlockTypeProperties[currentBlock.type].isEditable) {
+      return null
+    }
+
+    let value = (currentBlock as BlockDataText).value
+    value = value.indexOf('/') === 0 ? value.slice(1) : value
+    value = value.toLowerCase()
+
+    return value
+  }
+
   render() {
-    const { filterControlsText, blocks } = this.state
+    const { blocks } = this.state
     const {
       textControlPosition,
       textControlOpen,
@@ -313,9 +315,12 @@ class Content extends React.Component<IProps, IState> {
       blockControlPosition,
     } = this.props
 
+    const filterText = this.getCurrentFilterText()
+
     return (
       <div
         className={styles.body}
+        style={{ position: 'relative' }}
         ref={(ref) => {
           if (!ref) return
           this.bodyRef = ref
@@ -325,7 +330,7 @@ class Content extends React.Component<IProps, IState> {
         {blockControlOpen && (
           <BlockControls
             onClick={this.onBlockItemClick}
-            filterText={filterControlsText}
+            filterText={filterText}
             position={blockControlPosition}
           />
         )}
@@ -352,7 +357,6 @@ interface IProps extends ReduxProps<typeof mapStateToProps, typeof mapDispatchTo
 
 interface IState {
   blocks: BlockData[]
-  filterControlsText: string | null
   blockControlsFocusedIndex: number
 }
 
