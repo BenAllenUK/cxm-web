@@ -2,7 +2,7 @@ import { BlockType } from 'components/types'
 import Content from 'components/content'
 import { initialState } from 'reducers'
 import { createHTTPClient } from 'config/graphql'
-import GET_PROJECT_DATA from 'queries/project/GET_PROJECT_DATA.gql'
+import GET_PROJECTS from 'queries/project/GET_PROJECTS.gql'
 
 export default function ContentPage({ blocks }: any) {
   return <Content blocks={blocks} />
@@ -10,8 +10,8 @@ export default function ContentPage({ blocks }: any) {
 
 export async function getStaticProps() {
   const client = createHTTPClient()
-  const { data } = await client.query({ query: GET_PROJECT_DATA })
-  const { projects_by_pk: projectData } = data
+  const { data } = await client.query({ query: GET_PROJECTS })
+  // const { projects_by_pk: projectData } = data
 
   // Note that in this case we're returning the state directly, without creating
   // the store first (like in /pages/ssr.js), this approach can be better and easier
@@ -39,7 +39,7 @@ export async function getStaticProps() {
       blocks,
       initialReduxState: {
         ...initialState,
-        project: projectData,
+        // project: projectData,
         editor: {
           ...initialState.editor,
           blocks: blocks,

@@ -1,6 +1,6 @@
 import styles from './Sidebar.module.scss'
 import MenuItem from './MenuItem'
-import { IItem, SIDEBAR_INDENT } from '.'
+import { MenuItem as MenuItemType, SIDEBAR_INDENT } from '.'
 
 export function MenuList({ items, onItemClick, indexes = [] }: IProps) {
   return (
@@ -28,7 +28,7 @@ export function MenuList({ items, onItemClick, indexes = [] }: IProps) {
   )
 }
 interface IProps {
-  items: IItem[]
+  items: MenuItemType[]
   onItemClick: (id: number, indexes: number[]) => void
   indexes?: number[]
 }

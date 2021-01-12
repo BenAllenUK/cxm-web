@@ -5133,12 +5133,12 @@ export type GetBlocksQuery = (
   )> }
 );
 
-export type GetProjectDataQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProjectDataQuery = (
+export type GetProjectsQuery = (
   { __typename?: 'query_root' }
-  & { projects_by_pk?: Maybe<(
+  & { projects: Array<(
     { __typename?: 'projects' }
     & Pick<Projects, 'id' | 'name' | 'image' | 'slug'>
   )> }
@@ -5221,9 +5221,9 @@ export function useGetBlocksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetBlocksQueryHookResult = ReturnType<typeof useGetBlocksQuery>;
 export type GetBlocksLazyQueryHookResult = ReturnType<typeof useGetBlocksLazyQuery>;
 export type GetBlocksQueryResult = Apollo.QueryResult<GetBlocksQuery, GetBlocksQueryVariables>;
-export const GetProjectDataDocument = gql`
-    query GetProjectData {
-  projects_by_pk(id: 1) {
+export const GetProjectsDocument = gql`
+    query GetProjects {
+  projects {
     id
     name
     image
@@ -5233,26 +5233,26 @@ export const GetProjectDataDocument = gql`
     `;
 
 /**
- * __useGetProjectDataQuery__
+ * __useGetProjectsQuery__
  *
- * To run a query within a React component, call `useGetProjectDataQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProjectDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetProjectDataQuery({
+ * const { data, loading, error } = useGetProjectsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetProjectDataQuery(baseOptions?: Apollo.QueryHookOptions<GetProjectDataQuery, GetProjectDataQueryVariables>) {
-        return Apollo.useQuery<GetProjectDataQuery, GetProjectDataQueryVariables>(GetProjectDataDocument, baseOptions);
+export function useGetProjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
+        return Apollo.useQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, baseOptions);
       }
-export function useGetProjectDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectDataQuery, GetProjectDataQueryVariables>) {
-          return Apollo.useLazyQuery<GetProjectDataQuery, GetProjectDataQueryVariables>(GetProjectDataDocument, baseOptions);
+export function useGetProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
+          return Apollo.useLazyQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, baseOptions);
         }
-export type GetProjectDataQueryHookResult = ReturnType<typeof useGetProjectDataQuery>;
-export type GetProjectDataLazyQueryHookResult = ReturnType<typeof useGetProjectDataLazyQuery>;
-export type GetProjectDataQueryResult = Apollo.QueryResult<GetProjectDataQuery, GetProjectDataQueryVariables>;
+export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
+export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
+export type GetProjectsQueryResult = Apollo.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;

@@ -16,7 +16,7 @@ import {
 import TextControls from './text-controls'
 import { BlockData, BlockType, BlockDataText, BlockDataImage } from '../types'
 
-import { IAppState } from 'reducers'
+import { IRootState } from 'reducers'
 import editor from 'actions/editor'
 
 import BlockControls from './block-controls'
@@ -361,7 +361,7 @@ interface IState {
   blockControlsFocusedIndex: number
 }
 
-function mapStateToProps(state: IAppState) {
+function mapStateToProps(state: IRootState) {
   return {
     textControlOpen: state.editor.textControlOpen,
     textControlPosition: state.editor.textControlPosition,

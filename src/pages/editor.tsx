@@ -1,36 +1,50 @@
 import { BlockData, BlockType } from 'components/types'
 import Editor from 'components/editor'
-import { initialState } from 'reducers'
+import { initialState, IRootState } from 'reducers'
 import { Provider } from 'react-redux'
+import { createContext, useContext } from 'react'
 
 import { useStore, initializeStore } from '../store'
 import Sidebar, { Section } from 'components/navigation/sidebar'
-import GET_PROJECT_DATA from 'queries/project/GET_PROJECT_DATA.gql'
+import GET_PROJECTS from 'queries/project/GET_PROJECTS.gql'
 import GET_ARTICLES from 'queries/articles/GET_ARTICLES.gql'
 import GET_BLOCKS from 'queries/blocks/GET_BLOCKS.gql'
-import { createHTTPClient } from 'config/graphql'
-import { useGetArticlesQuery, useGetBlocksQuery } from 'generated/graphql'
+import { createHTTPClient, initializeApollo } from 'config/graphql'
+import { useGetArticlesQuery, useGetBlocksQuery, useGetProjectsQuery } from 'generated/graphql'
 import { formatMenu } from 'utils/menu'
 
 import { formatBlocks } from 'utils/blocks'
-import Root from 'components/root'
+import Root, { UserContext } from 'components/root'
+import { EditorContext } from 'components/editor/context'
 
 export default function EditorPage(props: any) {
   return (
     <Root {...props}>
-      <Content />
+      <EditorContext.Provider value={props.initialEditorContext}>
+        <Content />
+      </EditorContext.Provider>
     </Root>
   )
 }
 
 function Content() {
+  const { userId, organisationId, projects } = useContext(UserContext)
+  // why are these null
+  const { projectIndex, articleId, setProjectIndex, setArticleId } = useContext(EditorContext)
+
+  console.log(projectIndex, articleId)
+  if (!projectIndex || !articleId) {
+    return <div />
+  }
+
+  const project = projects[projectIndex]
+
   const { data: articleData } = useGetArticlesQuery({
     variables: {
-      projectId: 1,
+      projectId: project.id,
     },
   })
 
-  let articleId = 1
   const { data: blockData } = useGetBlocksQuery({
     variables: {
       articleId,
@@ -52,7 +66,7 @@ function Content() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
-      {articleData && <Sidebar sections={sections} />}
+      {articleData && <Sidebar project={project} sections={sections} />}
 
       <div style={{ flex: 1, height: '100vh', overflow: 'scroll' }}>
         {blockData && <Editor id={articleId} blocks={blocks} />}
@@ -61,44 +75,33 @@ function Content() {
   )
 }
 
-// export async function getStaticProps() {
-//   // TODO: Get site-wide data here
-//   return {
-//     props: {
-//       initialReduxState: {},
-//       initialApolloState: {},
-//     },
-//   }
-// }
-
+/**
+ * Block client data only
+ */
 export async function getServerSideProps() {
-  // TODO: Get blocking client data here
-  const reduxStore = initializeStore()
-  const client = createHTTPClient()
+  const client = initializeApollo()
 
-  // const client = createHTTPClient()
-  // const { data: projectData } = await client.query({ query: GET_PROJECT_DATA })
-  const { data: articleData } = await client.query({
-    query: GET_ARTICLES,
-    variables: { projectId: 1 },
-  })
-  const menuItemsTree = formatMenu(articleData)
+  const { data: projectsData } = await client.query({ query: GET_PROJECTS })
 
-  // const { data: blockData } = await client.query({
-  //   query: GET_BLOCKS,
-  //   variables: { articleId: 1 },
-  // })
+  if (!projectsData) {
+    return
+  }
 
-  const sections = [{ id: 1, label: 'CONTENT', items: menuItemsTree }]
-
-  // GET static apollo options
+  const reduxStore = initializeStore(initialState)
 
   return {
     props: {
       initialApolloState: {},
       initialReduxState: reduxStore.getState(),
-      blocks: [],
-      sections: [],
+      initialUserContext: {
+        userId: 1,
+        organisationId: 1,
+        projects: projectsData.projects,
+      },
+      initialEditorContext: {
+        projectIndex: null, // TODO: Init on client side from cookies
+        articleId: null,
+      },
     },
   }
 }

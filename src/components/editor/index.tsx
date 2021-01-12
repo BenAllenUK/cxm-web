@@ -6,7 +6,7 @@ export default function Editor({ id, blocks }: IProps) {
   return (
     <>
       <div className={styles.container}>
-        <Content id={id} blocks={blocks} />
+        <Content key={id} blocks={blocks} />
       </div>
     </>
   )

@@ -4,8 +4,9 @@ import { HttpLink } from '@apollo/client/link/http'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { useMemo } from 'react'
 
-let apolloClient: any
 import { ApolloProvider } from '@apollo/client'
+
+export let apolloClient: any
 
 export function initializeApollo(initialState: any = {}) {
   const _apolloClient = apolloClient ?? createHTTPClient()

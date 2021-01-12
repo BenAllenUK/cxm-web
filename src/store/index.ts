@@ -1,15 +1,15 @@
 import { useMemo } from 'react'
-import reducer, { initialState } from 'reducers'
+import reducer, { IRootState } from 'reducers'
 import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 let store: any
 
-function initStore(preloadedState = initialState) {
+function initStore(preloadedState: IRootState) {
   return createStore(reducer, preloadedState, composeWithDevTools(applyMiddleware()))
 }
 
-export const initializeStore = (preloadedState?: typeof initialState) => {
+export const initializeStore = (preloadedState: IRootState) => {
   let _store = store ?? initStore(preloadedState)
 
   // After navigating to a page with an initial Redux state, merge that state
@@ -31,7 +31,7 @@ export const initializeStore = (preloadedState?: typeof initialState) => {
   return _store
 }
 
-export function useStore(state: typeof initialState) {
+export function useStore(state: IRootState) {
   const store = useMemo(() => initializeStore(state), [state])
   return store
 }

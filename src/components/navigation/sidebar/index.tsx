@@ -11,7 +11,6 @@ import { Tooltip } from 'components/tooltip'
 
 import produce from 'immer'
 import update from 'lodash/update'
-import { useGetArticlesQuery } from 'generated/graphql'
 
 export const SIDEBAR_INDENT = 20
 
@@ -42,7 +41,7 @@ export type MenuItem = {
   parentId: number | null
 }
 
-export function Sidebar({ sections: savedSections }: IProps) {
+export function Sidebar({ project, sections: savedSections }: IProps) {
   const [sections, setSections] = useState(savedSections)
 
   const onMenuItemClick = async (sectionIndex: number, menuIndexes: number[]) => {
@@ -59,7 +58,7 @@ export function Sidebar({ sections: savedSections }: IProps) {
   return (
     <>
       <div className={styles.container}>
-        <Title name={'Gimme Radio'} />
+        <Title name={project.name} />
         <ul className={styles.projectMenu}>
           {appMenu.map((item, index) => (
             <li key={index} onClick={() => console.log(item.id)}>
@@ -86,7 +85,11 @@ export function Sidebar({ sections: savedSections }: IProps) {
 }
 
 interface IProps {
-  sections: ISection[]
+  project: {
+    name: string
+    image?: string | null
+  }
+  sections: Section[]
 }
 
 export default Sidebar
