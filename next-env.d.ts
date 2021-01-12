@@ -9,6 +9,13 @@ declare module '*.svg' {
   export default content
 }
 
+declare module '*.gql' {
+  import { DocumentNode } from 'graphql'
+
+  const value: any
+  export = value
+}
+
 declare module 'updeep/dist/updateIn'
 
 type ReduxProps<T extends (...args: any) => any, U extends (...args: any) => any> = (T extends (

@@ -24,6 +24,11 @@ module.exports = {
         },
       ],
     })
+    config.module.rules.push({
+      test: /\.(graphql|gql)$/,
+      exclude: /node_modules/,
+      loader: 'graphql-tag/loader',
+    })
     if (process.env.ANALYZE) {
       config.plugins.push(
         new BundleAnalyzerPlugin({

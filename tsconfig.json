@@ -17,7 +17,8 @@
     "baseUrl": "src",
     "noUnusedParameters": false,
     "noImplicitAny": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/api.js"],
   "exclude": ["node_modules"]

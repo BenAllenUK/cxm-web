@@ -1,0 +1,10 @@
+query GetArticles($projectId: Int!) {
+  articles(where: { project_id: { _eq: $projectId } }) {
+    id
+    parent_id
+    slug
+    title
+    updated_at
+    created_at
+  }
+}

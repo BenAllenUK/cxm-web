@@ -5,11 +5,11 @@ import { BlockData, BlockType, BlockDataText, BlockDataImage } from 'components/
 import Text from './blocks/Text'
 import Image from './blocks/Image'
 
-import styles from './Post.module.scss'
+import styles from './Article.module.scss'
 import Divider from './blocks/Divider'
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from 'components/editor/blocks'
 
-class Post extends React.Component<IProps> {
+class Article extends React.Component<IProps> {
   renderBlockItem = (item: BlockData, i: number) => {
     switch (item.type) {
       case BlockType.TEXT:
@@ -55,4 +55,4 @@ interface IProps {
   blocks: BlockData[]
 }
 
-export default Post
+export default Article

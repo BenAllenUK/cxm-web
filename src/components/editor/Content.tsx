@@ -22,7 +22,7 @@ import editor from 'actions/editor'
 import BlockControls from './block-controls'
 import ReactTooltip from 'react-tooltip'
 
-import styles from './Content.module.scss'
+import styles from './Editor.module.scss'
 import Container from './blocks/Container'
 import Image from './blocks/Image'
 import Divider from './blocks/Divider'
@@ -346,12 +346,13 @@ class Content extends React.Component<IProps, IState> {
 
 const StyledList = ({ children }: any) => <div className={styles.list}>{children}</div>
 
-const ItemContainer = ({ children }: any) => <div className={styles.container}>{children}</div>
+const ItemContainer = ({ children }: any) => <div>{children}</div>
 
 const List = SortableContainer(StyledList)
 const Item = SortableElement(ItemContainer)
 
 interface IProps extends ReduxProps<typeof mapStateToProps, typeof mapDispatchToProps> {
+  id: number
   blocks: BlockData[]
 }
 

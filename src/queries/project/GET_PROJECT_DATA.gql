@@ -1,0 +1,8 @@
+query GetProjectData {
+  projects_by_pk(id: 1) {
+    id
+    name
+    image
+    slug
+  }
+}

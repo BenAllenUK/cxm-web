@@ -1,94 +1,104 @@
-import { BlockType } from 'components/types'
+import { BlockData, BlockType } from 'components/types'
 import Editor from 'components/editor'
 import { initialState } from 'reducers'
 import { Provider } from 'react-redux'
 
-import { useStore } from '../store'
-import Sidebar from 'components/navigation/sidebar'
+import { useStore, initializeStore } from '../store'
+import Sidebar, { Section } from 'components/navigation/sidebar'
+import GET_PROJECT_DATA from 'queries/project/GET_PROJECT_DATA.gql'
+import GET_ARTICLES from 'queries/articles/GET_ARTICLES.gql'
+import GET_BLOCKS from 'queries/blocks/GET_BLOCKS.gql'
+import { createHTTPClient } from 'config/graphql'
+import { useGetArticlesQuery, useGetBlocksQuery } from 'generated/graphql'
+import { formatMenu } from 'utils/menu'
 
-const menu = [
-  {
-    id: 1,
-    label: 'bar',
-    isOpen: false,
-    children: [
-      { id: 2, isOpen: false, label: 'barA', children: [] },
-      { id: 3, isOpen: false, label: 'barB', children: [] },
-    ],
-  },
-  {
-    id: 3,
-    label: 'foo',
-    isOpen: true,
-    children: [
-      { id: 3, isOpen: false, label: 'fooA', children: [] },
-      { id: 3, isOpen: false, label: 'fooB', children: [] },
-      {
-        id: 3,
-        label: 'fooC',
-        isOpen: true,
-        children: [
-          { id: 3, isOpen: false, label: 'barA', children: [] },
-          { id: 3, isOpen: false, label: 'barB', children: [] },
-        ],
-      },
-    ],
-  },
-]
+import { formatBlocks } from 'utils/blocks'
+import Root from 'components/root'
 
-const sections = [
-  { id: 1, label: 'SEGMENTS', items: [...menu] },
-  { id: 2, label: 'FOO BAR', items: [...menu] },
-  { id: 2, label: 'FOO BAR', items: [...menu] },
-  { id: 2, label: 'FOO BAR', items: [...menu] },
-]
-
-export default function EditorPage({ blocks, initialReduxState }: any) {
-  const store = useStore(initialReduxState)
+export default function EditorPage(props: any) {
   return (
-    <Provider store={store}>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Sidebar sections={sections} />
-        <div style={{ flex: 1, height: '100vh', overflow: 'scroll' }}>
-          <Editor blocks={blocks} />
-        </div>
-      </div>
-    </Provider>
+    <Root {...props}>
+      <Content />
+    </Root>
   )
 }
 
-export function getStaticProps() {
-  // Note that in this case we're returning the state directly, without creating
-  // the store first (like in /pages/ssr.js), this approach can be better and easier
-  const blocks = [
-    { type: BlockType.H1, value: 'Header 1' },
-    { type: BlockType.H2, value: 'Header 2' },
-    { type: BlockType.H3, value: 'Header 3' },
-    {
-      type: BlockType.TEXT,
-      value:
-        'Keyword cannibalization is one of the major issues that has a detrimental effect on search engine rankings. When multiple pages on your website are targeting exactly the same keyword, they may eventually start competing against each other. Search engines will be forced to make a choice as to which page they should display in search results, and their choice may not be the one you want. If you are already suffering from cannibalization issues, you can use a 301 redirect. ',
+function Content() {
+  const { data: articleData } = useGetArticlesQuery({
+    variables: {
+      projectId: 1,
     },
-    {
-      type: BlockType.IMAGE,
-      source: null,
+  })
+
+  let articleId = 1
+  const { data: blockData } = useGetBlocksQuery({
+    variables: {
+      articleId,
     },
-    { type: BlockType.DIVIDER, value: 'Divider' },
-    { type: BlockType.CALLOUT, value: 'Callout' },
-    { type: BlockType.QUOTE, value: 'Quote' },
-    { type: BlockType.CODE, value: 'Code' },
-  ]
+  })
+
+  let sections: Section[] = []
+
+  if (articleData) {
+    const menuItemsTree = formatMenu(articleData)
+    sections = [{ id: 1, label: 'CONTENT', items: menuItemsTree }]
+  }
+
+  let blocks: BlockData[] = []
+
+  if (blockData) {
+    blocks = formatBlocks(blockData)
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      {articleData && <Sidebar sections={sections} />}
+
+      <div style={{ flex: 1, height: '100vh', overflow: 'scroll' }}>
+        {blockData && <Editor id={articleId} blocks={blocks} />}
+      </div>
+    </div>
+  )
+}
+
+// export async function getStaticProps() {
+//   // TODO: Get site-wide data here
+//   return {
+//     props: {
+//       initialReduxState: {},
+//       initialApolloState: {},
+//     },
+//   }
+// }
+
+export async function getServerSideProps() {
+  // TODO: Get blocking client data here
+  const reduxStore = initializeStore()
+  const client = createHTTPClient()
+
+  // const client = createHTTPClient()
+  // const { data: projectData } = await client.query({ query: GET_PROJECT_DATA })
+  const { data: articleData } = await client.query({
+    query: GET_ARTICLES,
+    variables: { projectId: 1 },
+  })
+  const menuItemsTree = formatMenu(articleData)
+
+  // const { data: blockData } = await client.query({
+  //   query: GET_BLOCKS,
+  //   variables: { articleId: 1 },
+  // })
+
+  const sections = [{ id: 1, label: 'CONTENT', items: menuItemsTree }]
+
+  // GET static apollo options
 
   return {
     props: {
-      blocks,
-      initialReduxState: {
-        ...initialState,
-        editor: {
-          ...initialState.editor,
-          blocks: blocks,
-        },
-      },
+      initialApolloState: {},
+      initialReduxState: reduxStore.getState(),
+      blocks: [],
+      sections: [],
     },
   }
 }

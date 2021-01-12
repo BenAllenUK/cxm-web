@@ -1,0 +1,10 @@
+query GetBlocks($articleId: Int!) {
+  blocks(where: { article_id: { _eq: $articleId } }) {
+    id
+    parent_id
+    updated_at
+    created_at
+    payload
+    type
+  }
+}

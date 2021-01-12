@@ -36,7 +36,10 @@ export type BlockData =
   | BlockDataGoogleMaps
 
 export type BlockDataDefault = {
+  id: number
   type: BlockType
+  parentId: number | null
+  children: BlockData[]
 }
 
 export type BlockDataText = BlockDataDefault & {

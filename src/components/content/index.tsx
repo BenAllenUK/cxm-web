@@ -1,14 +1,14 @@
 import React from 'react'
 
 import { BlockData } from 'components/types'
-import styles from './Blog.module.scss'
-import Post from './post/Post'
+import styles from './Content.module.scss'
+import Article from './articles/Article'
 
 class Content extends React.Component<IProps> {
   render() {
     return (
       <div className={styles.body}>
-        <Post blocks={this.props.blocks} />
+        <Article blocks={this.props.blocks} />
       </div>
     )
   }

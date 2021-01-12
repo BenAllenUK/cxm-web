@@ -11,6 +11,7 @@ import { Tooltip } from 'components/tooltip'
 
 import produce from 'immer'
 import update from 'lodash/update'
+import { useGetArticlesQuery } from 'generated/graphql'
 
 export const SIDEBAR_INDENT = 20
 
@@ -27,17 +28,18 @@ const appMenu = [
   },
 ]
 
-export interface ISection {
+export type Section = {
   id: number
   label: string
-  items: IItem[]
+  items: MenuItem[]
 }
 
-export interface IItem {
+export type MenuItem = {
   id: number
   label: string
   isOpen: boolean
-  children: IItem[]
+  children: MenuItem[]
+  parentId: number | null
 }
 
 export function Sidebar({ sections: savedSections }: IProps) {
