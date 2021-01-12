@@ -11,7 +11,18 @@ module.exports = {
       issuer: {
         test: /\.(js|ts)x?$/,
       },
-      use: ['@svgr/webpack'],
+      use: [
+        {
+          loader: '@svgr/webpack',
+          options: {
+            svgoConfig: {
+              plugins: {
+                removeViewBox: false,
+              },
+            },
+          },
+        },
+      ],
     })
     if (process.env.ANALYZE) {
       config.plugins.push(

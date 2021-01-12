@@ -1,0 +1,123 @@
+@import 'styles/variables';
+
+.container {
+  width: $sidebar-width;
+  height: 100vh;
+  background-color: $primary;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 20px;
+  padding-left: 20px;
+  padding-right: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: $text2-color;
+  user-select: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+ul.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 20px;
+  padding-right: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: $text2-color;
+  user-select: none;
+  cursor: pointer;
+
+  .itemControls {
+    visibility: hidden;
+  }
+
+  &:hover {
+    background-color: #fbfcff;
+    color: $text2-color;
+
+    .itemControls {
+      visibility: visible;
+    }
+  }
+}
+
+ul.projectMenu {
+  @extend .menu;
+
+  li {
+    @extend .item;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+}
+
+.itemMain {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+}
+
+.itemControls {
+  display: flex;
+  flex-direction: flex-end;
+}
+
+.itemControlsButton {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: rgba($text2-color, 0.2);
+    color: $background-color;
+  }
+}
+
+.titleEmptyLogo {
+  margin-right: 12px;
+  background-color: $text1-color;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $primary;
+  font-weight: 600;
+  text-align: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+}
+
+.label {
+  font-size: 10px;
+  color: $label-color;
+  padding-left: 20px;
+  padding-top: 20px;
+  margin-bottom: 5px;
+  user-select: none;
+}
+
+.scrollable {
+  flex: 1;
+  overflow: scroll;
+}

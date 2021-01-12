@@ -7,9 +7,9 @@
   align-items: center;
   cursor: pointer;
   padding: 3px;
-}
 
-.container:hover {
-  background-color: $line-color;
-  color: $background-color;
+  &:hover {
+    background-color: $line-color;
+    color: $background-color;
+  }
 }

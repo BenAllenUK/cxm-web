@@ -19,7 +19,7 @@
   border-right: 1px solid $line-color;
   cursor: pointer;
 
-  :hover {
+  &:hover {
     background-color: $line-color;
   }
 }
@@ -29,7 +29,7 @@
   border-right: 1px solid $line-color;
   cursor: pointer;
 
-  :hover {
+  &:hover {
     background-color: $line-color;
   }
 }

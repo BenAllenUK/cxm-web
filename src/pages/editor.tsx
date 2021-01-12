@@ -4,12 +4,55 @@ import { initialState } from 'reducers'
 import { Provider } from 'react-redux'
 
 import { useStore } from '../store'
+import Sidebar from 'components/navigation/sidebar'
+
+const menu = [
+  {
+    id: 1,
+    label: 'bar',
+    isOpen: false,
+    children: [
+      { id: 2, isOpen: false, label: 'barA', children: [] },
+      { id: 3, isOpen: false, label: 'barB', children: [] },
+    ],
+  },
+  {
+    id: 3,
+    label: 'foo',
+    isOpen: true,
+    children: [
+      { id: 3, isOpen: false, label: 'fooA', children: [] },
+      { id: 3, isOpen: false, label: 'fooB', children: [] },
+      {
+        id: 3,
+        label: 'fooC',
+        isOpen: true,
+        children: [
+          { id: 3, isOpen: false, label: 'barA', children: [] },
+          { id: 3, isOpen: false, label: 'barB', children: [] },
+        ],
+      },
+    ],
+  },
+]
+
+const sections = [
+  { id: 1, label: 'SEGMENTS', items: [...menu] },
+  { id: 2, label: 'FOO BAR', items: [...menu] },
+  { id: 2, label: 'FOO BAR', items: [...menu] },
+  { id: 2, label: 'FOO BAR', items: [...menu] },
+]
 
 export default function EditorPage({ blocks, initialReduxState }: any) {
   const store = useStore(initialReduxState)
   return (
     <Provider store={store}>
-      <Editor blocks={blocks} />
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <Sidebar sections={sections} />
+        <div style={{ flex: 1, height: '100vh', overflow: 'scroll' }}>
+          <Editor blocks={blocks} />
+        </div>
+      </div>
     </Provider>
   )
 }
