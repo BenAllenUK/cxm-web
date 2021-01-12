@@ -48,6 +48,7 @@ class Container extends React.Component<IProps, IState> {
   render() {
     const { children, onAddClick, initialHeight, enableHandle } = this.props
     const { showControls } = this.state
+    const isVisible = enableHandle && showControls
     return (
       <div
         style={{
@@ -60,16 +61,18 @@ class Container extends React.Component<IProps, IState> {
         onMouseLeave={this.onMouseLeave}
       >
         <div className={styles.block}>
-          {enableHandle && showControls && (
-            <div className={styles.controls} style={{ height: initialHeight }}>
-              <AddButton
-                data-tip={'Click to add a block below'}
-                data-for="editor"
-                onClick={onAddClick}
-              />
-              <DragButton />
-            </div>
-          )}
+          <div
+            className={styles.controls}
+            style={{ height: initialHeight, visibility: isVisible ? 'visible' : 'hidden' }}
+          >
+            <AddButton
+              data-tip={'Click to add a block below'}
+              data-for="editor"
+              onClick={onAddClick}
+            />
+            <DragButton />
+          </div>
+
           {children}
         </div>
       </div>

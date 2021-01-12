@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { SortableContainer, SortableElement, SortEvent, SortStart } from 'react-sortable-hoc'
 import arrayMove from 'array-move'
+import { Tooltip } from 'components/tooltip'
 
 import Text from './blocks/Text'
 import {
@@ -332,6 +333,7 @@ class Content extends React.Component<IProps, IState> {
         <List onSortStart={this.onSortStart} onSortEnd={this.onSortEnd} useDragHandle={true}>
           {blocks.map((item, i) => this.renderBlock(item, i))}
         </List>
+        <Tooltip id={'editor'} />
       </div>
     )
   }
