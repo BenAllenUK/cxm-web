@@ -9,6 +9,9 @@ import { MenuList } from './MenuList'
 
 import { Tooltip } from 'components/tooltip'
 
+import produce from 'immer'
+import update from 'lodash/update'
+
 export const SIDEBAR_INDENT = 20
 
 const appMenu = [
@@ -41,15 +44,14 @@ export function Sidebar({ sections: savedSections }: IProps) {
   const [sections, setSections] = useState(savedSections)
 
   const onMenuItemClick = async (sectionIndex: number, menuIndexes: number[]) => {
-    const sectionPath = `${sectionIndex}.items.`
-    const menuPath = menuIndexes.map((i) => `${i}`).join('.children.')
-    const u = await (await import('updeep')).default
-    const mutatedSections = u.updateIn(
-      sectionPath + menuPath,
-      (value: IItem) => ({ ...value, isOpen: !value.isOpen }),
-      sections
-    )
-    setSections(mutatedSections)
+    const sectionPath = `[${sectionIndex}].items.`
+    const menuPath = menuIndexes.map((i) => `[${i}]`).join('.children.')
+    const path = sectionPath + menuPath + '.isOpen'
+    const newSections = produce(sections, (draftSections) => {
+      return update(draftSections, path, (val: boolean) => !val)
+    })
+
+    setSections(newSections)
   }
 
   return (

@@ -1,5 +1,5 @@
 import { BlockType } from 'components/types'
-import Blog from 'components/blog'
+import Blog from 'components/content'
 import { initialState } from 'reducers'
 
 export default function BlogPage({ blocks }: any) {

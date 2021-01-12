@@ -1,9 +1,9 @@
 import { BlockType } from 'components/types'
-import Blog from 'components/blog'
+import Content from 'components/content'
 import { initialState } from 'reducers'
 
-export default function BlogPage({ blocks }: any) {
-  return <Blog blocks={blocks} />
+export default function ContentPage({ blocks }: any) {
+  return <Content blocks={blocks} />
 }
 
 export function getStaticProps() {

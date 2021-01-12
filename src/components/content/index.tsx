@@ -4,7 +4,7 @@ import { BlockData } from 'components/types'
 import styles from './Blog.module.scss'
 import Post from './post/Post'
 
-class Blog extends React.Component<IProps> {
+class Content extends React.Component<IProps> {
   render() {
     return (
       <div className={styles.body}>
@@ -18,4 +18,4 @@ interface IProps {
   blocks: BlockData[]
 }
 
-export default Blog
+export default Content
