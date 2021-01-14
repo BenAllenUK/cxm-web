@@ -1,0 +1,7 @@
+mutation CreateProject($name: String!, $image: String, $organisationId: Int!, $slug: String!) {
+  insert_projects_one(
+    object: { name: $name, image: $image, organisation_id: $organisationId, slug: $slug }
+  ) {
+    id
+  }
+}

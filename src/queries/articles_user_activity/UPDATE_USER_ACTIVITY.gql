@@ -1,0 +1,9 @@
+mutation updateUserActivity($articleId: Int!, $userId: Int!, $now: timestamptz!) {
+  insert_articles_user_activity_one(
+    object: { article_id: $articleId, user_id: $userId, created_at: $now }
+    on_conflict: { constraint: articles_user_activity_pkey, update_columns: [created_at] }
+  ) {
+    user_id
+    article_id
+  }
+}

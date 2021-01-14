@@ -6,5 +6,6 @@ query GetArticles($projectId: Int!) {
     title
     updated_at
     created_at
+    # cartItems @client
   }
 }

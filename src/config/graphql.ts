@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloClient, gql, InMemoryCache, makeVar } from '@apollo/client'
 
 import { HttpLink } from '@apollo/client/link/http'
 import { WebSocketLink } from '@apollo/client/link/ws'
@@ -34,6 +34,7 @@ export function useApollo(initialState: any = {}) {
   const store = useMemo(() => initializeApollo(initialState), [initialState])
   return store
 }
+export const isLoggedInVar = makeVar<boolean>(false) // !!localStorage.getItem('token')
 
 export function createHTTPClient() {
   return new ApolloClient({
@@ -44,25 +45,23 @@ export function createHTTPClient() {
         'X-Hasura-admin-secret': 'BARBAR',
       },
     }),
-    cache: new InMemoryCache(),
-  })
-}
-
-export function createWSClient(authToken?: string) {
-  return new ApolloClient({
-    ssrMode: typeof window === 'undefined',
-    link: new WebSocketLink({
-      uri: process.env.GRAPHQL_ENDPOINT || 'ws://cxm.hasura.app/v1/graphql',
-      options: {
-        reconnect: true,
-        connectionParams: {
-          headers: {
-            'X-Hasura-admin-secret': 'BARBAR',
-            // Authorization: `Bearer ${authToken}`,
+    typeDefs: gql`
+      extend type Articles {
+        isLoggedIn: Boolean!
+      }
+    `,
+    cache: new InMemoryCache({
+      typePolicies: {
+        articles: {
+          fields: {
+            isLoggedIn: {
+              read() {
+                return isLoggedInVar()
+              },
+            },
           },
         },
       },
     }),
-    cache: new InMemoryCache(),
   })
 }

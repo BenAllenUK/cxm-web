@@ -197,7 +197,6 @@ class Content extends React.Component<IProps, IState> {
 
     const blockRef = this.blockRefs[index]
     const { top: blockTop, left: blockLeft } = blockRef.getBoundingClientRect()
-    console.log({ blockLeft, blockTop })
     const bodyTop = this.bodyRef ? this.bodyRef.getBoundingClientRect().top : 0
     const bodyLeft = this.bodyRef ? this.bodyRef.getBoundingClientRect().left : 0
     const diffTop = blockTop - bodyTop

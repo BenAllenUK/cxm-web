@@ -1,0 +1,10 @@
+mutation UpsertBlocks($objects: [blocks_insert_input!]!) {
+  insert_blocks(
+    objects: $objects
+    on_conflict: { constraint: blocks_pkey, update_columns: [parent_id, payload, article_id, type] }
+  ) {
+    returning {
+      id
+    }
+  }
+}

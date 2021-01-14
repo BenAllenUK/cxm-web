@@ -1,0 +1,14 @@
+mutation UpdateArticle(
+  $id: Int!
+  $parentId: Int!
+  $title: String!
+  $projectId: Int!
+  $slug: String!
+) {
+  update_articles_by_pk(
+    pk_columns: { id: $id }
+    _set: { parent_id: $parentId, title: $title, project_id: $projectId, slug: $slug }
+  ) {
+    id
+  }
+}

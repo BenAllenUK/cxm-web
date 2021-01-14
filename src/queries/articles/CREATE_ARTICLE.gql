@@ -1,0 +1,7 @@
+mutation CreateArticle($parentId: Int!, $title: String!, $projectId: Int!, $slug: String!) {
+  insert_articles_one(
+    object: { parent_id: $parentId, title: $title, project_id: $projectId, slug: $slug }
+  ) {
+    id
+  }
+}

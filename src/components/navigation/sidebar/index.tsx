@@ -41,18 +41,16 @@ export type MenuItem = {
   parentId: number | null
 }
 
-export function Sidebar({ project, sections: savedSections }: IProps) {
-  const [sections, setSections] = useState(savedSections)
-
-  const onMenuItemClick = async (sectionIndex: number, menuIndexes: number[]) => {
+export function Sidebar({ project, sections, onItemClick }: IProps) {
+  const onMenuItemClick = async (id: number, sectionIndex: number, menuIndexes: number[]) => {
     const sectionPath = `[${sectionIndex}].items.`
     const menuPath = menuIndexes.map((i) => `[${i}]`).join('.children.')
     const path = sectionPath + menuPath + '.isOpen'
-    setSections(
-      produce((draftSections) => {
-        update(draftSections, path, (val: boolean) => !val)
-      })
-    )
+    // setSections(
+    //   produce((draftSections) => {
+    //     update(draftSections, path, (val: boolean) => !val)
+    //   })
+    // )
   }
 
   return (
@@ -73,7 +71,7 @@ export function Sidebar({ project, sections: savedSections }: IProps) {
               <div className={styles.label}>{item.label}</div>
               <MenuList
                 items={item.items}
-                onItemClick={(_, menuIndexes) => onMenuItemClick(index, menuIndexes)}
+                onItemClick={(id, menuIndexes) => onMenuItemClick(id, index, menuIndexes)}
               />
             </div>
           ))}
@@ -90,6 +88,7 @@ interface IProps {
     image?: string | null
   }
   sections: Section[]
+  onItemClick: (id: number) => void
 }
 
 export default Sidebar

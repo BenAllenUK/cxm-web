@@ -1,11 +1,16 @@
 import { MenuItem } from 'components/navigation/sidebar'
-import { GetArticlesQueryResult } from 'generated/graphql'
 import { unflatten } from './tree'
 
-type Data = NonNullable<GetArticlesQueryResult['data']>
+export function parseMenu(
+  data: { id: number; title: string; parent_id?: number | null }[]
+): MenuItem[] {
+  if (data.length === 0) {
+    return []
+  }
 
-export function formatMenu(data: Data): MenuItem[] {
-  const menuItemsList = data.articles.map((item) => ({
+  console.log(data)
+
+  const menuItemsList = data.map((item) => ({
     id: item.id,
     label: item.title,
     isOpen: false,
@@ -13,6 +18,5 @@ export function formatMenu(data: Data): MenuItem[] {
     parentId: item.parent_id || null,
   }))
   const menuItemsTree = unflatten<MenuItem>(menuItemsList)
-
   return menuItemsTree as MenuItem[]
 }

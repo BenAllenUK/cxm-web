@@ -7,8 +7,9 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "javascript.preferences.importModuleSpecifier": "relative",
   "editor.tabSize": 2,
-  "cSpell.words": [
-    "scrollable",
-    "unflatten"
-  ]
+  "cSpell.words": ["scrollable", "unflatten"],
+  "search.exclude": {
+    "src/generated/**.*": true,
+    "public/docs/api.json": true
+  }
 }

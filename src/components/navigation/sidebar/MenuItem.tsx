@@ -8,7 +8,7 @@ import { CSSProperties } from 'react'
 
 export default function MenuItem({ children, isOpen, subList, innerStyle, onClick }: IProps) {
   return (
-    <div className={styles.item} onClick={subList ? onClick : undefined}>
+    <div className={styles.item} onClick={onClick}>
       <div className={styles.itemMain} style={innerStyle}>
         <ArrowButton disable={!subList} isDown={isOpen} />
 

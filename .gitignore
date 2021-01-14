@@ -34,3 +34,6 @@ yarn-error.log*
 .vercel
 
 .envrc
+
+src/generated/*.*
+graphql.schema.json
