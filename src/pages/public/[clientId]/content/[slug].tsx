@@ -1,7 +1,7 @@
 import { BlockType } from 'components/types'
 import Content from 'components/content'
 import { initialState } from 'reducers'
-import { createHTTPClient } from 'config/graphql'
+import { createGraphQLClient } from 'config/graphql'
 import GET_PROJECTS from 'queries/project/GET_PROJECTS.gql'
 
 export default function ContentPage({ blocks }: any) {
@@ -9,7 +9,7 @@ export default function ContentPage({ blocks }: any) {
 }
 
 export async function getStaticProps() {
-  const client = createHTTPClient()
+  const client = createGraphQLClient()
   const { data } = await client.query({ query: GET_PROJECTS })
   // const { projects_by_pk: projectData } = data
 

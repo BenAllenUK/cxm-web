@@ -10,7 +10,7 @@
 //   const { WebSocketLink } = dynamic(() => import('@apollo/client/link/ws'))
 
 //   function initializeApollo(initialState: any = {}) {
-//     const _apolloClient = apolloClient ?? createHTTPClient()
+//     const _apolloClient = apolloClient ?? createGraphQLClient()
 
 //     // If your page has Next.js data fetching methods that use Apollo Client,
 //     // the initial state gets hydrated here
@@ -36,7 +36,7 @@
 //     return store
 //   }
 
-//   function createHTTPClient() {
+//   function createGraphQLClient() {
 //     return new ApolloClient({
 //       ssrMode: typeof window === 'undefined',
 //       link: new HttpLink({

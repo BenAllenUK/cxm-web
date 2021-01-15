@@ -9,7 +9,7 @@ import { ApolloProvider } from '@apollo/client'
 export let apolloClient: any
 
 export function initializeApollo(initialState: any = {}) {
-  const _apolloClient = apolloClient ?? createHTTPClient()
+  const _apolloClient = apolloClient ?? createGraphQLClient()
 
   // If your page has Next.js data fetching methods that use Apollo Client,
   // the initial state gets hydrated here
@@ -36,32 +36,35 @@ export function useApollo(initialState: any = {}) {
 }
 export const isLoggedInVar = makeVar<boolean>(false) // !!localStorage.getItem('token')
 
-export function createHTTPClient() {
+const cache = new InMemoryCache()
+
+export function createGraphQLClient() {
+  if (typeof window === 'undefined') {
+    return new ApolloClient({
+      ssrMode: true,
+      link: new HttpLink({
+        uri: process.env.GRAPHQL_ENDPOINT || 'https://cxm.hasura.app/v1/graphql',
+        headers: {
+          'X-Hasura-admin-secret': 'BARBAR',
+        },
+      }),
+      cache: new InMemoryCache(),
+    })
+  }
   return new ApolloClient({
-    ssrMode: typeof window === 'undefined',
-    link: new HttpLink({
-      uri: process.env.GRAPHQL_ENDPOINT || 'https://cxm.hasura.app/v1/graphql',
-      headers: {
-        'X-Hasura-admin-secret': 'BARBAR',
-      },
-    }),
-    typeDefs: gql`
-      extend type Articles {
-        isLoggedIn: Boolean!
-      }
-    `,
-    cache: new InMemoryCache({
-      typePolicies: {
-        articles: {
-          fields: {
-            isLoggedIn: {
-              read() {
-                return isLoggedInVar()
-              },
-            },
+    connectToDevTools: true,
+
+    link: new WebSocketLink({
+      uri: 'wss://cxm.hasura.app/v1/graphql',
+      options: {
+        reconnect: true,
+        connectionParams: {
+          headers: {
+            'X-Hasura-admin-secret': 'BARBAR',
           },
         },
       },
     }),
+    cache: cache,
   })
 }

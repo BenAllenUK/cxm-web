@@ -41,8 +41,6 @@ export default function EditorProvider(props: any) {
 
   const localState = Storage.getLocalItem(KEY) || initialState
 
-  console.log({ localState })
-
   return (
     <EditorContext.Provider value={{ ...localState, setArticleId, setProjectIndex }}>
       {props.children}

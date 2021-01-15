@@ -8,12 +8,9 @@ export function parseMenu(
     return []
   }
 
-  console.log(data)
-
   const menuItemsList = data.map((item) => ({
     id: item.id,
     label: item.title,
-    isOpen: false,
     children: [],
     parentId: item.parent_id || null,
   }))

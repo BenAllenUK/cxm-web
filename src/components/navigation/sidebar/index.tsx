@@ -36,21 +36,50 @@ export type Section = {
 export type MenuItem = {
   id: number
   label: string
-  isOpen: boolean
   children: MenuItem[]
   parentId: number | null
 }
 
-export function Sidebar({ project, sections, onItemClick }: IProps) {
-  const onMenuItemClick = async (id: number, sectionIndex: number, menuIndexes: number[]) => {
-    const sectionPath = `[${sectionIndex}].items.`
-    const menuPath = menuIndexes.map((i) => `[${i}]`).join('.children.')
-    const path = sectionPath + menuPath + '.isOpen'
-    // setSections(
-    //   produce((draftSections) => {
-    //     update(draftSections, path, (val: boolean) => !val)
-    //   })
-    // )
+export function Sidebar({ project, sections, onViewArticle, onCreateArticle }: IProps) {
+  // TODO: Assumes ids have different numbers
+  const [openState, setOpenState] = useState({})
+
+  const onMenuItemClick = async (
+    e: React.MouseEvent<HTMLDivElement>,
+    sectionIndex: number,
+    item: MenuItem
+  ) => {
+    if (item.children.length > 0) {
+      setOpenState(
+        produce((draftOpenState) => {
+          draftOpenState[item.id] = !draftOpenState[item.id]
+        })
+      )
+    }
+    onViewArticle(item.id)
+  }
+
+  const onMenuAddItemClick = async (
+    e: React.MouseEvent<HTMLDivElement>,
+    sectionIndex: number,
+    item: MenuItem
+  ) => {
+    console.log('add')
+    onCreateArticle(item.id)
+    setOpenState(
+      produce((draftOpenState) => {
+        draftOpenState[item.id] = true
+      })
+    )
+    e.stopPropagation()
+  }
+
+  const onMenuMoreItemClick = async (
+    e: React.MouseEvent<HTMLDivElement>,
+    sectionIndex: number,
+    item: MenuItem
+  ) => {
+    e.stopPropagation()
   }
 
   return (
@@ -70,8 +99,11 @@ export function Sidebar({ project, sections, onItemClick }: IProps) {
             <div key={index}>
               <div className={styles.label}>{item.label}</div>
               <MenuList
+                openState={openState}
                 items={item.items}
-                onItemClick={(id, menuIndexes) => onMenuItemClick(id, index, menuIndexes)}
+                onItemClick={(e, item) => onMenuItemClick(e, index, item)}
+                onItemAddClick={(e, item) => onMenuAddItemClick(e, index, item)}
+                onItemMoreClick={(e, item) => onMenuMoreItemClick(e, index, item)}
               />
             </div>
           ))}
@@ -88,7 +120,8 @@ interface IProps {
     image?: string | null
   }
   sections: Section[]
-  onItemClick: (id: number) => void
+  onViewArticle: (id: number) => void
+  onCreateArticle: (id: number | null) => void
 }
 
 export default Sidebar

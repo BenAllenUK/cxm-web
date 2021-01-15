@@ -1,6 +1,5 @@
-query GetArticles($projectId: Int!) {
+subscription GetArticlesSubscription($projectId: Int!) {
   projects_by_pk(id: $projectId) {
-    id
     articles {
       id
       parent_id
