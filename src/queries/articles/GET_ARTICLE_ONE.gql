@@ -1,0 +1,20 @@
+query GetArticleOne($slug: String!) {
+  articles(where: { slug: { _eq: $slug } }) {
+    id
+    parent_id
+    slug
+    title
+    updated_at
+    created_at
+
+    blocks {
+      id
+      article_id
+      parent_id
+      updated_at
+      created_at
+      payload
+      type
+    }
+  }
+}

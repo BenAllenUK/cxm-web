@@ -5,6 +5,12 @@ mutation UpsertBlocks($objects: [blocks_insert_input!]!) {
   ) {
     returning {
       id
+      article_id
+      parent_id
+      updated_at
+      created_at
+      payload
+      type
     }
   }
 }

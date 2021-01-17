@@ -2,17 +2,17 @@ import * as Storage from 'config/storage'
 import { createContext, useState, useContext, useEffect, cloneElement } from 'react'
 
 interface Context {
-  projectIndex: number | null
+  projectId: number | null
   articleId: number | null
 }
 
 interface ContextActions extends Context {
-  setProjectIndex: (projectIndex: number) => void
+  setProjectIndex: (projectId: number) => void
   setArticleId: (articleId: number) => void
 }
 
 const EditorContext = createContext<ContextActions>({
-  projectIndex: null,
+  projectId: null,
   articleId: null,
   setProjectIndex: () => {},
   setArticleId: () => {},
@@ -21,7 +21,7 @@ const EditorContext = createContext<ContextActions>({
 export const useEditor = () => useContext(EditorContext)
 
 const KEY = 'editor'
-const initialState = { projectIndex: 0, articleId: 1 }
+const initialState = { projectId: 0, articleId: 1 }
 
 export default function EditorProvider(props: any) {
   const [context, setContext] = useState<Context>(initialState)
@@ -35,14 +35,14 @@ export default function EditorProvider(props: any) {
     setContextData({ ...context, articleId })
   }
 
-  const setProjectIndex = (projectIndex: number) => {
-    setContextData({ ...context, projectIndex })
+  const setProjectId = (projectId: number) => {
+    setContextData({ ...context, projectId })
   }
 
   const localState = Storage.getLocalItem(KEY) || initialState
 
   return (
-    <EditorContext.Provider value={{ ...localState, setArticleId, setProjectIndex }}>
+    <EditorContext.Provider value={{ ...localState, setArticleId, setProjectId }}>
       {props.children}
     </EditorContext.Provider>
   )

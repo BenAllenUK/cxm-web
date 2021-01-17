@@ -1,5 +1,5 @@
-subscription GetArticlesSubscription($projectId: Int!) {
-  projects_by_pk(id: $projectId) {
+subscription GetArticlesSubscription($project_id: Int!) {
+  projects_by_pk(id: $project_id) {
     articles {
       id
       parent_id

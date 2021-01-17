@@ -3,7 +3,15 @@ import MenuItem from './MenuItem'
 import { MenuItem as MenuItemType, SIDEBAR_INDENT } from '.'
 
 export function MenuList(props: IProps) {
-  const { items, openState, depth = 0, onItemClick, onItemAddClick, onItemMoreClick } = props
+  const {
+    items,
+    openState,
+    depth = 0,
+    onItemClick,
+    onItemArrowClick,
+    onItemAddClick,
+    onItemMoreClick,
+  } = props
   return (
     <ul className={styles.menu}>
       {items.map((item, index) => (
@@ -13,6 +21,7 @@ export function MenuList(props: IProps) {
             innerStyle={{ paddingLeft: SIDEBAR_INDENT * (depth + 1) }}
             isOpen={openState[item.id]}
             onClick={(e) => onItemClick(e, item)}
+            onArrowClick={(e) => onItemArrowClick(e, item)}
             onAddClick={(e) => onItemAddClick(e, item)}
             onMoreClick={(e) => onItemMoreClick(e, item)}
           >
@@ -29,6 +38,7 @@ interface IProps {
   openState: { [key: string]: boolean }
   depth?: number
   onItemClick: (e: React.MouseEvent<HTMLDivElement>, item: MenuItemType) => void
+  onItemArrowClick: (e: React.MouseEvent<HTMLDivElement>, item: MenuItemType) => void
   onItemAddClick: (e: React.MouseEvent<HTMLDivElement>, item: MenuItemType) => void
   onItemMoreClick: (e: React.MouseEvent<HTMLDivElement>, item: MenuItemType) => void
 }

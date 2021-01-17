@@ -49,13 +49,6 @@ export function Sidebar({ project, sections, onViewArticle, onCreateArticle }: I
     sectionIndex: number,
     item: MenuItem
   ) => {
-    if (item.children.length > 0) {
-      setOpenState(
-        produce((draftOpenState) => {
-          draftOpenState[item.id] = !draftOpenState[item.id]
-        })
-      )
-    }
     onViewArticle(item.id)
   }
 
@@ -64,13 +57,27 @@ export function Sidebar({ project, sections, onViewArticle, onCreateArticle }: I
     sectionIndex: number,
     item: MenuItem
   ) => {
-    console.log('add')
     onCreateArticle(item.id)
     setOpenState(
       produce((draftOpenState) => {
         draftOpenState[item.id] = true
       })
     )
+    e.stopPropagation()
+  }
+
+  const onMenuArrowItemClick = async (
+    e: React.MouseEvent<HTMLDivElement>,
+    sectionIndex: number,
+    item: MenuItem
+  ) => {
+    if (item.children.length > 0) {
+      setOpenState(
+        produce((draftOpenState) => {
+          draftOpenState[item.id] = !draftOpenState[item.id]
+        })
+      )
+    }
     e.stopPropagation()
   }
 
@@ -102,6 +109,7 @@ export function Sidebar({ project, sections, onViewArticle, onCreateArticle }: I
                 openState={openState}
                 items={item.items}
                 onItemClick={(e, item) => onMenuItemClick(e, index, item)}
+                onItemArrowClick={(e, item) => onMenuArrowItemClick(e, index, item)}
                 onItemAddClick={(e, item) => onMenuAddItemClick(e, index, item)}
                 onItemMoreClick={(e, item) => onMenuMoreItemClick(e, index, item)}
               />

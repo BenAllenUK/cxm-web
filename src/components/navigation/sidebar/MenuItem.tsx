@@ -12,13 +12,14 @@ export default function MenuItem({
   subList,
   innerStyle,
   onClick,
+  onArrowClick,
   onAddClick,
   onMoreClick,
 }: IProps) {
   return (
     <div className={styles.item} onClick={onClick}>
       <div className={styles.itemMain} style={innerStyle}>
-        <ArrowButton disable={!subList} isDown={isOpen} />
+        <ArrowButton onClick={onArrowClick} disable={!subList} isDown={isOpen} />
 
         <div>{children}</div>
       </div>
@@ -33,7 +34,8 @@ export default function MenuItem({
 export function ArrowButton({
   isDown = false,
   disable = false,
-}: {
+  onClick,
+}: HTMLAttributes<HTMLDivElement> & {
   isDown?: boolean
   disable: boolean
 }) {
@@ -41,6 +43,7 @@ export function ArrowButton({
     <div
       className={styles.itemControlsButton}
       style={{ marginRight: 4, pointerEvents: disable ? 'none' : 'inherit' }}
+      onClick={onClick}
     >
       <ArrowIcon
         width={10}
@@ -85,5 +88,6 @@ interface IProps {
   innerStyle: CSSProperties
   onAddClick: (e: React.MouseEvent<HTMLDivElement>) => void
   onMoreClick: (e: React.MouseEvent<HTMLDivElement>) => void
+  onArrowClick: (e: React.MouseEvent<HTMLDivElement>) => void
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void
 }

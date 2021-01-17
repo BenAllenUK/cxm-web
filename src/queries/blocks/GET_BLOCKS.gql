@@ -1,5 +1,5 @@
-query GetBlocks($articleId: Int!) {
-  blocks(where: { article_id: { _eq: $articleId } }) {
+query GetBlocks($article_id: Int!) {
+  blocks(where: { article_id: { _eq: $article_id } }) {
     id
     article_id
     parent_id

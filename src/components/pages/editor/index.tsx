@@ -5,61 +5,60 @@ import { parseBlocks } from 'utils/blocks'
 import { useEffect } from 'react'
 import styles from './Editor.module.scss'
 import {
+  GetArticleOneQuery,
   GetArticlesQuery,
   GetArticlesQueryResult,
   GetBlocksQuery,
+  GetProjectOneQuery,
   Projects,
   useCreateArticleMutation,
+  useUpsertBlocksMutation,
 } from 'generated/graphql'
 
-import GET_ARTICLES from 'queries/articles/GET_ARTICLES.gql'
-
 import { createArticleMutationParams } from 'queries/articles'
+import { createUpsertMutationParams } from 'queries/blocks'
 
 import { useRouter } from 'next/router'
-import { gql } from '@apollo/client'
-import produce from 'immer'
+import { DEFAULT_ARTICLE } from 'components/editor/blocks'
 
 export default function EditorPage({
-  articleId,
+  article,
   project,
-  articles,
-  blocks: blocksRaw,
   onCreateArticleMutation,
+  onUpsertBlockMutation,
 }: IProps) {
-  const sections = [{ id: 1, label: 'CONTENT', items: parseMenu(articles) }]
+  const sections = [{ id: 1, label: 'CONTENT', items: parseMenu(project.articles) }]
 
-  const [article] = articles.filter((item) => item.id === articleId)
   const router = useRouter()
 
-  let blocks = parseBlocks(blocksRaw)
+  let blocks = parseBlocks(article.blocks)
 
   useEffect(() => {
-    document.title = `Omnia ${article?.title ? `| ${article?.title}` : ''}`
+    document.title = `Omnia | ${article.title}`
   })
 
   const onViewArticle = (id: number) => {
-    const [article] = articles.filter((item) => item.id === id)
+    const [article] = project.articles.filter((item) => item.id === id)
     if (!article) {
       console.error("Clicked on an article that didn't exist")
       return
     }
-
-    // router.replace(`/editor/${article.slug}`)
+    router.push(`/admin/${project.slug}/editor/${article.slug}`)
   }
 
-  const onCreateArticle = (id: number | null) => {
-    const newArticle = {
-      title: 'New Page',
-      slug: 'new' + new Date().getTime(),
-    }
-
+  const onCreateArticle = async (parentId: number | null) => {
     const params = createArticleMutationParams({
-      parentId: id,
-      projectId: project.id,
-      ...newArticle,
+      parent_id: parentId,
+      project_id: project.id,
+      slug: 'new-' + encodeURI(new Date().toISOString()),
+      ...DEFAULT_ARTICLE,
     })
-    onCreateArticleMutation(params)
+    const { data } = await onCreateArticleMutation(params)
+    const articleId = data?.insert_articles_one?.id
+    if (articleId) {
+      const articleSlug = data?.insert_articles_one?.slug
+      router.push(`/admin/${project.slug}/editor/${articleSlug}`)
+    }
   }
 
   return (
@@ -72,16 +71,17 @@ export default function EditorPage({
       />
 
       <div className={styles.editor}>
-        {article ? <Editor id={articleId} blocks={blocks} /> : <div>Pick an article</div>}
+        {article ? <Editor id={article.id} blocks={blocks} /> : <div>Pick an article</div>}
       </div>
     </div>
   )
 }
 
 interface IProps {
-  articleId: number
-  project: Projects
-  articles: NonNullable<NonNullable<GetArticlesQuery['projects_by_pk']>['articles']>
-  blocks: NonNullable<GetBlocksQuery['blocks']>
+  article: NonNullable<GetArticleOneQuery['articles'][0]>
+  project: NonNullable<NonNullable<GetProjectOneQuery['projects']>[0]>
+  articles: NonNullable<NonNullable<NonNullable<GetProjectOneQuery['projects']>[0]>['articles']>
+  blocks: NonNullable<GetArticleOneQuery['articles'][0]>['blocks']
   onCreateArticleMutation: ReturnType<typeof useCreateArticleMutation>[0]
+  onUpsertBlockMutation: ReturnType<typeof useUpsertBlocksMutation>[0]
 }

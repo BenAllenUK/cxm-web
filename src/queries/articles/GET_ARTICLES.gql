@@ -1,5 +1,5 @@
-query GetArticles($projectId: Int!) {
-  projects_by_pk(id: $projectId) {
+query GetArticles($project_id: Int!) {
+  projects_by_pk(id: $project_id) {
     id
     articles {
       id
@@ -7,7 +7,7 @@ query GetArticles($projectId: Int!) {
       slug
       title
       updated_at
-      created_at
+      created_at #Remove these?
     }
   }
 }

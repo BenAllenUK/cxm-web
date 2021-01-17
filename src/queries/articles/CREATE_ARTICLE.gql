@@ -1,6 +1,18 @@
-mutation CreateArticle($parentId: Int, $title: String!, $projectId: Int!, $slug: String!) {
+mutation CreateArticle(
+  $parent_id: Int
+  $title: String!
+  $project_id: Int!
+  $slug: String!
+  $blocks: [blocks_insert_input!]!
+) {
   insert_articles_one(
-    object: { parent_id: $parentId, title: $title, project_id: $projectId, slug: $slug }
+    object: {
+      parent_id: $parent_id
+      title: $title
+      project_id: $project_id
+      slug: $slug
+      blocks: { data: $blocks }
+    }
   ) {
     __typename
     id
@@ -10,5 +22,14 @@ mutation CreateArticle($parentId: Int, $title: String!, $projectId: Int!, $slug:
     slug
     created_at
     updated_at
+    blocks {
+      id
+      article_id
+      parent_id
+      updated_at
+      created_at
+      payload
+      type
+    }
   }
 }

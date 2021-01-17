@@ -1,40 +1,24 @@
 import { ApolloCache } from '@apollo/client'
-import { CreateArticleMutation, GetArticlesQuery } from 'generated/graphql'
+import {
+  Blocks,
+  CreateArticleMutation,
+  CreateArticleMutationVariables,
+  GetArticlesQuery,
+  GetProjectOneQuery,
+} from 'generated/graphql'
 import produce from 'immer'
 
-import GET_ARTICLES from './GET_ARTICLES.gql'
+import GET_PROJECT_ONE from 'queries/project/GET_PROJECT_ONE.gql'
 
-interface IParams {
-  projectId: number
-  parentId: number | null
-  title: string
-  slug: string
-}
-
-export const createArticleMutationParams = ({
-  projectId,
-  parentId = null,
-  title,
-  slug,
-}: IParams) => {
+export const createArticleMutationParams = (variables: CreateArticleMutationVariables) => {
   return {
-    variables: {
-      projectId: projectId,
-      parentId: parentId,
-      title,
-      slug,
-    },
+    variables,
     optimisticResponse: {
       __typename: 'mutation_root',
       insert_articles_one: {
         __typename: 'articles',
         id: Math.round(Math.random() * -1000000),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        parent_id: parentId,
-        project_id: projectId,
-        title,
-        slug,
+        ...variables,
       },
     } as CreateArticleMutation,
     update: (cache: ApolloCache<CreateArticleMutation>, { data: dataRaw }: any) => {
@@ -43,16 +27,27 @@ export const createArticleMutationParams = ({
         return
       }
 
-      const data = cache.readQuery<GetArticlesQuery>({
-        query: GET_ARTICLES,
-        variables: { projectId },
+      const data = cache.readQuery<GetProjectOneQuery>({
+        query: GET_PROJECT_ONE,
+        // TODO: Change to id
+        variables: { slug: 'gimme' },
+      })
+
+      const newData = produce(data, (draftData: GetProjectOneQuery) => {
+        const { __typename, id, parent_id, slug, title } = article
+        draftData.projects[0].articles.push({
+          __typename,
+          id,
+          parent_id,
+          slug,
+          title,
+        })
       })
 
       cache.writeQuery({
-        query: GET_ARTICLES,
-        data: produce(data, (draftData: GetArticlesQuery) => {
-          draftData.projects_by_pk?.articles.push(article)
-        }),
+        query: GET_PROJECT_ONE,
+        data: newData,
+        variables: { slug: 'gimme' },
       })
     },
   }

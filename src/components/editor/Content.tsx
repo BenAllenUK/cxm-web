@@ -153,6 +153,7 @@ class Content extends React.Component<IProps, IState> {
     this.setState(
       produce((draftState) => {
         draftState.blocks.splice(index, 1)
+        draftState.blockControlsFocusedIndex = -1
       }),
       onComplete
     )
@@ -177,6 +178,10 @@ class Content extends React.Component<IProps, IState> {
   onBlockBlur = (index: number) => {
     // TODO: Update content
     // Enable undo/redo
+
+    // if (this.props.blocks[index] === this.state.blocks[index]) {
+    console.log('update content')
+    // }
   }
 
   prevFocus(index: number) {

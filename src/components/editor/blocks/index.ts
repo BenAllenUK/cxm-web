@@ -8,9 +8,25 @@ import {
 
 export const BLOCK_CONTAINER_VERTICAL_PADDING = 10
 
+export const DEFAULT_ARTICLE = {
+  title: 'New Page ' + new Date().toISOString(),
+  blocks: [{ type: 'TEXT', payload: JSON.stringify({ value: 'Start writing...' }) }],
+}
+
 export const DEFAULT_BLOCK = {
   type: BlockType.TEXT,
   value: '',
+  children: [],
+  id: -1,
+  parentId: null,
+}
+
+export const DEFAULT_BLOCK_START = {
+  type: BlockType.TEXT,
+  value: 'Start writing...',
+  children: [],
+  id: -1,
+  parentId: null,
 }
 
 export function isBlockEmpty(block: BlockData) {
