@@ -10,6 +10,7 @@ import {
   useGetArticleOneQuery,
   // useGetArticlesSubscriptionSubscription as useGetArticlesSubscription,
   useGetArticlesQuery,
+  useGetArticleOneSubscriptionSubscription,
   useGetProjectOneQuery,
   useUpsertBlocksMutation,
 } from 'generated/graphql'
@@ -52,12 +53,27 @@ export function Content() {
   }
 
   // Check to see if article Id is in article data
-  // aritcle id might not be part of this project
-  const { data: articleData } = useGetArticleOneQuery({
+  // article id might not be part of this project
+
+  let articleData = null
+
+  const response = useGetArticleOneQuery({
     variables: {
       slug: articleSlug,
     },
   })
+
+  articleData = response?.data
+
+  // Move to subscription after fetch
+  if (typeof window !== 'undefined') {
+    const { data } = useGetArticleOneSubscriptionSubscription({
+      variables: {
+        slug: articleSlug,
+      },
+    })
+    articleData = data ?? articleData
+  }
 
   const [article] = articleData?.articles || []
   if (!article) {

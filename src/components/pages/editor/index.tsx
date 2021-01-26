@@ -35,7 +35,7 @@ export default function EditorPage({
   const sections = [{ id: 1, label: 'CONTENT', items: parseMenu(project.articles) }]
 
   const router = useRouter()
-  const initialBlocks = parseBlocks(article.blocks)
+  const initialBlocks = article ? parseBlocks(article.blocks) : []
 
   useEffect(() => {
     document.title = `Omnia | ${article?.title ?? 'Loading...'}`

@@ -343,7 +343,7 @@ class Content extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { blocks } = this.state
+    const { blocks } = this.props
     const {
       textControlPosition,
       textControlOpen,

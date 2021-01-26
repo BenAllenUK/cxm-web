@@ -1,0 +1,12 @@
+#import "./ARTICLE_FRAGMENT.gql"
+#import "../blocks/BLOCK_FRAGMENT.gql"
+
+subscription GetArticleOneSubscription($slug: String!) {
+  articles(where: { slug: { _eq: $slug } }) {
+    ...Article
+
+    blocks {
+      ...Block
+    }
+  }
+}

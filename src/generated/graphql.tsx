@@ -5934,6 +5934,23 @@ export type GetArticlesSubscriptionSubscription = (
   )> }
 );
 
+export type GetArticleOneSubscriptionSubscriptionVariables = Exact<{
+  slug: Scalars['String'];
+}>;
+
+
+export type GetArticleOneSubscriptionSubscription = (
+  { __typename?: 'subscription_root' }
+  & { articles: Array<(
+    { __typename?: 'articles' }
+    & { blocks: Array<(
+      { __typename?: 'blocks' }
+      & BlockFragment
+    )> }
+    & ArticleFragment
+  )> }
+);
+
 export type UpdateArticleMutationVariables = Exact<{
   id: Scalars['Int'];
   parentId?: Maybe<Scalars['Int']>;
@@ -6226,6 +6243,39 @@ export function useGetArticlesSubscriptionSubscription(baseOptions: Apollo.Subsc
       }
 export type GetArticlesSubscriptionSubscriptionHookResult = ReturnType<typeof useGetArticlesSubscriptionSubscription>;
 export type GetArticlesSubscriptionSubscriptionResult = Apollo.SubscriptionResult<GetArticlesSubscriptionSubscription>;
+export const GetArticleOneSubscriptionDocument = gql`
+    subscription GetArticleOneSubscription($slug: String!) {
+  articles(where: {slug: {_eq: $slug}}) {
+    ...Article
+    blocks {
+      ...Block
+    }
+  }
+}
+    ${ArticleFragmentDoc}
+${BlockFragmentDoc}`;
+
+/**
+ * __useGetArticleOneSubscriptionSubscription__
+ *
+ * To run a query within a React component, call `useGetArticleOneSubscriptionSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGetArticleOneSubscriptionSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetArticleOneSubscriptionSubscription({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetArticleOneSubscriptionSubscription(baseOptions: Apollo.SubscriptionHookOptions<GetArticleOneSubscriptionSubscription, GetArticleOneSubscriptionSubscriptionVariables>) {
+        return Apollo.useSubscription<GetArticleOneSubscriptionSubscription, GetArticleOneSubscriptionSubscriptionVariables>(GetArticleOneSubscriptionDocument, baseOptions);
+      }
+export type GetArticleOneSubscriptionSubscriptionHookResult = ReturnType<typeof useGetArticleOneSubscriptionSubscription>;
+export type GetArticleOneSubscriptionSubscriptionResult = Apollo.SubscriptionResult<GetArticleOneSubscriptionSubscription>;
 export const UpdateArticleDocument = gql`
     mutation UpdateArticle($id: Int!, $parentId: Int, $title: String, $projectId: Int, $slug: String) {
   update_articles_by_pk(
