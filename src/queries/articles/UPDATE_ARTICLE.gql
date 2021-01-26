@@ -1,13 +1,7 @@
-mutation UpdateArticle(
-  $id: Int!
-  $parent_id: Int
-  $title: String
-  $project_id: Int
-  $slug: String
-) {
+mutation UpdateArticle($id: Int!, $parentId: Int, $title: String, $projectId: Int, $slug: String) {
   update_articles_by_pk(
     pk_columns: { id: $id }
-    _set: { parent_id: $parent_id, title: $title, project_id: $parent_id, slug: $slug }
+    _set: { parentId: $parentId, title: $title, projectId: $projectId, slug: $slug }
   ) {
     id
   }

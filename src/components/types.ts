@@ -35,18 +35,21 @@ export type BlockData =
   | BlockDataTweet
   | BlockDataGoogleMaps
 
-export type BlockDataDefault = {
+export type Block = {
   id: number
   type: BlockType
-  parentId: number | null
-  children: BlockData[]
+  parentId?: number | null
+  editingUserId?: number | null
+  payload: BlockData
+  createdAt: string
+  updatedAt: string
 }
 
-export type BlockDataText = BlockDataDefault & {
+export type BlockDataText = {
   value: string
 }
 
-export type BlockDataImage = BlockDataDefault & {
+export type BlockDataImage = {
   source: string | null
   alt: string | null
   imageType: BlockDataImageType
@@ -57,36 +60,36 @@ export enum BlockDataImageType {
   UNSPLASH = 'UNSPLASH',
 }
 
-export type BlockDataH1 = BlockDataDefault & BlockDataText
+export type BlockDataH1 = BlockDataText
 
-export type BlockDataH2 = BlockDataDefault & BlockDataText
+export type BlockDataH2 = BlockDataText
 
-export type BlockDataH3 = BlockDataDefault & BlockDataText
+export type BlockDataH3 = BlockDataText
 
-export type BlockDataTableInline = BlockDataDefault & {
+export type BlockDataTableInline = {
   title: string
   colNames: string[]
   rows: string[][]
 }
 
-export type BlockDataCheckBullet = BlockDataDefault & {
+export type BlockDataCheckBullet = {
   items: string[]
   selected: boolean[]
 }
 
-export type BlockDataListBullet = BlockDataDefault & {
+export type BlockDataListBullet = {
   items: string[]
 }
 
-export type BlockDataNumberBullet = BlockDataDefault & BlockDataListBullet
+export type BlockDataNumberBullet = BlockDataListBullet
 
-export type BlockDataQuote = BlockDataDefault & BlockDataText
+export type BlockDataQuote = BlockDataText
 
-export type BlockDataDivider = BlockDataDefault
+export type BlockDataDivider = {}
 
-export type BlockDataCallout = BlockDataDefault & BlockDataText
+export type BlockDataCallout = BlockDataText
 
-export type BlockDataVideo = BlockDataDefault & {
+export type BlockDataVideo = {
   url: string
   alt: string
   type: string
@@ -97,14 +100,14 @@ export enum BlockDataVideoType {
   YOUTUBE = 'YOUTUBE',
 }
 
-export type BlockDataCode = BlockDataDefault & BlockDataText
+export type BlockDataCode = BlockDataText
 
-export type BlockDataTweet = BlockDataDefault & {
+export type BlockDataTweet = {
   value: string
   url: string
 }
 
-export type BlockDataGoogleMaps = BlockDataDefault & {
+export type BlockDataGoogleMaps = {
   lat: string
   long: string
 }

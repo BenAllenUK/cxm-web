@@ -4,7 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { SortableContainer, SortableElement, SortEvent, SortStart } from 'react-sortable-hoc'
 import arrayMove from 'array-move'
 import { Tooltip } from 'components/tooltip'
-
+import LinearProgress from '@material-ui/core/LinearProgress'
 import Text from './blocks/Text'
 import {
   BlockTypeProperties,
@@ -14,7 +14,7 @@ import {
   isBlockEmpty,
 } from './blocks'
 import TextControls from './text-controls'
-import { BlockData, BlockType, BlockDataText, BlockDataImage } from '../types'
+import { BlockData, BlockType, BlockDataText, BlockDataImage, Block } from '../types'
 
 import { IRootState } from 'reducers'
 import editor from 'actions/editor'
@@ -100,7 +100,7 @@ class Content extends React.Component<IProps, IState> {
 
   onBlockItemClick = (key: BlockType) => {
     const { blockControlsFocusedIndex: index } = this.state
-
+    console.log({ key })
     const isEditable = BlockTypeProperties[key].isEditable
 
     if (index === -1) return
@@ -109,7 +109,7 @@ class Content extends React.Component<IProps, IState> {
       produce((draftState) => {
         draftState.blocks[index].type = key
         if (isEditable) {
-          draftState.blocks[index].value = ''
+          draftState.blocks[index].payload.value = ''
         }
       })
     )
@@ -171,17 +171,48 @@ class Content extends React.Component<IProps, IState> {
 
   onBlockFocus = (index: number) => {
     this.setState((state) => ({ ...state, blockControlsFocusedIndex: index }))
-    // TODO: Lock block
+
+    const { blocks } = this.state
+    if (blocks[index].id) {
+      // TODO: Lock block
+    }
     // Disable auto undo/redo
   }
 
   onBlockBlur = (index: number) => {
     // TODO: Update content
     // Enable undo/redo
+    const { blocks } = this.state
+    if (!blocks[index].id) {
+      // TODO: unlock block
+    }
+    this.onUpdateTrigger()
+  }
 
-    // if (this.props.blocks[index] === this.state.blocks[index]) {
-    console.log('update content')
-    // }
+  onUpdateTrigger = () => {
+    const { blocks: legacyBlocks, onBlocksUpdate } = this.props
+    const { blocks } = this.state
+    console.log(JSON.stringify(blocks))
+    console.log(JSON.stringify(legacyBlocks))
+    if (JSON.stringify(blocks) !== JSON.stringify(legacyBlocks)) {
+      console.log('difference')
+      console.log({ blocks })
+      onBlocksUpdate(blocks)
+    }
+  }
+
+  onBodyClick = () => {
+    const { blocks } = this.state
+    const lastItemIndex = blocks.length - 1
+    const lastBlock = blocks[lastItemIndex]
+    if (lastBlock.type === BlockType.TEXT && (lastBlock.payload as BlockDataText).value === '') {
+      this.focus(lastItemIndex)
+      return
+    }
+
+    this.onCreateBlock(lastItemIndex, () => {
+      this.focus(lastItemIndex + 1)
+    })
   }
 
   prevFocus(index: number) {
@@ -219,7 +250,7 @@ class Content extends React.Component<IProps, IState> {
     actions.editor.blockControlClose()
   }
 
-  renderBlock = (item: BlockData, i: number) => {
+  renderBlock = (item: Block, i: number) => {
     const { blockControlOpen } = this.props
     const initialHeight = BlockTypeProperties[item.type].initialHeight
     return (
@@ -237,8 +268,8 @@ class Content extends React.Component<IProps, IState> {
     )
   }
 
-  renderBlockItem = (item: BlockData, i: number) => {
-    const { blockControlOpen, actions } = this.props
+  renderBlockItem = (item: Block, i: number) => {
+    const { blockControlOpen } = this.props
 
     const refCallback = (ref: any) => {
       if (!ref) return
@@ -253,21 +284,22 @@ class Content extends React.Component<IProps, IState> {
       case BlockType.CALLOUT:
       case BlockType.CODE:
       case BlockType.QUOTE: {
-        const content: BlockDataText = item as BlockDataText
+        const content: BlockDataText = item.payload as BlockDataText
 
         return (
           <Text
             innerRef={refCallback}
-            tabIndex={i}
+            tabIndex={i + 1}
             content={content}
+            type={item.type}
             filteringMode={blockControlOpen}
             onNew={() =>
               this.onCreateBlock(i, () => {
                 this.nextFocus(i)
               })
             }
-            onUpdate={(item) =>
-              this.onUpdateBlock(i, item, () => {
+            onUpdate={(payload) =>
+              this.onUpdateBlock(i, { ...item, payload }, () => {
                 this.manageControls()
               })
             }
@@ -282,7 +314,7 @@ class Content extends React.Component<IProps, IState> {
         )
       }
       case BlockType.IMAGE: {
-        const content: BlockDataImage = item as BlockDataImage
+        const content: BlockDataImage = item.payload as BlockDataImage
         return <Image innerRef={refCallback} content={content} />
       }
       case BlockType.DIVIDER:
@@ -303,7 +335,7 @@ class Content extends React.Component<IProps, IState> {
       return null
     }
 
-    let value = (currentBlock as BlockDataText).value
+    let value = (currentBlock.payload as BlockDataText).value
     value = value.indexOf('/') === 0 ? value.slice(1) : value
     value = value.toLowerCase()
 
@@ -329,6 +361,7 @@ class Content extends React.Component<IProps, IState> {
           if (!ref) return
           this.bodyRef = ref
         }}
+        onClick={this.onBodyClick}
       >
         {textControlOpen && <TextControls position={textControlPosition} />}
         {blockControlOpen && (
@@ -338,11 +371,12 @@ class Content extends React.Component<IProps, IState> {
             position={blockControlPosition}
           />
         )}
-
-        <List onSortStart={this.onSortStart} onSortEnd={this.onSortEnd} useDragHandle={true}>
-          {blocks.map((item, i) => this.renderBlock(item, i))}
-        </List>
-        <Tooltip id={'editor'} />
+        <div onClick={(e) => e.stopPropagation()}>
+          <List onSortStart={this.onSortStart} onSortEnd={this.onSortEnd} useDragHandle={true}>
+            {blocks.map((item, i) => this.renderBlock(item, i))}
+          </List>
+          <Tooltip id={'editor'} />
+        </div>
       </div>
     )
   }
@@ -357,11 +391,12 @@ const Item = SortableElement(ItemContainer)
 
 interface IProps extends ReduxProps<typeof mapStateToProps, typeof mapDispatchToProps> {
   id: number
-  blocks: BlockData[]
+  blocks: Block[]
+  onBlocksUpdate: (blocks: Block[]) => void
 }
 
 interface IState {
-  blocks: BlockData[]
+  blocks: Block[]
   blockControlsFocusedIndex: number
 }
 

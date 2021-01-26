@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BlockData } from 'components/types'
+import { Block } from 'components/types'
 import styles from './Content.module.scss'
 import Article from './articles/Article'
 
@@ -15,7 +15,7 @@ class Content extends React.Component<IProps> {
 }
 
 interface IProps {
-  blocks: BlockData[]
+  blocks: Block[]
 }
 
 export default Content

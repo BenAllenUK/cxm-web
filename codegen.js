@@ -18,6 +18,12 @@ module.exports = {
         withHooks: true,
         withHOC: false,
         withComponent: false,
+        transformUnderscore: true,
+        namingConvention: {
+          enumValues: 'change-case#pascalCase',
+          typeNames: 'change-case#pascalCase',
+        },
+        // typesPrefix: 'I',
       },
     },
     './graphql.schema.json': {

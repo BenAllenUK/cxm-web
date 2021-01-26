@@ -31,7 +31,7 @@ ul.menu {
 
 .item {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   padding-top: 2px;
   padding-bottom: 2px;
@@ -62,16 +62,23 @@ ul.projectMenu {
 
   li {
     @extend .item;
+    justify-content: flex-start;
+    padding-left: 22px;
     padding-top: 6px !important;
     padding-bottom: 6px !important;
   }
 }
 
+.itemMainText {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
 .itemMain {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  flex: 1;
 }
 
 .itemControls {

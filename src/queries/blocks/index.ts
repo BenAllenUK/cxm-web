@@ -1,37 +1,23 @@
-import { ApolloCache } from '@apollo/client'
-import {
-  CreateArticleMutation,
-  GetArticleOneQuery,
-  GetArticlesQuery,
-  UpdateArticleMutationVariables,
-  UpsertBlocksMutation,
-  UpsertBlocksMutationVariables,
-} from 'generated/graphql'
-import produce from 'immer'
+import { ApolloCache, FetchResult } from '@apollo/client'
+import { UpsertBlocksMutation, UpsertBlocksMutationVariables } from 'generated/graphql'
 
-import GET_ARTICLE_ONE from 'queries/articles/GET_ARTICLE_ONE.gql'
+import BLOCK_FRAGMENT from 'queries/blocks/BLOCK_FRAGMENT.gql'
 
-interface IParams {
-  blockId?: number | null
-  articleId: number
-  articleSlug: string
-  parentId?: number | null
-  payload: string
-  type: string
-}
-
-export const createUpsertMutationParams = (variables: UpsertBlocksMutationVariables) => {
+export const createUpsertMutationParams = (
+  articleId: number,
+  variables: UpsertBlocksMutationVariables
+) => {
   let returning = null
   if (Array.isArray(variables.objects)) {
     returning = variables.objects.map((item) => ({
       __typename: 'blocks',
-      id: Math.round(Math.random() * -1000000),
       ...item,
+      id: item.id || Math.round(Math.random() * -1000000),
     }))
   } else {
     returning = variables
   }
-
+  // TODO Delete all old references related to this article
   return {
     variables,
     optimisticResponse: {
@@ -41,29 +27,41 @@ export const createUpsertMutationParams = (variables: UpsertBlocksMutationVariab
         returning,
       },
     } as UpsertBlocksMutation,
-    update: (cache: ApolloCache<UpsertBlocksMutation>, { data: dataRaw }: any) => {
-      const article = dataRaw?.insert_articles_one
-      if (!article) {
+    update: (
+      cache: ApolloCache<UpsertBlocksMutation>,
+      result: FetchResult<UpsertBlocksMutation>
+    ) => {
+      const blocks = result.data?.insert_blocks?.returning
+      if (!blocks) {
         return
       }
+      cache.modify({
+        id: `articles:${articleId}`,
+        fields: {
+          blocks(blocksRef = [], { readField }) {
+            const newBlockRefs = blocks.map((item) => {
+              const id = item.id ?? Math.round(Math.random() * -1000000)
+              const newRef = cache.writeFragment({
+                id: `blocks:${id}`,
+                data: {
+                  ...item,
+                  id,
+                  updatedAt: new Date().toISOString(),
+                  createdAt: new Date().toISOString(),
+                },
+                fragment: BLOCK_FRAGMENT,
+              })
 
-      const data = cache.readQuery<GetArticleOneQuery>({
-        query: GET_ARTICLE_ONE,
-        // TODO: update slug
-        variables: { slug: '1234' },
+              // const existingRef = blocksRef.filter((ref: any) => readField('id', ref) === item.id)
+              // if (existingRef) {
+              //   return existingRef
+              // }
+              return newRef
+            })
+            return newBlockRefs
+          },
+        },
       })
-      // TODO: Update blocks
-      // cache.writeQuery({
-      //   query: GET_ARTICLE_ONE,
-      // variables: { slug: '1234' },
-      //   data: produce(data, (draftData: GetArticleOneQuery) => {
-      //     const [article] = draftData.articles.filter((item) => item.id === articleId)
-      //     const [block] = article.blocks.filter((item) => item.id === articleId)
-      //     block.payload = payload
-      //     block.type = type
-      //     // block.parent_id = parentId
-      //   }),
-      // })
     },
   }
 }

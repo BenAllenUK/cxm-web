@@ -1,6 +1,6 @@
 import { IAction } from 'actions'
 import { types } from 'actions/editor'
-import { BlockData } from 'components/types'
+import { Block } from 'components/types'
 
 export interface IEditorState {
   textControlOpen: boolean
@@ -9,7 +9,7 @@ export interface IEditorState {
   blockControlOpen: boolean
   blockControlPosition: { x: number; y: number }
 
-  blocks: BlockData[]
+  blocks: Block[]
 }
 
 export const initialState = {

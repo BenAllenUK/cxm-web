@@ -1,53 +1,72 @@
-import { ApolloCache } from '@apollo/client'
-import {
-  Blocks,
-  CreateArticleMutation,
-  CreateArticleMutationVariables,
-  GetArticlesQuery,
-  GetProjectOneQuery,
-} from 'generated/graphql'
-import produce from 'immer'
+import { ApolloCache, FetchResult } from '@apollo/client'
+import { CreateArticleMutation, CreateArticleMutationVariables } from 'generated/graphql'
 
-import GET_PROJECT_ONE from 'queries/project/GET_PROJECT_ONE.gql'
+import BLOCK_FRAGMENT from 'queries/blocks/BLOCK_FRAGMENT.gql'
+import ARTICLE_FRAGMENT from 'queries/articles/ARTICLE_FRAGMENT.gql'
 
-export const createArticleMutationParams = (variables: CreateArticleMutationVariables) => {
+export const createArticleMutationParams = (
+  projectId: number,
+  variables: CreateArticleMutationVariables
+) => {
+  const { blocks, ...articleParams } = variables.object
+  const id = Math.round(Math.random() * -1000000)
+
   return {
     variables,
     optimisticResponse: {
       __typename: 'mutation_root',
       insert_articles_one: {
+        ...articleParams,
         __typename: 'articles',
-        id: Math.round(Math.random() * -1000000),
-        ...variables,
+        id,
+        blocks: blocks?.data,
       },
     } as CreateArticleMutation,
-    update: (cache: ApolloCache<CreateArticleMutation>, { data: dataRaw }: any) => {
-      const article = dataRaw?.insert_articles_one
+    update: (
+      cache: ApolloCache<CreateArticleMutation>,
+      result: FetchResult<CreateArticleMutation>
+    ) => {
+      const article = result.data?.insert_articles_one
       if (!article) {
-        return
+        return []
       }
+      return
+      cache.modify({
+        id: `projects:${projectId}`,
+        fields: {
+          articles(articlesRef = [], { readField }) {
+            const newBlockRefs = article.blocks.map((item) => {
+              const id = Math.round(Math.random() * -1000000)
+              return cache.writeFragment({
+                id: `blocks:${id}`,
+                data: {
+                  ...item,
+                  id,
+                  updatedAt: new Date().toISOString(),
+                  createdAt: new Date().toISOString(),
+                },
+                fragment: BLOCK_FRAGMENT,
+              })
+            })
 
-      const data = cache.readQuery<GetProjectOneQuery>({
-        query: GET_PROJECT_ONE,
-        // TODO: Change to id
-        variables: { slug: 'gimme' },
-      })
+            const newArticleRef = cache.writeFragment({
+              id: cache.identify(article),
+              data: {
+                ...article,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                blocks: newBlockRefs,
+              },
+              fragment: ARTICLE_FRAGMENT,
+            })
 
-      const newData = produce(data, (draftData: GetProjectOneQuery) => {
-        const { __typename, id, parent_id, slug, title } = article
-        draftData.projects[0].articles.push({
-          __typename,
-          id,
-          parent_id,
-          slug,
-          title,
-        })
-      })
+            if (articlesRef.some((ref: any) => readField('id', ref) === article.id)) {
+              return articlesRef
+            }
 
-      cache.writeQuery({
-        query: GET_PROJECT_ONE,
-        data: newData,
-        variables: { slug: 'gimme' },
+            return [...articlesRef, newArticleRef]
+          },
+        },
       })
     },
   }

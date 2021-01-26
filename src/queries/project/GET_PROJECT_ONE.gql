@@ -1,14 +1,7 @@
+#import "./PROJECT_FRAGMENT.gql"
+
 query GetProjectOne($slug: String!) {
   projects(where: { slug: { _eq: $slug } }) {
-    id
-    name
-    image
-    slug
-    articles {
-      id
-      parent_id
-      slug
-      title
-    }
+    ...Project
   }
 }

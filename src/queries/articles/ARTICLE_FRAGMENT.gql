@@ -1,0 +1,9 @@
+fragment Article on articles {
+  id
+  parentId
+  projectId
+  slug
+  title
+  updatedAt
+  createdAt
+}

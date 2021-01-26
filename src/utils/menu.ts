@@ -1,8 +1,9 @@
 import { MenuItem } from 'components/navigation/sidebar'
+import { GetProjectOneQuery } from 'generated/graphql'
 import { unflatten } from './tree'
 
 export function parseMenu(
-  data: { id: number; title: string; parent_id?: number | null }[]
+  data: NonNullable<NonNullable<NonNullable<GetProjectOneQuery['projects']>[0]>['articles']>
 ): MenuItem[] {
   if (data.length === 0) {
     return []
@@ -12,7 +13,7 @@ export function parseMenu(
     id: item.id,
     label: item.title,
     children: [],
-    parentId: item.parent_id || null,
+    parentId: item.parentId || null,
   }))
   const menuItemsTree = unflatten<MenuItem>(menuItemsList)
   return menuItemsTree as MenuItem[]

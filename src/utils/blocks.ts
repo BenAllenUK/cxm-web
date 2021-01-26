@@ -1,14 +1,12 @@
-import { BlockData, BlockType } from 'components/types'
+import { Block, BlockType } from 'components/types'
+import { GetArticleOneQuery } from 'generated/graphql'
 
 export function parseBlocks(
-  data: { id: number; type: string; parent_id?: number | null; payload: any }[]
-): BlockData[] {
-  const list = data.map((item) => ({
-    id: item.id,
+  data: NonNullable<GetArticleOneQuery['articles'][0]>['blocks']
+): Block[] {
+  return data.map(({ __typename, ...item }) => ({
+    ...item,
     type: item.type as BlockType,
-    children: [],
-    parentId: item.parent_id || null,
-    ...JSON.parse(item.payload),
+    payload: JSON.parse(item.payload),
   }))
-  return list
 }

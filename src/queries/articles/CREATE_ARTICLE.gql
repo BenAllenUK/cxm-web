@@ -1,35 +1,12 @@
-mutation CreateArticle(
-  $parent_id: Int
-  $title: String!
-  $project_id: Int!
-  $slug: String!
-  $blocks: [blocks_insert_input!]!
-) {
-  insert_articles_one(
-    object: {
-      parent_id: $parent_id
-      title: $title
-      project_id: $project_id
-      slug: $slug
-      blocks: { data: $blocks }
-    }
-  ) {
+#import "./ARTICLE_FRAGMENT.gql"
+#import "../blocks/BLOCK_FRAGMENT.gql"
+
+mutation CreateArticle($object: articles_insert_input!) {
+  insert_articles_one(object: $object) {
     __typename
-    id
-    title
-    parent_id
-    project_id
-    slug
-    created_at
-    updated_at
+    ...Article
     blocks {
-      id
-      article_id
-      parent_id
-      updated_at
-      created_at
-      payload
-      type
+      ...Block
     }
   }
 }

@@ -1,6 +1,6 @@
 subscription getUserActivity($articleId: Int!) {
-  articles_user_activity(where: { article_id: { _eq: $articleId } }, order_by: { user_id: asc }) {
-    created_at
+  articles_user_activity(where: { articleId: { _eq: $articleId } }, order_by: { userId: asc }) {
+    createdAt
     user {
       id
       name

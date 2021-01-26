@@ -1,0 +1,11 @@
+fragment Block on blocks {
+  id
+  articleId
+  parentId
+  editingUserId
+  updatedAt
+  createdAt
+  payload
+  type
+  position
+}

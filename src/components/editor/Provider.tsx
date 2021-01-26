@@ -2,48 +2,54 @@ import * as Storage from 'config/storage'
 import { createContext, useState, useContext, useEffect, cloneElement } from 'react'
 
 interface Context {
-  projectId: number | null
-  articleId: number | null
+  projectSlug: string | null
+  articleSlug: string | null
 }
 
 interface ContextActions extends Context {
-  setProjectIndex: (projectId: number) => void
-  setArticleId: (articleId: number) => void
+  setProjectSlug: (slug: string) => void
+  setArticleSlug: (slug: string) => void
 }
 
 const EditorContext = createContext<ContextActions>({
-  projectId: null,
-  articleId: null,
-  setProjectIndex: () => {},
-  setArticleId: () => {},
+  projectSlug: null,
+  articleSlug: null,
+  setProjectSlug: () => {},
+  setArticleSlug: () => {},
 })
 
 export const useEditor = () => useContext(EditorContext)
 
 const KEY = 'editor'
-const initialState = { projectId: 0, articleId: 1 }
 
-export default function EditorProvider(props: any) {
-  const [context, setContext] = useState<Context>(initialState)
+export default function EditorProvider({
+  initialContext,
+  children,
+}: {
+  initialContext: Context
+  children: any
+}) {
+  const [context, setContext] = useState<Context>(initialContext)
 
   const setContextData = (data: Context) => {
+    console.log(data)
     setContext(data)
     Storage.setLocalItem(KEY, data)
   }
 
-  const setArticleId = (articleId: number) => {
-    setContextData({ ...context, articleId })
+  const setArticleSlug = (slug: string) => {
+    setContextData({ ...context, articleSlug: slug })
   }
 
-  const setProjectId = (projectId: number) => {
-    setContextData({ ...context, projectId })
+  const setProjectSlug = (slug: string) => {
+    setContextData({ ...context, projectSlug: slug })
   }
 
-  const localState = Storage.getLocalItem(KEY) || initialState
+  const localState = context // Storage.getLocalItem(KEY)
 
   return (
-    <EditorContext.Provider value={{ ...localState, setArticleId, setProjectId }}>
-      {props.children}
+    <EditorContext.Provider value={{ ...localState, setArticleSlug, setProjectSlug }}>
+      {children}
     </EditorContext.Provider>
   )
 }

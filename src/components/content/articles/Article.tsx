@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BlockData, BlockType, BlockDataText, BlockDataImage } from 'components/types'
+import { Block, BlockType, BlockDataText, BlockDataImage } from 'components/types'
 
 import Text from './blocks/Text'
 import Image from './blocks/Image'
@@ -10,7 +10,7 @@ import Divider from './blocks/Divider'
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from 'components/editor/blocks'
 
 class Article extends React.Component<IProps> {
-  renderBlockItem = (item: BlockData, i: number) => {
+  renderBlockItem = (item: Block, i: number) => {
     switch (item.type) {
       case BlockType.TEXT:
       case BlockType.H1:
@@ -19,17 +19,17 @@ class Article extends React.Component<IProps> {
       case BlockType.CALLOUT:
       case BlockType.CODE:
       case BlockType.QUOTE:
-        return <Text content={item as BlockDataText} />
+        return <Text content={item.payload as BlockDataText} />
       case BlockType.DIVIDER:
         return <Divider />
       case BlockType.IMAGE:
-        return <Image content={item as BlockDataImage} />
+        return <Image content={item.payload as BlockDataImage} />
       default:
         return <div />
     }
   }
 
-  renderBlock = (item: BlockData, i: number) => {
+  renderBlock = (item: Block, i: number) => {
     return (
       <div
         key={i}
@@ -52,7 +52,7 @@ class Article extends React.Component<IProps> {
 }
 
 interface IProps {
-  blocks: BlockData[]
+  blocks: Block[]
 }
 
 export default Article

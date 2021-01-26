@@ -20,8 +20,7 @@ export default function MenuItem({
     <div className={styles.item} onClick={onClick}>
       <div className={styles.itemMain} style={innerStyle}>
         <ArrowButton onClick={onArrowClick} disable={!subList} isDown={isOpen} />
-
-        <div>{children}</div>
+        <div className={styles.itemMainText}>{children}</div>
       </div>
       <div className={styles.itemControls}>
         <AddButton onClick={onAddClick} />

@@ -4,32 +4,39 @@ import {
   BlockType,
   BlockDataListBullet,
   BlockDataImage,
+  Block,
 } from '../../types'
 
 export const BLOCK_CONTAINER_VERTICAL_PADDING = 10
 
-export const DEFAULT_ARTICLE = {
-  title: 'New Page ' + new Date().toISOString(),
-  blocks: [{ type: 'TEXT', payload: JSON.stringify({ value: 'Start writing...' }) }],
-}
-
 export const DEFAULT_BLOCK = {
   type: BlockType.TEXT,
-  value: '',
-  children: [],
+  payload: {
+    value: '',
+  },
   id: -1,
   parentId: null,
+  editingUserId: null,
 }
 
 export const DEFAULT_BLOCK_START = {
   type: BlockType.TEXT,
-  value: 'Start writing...',
-  children: [],
+  payload: {
+    value: 'Start writing...',
+  },
   id: -1,
   parentId: null,
+  editingUserId: null,
+  createdAt: '',
+  updatedAt: '',
 }
 
-export function isBlockEmpty(block: BlockData) {
+export const DEFAULT_ARTICLE = {
+  title: 'New Page',
+  blocks: [DEFAULT_BLOCK_START],
+}
+
+export function isBlockEmpty(block: Block) {
   switch (block.type) {
     case BlockType.H1:
     case BlockType.H2:
@@ -38,11 +45,11 @@ export function isBlockEmpty(block: BlockData) {
     case BlockType.CALLOUT:
     case BlockType.CODE:
     case BlockType.QUOTE:
-      return !(block as BlockDataText).value
+      return !(block.payload as BlockDataText).value
     case BlockType.LIST_BULLET:
-      return (block as BlockDataListBullet).items.length == 0
+      return (block.payload as BlockDataListBullet).items.length == 0
     case BlockType.IMAGE:
-      return !(block as BlockDataImage).source
+      return !(block.payload as BlockDataImage).source
     default:
       return true
   }

@@ -1,0 +1,11 @@
+#import "../articles/ARTICLE_FRAGMENT.gql"
+
+fragment Project on projects {
+  id
+  name
+  image
+  slug
+  articles {
+    ...Article
+  }
+}

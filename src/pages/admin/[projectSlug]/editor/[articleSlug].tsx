@@ -10,7 +10,6 @@ import {
   useGetArticleOneQuery,
   // useGetArticlesSubscriptionSubscription as useGetArticlesSubscription,
   useGetArticlesQuery,
-  useGetBlocksQuery,
   useGetProjectOneQuery,
   useUpsertBlocksMutation,
 } from 'generated/graphql'
@@ -20,27 +19,23 @@ import EditorPage from 'components/pages/editor'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 
 export default function EditorRoot(props: any) {
-  const { articleSlug, projectSlug, ...otherProps } = props
+  const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
   return (
-    <Root {...props}>
-      <EditorProvider>
-        <Content articleSlug={articleSlug} projectSlug={projectSlug} />
+    <Root {...otherProps}>
+      <EditorProvider initialContext={initialEditorContext}>
+        <Content />
       </EditorProvider>
     </Root>
   )
 }
 
-interface IContentProps {
-  projectSlug: string
-  articleSlug: string
-}
-
-export function Content({ projectSlug, articleSlug }: IContentProps) {
+export function Content() {
   const { userId, organisationId, projects } = useUser()
 
-  const { projectId, articleId } = useEditor()
+  const { projectSlug, articleSlug } = useEditor()
+  console.log({ articleSlug })
 
-  if (projectId === null || articleId === null) {
+  if (projectSlug === null || articleSlug === null) {
     return <div />
   }
 
@@ -50,11 +45,10 @@ export function Content({ projectSlug, articleSlug }: IContentProps) {
     },
   })
 
-  console.log({ projectsData })
   const [project] = projectsData?.projects || []
   if (!project) {
     console.error(`Project not found: ${projectSlug}`)
-    return
+    return <div />
   }
 
   // Check to see if article Id is in article data
@@ -68,7 +62,6 @@ export function Content({ projectSlug, articleSlug }: IContentProps) {
   const [article] = articleData?.articles || []
   if (!article) {
     console.error(`Article not found: ${articleSlug}`)
-    return
   }
 
   const [createArticleMutation] = useCreateArticleMutation()
@@ -79,8 +72,6 @@ export function Content({ projectSlug, articleSlug }: IContentProps) {
     <EditorPage
       project={project}
       article={article}
-      articles={project.articles}
-      blocks={article.blocks}
       onCreateArticleMutation={createArticleMutation}
       onUpsertBlockMutation={upsertBlockMutation}
     />
@@ -123,7 +114,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       notFound: true,
     }
-    return
   }
 
   // const reduxStore = initializeStore(initialState)
@@ -138,11 +128,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         projects: [],
       },
       initialEditorContext: {
-        projectId: project.id,
-        articleId: article.id,
+        projectSlug: project.slug,
+        articleSlug: article.slug,
       },
-      articleSlug: article.slug,
-      projectSlug: project.slug,
     },
   }
 }

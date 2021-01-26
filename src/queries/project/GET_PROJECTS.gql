@@ -1,8 +1,7 @@
+#import "./PROJECT_FRAGMENT.gql"
+
 query GetProjects {
   projects {
-    id
-    name
-    image
-    slug
+    ...Project
   }
 }

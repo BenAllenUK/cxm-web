@@ -6,7 +6,7 @@ export function MenuList(props: IProps) {
   const {
     items,
     openState,
-    depth = 0,
+    depth = -1,
     onItemClick,
     onItemArrowClick,
     onItemAddClick,

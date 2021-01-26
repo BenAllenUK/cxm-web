@@ -1,13 +1,10 @@
-query GetArticles($project_id: Int!) {
-  projects_by_pk(id: $project_id) {
+#import "./ARTICLE_FRAGMENT.gql"
+
+query GetArticles($projectId: Int!) {
+  projects_by_pk(id: $projectId) {
     id
     articles {
-      id
-      parent_id
-      slug
-      title
-      updated_at
-      created_at #Remove these?
+      ...Article
     }
   }
 }

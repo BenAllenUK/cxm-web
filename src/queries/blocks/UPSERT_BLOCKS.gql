@@ -1,16 +1,15 @@
+#import "./BLOCK_FRAGMENT.gql"
+
 mutation UpsertBlocks($objects: [blocks_insert_input!]!) {
   insert_blocks(
     objects: $objects
-    on_conflict: { constraint: blocks_pkey, update_columns: [parent_id, payload, article_id, type] }
+    on_conflict: {
+      constraint: blocks_pkey
+      update_columns: [parentId, payload, articleId, type, editingUserId]
+    }
   ) {
     returning {
-      id
-      article_id
-      parent_id
-      updated_at
-      created_at
-      payload
-      type
+      ...Block
     }
   }
 }

@@ -12,6 +12,7 @@
   box-shadow: none;
   outline: none;
   resize: none;
+  cursor: text;
 
   &:empty:before {
     content: attr(placeholder);

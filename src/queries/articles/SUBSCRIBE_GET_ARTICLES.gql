@@ -1,12 +1,9 @@
-subscription GetArticlesSubscription($project_id: Int!) {
-  projects_by_pk(id: $project_id) {
+#import "./ARTICLE_FRAGMENT.gql"
+
+subscription GetArticlesSubscription($projectId: Int!) {
+  projects_by_pk(id: $projectId) {
     articles {
-      id
-      parent_id
-      slug
-      title
-      updated_at
-      created_at
+      ...Article
     }
   }
 }

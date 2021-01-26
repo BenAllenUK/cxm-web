@@ -1,7 +1,7 @@
 import React from 'react'
 
 import TextInput, { TextInputEvent } from 'components/common/TextInput'
-import { BlockData, BlockDataText, BlockType } from '../../types'
+import { BlockData, BlockDataText, BlockType, Block } from '../../types'
 
 import { BlockTypeProperties } from '.'
 import styles from './Text.module.scss'
@@ -11,16 +11,14 @@ class Text extends React.Component<IProps> {
     const { content, onUpdate } = this.props
 
     const value = event.target.value.replace('&nbsp;', ' ')
-    const block = {
-      ...content,
-      value,
-    }
 
-    onUpdate(block)
+    onUpdate({
+      value,
+    })
   }
 
-  renderStyle = (content: BlockDataText) => {
-    switch (content.type) {
+  renderStyle = (type: BlockType) => {
+    switch (type) {
       case BlockType.H1:
         return styles.header1
       case BlockType.H2:
@@ -38,10 +36,10 @@ class Text extends React.Component<IProps> {
     }
   }
 
-  renderFocusedPlaceholder = (content: BlockDataText) => {
+  renderFocusedPlaceholder = (type: BlockType) => {
     const { filteringMode } = this.props
 
-    switch (content.type) {
+    switch (type) {
       case BlockType.H1:
         return `Heading 1`
       case BlockType.H2:
@@ -57,8 +55,8 @@ class Text extends React.Component<IProps> {
     }
   }
 
-  renderBlurredPlaceholder = (content: BlockDataText) => {
-    switch (content.type) {
+  renderBlurredPlaceholder = (type: BlockType) => {
+    switch (type) {
       case BlockType.H1:
         return `Heading 1`
       case BlockType.H2:
@@ -75,7 +73,7 @@ class Text extends React.Component<IProps> {
   }
 
   onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const { content, onDelete, onNew, filteringMode } = this.props
+    const { content, type, onDelete, onNew, filteringMode } = this.props
 
     switch (e.key) {
       case 'Backspace':
@@ -85,13 +83,13 @@ class Text extends React.Component<IProps> {
         }
         return
       case 'Enter':
-        if (!filteringMode && content.type !== BlockType.CODE && !e.shiftKey) {
+        if (!filteringMode && type !== BlockType.CODE && !e.shiftKey) {
           e.preventDefault()
           onNew()
         }
         return
       case 'Tab':
-        if (content.type === BlockType.CODE) {
+        if (type === BlockType.CODE) {
           document.execCommand('insertHTML', false, '&#009')
           e.preventDefault()
         }
@@ -100,19 +98,19 @@ class Text extends React.Component<IProps> {
   }
 
   render() {
-    const { content, tabIndex, innerRef, onFocus, onBlur } = this.props
+    const { content, type, tabIndex, innerRef, onFocus, onBlur } = this.props
     const html = content.value
 
-    const className = this.renderStyle(content)
-    const focusedPlaceholder = this.renderFocusedPlaceholder(content)
-    const blurredPlaceholder = this.renderBlurredPlaceholder(content)
-    const initialHeight = BlockTypeProperties[content.type].initialHeight
+    const className = this.renderStyle(type)
+    const focusedPlaceholder = this.renderFocusedPlaceholder(type)
+    const blurredPlaceholder = this.renderBlurredPlaceholder(type)
+    const initialHeight = BlockTypeProperties[type].initialHeight
 
     return (
       <div
         className={className}
         style={{ minHeight: initialHeight }}
-        data-gramm_editor={content.type === BlockType.CODE ? 'false' : 'true'}
+        data-gramm_editor={type === BlockType.CODE ? 'false' : 'true'}
       >
         <TextInput
           focusedPlaceholder={focusedPlaceholder}
@@ -133,12 +131,13 @@ class Text extends React.Component<IProps> {
 interface IProps {
   innerRef?: (ref: any | null) => void
   tabIndex?: number
+  type: BlockType
   content: BlockDataText
   filteringMode: boolean
   disabled?: boolean
 
   onNew: () => void
-  onUpdate: (arg0: BlockData) => void
+  onUpdate: (arg0: BlockDataText) => void
   onDelete: () => void
   onFocus: () => void
   onBlur: () => void
