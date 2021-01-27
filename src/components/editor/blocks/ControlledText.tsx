@@ -2,18 +2,12 @@ import { useEffect, useRef, useState, memo, useCallback } from 'react'
 import Text from 'components/editor/blocks/Text'
 import { BlockType } from 'components/types'
 
-const ControlledText = (props: IProps) => {
-  const {
-    focus,
-    initialValue,
-    onUpdate: onParentUpdate,
-    onBlur: onParentBlur,
-    ...otherProps
-  } = props
-  const [payload, setPayload] = useState<string>(props.initialValue || '')
-  const onValueChange = (_value: string) => {
-    setPayload(_value)
-  }
+const ControlledText = ({ focus, initialValue, onUpdate: onParentUpdate, onBlur: onParentBlur, ...otherProps }: IProps) => {
+  const [value, setValue] = useState<string>(initialValue || '')
+
+  const onValueChange = useCallback((_value: string) => {
+    setValue(_value)
+  }, [])
 
   const inputRef = useRef<HTMLDivElement>(null)
 
@@ -25,18 +19,12 @@ const ControlledText = (props: IProps) => {
 
   const onBlur = useCallback(() => {
     // onParentBlur()
-    onParentUpdate(payload)
+    onParentUpdate(value)
   }, [])
 
   return (
     <>
-      <Text
-        {...otherProps}
-        initialValue={initialValue}
-        innerRef={inputRef}
-        onBlur={onBlur}
-        onUpdate={onValueChange}
-      />
+      <Text {...otherProps} value={value} innerRef={inputRef} onBlur={onBlur} onUpdate={onValueChange} />
     </>
   )
 }

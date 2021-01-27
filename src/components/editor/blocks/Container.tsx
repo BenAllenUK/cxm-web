@@ -1,4 +1,5 @@
 import { useCallback, useState, memo, ReactNode } from 'react'
+import { useHover, useToggle } from 'utils/hooks'
 
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from '.'
 
@@ -14,8 +15,6 @@ const Container = ({
   onAddClick,
   children,
 }: IProps) => {
-  const [isControlsVisible, toggleControls] = useState<boolean>(false)
-
   const _onDoubleClick = useCallback(
     (event: React.MouseEvent) => {
       onDoubleClick(index, { x: event.clientX, y: event.clientY })
@@ -27,30 +26,22 @@ const Container = ({
     onClick(index)
   }, [index])
 
-  const _onMouseEnter = useCallback(() => {
-    toggleControls(true)
-  }, [])
-
-  const _onMouseLeave = useCallback(() => {
-    toggleControls(false)
-  }, [])
-
   const _onAddClick = useCallback(() => {
     onAddClick(index)
   }, [index])
 
-  const isVisible = enableHandle && isControlsVisible
+  const [hoverRef, isHovered] = useHover<HTMLDivElement>()
+
+  const isVisible = enableHandle && isHovered
   return (
     <div
+      ref={hoverRef}
       className={styles.block}
       style={{
         marginTop: BLOCK_CONTAINER_VERTICAL_PADDING,
         marginBottom: BLOCK_CONTAINER_VERTICAL_PADDING,
       }}
       onClick={_onClick}
-      onDoubleClick={_onDoubleClick}
-      onMouseEnter={_onMouseEnter}
-      onMouseLeave={_onMouseLeave}
     >
       <Controls initialHeight={initialHeight} isVisible={isVisible} onAddClick={_onAddClick} />
       {children}
