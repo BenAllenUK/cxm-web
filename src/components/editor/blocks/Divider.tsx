@@ -1,19 +1,14 @@
-import React from 'react'
+import { memo } from 'react'
 import styles from './Divider.module.scss'
 
-class Divider extends React.Component<IProps> {
-  render() {
-    const { innerRef } = this.props
-    return (
-      <div className={styles.container}>
-        <div className={styles.divide} ref={innerRef}></div>
-      </div>
-    )
-  }
+const Divider = (_: IProps) => {
+  return (
+    <div className={styles.container}>
+      <div className={styles.divide}></div>
+    </div>
+  )
 }
 
-interface IProps {
-  innerRef: (ref: any | null) => void
-}
+interface IProps {}
 
-export default Divider
+export default memo(Divider)

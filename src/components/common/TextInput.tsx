@@ -30,14 +30,9 @@ function replaceCaret(el: HTMLElement) {
  */
 export default class TextInput extends React.Component<Props, State> {
   lastHtml: string = this.props.html
-  el?: HTMLDivElement
 
   state = {
     isFocused: false,
-  }
-
-  getEl = () => {
-    return this.el
   }
 
   onFocus = (e: React.FocusEvent<HTMLDivElement>) => {
@@ -83,7 +78,7 @@ export default class TextInput extends React.Component<Props, State> {
       focusedPlaceholder,
       blurredPlaceholder,
       html,
-      innerRef: refCallback,
+      innerRef,
       disabled,
       ...props
     } = this.props
@@ -96,12 +91,7 @@ export default class TextInput extends React.Component<Props, State> {
         className={styles.container}
         {...props}
         placeholder={isFocused ? focusedPlaceholderText : blurredPlaceholderText}
-        ref={(ref) => {
-          if (!refCallback || !ref) return
-          this.el = ref
-          refCallback(ref)
-          return ref
-        }}
+        ref={innerRef}
         onPaste={this.onPaste}
         onInput={this.emitChange}
         onFocus={this.onFocus}
@@ -116,7 +106,7 @@ export default class TextInput extends React.Component<Props, State> {
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
     const { props, state } = this
-    const el = this.getEl()
+    const el = props.innerRef?.current
 
     // We need not rerender if the change of props simply reflects the user's edits.
     // Rerendering in this case would make the cursor/caret jump
@@ -146,20 +136,20 @@ export default class TextInput extends React.Component<Props, State> {
   }
 
   componentDidUpdate() {
-    const el = this.getEl()
-    if (!el) return
+    const { innerRef } = this.props
+    if (!innerRef?.current) return
 
     // Perhaps React (whose VDOM gets outdated because we often prevent
     // rerendering) did not update the DOM. So we update it manually now.
-    if (this.props.html !== el.innerHTML) {
-      el.innerHTML = this.props.html
+    if (this.props.html !== innerRef.current.innerHTML) {
+      innerRef.current.innerHTML = this.props.html
     }
     this.lastHtml = this.props.html
-    replaceCaret(el)
+    replaceCaret(innerRef.current)
   }
 
   emitChange = (originalEvt: React.SyntheticEvent<any>) => {
-    const el = this.getEl()
+    const el = this.props.innerRef?.current
     if (!el) return
 
     const html = el.innerHTML
@@ -184,7 +174,7 @@ type DivProps = Modify<JSX.IntrinsicElements['div'], { onChange: (event: TextInp
 export interface Props extends DivProps {
   focusedPlaceholder?: string
   blurredPlaceholder?: string
-  innerRef?: (ref: HTMLDivElement | null) => void
+  innerRef?: React.RefObject<HTMLDivElement>
   html: string
   disabled?: boolean
   className?: string

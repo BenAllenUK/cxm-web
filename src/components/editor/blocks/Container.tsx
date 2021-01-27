@@ -1,95 +1,75 @@
-import React from 'react'
+import { useCallback, useState, memo, ReactNode } from 'react'
 
-import IconButton from 'components/common/IconButton'
-
-import { SortableHandle } from 'react-sortable-hoc'
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from '.'
 
-import AddIcon from 'images/icons/add.svg'
-import DragIcon from 'images/icons/drag.svg'
-
 import styles from './Container.module.scss'
+import Controls from './Controls'
 
-const AddButton = (props: React.HTMLAttributes<HTMLDivElement>) => (
-  <IconButton style={{ cursor: 'pointer', height: 16 }} {...props}>
-    <AddIcon className={styles.add} width={16} height={16} />
-  </IconButton>
-)
+const Container = ({
+  index,
+  enableHandle,
+  initialHeight,
+  onDoubleClick,
+  onClick,
+  onAddClick,
+  children,
+}: IProps) => {
+  const [isControlsVisible, toggleControls] = useState<boolean>(false)
 
-const DragButton = SortableHandle(() => (
-  <IconButton style={{ cursor: 'grab', height: 16 }}>
-    <DragIcon className={styles.add} width={16} height={16} />
-  </IconButton>
-))
+  const _onDoubleClick = useCallback(
+    (event: React.MouseEvent) => {
+      onDoubleClick(index, { x: event.clientX, y: event.clientY })
+    },
+    [index]
+  )
 
-class Container extends React.Component<IProps, IState> {
-  state = {
-    showControls: false,
-  }
+  const _onClick = useCallback(() => {
+    onClick(index)
+  }, [index])
 
-  onDoubleClick = (event: React.MouseEvent) => {
-    const { onDoubleClick } = this.props
-    onDoubleClick({ x: event.clientX, y: event.clientY })
-  }
+  const _onMouseEnter = useCallback(() => {
+    toggleControls(true)
+  }, [])
 
-  onClick = () => {
-    const { onClick } = this.props
-    onClick()
-  }
+  const _onMouseLeave = useCallback(() => {
+    toggleControls(false)
+  }, [])
 
-  onMouseEnter = () => {
-    this.setState({ showControls: true })
-  }
+  const _onAddClick = useCallback(() => {
+    onAddClick(index)
+  }, [index])
 
-  onMouseLeave = () => {
-    this.setState({ showControls: false })
-  }
-
-  render() {
-    const { children, onAddClick, initialHeight, enableHandle } = this.props
-    const { showControls } = this.state
-    const isVisible = enableHandle && showControls
-    return (
-      <div
-        style={{
-          marginTop: BLOCK_CONTAINER_VERTICAL_PADDING,
-          marginBottom: BLOCK_CONTAINER_VERTICAL_PADDING,
-        }}
-        onClick={this.onClick}
-        onDoubleClick={this.onDoubleClick}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
-      >
-        <div className={styles.block}>
-          <div
-            className={styles.controls}
-            style={{ height: initialHeight, visibility: isVisible ? 'visible' : 'hidden' }}
-          >
-            <AddButton
-              data-tip={'Click to add a block below'}
-              data-for="editor"
-              onClick={onAddClick}
-            />
-            <DragButton />
-          </div>
-
-          {children}
-        </div>
-      </div>
-    )
-  }
+  const isVisible = enableHandle && isControlsVisible
+  return (
+    <div
+      className={styles.block}
+      style={{
+        marginTop: BLOCK_CONTAINER_VERTICAL_PADDING,
+        marginBottom: BLOCK_CONTAINER_VERTICAL_PADDING,
+      }}
+      onClick={_onClick}
+      onDoubleClick={_onDoubleClick}
+      onMouseEnter={_onMouseEnter}
+      onMouseLeave={_onMouseLeave}
+    >
+      <Controls initialHeight={initialHeight} isVisible={isVisible} onAddClick={_onAddClick} />
+      {children}
+    </div>
+  )
 }
 
 interface IProps {
+  children: ReactNode
+  index: number
   initialHeight: number
-  onClick: () => void
-  onDoubleClick: (pos: { x: number; y: number }) => void
+  onClick: (index: number) => void
+  onDoubleClick: (index: number, pos: { x: number; y: number }) => void
   enableHandle?: boolean
-  onAddClick: () => void
+  onAddClick: (index: number) => void
 }
 
 interface IState {
   showControls: boolean
 }
 
-export default Container
+export default memo(Container)

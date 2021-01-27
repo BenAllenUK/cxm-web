@@ -27,16 +27,24 @@ import Container from './blocks/Container'
 import Image from './blocks/Image'
 import Divider from './blocks/Divider'
 import produce from 'immer'
+import BlockItem from './BlockItem'
+import { diff, addedDiff, deletedDiff, updatedDiff, detailedDiff } from 'deep-object-diff'
 
 class Content extends React.Component<IProps, IState> {
   state = {
     blocks: this.props.blocks,
     sortingIndex: null,
     blockControlsFocusedIndex: -1,
+    focusIndex: -1,
   }
 
   blockRefs: HTMLDivElement[] = []
   bodyRef?: HTMLDivElement
+
+  shouldComponentUpdate(prevProps: any) {
+    console.log(diff(prevProps, this.props))
+    return true
+  }
 
   componentDidMount() {
     document.addEventListener('keyup', this.onKeyPress)
@@ -49,32 +57,31 @@ class Content extends React.Component<IProps, IState> {
   onKeyPress = (e: KeyboardEvent) => {
     const filterText = this.getCurrentFilterText()
     if (e.key === 'Tab') {
-      this.closeBlockControl()
+      // this.closeBlockControl()
     } else if (e.key === 'Backspace' && !filterText) {
-      this.closeBlockControl()
+      // this.closeBlockControl()
     } else if (e.key === '/' && !filterText) {
       const { blockControlsFocusedIndex } = this.state
-      this.openBlockControl(blockControlsFocusedIndex)
+      // this.openBlockControl(blockControlsFocusedIndex)
     }
   }
 
   onAddClick = (index: number) => {
     ReactTooltip.hide()
 
-    const { blocks } = this.state
+    const { blocks } = this.props
     const block = blocks[index]
     const isEmpty = isBlockEmpty(block)
 
     // If empty block then update this one instead
     if (isEmpty) {
-      this.openBlockControl(index)
+      // this.openBlockControl(index)
       return
     }
 
-    this.onCreateBlock(index, () => {
-      this.nextFocus(index)
-      this.openBlockControl(index + 1)
-    })
+    this.onCreateBlock(index)
+    this.nextFocus(index)
+    // this.openBlockControl(index + 1)
   }
 
   manageControls = () => {
@@ -105,6 +112,7 @@ class Content extends React.Component<IProps, IState> {
 
     if (index === -1) return
 
+    // TODO: Reset the filter text
     this.setState(
       produce((draftState) => {
         draftState.blocks[index].type = key
@@ -114,7 +122,7 @@ class Content extends React.Component<IProps, IState> {
       })
     )
 
-    this.closeBlockControl()
+    // this.closeBlockControl()
     this.focus(index)
   }
 
@@ -131,32 +139,63 @@ class Content extends React.Component<IProps, IState> {
     actions.editor.textControlOpen(newPos)
   }
 
-  onCreateBlock = (index: number, onComplete?: () => void) => {
-    this.setState(
-      produce((draftState) => {
-        draftState.blocks.splice(index + 1, 0, DEFAULT_BLOCK)
-      }),
-      onComplete
-    )
+  onCreateBlock = (index: number) => {
+    const newPosition = index + 1
+    const { onBlocksUpsert, blocks } = this.props
+    const movedBlocks = blocks
+      .filter((_, i) => i > newPosition - 1)
+      .map((item) => ({ ...item, position: item.position + 1 }))
+
+    // console.log(blocks.map((item) => ({ i: item.id, p: item.position })))
+    // console.log(movedBlocks.map((item) => ({ i: item.id, p: item.position })))
+    onBlocksUpsert([
+      {
+        type: BlockType.TEXT,
+        payload: {
+          value: 'New',
+        },
+        id: -1,
+        parentId: null,
+        editingUserId: null,
+
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        position: newPosition,
+      },
+      // ...movedBlocks,
+    ])
+    // TODO: this.nextFocus(i) - maybe check to see what else does this?
   }
 
-  onUpdateBlock = (i: number, item: BlockData, onComplete?: () => void) => {
-    this.setState(
-      produce((draftState) => {
-        draftState.blocks[i] = item
-      }),
-      onComplete
-    )
+  onUpdateBlock = (index: number, payload: BlockData) => {
+    const { onBlocksUpsert } = this.props
+
+    // onBlocksUpsert([
+    //   {
+    //     ...item,
+    // position: index,
+    //   },
+    // ])
+
+    // this.setState(
+    //   produce((draftState) => {
+    //     draftState.blocks[i] = item
+    //   }),
+    //   onComplete
+    // )
+    // this.manageControls()
   }
 
-  onDeleteBlock = (index: number, onComplete?: () => void) => {
-    this.setState(
-      produce((draftState) => {
-        draftState.blocks.splice(index, 1)
-        draftState.blockControlsFocusedIndex = -1
-      }),
-      onComplete
-    )
+  onDeleteBlock = (index: number) => {
+    // TODO: Delete block
+    // this.setState(
+    //   produce((draftState) => {
+    //     draftState.blocks.splice(index, 1)
+    //     draftState.blockControlsFocusedIndex = -1
+    //   }),
+    //   onComplete
+    // )
+    // this.prevFocus(i)
   }
 
   onSortStart = (sort: SortStart, event: SortEvent) => {
@@ -170,9 +209,9 @@ class Content extends React.Component<IProps, IState> {
   }
 
   onBlockFocus = (index: number) => {
-    this.setState((state) => ({ ...state, blockControlsFocusedIndex: index }))
+    // this.setState((state) => ({ ...state, blockControlsFocusedIndex: index }))
 
-    const { blocks } = this.state
+    const { blocks } = this.props
     if (blocks[index].id) {
       // TODO: Lock block
     }
@@ -182,27 +221,15 @@ class Content extends React.Component<IProps, IState> {
   onBlockBlur = (index: number) => {
     // TODO: Update content
     // Enable undo/redo
-    const { blocks } = this.state
+    const { blocks } = this.props
     if (!blocks[index].id) {
       // TODO: unlock block
     }
-    this.onUpdateTrigger()
-  }
-
-  onUpdateTrigger = () => {
-    const { blocks: legacyBlocks, onBlocksUpdate } = this.props
-    const { blocks } = this.state
-    console.log(JSON.stringify(blocks))
-    console.log(JSON.stringify(legacyBlocks))
-    if (JSON.stringify(blocks) !== JSON.stringify(legacyBlocks)) {
-      console.log('difference')
-      console.log({ blocks })
-      onBlocksUpdate(blocks)
-    }
+    // this.onUpdateTrigger()
   }
 
   onBodyClick = () => {
-    const { blocks } = this.state
+    const { blocks } = this.props
     const lastItemIndex = blocks.length - 1
     const lastBlock = blocks[lastItemIndex]
     if (lastBlock.type === BlockType.TEXT && (lastBlock.payload as BlockDataText).value === '') {
@@ -210,121 +237,89 @@ class Content extends React.Component<IProps, IState> {
       return
     }
 
-    this.onCreateBlock(lastItemIndex, () => {
-      this.focus(lastItemIndex + 1)
-    })
+    this.onCreateBlock(lastItemIndex)
+    this.nextFocus(lastItemIndex)
   }
 
   prevFocus(index: number) {
-    this.blockRefs[index - 1].focus()
+    // this.blockRefs[index - 1].focus()
+    // this.setState({ focusIndex: index - 1 })
   }
 
   focus(index: number) {
-    this.blockRefs[index].focus()
+    console.log(index)
+    // this.blockRefs[index].focus()
+    // this.setState({ focusIndex: index })
   }
 
   nextFocus(index: number) {
-    this.blockRefs[index + 1].focus()
+    // this.blockRefs[index + 1].focus()
+    // this.setState({ focusIndex: index + 1 })
   }
 
-  openBlockControl = (index: number) => {
-    const { actions } = this.props
-    const { blocks } = this.state
+  // openBlockControl = (index: number) => {
+  //   const { actions } = this.props
+  //   const { blocks } = this.props
 
-    const blockRef = this.blockRefs[index]
-    const { top: blockTop, left: blockLeft } = blockRef.getBoundingClientRect()
-    const bodyTop = this.bodyRef ? this.bodyRef.getBoundingClientRect().top : 0
-    const bodyLeft = this.bodyRef ? this.bodyRef.getBoundingClientRect().left : 0
-    const diffTop = blockTop - bodyTop
-    const diffLeft = blockLeft - bodyLeft
-    const block = blocks[index]
-    const initialHeight = BlockTypeProperties[block.type].initialHeight
-    actions.editor.blockControlOpen({
-      x: diffLeft,
-      y: diffTop + initialHeight + BLOCK_CONTAINER_VERTICAL_PADDING,
-    })
-  }
+  //   const blockRef = this.blockRefs[index]
+  //   const { top: blockTop, left: blockLeft } = blockRef.getBoundingClientRect()
+  //   const bodyTop = this.bodyRef ? this.bodyRef.getBoundingClientRect().top : 0
+  //   const bodyLeft = this.bodyRef ? this.bodyRef.getBoundingClientRect().left : 0
+  //   const diffTop = blockTop - bodyTop
+  //   const diffLeft = blockLeft - bodyLeft
+  //   const block = blocks[index]
+  //   const initialHeight = BlockTypeProperties[block.type].initialHeight
+  //   actions.editor.blockControlOpen({
+  //     x: diffLeft,
+  //     y: diffTop + initialHeight + BLOCK_CONTAINER_VERTICAL_PADDING,
+  //   })
+  // }
 
-  closeBlockControl = () => {
-    const { actions } = this.props
-    actions.editor.blockControlClose()
-  }
+  // closeBlockControl = () => {
+  //   const { actions } = this.props
+  //   actions.editor.blockControlClose()
+  // }
 
   renderBlock = (item: Block, i: number) => {
     const { blockControlOpen } = this.props
+    const { focusIndex } = this.state
     const initialHeight = BlockTypeProperties[item.type].initialHeight
+
+    if (focusIndex === i) {
+      console.log('render')
+      console.log(item.id)
+    }
+
     return (
-      <Item index={i} key={`${i}`}>
+      <Item index={i} key={item.id}>
         <Container
+          index={i}
           initialHeight={initialHeight}
-          onClick={() => this.onBlockClick(i)}
-          onAddClick={() => this.onAddClick(i)}
-          onDoubleClick={(pos) => this.onBlockDoubleClick(i, pos)}
+          onClick={this.onBlockClick}
+          onAddClick={this.onAddClick}
+          onDoubleClick={this.onBlockDoubleClick}
           enableHandle={!blockControlOpen}
         >
-          {this.renderBlockItem(item, i)}
+          <BlockItem
+            index={i}
+            focus={focusIndex === i}
+            blockControlOpen={blockControlOpen}
+            type={item.type}
+            payload={item.payload}
+            onNew={this.onCreateBlock}
+            onUpdate={this.onUpdateBlock}
+            onDelete={this.onDeleteBlock}
+            onFocus={this.onBlockFocus}
+            onBlur={this.onBlockBlur}
+          />
         </Container>
       </Item>
     )
   }
 
-  renderBlockItem = (item: Block, i: number) => {
-    const { blockControlOpen } = this.props
-
-    const refCallback = (ref: any) => {
-      if (!ref) return
-      this.blockRefs[i] = ref
-    }
-
-    switch (item.type) {
-      case BlockType.TEXT:
-      case BlockType.H1:
-      case BlockType.H2:
-      case BlockType.H3:
-      case BlockType.CALLOUT:
-      case BlockType.CODE:
-      case BlockType.QUOTE: {
-        const content: BlockDataText = item.payload as BlockDataText
-
-        return (
-          <Text
-            innerRef={refCallback}
-            tabIndex={i + 1}
-            content={content}
-            type={item.type}
-            filteringMode={blockControlOpen}
-            onNew={() =>
-              this.onCreateBlock(i, () => {
-                this.nextFocus(i)
-              })
-            }
-            onUpdate={(payload) =>
-              this.onUpdateBlock(i, { ...item, payload }, () => {
-                this.manageControls()
-              })
-            }
-            onDelete={() =>
-              this.onDeleteBlock(i, () => {
-                this.prevFocus(i)
-              })
-            }
-            onFocus={() => this.onBlockFocus(i)}
-            onBlur={() => this.onBlockBlur(i)}
-          />
-        )
-      }
-      case BlockType.IMAGE: {
-        const content: BlockDataImage = item.payload as BlockDataImage
-        return <Image innerRef={refCallback} content={content} />
-      }
-      case BlockType.DIVIDER:
-        return <Divider innerRef={refCallback} />
-      default:
-        return <div />
-    }
-  }
-
+  // TODO: Move logic into ControlledText
   getCurrentFilterText() {
+    return ''
     const { blockControlsFocusedIndex, blocks } = this.state
     if (blocks.length === 0 || blockControlsFocusedIndex < 0) {
       return null
@@ -352,7 +347,8 @@ class Content extends React.Component<IProps, IState> {
     } = this.props
 
     const filterText = this.getCurrentFilterText()
-
+    console.log(blocks)
+    console.log('render')
     return (
       <div
         className={styles.body}
@@ -373,7 +369,9 @@ class Content extends React.Component<IProps, IState> {
         )}
         <div onClick={(e) => e.stopPropagation()}>
           <List onSortStart={this.onSortStart} onSortEnd={this.onSortEnd} useDragHandle={true}>
-            {blocks.map((item, i) => this.renderBlock(item, i))}
+            {blocks
+              .sort((a: Block, b: Block) => a.position - b.position)
+              .map((item, i) => this.renderBlock(item, i))}
           </List>
           <Tooltip id={'editor'} />
         </div>
@@ -386,18 +384,20 @@ const StyledList = ({ children }: any) => <div className={styles.list}>{children
 
 const ItemContainer = ({ children }: any) => <div>{children}</div>
 
-const List = SortableContainer(StyledList)
-const Item = SortableElement(ItemContainer)
+const List = StyledList //SortableContainer(StyledList)
+const Item = ItemContainer // SortableElement(ItemContainer)
 
 interface IProps extends ReduxProps<typeof mapStateToProps, typeof mapDispatchToProps> {
   id: number
   blocks: Block[]
-  onBlocksUpdate: (blocks: Block[]) => void
+  onBlocksUpsert: (blocks: Block[]) => void
+  onBlockDelete: (index: number) => void
 }
 
 interface IState {
   blocks: Block[]
   blockControlsFocusedIndex: number
+  focusIndex: number
 }
 
 function mapStateToProps(state: IRootState) {

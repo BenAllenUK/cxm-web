@@ -12,11 +12,12 @@ export const BLOCK_CONTAINER_VERTICAL_PADDING = 10
 export const DEFAULT_BLOCK = {
   type: BlockType.TEXT,
   payload: {
-    value: '',
+    value: 'New',
   },
   id: -1,
   parentId: null,
   editingUserId: null,
+  position: 0,
 }
 
 export const DEFAULT_BLOCK_START = {
@@ -29,6 +30,7 @@ export const DEFAULT_BLOCK_START = {
   editingUserId: null,
   createdAt: '',
   updatedAt: '',
+  position: 0,
 }
 
 export const DEFAULT_ARTICLE = {

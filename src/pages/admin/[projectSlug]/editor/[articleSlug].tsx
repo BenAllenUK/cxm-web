@@ -1,3 +1,5 @@
+import React, { useCallback } from 'react'
+
 import { initialState } from 'reducers'
 
 import { initializeStore } from 'store'
@@ -34,7 +36,6 @@ export function Content() {
   const { userId, organisationId, projects } = useUser()
 
   const { projectSlug, articleSlug } = useEditor()
-  console.log({ articleSlug })
 
   if (projectSlug === null || articleSlug === null) {
     return <div />
@@ -65,15 +66,16 @@ export function Content() {
 
   articleData = response?.data
 
+  // Stops the local query cache from working
   // Move to subscription after fetch
-  if (typeof window !== 'undefined') {
-    const { data } = useGetArticleOneSubscriptionSubscription({
-      variables: {
-        slug: articleSlug,
-      },
-    })
-    articleData = data ?? articleData
-  }
+  // if (typeof window !== 'undefined') {
+  //   const { data } = useGetArticleOneSubscriptionSubscription({
+  //     variables: {
+  //       slug: articleSlug,
+  //     },
+  //   })
+  //   articleData = data ?? articleData
+  // }
 
   const [article] = articleData?.articles || []
   if (!article) {
@@ -82,7 +84,9 @@ export function Content() {
 
   const [createArticleMutation] = useCreateArticleMutation()
 
-  const [upsertBlockMutation] = useUpsertBlocksMutation()
+  const [upsertBlockMutation, info] = useUpsertBlocksMutation()
+
+  console.log('[article sliug] re render')
 
   return (
     <EditorPage

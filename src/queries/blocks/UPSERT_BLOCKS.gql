@@ -5,7 +5,7 @@ mutation UpsertBlocks($objects: [blocks_insert_input!]!) {
     objects: $objects
     on_conflict: {
       constraint: blocks_pkey
-      update_columns: [parentId, payload, articleId, type, editingUserId]
+      update_columns: [parentId, payload, articleId, type, editingUserId, position]
     }
   ) {
     returning {

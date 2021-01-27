@@ -1,10 +1,11 @@
+import { memo } from 'react'
+
 import Sidebar, { Section } from 'components/navigation/sidebar'
 import Editor from 'components/editor'
 import { parseMenu } from 'utils/menu'
 import { parseBlocks } from 'utils/blocks'
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import styles from './Editor.module.scss'
-import throttle from 'lodash/throttle'
 
 import {
   GetArticleOneQuery,
@@ -24,12 +25,12 @@ import { DEFAULT_ARTICLE } from 'components/editor/blocks'
 import { useEditor } from 'components/editor/Provider'
 import { Block } from 'components/types'
 
-export default function EditorPage({
+const EditorPage = ({
   article,
   project,
   onCreateArticleMutation,
   onUpsertBlockMutation,
-}: IProps) {
+}: IProps) => {
   const { setArticleSlug, setProjectSlug } = useEditor()
 
   const sections = [{ id: 1, label: 'CONTENT', items: parseMenu(project.articles) }]
@@ -51,62 +52,64 @@ export default function EditorPage({
     window.history.replaceState({}, '', `/admin/${project.slug}/editor/${article.slug}`)
   }
 
-  const onCreateArticle = async (parentId: number | null) => {
-    const { blocks, ...articleParams } = DEFAULT_ARTICLE
-    const projectId = project.id
-    const params = createArticleMutationParams(projectId, {
-      object: {
-        ...articleParams,
-        parentId,
-        projectId: project.id,
-        slug: 'new-' + encodeURI(new Date().toISOString()),
-        blocks: { data: blocks },
-      },
-    })
-    const { data } = await onCreateArticleMutation(params)
+  const onCreateArticle = useCallback(
+    async (parentId: number | null) => {
+      const { blocks, ...articleParams } = DEFAULT_ARTICLE
+      const projectId = project.id
+      const params = createArticleMutationParams(projectId, {
+        object: {
+          ...articleParams,
+          parentId,
+          projectId: project.id,
+          slug: 'new-' + encodeURI(new Date().toISOString()),
+          blocks: { data: blocks },
+        },
+      })
+      const { data } = await onCreateArticleMutation(params)
 
-    const articleSlug = data?.insert_articles_one?.slug
-    if (!articleSlug) {
-      console.error('Article failed to create')
-      return
-    }
-
-    setArticleSlug(articleSlug)
-    window.history.replaceState({}, '', `/admin/${project.slug}/editor/${articleSlug}`)
-  }
-
-  const onBlocksUpdate = async (blocks: Block[]) => {
-    console.log('update')
-
-    const o = blocks.map(({ payload, id: oldId, ...data }, index) => {
-      let newId
-      console.log(oldId)
-      console.log(oldId < 0)
-      if (oldId < 0) {
-      } else {
-        console.log('new ID = old Id')
-        newId = oldId
+      const articleSlug = data?.insert_articles_one?.slug
+      if (!articleSlug) {
+        console.error('Article failed to create')
+        return
       }
 
-      return {
-        ...data,
-        id: newId,
-        articleId: article.id,
-        position: index,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        payload: JSON.stringify(payload),
-      }
-    })
-    console.log({ o })
-    const params = createUpsertMutationParams(article.id, {
-      objects: o,
-    })
-    console.log(o)
-    // const { data } = await onUpsertBlockMutation(params)
-    // console.log(data)
-  }
+      setArticleSlug(articleSlug)
+      window.history.replaceState({}, '', `/admin/${project.slug}/editor/${articleSlug}`)
+    },
+    [project.id]
+  )
 
+  const onBlocksUpsert = useCallback(
+    async (blocks: Block[]) => {
+      console.log('update')
+
+      const o = blocks.map(({ payload, id: oldId, ...data }) => {
+        let newId
+        // console.log(oldId)
+        if (oldId < 0) {
+        } else {
+          newId = oldId
+        }
+
+        return {
+          ...data,
+          id: newId,
+          articleId: article.id,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          payload: JSON.stringify(payload),
+        }
+      })
+      const params = createUpsertMutationParams(article.id, {
+        objects: o,
+      })
+
+      const { data } = await onUpsertBlockMutation(params)
+    },
+    [article.id]
+  )
+
+  console.log('Re render editor page')
   return (
     <div className={styles.container}>
       <Sidebar
@@ -118,11 +121,7 @@ export default function EditorPage({
 
       <div className={styles.editor}>
         {article ? (
-          <Editor
-            id={article.id}
-            blocks={initialBlocks}
-            onBlocksUpdate={throttle(onBlocksUpdate, 5000)}
-          />
+          <Editor id={article.id} blocks={initialBlocks} onBlocksUpsert={onBlocksUpsert} />
         ) : (
           <div>Loading...</div>
         )}
@@ -130,6 +129,8 @@ export default function EditorPage({
     </div>
   )
 }
+
+export default memo(EditorPage)
 
 interface IProps {
   article: NonNullable<GetArticleOneQuery['articles'][0]>

@@ -43,6 +43,7 @@ export type Block = {
   payload: BlockData
   createdAt: string
   updatedAt: string
+  position: number
 }
 
 export type BlockDataText = {

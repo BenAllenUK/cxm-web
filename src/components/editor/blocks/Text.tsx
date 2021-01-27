@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { RefObject } from 'react'
 
 import TextInput, { TextInputEvent } from 'components/common/TextInput'
 import { BlockData, BlockDataText, BlockType, Block } from '../../types'
@@ -8,13 +8,10 @@ import styles from './Text.module.scss'
 
 class Text extends React.Component<IProps> {
   onValueChange = (event: TextInputEvent) => {
-    const { content, onUpdate } = this.props
+    const { onUpdate } = this.props
 
     const value = event.target.value.replace('&nbsp;', ' ')
-
-    onUpdate({
-      value,
-    })
+    onUpdate(value)
   }
 
   renderStyle = (type: BlockType) => {
@@ -73,11 +70,11 @@ class Text extends React.Component<IProps> {
   }
 
   onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const { content, type, onDelete, onNew, filteringMode } = this.props
+    const { initialValue, type, onDelete, onNew, filteringMode } = this.props
 
     switch (e.key) {
       case 'Backspace':
-        if (content.value.length === 0 && !e.shiftKey) {
+        if (initialValue && initialValue.length === 0 && !e.shiftKey) {
           e.preventDefault()
           onDelete()
         }
@@ -98,8 +95,8 @@ class Text extends React.Component<IProps> {
   }
 
   render() {
-    const { content, type, tabIndex, innerRef, onFocus, onBlur } = this.props
-    const html = content.value
+    const { initialValue, type, tabIndex, innerRef, onFocus, onBlur } = this.props
+    const html = initialValue || ''
 
     const className = this.renderStyle(type)
     const focusedPlaceholder = this.renderFocusedPlaceholder(type)
@@ -129,15 +126,15 @@ class Text extends React.Component<IProps> {
 }
 
 interface IProps {
-  innerRef?: (ref: any | null) => void
+  innerRef: RefObject<HTMLDivElement>
   tabIndex?: number
   type: BlockType
-  content: BlockDataText
-  filteringMode: boolean
+  initialValue?: string
+  filteringMode?: boolean
   disabled?: boolean
 
   onNew: () => void
-  onUpdate: (arg0: BlockDataText) => void
+  onUpdate: (arg0: string) => void
   onDelete: () => void
   onFocus: () => void
   onBlur: () => void

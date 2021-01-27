@@ -35,11 +35,23 @@ export const createUpsertMutationParams = (
       if (!blocks) {
         return
       }
+
       cache.modify({
         id: `articles:${articleId}`,
         fields: {
-          blocks(blocksRef = [], { readField }) {
+          blocks(blockRefs = [], { readField }) {
+            const ids = blocks.map((i) => i.id)
+            const existingRefs = blockRefs.filter((ref: any) => {
+              const tId = Number(readField('id', ref))
+              if (!tId) return
+              return ids.indexOf(tId) === -1
+            })
+
             const newBlockRefs = blocks.map((item) => {
+              const [existingRef] = blockRefs.filter((ref: any) => readField('id', ref) === item.id)
+              if (existingRef) {
+                return existingRef
+              }
               const id = item.id ?? Math.round(Math.random() * -1000000)
               const newRef = cache.writeFragment({
                 id: `blocks:${id}`,
@@ -51,14 +63,11 @@ export const createUpsertMutationParams = (
                 },
                 fragment: BLOCK_FRAGMENT,
               })
-
-              // const existingRef = blocksRef.filter((ref: any) => readField('id', ref) === item.id)
-              // if (existingRef) {
-              //   return existingRef
-              // }
               return newRef
             })
-            return newBlockRefs
+            // console.log('new refs', [...newBlockRefs])
+            // console.log('all refs', [...existingRefs, ...newBlockRefs])
+            return [...existingRefs, ...newBlockRefs]
           },
         },
       })

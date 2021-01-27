@@ -6001,7 +6001,7 @@ export type UpdateUserActivityMutation = (
 );
 
 export type BlockFragment = (
-  { __typename?: 'blocks' }
+  { __typename: 'blocks' }
   & Pick<Blocks, 'id' | 'articleId' | 'parentId' | 'editingUserId' | 'updatedAt' | 'createdAt' | 'payload' | 'type' | 'position'>
 );
 
@@ -6069,6 +6069,7 @@ export type ProjectFragment = (
 
 export const BlockFragmentDoc = gql`
     fragment Block on blocks {
+  __typename
   id
   articleId
   parentId
@@ -6394,7 +6395,7 @@ export const UpsertBlocksDocument = gql`
     mutation UpsertBlocks($objects: [blocks_insert_input!]!) {
   insert_blocks(
     objects: $objects
-    on_conflict: {constraint: blocks_pkey, update_columns: [parentId, payload, articleId, type, editingUserId]}
+    on_conflict: {constraint: blocks_pkey, update_columns: [parentId, payload, articleId, type, editingUserId, position]}
   ) {
     returning {
       ...Block

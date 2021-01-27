@@ -1,4 +1,5 @@
 fragment Block on blocks {
+  __typename
   id
   articleId
   parentId
