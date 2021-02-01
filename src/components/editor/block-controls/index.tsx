@@ -1,108 +1,42 @@
-import React from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 
 import { BlockType } from '../../types'
-import { getBlockOptions } from '../blocks'
-import Colors from 'config/colors'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt, faClone, faEdit } from '@fortawesome/free-regular-svg-icons'
+import { faLink, faLevelUpAlt } from '@fortawesome/free-solid-svg-icons'
+import OptionControls, { IOptionElements, OptionType } from 'components/common/option-controls'
+import { BlockTypeProperties, getBlockOptions } from '../blocks'
 import Image from 'next/image'
+
 import styles from './BlockControls.module.scss'
 
-class BlockControls extends React.Component<IProps, IState> {
-  state = {
-    selectedIndex: 0,
-  }
+const BlockControls = ({ position, filterText, onClick, onDismiss }: IProps) => {
+  const items: IOptionElements[] = Object.values(BlockTypeProperties).map((item, i) => ({
+    id: item.id,
+    icon: <Image className={styles.image} width={46} height={46} src={item.image} />,
+    title: item.title,
+    subtitle: item.subtitle,
+    type: OptionType.Button,
+  }))
 
-  itemRefs: HTMLDivElement[] = []
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.onKeyPress)
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.onKeyPress)
-  }
-
-  onItemMouseEnter = (selectedIndex: number) => {
-    this.setState({ selectedIndex })
-  }
-
-  onMouseLeave = () => {
-    this.setState({ selectedIndex: -1 })
-  }
-
-  onKeyPress = (e: KeyboardEvent) => {
-    const { onClick, filterText } = this.props
-    const { selectedIndex } = this.state
-
-    let items = getBlockOptions(filterText)
-
-    if (e.key === 'Enter' && selectedIndex > -1) {
-      onClick(items[selectedIndex].id)
-      e.preventDefault()
-      return
-    }
-
-    let index = 0
-    if (e.key === 'ArrowUp') {
-      index = selectedIndex > -1 ? selectedIndex - 1 : -1
-    } else if (e.key === 'ArrowDown') {
-      index = selectedIndex < items.length - 1 ? selectedIndex + 1 : items.length - 1
-    }
-
-    this.setState({
-      selectedIndex: index,
-    })
-
-    if (index > -1) {
-      this.itemRefs[index].scrollIntoView(false)
-    }
-  }
-
-  render() {
-    const { position, filterText, onClick } = this.props
-    const { selectedIndex } = this.state
-    let items = getBlockOptions(filterText)
-
-    return (
-      <div
-        style={{
-          left: position.x,
-          top: position.y,
-        }}
-        onMouseLeave={this.onMouseLeave}
-        className={styles.container}
-      >
-        {items.map((item, i) => (
-          <div
-            className={styles.item}
-            onClick={() => onClick(item.id)}
-            onMouseEnter={() => this.onItemMouseEnter(i)}
-            key={i}
-            style={i === selectedIndex ? { backgroundColor: Colors.line } : {}}
-            ref={(ref) => {
-              if (!ref) return
-              this.itemRefs[i] = ref
-            }}
-          >
-            <Image className={styles.image} width={46} height={46} src={item.image} />
-            <div className={styles.description}>
-              <div className={styles.title}>{item.title}</div>
-              <div className={styles.subtitle}>{item.subtitle}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-    )
-  }
-}
-
-interface IState {
-  selectedIndex: number
+  return (
+    <OptionControls
+      items={items}
+      position={position}
+      filterText={filterText}
+      iconClassName={styles.icon}
+      onClick={onClick}
+      onDismiss={onDismiss}
+    />
+  )
 }
 
 interface IProps {
   position: { x: number; y: number }
   filterText?: string | null
-  onClick: (key: BlockType) => void
+  onClick: (key: number) => void
+  onDismiss: () => void
 }
 
 export default BlockControls

@@ -1,0 +1,81 @@
+@import 'styles/variables';
+
+.defaultContainer {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 200px;
+  left: 200px;
+  background-color: $background-color;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid $line-color;
+  border-right: none;
+  z-index: 1;
+  width: 320px;
+  max-height: 300px;
+  overflow: scroll;
+  border-radius: 5px;
+  user-select: none;
+}
+
+.item {
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: flex-start;
+  user-select: none;
+}
+
+.hint {
+  color: $text2-color;
+  text-align: right;
+  font-size: 12px;
+}
+
+.line {
+  height: 1px;
+  background-color: $border-color;
+}
+
+.icon {
+  padding-left: 8px;
+  padding-right: 4px;
+}
+
+.description {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px;
+  padding-left: 8px;
+  flex: 1;
+}
+
+.image {
+  border-radius: 5px;
+  border: 1px solid $border-color;
+}
+
+.title {
+  font-size: 14px;
+  color: $text1-color;
+  text-align: left;
+  margin-bottom: 2px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: $text2-color;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

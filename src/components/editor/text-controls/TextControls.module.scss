@@ -16,7 +16,10 @@
 
 .linkButton {
   padding: 10px;
+  padding-top: 7px;
+  padding-bottom: 7px;
   border-right: 1px solid $line-color;
+  font-size: 12px;
   cursor: pointer;
 
   &:hover {
@@ -26,7 +29,10 @@
 
 .styleButton {
   padding: 10px;
+  padding-top: 7px;
+  padding-bottom: 7px;
   border-right: 1px solid $line-color;
+  font-size: 12px;
   cursor: pointer;
 
   &:hover {

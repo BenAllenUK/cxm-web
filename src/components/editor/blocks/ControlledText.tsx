@@ -2,10 +2,18 @@ import { useEffect, useRef, useState, memo, useCallback } from 'react'
 import Text from 'components/editor/blocks/Text'
 import { BlockType } from 'components/types'
 
-const ControlledText = ({ focus, initialValue, onUpdate: onParentUpdate, onBlur: onParentBlur, ...otherProps }: IProps) => {
+const ControlledText = ({
+  focus,
+  initialValue,
+  onTextChange,
+  onUpdate: onParentUpdate,
+  onBlur: onParentBlur,
+  ...otherProps
+}: IProps) => {
   const [value, setValue] = useState<string>(initialValue || '')
 
   const onValueChange = useCallback((_value: string) => {
+    onTextChange(_value)
     setValue(_value)
   }, [])
 
@@ -19,8 +27,11 @@ const ControlledText = ({ focus, initialValue, onUpdate: onParentUpdate, onBlur:
 
   const onBlur = useCallback(() => {
     // onParentBlur()
-    onParentUpdate(value)
-  }, [])
+    // TODO: Optimise (use dirty flag on block item)
+    if (JSON.stringify(initialValue) !== JSON.stringify(value)) {
+      onParentUpdate(value)
+    }
+  }, [initialValue, value])
 
   return (
     <>
@@ -39,8 +50,9 @@ interface IProps {
   filteringMode?: boolean
   disabled?: boolean
 
+  onTextChange: (value: string) => void
   onNew: () => void
-  onUpdate: (arg0: string) => void
+  onUpdate: (value: string) => void
   onDelete: () => void
   onFocus: () => void
   onBlur: () => void

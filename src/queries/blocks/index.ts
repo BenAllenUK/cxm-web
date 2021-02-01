@@ -1,12 +1,32 @@
 import { ApolloCache, FetchResult } from '@apollo/client'
-import { UpsertBlocksMutation, UpsertBlocksMutationVariables } from 'generated/graphql'
+import {
+  UpsertBlocksMutation,
+  UpsertBlocksMutationVariables,
+  DeleteBlockMutation,
+  DeleteBlockMutationVariables,
+} from 'generated/graphql'
 
 import BLOCK_FRAGMENT from 'queries/blocks/BLOCK_FRAGMENT.gql'
 
-export const createUpsertMutationParams = (
-  articleId: number,
-  variables: UpsertBlocksMutationVariables
-) => {
+export const deleteMutationParams = (articleId: number, id: number) => {
+  return {
+    variables: {
+      id,
+    },
+    update: (cache: ApolloCache<DeleteBlockMutation>, result: FetchResult<DeleteBlockMutation>) => {
+      cache.modify({
+        id: `articles:${articleId}`,
+        fields: {
+          blocks(blockRefs = [], { readField }) {
+            return blockRefs.filter((ref: any) => id !== readField('id', ref))
+          },
+        },
+      })
+    },
+  }
+}
+
+export const createUpsertMutationParams = (articleId: number, variables: UpsertBlocksMutationVariables) => {
   let returning = null
   if (Array.isArray(variables.objects)) {
     returning = variables.objects.map((item) => ({
@@ -17,7 +37,6 @@ export const createUpsertMutationParams = (
   } else {
     returning = variables
   }
-  // TODO Delete all old references related to this article
   return {
     variables,
     optimisticResponse: {
@@ -27,10 +46,7 @@ export const createUpsertMutationParams = (
         returning,
       },
     } as UpsertBlocksMutation,
-    update: (
-      cache: ApolloCache<UpsertBlocksMutation>,
-      result: FetchResult<UpsertBlocksMutation>
-    ) => {
+    update: (cache: ApolloCache<UpsertBlocksMutation>, result: FetchResult<UpsertBlocksMutation>) => {
       const blocks = result.data?.insert_blocks?.returning
       if (!blocks) {
         return

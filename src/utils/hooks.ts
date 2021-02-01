@@ -1,12 +1,4 @@
-import {
-  EventHandler,
-  RefObject,
-  useCallback,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from 'react'
+import { EventHandler, RefObject, useCallback, useEffect, useReducer, useRef, useState } from 'react'
 
 // https://usehooks.com/
 
@@ -88,10 +80,7 @@ export function useEventListener(eventName: string, handler: MouseEvent, element
   )
 }
 
-export function useOnClickOutside<T extends Element>(
-  ref: RefObject<T>,
-  handler: (event: MouseEvent) => void
-) {
+export function useOnClickOutside<T extends Element>(ref: RefObject<T>, handler: (event: MouseEvent) => void) {
   useEffect(
     () => {
       const listener = (event: any) => {
@@ -186,7 +175,8 @@ export function useLocalStorage(key: string, initialValue: object | string) {
 export function useKeyDown<T extends Element>(
   targetKey: string,
   ref: RefObject<T>,
-  handler: (e: KeyboardEvent) => void
+  handler: (e: KeyboardEvent) => void,
+  dependents: any[] = []
 ) {
   function downHandler(e: Event) {
     const _e = e as KeyboardEvent
@@ -205,13 +195,46 @@ export function useKeyDown<T extends Element>(
         ref.current?.removeEventListener('keydown', downHandler)
       }
     }
-  }, [])
+  }, dependents)
+}
+
+export function useWindowKeyDown(targetKey: string, handler: (e: KeyboardEvent) => void, dependents: any[] = []) {
+  function downHandler(e: KeyboardEvent) {
+    if (e.key === targetKey) {
+      handler(e)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', downHandler)
+
+    return () => {
+      window.removeEventListener('keydown', downHandler)
+    }
+  }, dependents)
+}
+
+export function useWindowKeyUp(targetKey: string, handler: (e: KeyboardEvent) => void, dependents: any[] = []) {
+  function upHandler(e: KeyboardEvent) {
+    if (e.key === targetKey) {
+      handler(e)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keyup', upHandler)
+
+    return () => {
+      window.removeEventListener('keyup', upHandler)
+    }
+  }, dependents)
 }
 
 export function useKeyUp<T extends Element>(
   targetKey: string,
   ref: RefObject<T>,
-  handler: (e: KeyboardEvent) => void
+  handler: (e: KeyboardEvent) => void,
+  dependents: any[] = []
 ) {
   function upHandler(e: Event) {
     const _e = e as KeyboardEvent
@@ -229,5 +252,5 @@ export function useKeyUp<T extends Element>(
         ref.current?.removeEventListener('keyup', upHandler)
       }
     }
-  }, [])
+  }, dependents)
 }

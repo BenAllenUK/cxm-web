@@ -11,6 +11,7 @@ const BlockItem = ({
   payload,
   index,
   focus,
+  onTextChange,
   onNew,
   onUpdate,
   onDelete,
@@ -40,6 +41,13 @@ const BlockItem = ({
     onBlur(index)
   }, [index])
 
+  const _onTextChange = useCallback(
+    (value: string) => {
+      onTextChange(index, value)
+    },
+    [index]
+  )
+
   switch (type) {
     case BlockType.TEXT:
     case BlockType.H1:
@@ -57,6 +65,7 @@ const BlockItem = ({
           initialValue={initialPayload.value}
           type={type}
           filteringMode={blockControlOpen}
+          onTextChange={_onTextChange}
           onNew={_onNew}
           onUpdate={_onUpdate}
           onDelete={_onDelete}
@@ -84,7 +93,9 @@ interface IProps {
   type: BlockType
   payload: BlockData
   index: number
+  xData: string
 
+  onTextChange: (index: number, value: string) => void
   onNew: (index: number) => void
   onUpdate: (index: number, arg0: BlockData) => void // TODO: Change BlockData to BlockPayload
   onDelete: (index: number) => void

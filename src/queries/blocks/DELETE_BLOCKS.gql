@@ -1,0 +1,5 @@
+mutation DeleteBlock($id: Int!) {
+  delete_blocks_by_pk(id: $id) {
+    id
+  }
+}

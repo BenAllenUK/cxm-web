@@ -17,39 +17,40 @@ const Text = ({ value, type, filteringMode, tabIndex, innerRef, onFocus, onBlur,
   const blurredPlaceholder = getBlurredPlaceholder(type)
   const focusedPlaceholder = getFocusedPlaceholder(type, filteringMode)
 
-  useKeyDown('Backspace', innerRef, (e) => {
-    if (!!value && !e.shiftKey) {
-      e.preventDefault()
-      onDelete()
-    }
-  })
+  useKeyDown(
+    'Backspace',
+    innerRef,
+    (e) => {
+      if (!value && !e.shiftKey) {
+        e.preventDefault()
+        onDelete()
+      }
+    },
+    [value]
+  )
 
   useKeyDown(
     'Enter',
     innerRef,
-    useCallback(
-      (e) => {
-        if (!filteringMode && type !== BlockType.CODE && !e.shiftKey) {
-          e.preventDefault()
-          onNew()
-        }
-      },
-      [filteringMode, type]
-    )
+    (e) => {
+      if (!filteringMode && type !== BlockType.CODE && !e.shiftKey) {
+        e.preventDefault()
+        onNew()
+      }
+    },
+    [filteringMode, type]
   )
 
   useKeyDown(
     'Tab',
     innerRef,
-    useCallback(
-      (e) => {
-        if (type === BlockType.CODE) {
-          document.execCommand('insertHTML', false, '&#009')
-          e.preventDefault()
-        }
-      },
-      [type]
-    )
+    (e) => {
+      if (type === BlockType.CODE) {
+        document.execCommand('insertHTML', false, '&#009')
+        e.preventDefault()
+      }
+    },
+    [type]
   )
 
   const initialHeight = BlockTypeProperties[type].initialHeight

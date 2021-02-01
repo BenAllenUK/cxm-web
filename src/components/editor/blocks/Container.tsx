@@ -6,15 +6,7 @@ import { BLOCK_CONTAINER_VERTICAL_PADDING } from '.'
 import styles from './Container.module.scss'
 import Controls from './Controls'
 
-const Container = ({
-  index,
-  enableHandle,
-  initialHeight,
-  onDoubleClick,
-  onClick,
-  onAddClick,
-  children,
-}: IProps) => {
+const Container = ({ index, enableHandle, initialHeight, onDoubleClick, onClick, onAddClick, children }: IProps) => {
   const _onDoubleClick = useCallback(
     (event: React.MouseEvent) => {
       onDoubleClick(index, { x: event.clientX, y: event.clientY })
@@ -34,17 +26,19 @@ const Container = ({
 
   const isVisible = enableHandle && isHovered
   return (
-    <div
-      ref={hoverRef}
-      className={styles.block}
-      style={{
-        marginTop: BLOCK_CONTAINER_VERTICAL_PADDING,
-        marginBottom: BLOCK_CONTAINER_VERTICAL_PADDING,
-      }}
-      onClick={_onClick}
-    >
-      <Controls initialHeight={initialHeight} isVisible={isVisible} onAddClick={_onAddClick} />
-      {children}
+    <div ref={hoverRef}>
+      <div
+        className={styles.block}
+        style={{
+          marginTop: BLOCK_CONTAINER_VERTICAL_PADDING,
+          marginBottom: BLOCK_CONTAINER_VERTICAL_PADDING,
+        }}
+        onClick={_onClick}
+        onDoubleClick={_onDoubleClick}
+      >
+        <Controls initialHeight={initialHeight} isVisible={isVisible} onAddClick={_onAddClick} />
+        {children}
+      </div>
     </div>
   )
 }

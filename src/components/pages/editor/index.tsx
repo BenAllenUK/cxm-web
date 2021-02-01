@@ -15,22 +15,18 @@ import {
   Projects,
   useCreateArticleMutation,
   useUpsertBlocksMutation,
+  useDeleteBlockMutation,
 } from 'generated/graphql'
 
 import { createArticleMutationParams } from 'queries/articles'
-import { createUpsertMutationParams } from 'queries/blocks'
+import { createUpsertMutationParams, deleteMutationParams } from 'queries/blocks'
 
 import { useRouter } from 'next/router'
 import { DEFAULT_ARTICLE } from 'components/editor/blocks'
 import { useEditor } from 'components/editor/Provider'
 import { Block } from 'components/types'
 
-const EditorPage = ({
-  article,
-  project,
-  onCreateArticleMutation,
-  onUpsertBlockMutation,
-}: IProps) => {
+const EditorPage = ({ article, project, onCreateArticleMutation, onUpsertBlockMutation, onDeleteBlockMutation }: IProps) => {
   const { setArticleSlug, setProjectSlug } = useEditor()
 
   const sections = [{ id: 1, label: 'CONTENT', items: parseMenu(project.articles) }]
@@ -79,13 +75,17 @@ const EditorPage = ({
     [project.id]
   )
 
+  const onBlockDelete = async (id: number) => {
+    const params = deleteMutationParams(article.id, id)
+    const res = await onDeleteBlockMutation(params)
+  }
+
   const onBlocksUpsert = useCallback(
     async (blocks: Block[]) => {
       console.log('update')
 
       const o = blocks.map(({ payload, id: oldId, ...data }) => {
         let newId
-        // console.log(oldId)
         if (oldId < 0) {
         } else {
           newId = oldId
@@ -105,23 +105,18 @@ const EditorPage = ({
       })
 
       const { data } = await onUpsertBlockMutation(params)
+      return data?.insert_blocks?.returning.map((item) => item.id)
     },
     [article.id]
   )
 
-  console.log('Re render editor page')
   return (
     <div className={styles.container}>
-      <Sidebar
-        project={project}
-        sections={sections}
-        onCreateArticle={onCreateArticle}
-        onViewArticle={onViewArticle}
-      />
+      <Sidebar project={project} sections={sections} onCreateArticle={onCreateArticle} onViewArticle={onViewArticle} />
 
       <div className={styles.editor}>
         {article ? (
-          <Editor id={article.id} blocks={initialBlocks} onBlocksUpsert={onBlocksUpsert} />
+          <Editor id={article.id} blocks={initialBlocks} onBlockDelete={onBlockDelete} onBlocksUpsert={onBlocksUpsert} />
         ) : (
           <div>Loading...</div>
         )}
@@ -137,4 +132,5 @@ interface IProps {
   project: NonNullable<NonNullable<GetProjectOneQuery['projects']>[0]>
   onCreateArticleMutation: ReturnType<typeof useCreateArticleMutation>[0]
   onUpsertBlockMutation: ReturnType<typeof useUpsertBlocksMutation>[0]
+  onDeleteBlockMutation: ReturnType<typeof useDeleteBlockMutation>[0]
 }

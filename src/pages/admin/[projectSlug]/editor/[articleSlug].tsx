@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 
 import { initialState } from 'reducers'
 
@@ -15,6 +15,7 @@ import {
   useGetArticleOneSubscriptionSubscription,
   useGetProjectOneQuery,
   useUpsertBlocksMutation,
+  useDeleteBlockMutation,
 } from 'generated/graphql'
 import Root, { UserContext, useUser } from 'components/root'
 import EditorProvider, { useEditor } from 'components/editor/Provider'
@@ -84,9 +85,9 @@ export function Content() {
 
   const [createArticleMutation] = useCreateArticleMutation()
 
-  const [upsertBlockMutation, info] = useUpsertBlocksMutation()
+  const [upsertBlockMutation] = useUpsertBlocksMutation()
 
-  console.log('[article sliug] re render')
+  const [deleteBlockMutation] = useDeleteBlockMutation()
 
   return (
     <EditorPage
@@ -94,6 +95,7 @@ export function Content() {
       article={article}
       onCreateArticleMutation={createArticleMutation}
       onUpsertBlockMutation={upsertBlockMutation}
+      onDeleteBlockMutation={deleteBlockMutation}
     />
   )
 }

@@ -1,18 +1,11 @@
-import {
-  BlockData,
-  BlockDataText,
-  BlockType,
-  BlockDataListBullet,
-  BlockDataImage,
-  Block,
-} from '../../types'
+import { BlockData, BlockDataText, BlockType, BlockDataListBullet, BlockDataImage, Block } from '../../types'
 
 export const BLOCK_CONTAINER_VERTICAL_PADDING = 10
 
 export const DEFAULT_BLOCK = {
   type: BlockType.TEXT,
   payload: {
-    value: 'New',
+    value: '',
   },
   id: -1,
   parentId: null,
@@ -61,7 +54,8 @@ export function getBlockOptions(filterText?: string | null) {
   let items = Object.values(BlockTypeProperties)
 
   if (filterText) {
-    items = items.filter((items) => items.title.toLowerCase().indexOf(filterText) > -1)
+    const text = filterText.replace('/', '').toLowerCase()
+    items = items.filter((items) => items.title.toLowerCase().indexOf(text) > -1)
   }
   return items
 }

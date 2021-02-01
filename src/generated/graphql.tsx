@@ -862,7 +862,7 @@ export type Blocks = {
   parentId?: Maybe<Scalars['Int']>;
   payload: Scalars['jsonb'];
   position: Scalars['Int'];
-  type: Scalars['String'];
+  type: Scalars['Int'];
   updatedAt: Scalars['timestamptz'];
 };
 
@@ -956,6 +956,7 @@ export type BlocksAvgFields = {
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   position?: Maybe<Scalars['Float']>;
+  type?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "blocks" */
@@ -965,6 +966,7 @@ export type BlocksAvgOrderBy = {
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   position?: Maybe<OrderBy>;
+  type?: Maybe<OrderBy>;
 };
 
 /** Boolean expression to filter rows from the table "blocks". All fields are combined with a logical 'AND'. */
@@ -983,7 +985,7 @@ export type BlocksBoolExp = {
   parentId?: Maybe<IntComparisonExp>;
   payload?: Maybe<JsonbComparisonExp>;
   position?: Maybe<IntComparisonExp>;
-  type?: Maybe<StringComparisonExp>;
+  type?: Maybe<IntComparisonExp>;
   updatedAt?: Maybe<TimestamptzComparisonExp>;
 };
 
@@ -1015,6 +1017,7 @@ export type BlocksIncInput = {
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
   position?: Maybe<Scalars['Int']>;
+  type?: Maybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "blocks" */
@@ -1030,7 +1033,7 @@ export type BlocksInsertInput = {
   parentId?: Maybe<Scalars['Int']>;
   payload?: Maybe<Scalars['jsonb']>;
   position?: Maybe<Scalars['Int']>;
-  type?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -1043,7 +1046,7 @@ export type BlocksMaxFields = {
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
   position?: Maybe<Scalars['Int']>;
-  type?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -1068,7 +1071,7 @@ export type BlocksMinFields = {
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
   position?: Maybe<Scalars['Int']>;
-  type?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -1164,7 +1167,7 @@ export type BlocksSetInput = {
   parentId?: Maybe<Scalars['Int']>;
   payload?: Maybe<Scalars['jsonb']>;
   position?: Maybe<Scalars['Int']>;
-  type?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -1176,6 +1179,7 @@ export type BlocksStddevFields = {
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   position?: Maybe<Scalars['Float']>;
+  type?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "blocks" */
@@ -1185,6 +1189,7 @@ export type BlocksStddevOrderBy = {
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   position?: Maybe<OrderBy>;
+  type?: Maybe<OrderBy>;
 };
 
 /** aggregate stddev_pop on columns */
@@ -1195,6 +1200,7 @@ export type BlocksStddevPopFields = {
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   position?: Maybe<Scalars['Float']>;
+  type?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "blocks" */
@@ -1204,6 +1210,7 @@ export type BlocksStddevPopOrderBy = {
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   position?: Maybe<OrderBy>;
+  type?: Maybe<OrderBy>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -1214,6 +1221,7 @@ export type BlocksStddevSampFields = {
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   position?: Maybe<Scalars['Float']>;
+  type?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "blocks" */
@@ -1223,6 +1231,7 @@ export type BlocksStddevSampOrderBy = {
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   position?: Maybe<OrderBy>;
+  type?: Maybe<OrderBy>;
 };
 
 /** aggregate sum on columns */
@@ -1233,6 +1242,7 @@ export type BlocksSumFields = {
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
   position?: Maybe<Scalars['Int']>;
+  type?: Maybe<Scalars['Int']>;
 };
 
 /** order by sum() on columns of table "blocks" */
@@ -1242,6 +1252,7 @@ export type BlocksSumOrderBy = {
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   position?: Maybe<OrderBy>;
+  type?: Maybe<OrderBy>;
 };
 
 /** update columns of table "blocks" */
@@ -1274,6 +1285,7 @@ export type BlocksVarPopFields = {
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   position?: Maybe<Scalars['Float']>;
+  type?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "blocks" */
@@ -1283,6 +1295,7 @@ export type BlocksVarPopOrderBy = {
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   position?: Maybe<OrderBy>;
+  type?: Maybe<OrderBy>;
 };
 
 /** aggregate var_samp on columns */
@@ -1293,6 +1306,7 @@ export type BlocksVarSampFields = {
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   position?: Maybe<Scalars['Float']>;
+  type?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "blocks" */
@@ -1302,6 +1316,7 @@ export type BlocksVarSampOrderBy = {
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   position?: Maybe<OrderBy>;
+  type?: Maybe<OrderBy>;
 };
 
 /** aggregate variance on columns */
@@ -1312,6 +1327,7 @@ export type BlocksVarianceFields = {
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   position?: Maybe<Scalars['Float']>;
+  type?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "blocks" */
@@ -1321,6 +1337,7 @@ export type BlocksVarianceOrderBy = {
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   position?: Maybe<OrderBy>;
+  type?: Maybe<OrderBy>;
 };
 
 /** columns and relationships of "campaigns" */
@@ -6005,6 +6022,19 @@ export type BlockFragment = (
   & Pick<Blocks, 'id' | 'articleId' | 'parentId' | 'editingUserId' | 'updatedAt' | 'createdAt' | 'payload' | 'type' | 'position'>
 );
 
+export type DeleteBlockMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteBlockMutation = (
+  { __typename?: 'mutation_root' }
+  & { delete_blocks_by_pk?: Maybe<(
+    { __typename?: 'blocks' }
+    & Pick<Blocks, 'id'>
+  )> }
+);
+
 export type UpsertBlocksMutationVariables = Exact<{
   objects: Array<BlocksInsertInput> | BlocksInsertInput;
 }>;
@@ -6391,6 +6421,38 @@ export function useUpdateUserActivityMutation(baseOptions?: Apollo.MutationHookO
 export type UpdateUserActivityMutationHookResult = ReturnType<typeof useUpdateUserActivityMutation>;
 export type UpdateUserActivityMutationResult = Apollo.MutationResult<UpdateUserActivityMutation>;
 export type UpdateUserActivityMutationOptions = Apollo.BaseMutationOptions<UpdateUserActivityMutation, UpdateUserActivityMutationVariables>;
+export const DeleteBlockDocument = gql`
+    mutation DeleteBlock($id: Int!) {
+  delete_blocks_by_pk(id: $id) {
+    id
+  }
+}
+    `;
+export type DeleteBlockMutationFn = Apollo.MutationFunction<DeleteBlockMutation, DeleteBlockMutationVariables>;
+
+/**
+ * __useDeleteBlockMutation__
+ *
+ * To run a mutation, you first call `useDeleteBlockMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBlockMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteBlockMutation, { data, loading, error }] = useDeleteBlockMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteBlockMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBlockMutation, DeleteBlockMutationVariables>) {
+        return Apollo.useMutation<DeleteBlockMutation, DeleteBlockMutationVariables>(DeleteBlockDocument, baseOptions);
+      }
+export type DeleteBlockMutationHookResult = ReturnType<typeof useDeleteBlockMutation>;
+export type DeleteBlockMutationResult = Apollo.MutationResult<DeleteBlockMutation>;
+export type DeleteBlockMutationOptions = Apollo.BaseMutationOptions<DeleteBlockMutation, DeleteBlockMutationVariables>;
 export const UpsertBlocksDocument = gql`
     mutation UpsertBlocks($objects: [blocks_insert_input!]!) {
   insert_blocks(
