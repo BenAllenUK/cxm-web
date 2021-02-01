@@ -20,3 +20,15 @@ a {
 .Mui-checked {
   color: $text2-color !important;
 }
+
+.MuiLinearProgress-indeterminate {
+  background-color: $primary-highlight !important;
+}
+
+.MuiLinearProgress-bar1Indeterminate {
+  background-color: white !important;
+}
+
+.MuiLinearProgress-bar2Indeterminate {
+  background-color: $border-color !important;
+}

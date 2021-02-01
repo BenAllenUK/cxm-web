@@ -25,6 +25,7 @@ import { useRouter } from 'next/router'
 import { DEFAULT_ARTICLE } from 'components/editor/blocks'
 import { useEditor } from 'components/editor/Provider'
 import { Block } from 'components/types'
+import PageControls from 'components/navigation/sidebar/page-controls'
 
 const EditorPage = ({ article, project, onCreateArticleMutation, onUpsertBlockMutation, onDeleteBlockMutation }: IProps) => {
   const { setArticleSlug, setProjectSlug } = useEditor()
@@ -109,18 +110,22 @@ const EditorPage = ({ article, project, onCreateArticleMutation, onUpsertBlockMu
     },
     [article.id]
   )
-
+  const _onPageControlsClick = (id: number) => {
+    console.log({ id })
+  }
   return (
     <div className={styles.container}>
-      <Sidebar project={project} sections={sections} onCreateArticle={onCreateArticle} onViewArticle={onViewArticle} />
+      <PageControls onClick={_onPageControlsClick}>
+        <Sidebar project={project} sections={sections} onCreateArticle={onCreateArticle} onViewArticle={onViewArticle} />
 
-      <div className={styles.editor}>
-        {article ? (
-          <Editor id={article.id} blocks={initialBlocks} onBlockDelete={onBlockDelete} onBlocksUpsert={onBlocksUpsert} />
-        ) : (
-          <div>Loading...</div>
-        )}
-      </div>
+        <div className={styles.editor}>
+          {article ? (
+            <Editor id={article.id} blocks={initialBlocks} onBlockDelete={onBlockDelete} onBlocksUpsert={onBlocksUpsert} />
+          ) : (
+            <div>Loading...</div>
+          )}
+        </div>
+      </PageControls>
     </div>
   )
 }

@@ -10,7 +10,7 @@ import { MenuList } from './MenuList'
 import { Tooltip } from 'components/tooltip'
 
 import produce from 'immer'
-import Modals from './modals'
+import PageControls, { usePageControlModals } from './page-controls'
 
 export const SIDEBAR_INDENT = 20
 
@@ -42,6 +42,9 @@ export type MenuItem = {
 
 export function Sidebar({ project, sections, onViewArticle, onCreateArticle }: IProps) {
   // TODO: Assumes ids have different numbers
+
+  const { showControls } = usePageControlModals()
+
   const [openState, setOpenState] = useState({})
 
   const onMenuItemClick = async (e: MouseEvent<HTMLDivElement>, sectionIndex: number, item: MenuItem) => {
@@ -71,39 +74,38 @@ export function Sidebar({ project, sections, onViewArticle, onCreateArticle }: I
 
   const onMenuMoreItemClick = async (e: MouseEvent<HTMLDivElement>, sectionIndex: number, item: MenuItem) => {
     e.stopPropagation()
+    showControls(true, item.id, { x: e.clientX, y: e.clientY })
   }
 
   return (
     <>
-      <Modals>
-        <div className={styles.container}>
-          <Title name={project.name} />
-          <ul className={styles.projectMenu}>
-            {appMenu.map((item, index) => (
-              <li key={index} onClick={() => console.log(item.id)}>
-                {item.icon({ style: { marginRight: 20 } })}
-                <div>{item.label}</div>
-              </li>
-            ))}
-          </ul>
-          <div className={styles.scrollable}>
-            {sections.map((item, index) => (
-              <div key={index}>
-                <div className={styles.label}>{item.label}</div>
-                <MenuList
-                  openState={openState}
-                  items={item.items}
-                  onItemClick={(e, item) => onMenuItemClick(e, index, item)}
-                  onItemArrowClick={(e, item) => onMenuArrowItemClick(e, index, item)}
-                  onItemAddClick={(e, item) => onMenuAddItemClick(e, index, item)}
-                  onItemMoreClick={(e, item) => onMenuMoreItemClick(e, index, item)}
-                />
-              </div>
-            ))}
-          </div>
-          <Tooltip id={'sidebar'} />
+      <div className={styles.container}>
+        <Title name={project.name} />
+        <ul className={styles.projectMenu}>
+          {appMenu.map((item, index) => (
+            <li key={index} onClick={() => console.log(item.id)}>
+              {item.icon({ style: { marginRight: 20 } })}
+              <div>{item.label}</div>
+            </li>
+          ))}
+        </ul>
+        <div className={styles.scrollable}>
+          {sections.map((item, index) => (
+            <div key={index}>
+              <div className={styles.label}>{item.label}</div>
+              <MenuList
+                openState={openState}
+                items={item.items}
+                onItemClick={(e, item) => onMenuItemClick(e, index, item)}
+                onItemArrowClick={(e, item) => onMenuArrowItemClick(e, index, item)}
+                onItemAddClick={(e, item) => onMenuAddItemClick(e, index, item)}
+                onItemMoreClick={(e, item) => onMenuMoreItemClick(e, index, item)}
+              />
+            </div>
+          ))}
         </div>
-      </Modals>
+        <Tooltip id={'sidebar'} />
+      </div>
     </>
   )
 }

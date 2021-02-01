@@ -2,6 +2,7 @@ import OptionControls, { OptionType, IOptionElements } from 'components/common/o
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faClone, faEdit } from '@fortawesome/free-regular-svg-icons'
 import { faLink, faLevelUpAlt } from '@fortawesome/free-solid-svg-icons'
+import { createContext, ReactNode, useCallback, useContext, useState } from 'react'
 
 const items: IOptionElements[] = [
   {
@@ -39,15 +40,62 @@ const items: IOptionElements[] = [
     hint: '⌘ + Shift + P',
   },
 ]
+interface Context {
+  id: number | null
+  enabled: boolean
+  position: { x: number; y: number } | null
+}
 
-const PageControls = ({ position, onClick, onDismiss }: IProps) => {
-  return <OptionControls items={items} position={position} filterText={null} onClick={onClick} onDismiss={onDismiss} />
+interface ContextActions extends Context {
+  showControls: (enabled: boolean, id: number, position: { x: number; y: number }) => void
+  hideControls: () => void
+}
+
+const initialState = {
+  id: null,
+  enabled: false,
+  position: null,
+  showControls: () => {},
+  hideControls: () => {},
+}
+
+const Context = createContext<ContextActions>(initialState)
+
+export const usePageControlModals = () => useContext(Context)
+
+const PageControls = ({ children, onClick }: IProps) => {
+  const [state, setState] = useState<Context>(initialState)
+
+  const showControls = (enabled: boolean, id: number, position: { x: number; y: number }) => {
+    setState({
+      enabled,
+      id,
+      position,
+    })
+  }
+
+  const hideControls = useCallback(() => {
+    setState({ enabled: false, id: null, position: null })
+  }, [])
+
+  const _onClick = useCallback((id: number) => {
+    onClick(id)
+    hideControls()
+  }, [])
+
+  return (
+    <Context.Provider value={{ ...state, showControls, hideControls }}>
+      {state.enabled && state.position && (
+        <OptionControls items={items} position={state.position} filterText={null} onClick={_onClick} onDismiss={hideControls} />
+      )}
+      {children}
+    </Context.Provider>
+  )
 }
 
 export default PageControls
 
 interface IProps {
-  position: { x: number; y: number }
-  onClick: () => void
-  onDismiss: () => void
+  children: ReactNode
+  onClick: (id: number) => void
 }

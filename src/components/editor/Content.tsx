@@ -108,13 +108,13 @@ const Content = ({ blocks, onBlocksUpsert, onBlockDelete }: IProps) => {
 
     setFocusIndex(newPosition)
 
-    const ids = await onBlocksUpsert([
+    onBlocksUpsert([
       {
         type: BlockType.TEXT,
         payload: {
           value: '',
         },
-        id: -1,
+        id: Math.round(Math.random() * -1000000),
         parentId: null,
         editingUserId: null,
 
@@ -248,7 +248,7 @@ const Item = ItemContainer // SortableElement(ItemContainer)
 
 interface IProps {
   blocks: Block[]
-  onBlocksUpsert: (blocks: Block[]) => Promise<number[] | undefined>
+  onBlocksUpsert: (blocks: Block[]) => void
   onBlockDelete: (id: number) => void
 }
 

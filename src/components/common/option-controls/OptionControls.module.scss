@@ -79,3 +79,13 @@
   white-space: nowrap;
   overflow: hidden;
 }
+
+.header {
+  margin: 10px;
+  margin-top: 15px;
+  margin-bottom: 8px;
+  font-size: 10px;
+  font-weight: 400;
+  color: $text2-color;
+  text-transform: uppercase;
+}

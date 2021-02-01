@@ -1,18 +1,25 @@
 import { memo, useCallback, useRef, useState, ReactNode } from 'react'
-import { useWindowKeyDown } from 'utils/hooks'
+import { useOnClickOutside, useWindowKeyDown } from 'utils/hooks'
 import Button from './Button'
 import Line from './Line'
 import styles from './OptionControls.module.scss'
 import findIndex from 'lodash/findIndex'
 import Switch from './Switch'
+import Header from './Header'
 
 export enum OptionType {
   Button = 1,
   Line,
   Switch,
+  Header,
 }
 
-interface IOptionButton {
+export interface IOptionHeader {
+  type: OptionType.Header
+  title: string
+}
+
+export interface IOptionButton {
   id: number
   type: OptionType.Button
   title: string
@@ -34,8 +41,9 @@ interface IOptionSwitch {
 }
 
 type IOptionActionElements = IOptionButton | IOptionSwitch
+type IOptionNonActionElements = IOptionLine | IOptionHeader
 
-export type IOptionElements = IOptionLine | IOptionButton | IOptionSwitch
+export type IOptionElements = IOptionNonActionElements | IOptionActionElements
 
 // , hint: null, icon: null, size: 'NORMAL'
 const items1 = [
@@ -91,6 +99,7 @@ const OptionControls = ({ items, position, filterText, className, iconClassName,
     (_) => {
       const index = selectedIndex > -1 ? selectedIndex - 1 : -1
       setSelected(index)
+      scrollIntoView(index)
     },
     [selectedIndex]
   )
@@ -135,12 +144,19 @@ const OptionControls = ({ items, position, filterText, className, iconClassName,
     onClick(id)
   }, [])
 
+  const ref = useRef<HTMLDivElement>(null)
+
+  useOnClickOutside(ref, () => {
+    onDismiss()
+  })
+
   if (filteredControls.length === 0) {
     return <div />
   }
 
   return (
     <div
+      ref={ref}
       style={{
         left: position.x,
         top: position.y,
@@ -150,10 +166,17 @@ const OptionControls = ({ items, position, filterText, className, iconClassName,
     >
       {items.map((item, i) => {
         switch (item.type) {
+          case OptionType.Header:
+            return <Header title={item.title} />
           case OptionType.Button:
             return (
               <Button
                 key={i}
+                innerRef={(ref: any) => {
+                  if (ref) {
+                    itemRefs.current[i] = ref
+                  }
+                }}
                 iconClassName={iconClassName}
                 selected={item.id === filteredControls[selectedIndex]?.id}
                 onClick={_onClick}

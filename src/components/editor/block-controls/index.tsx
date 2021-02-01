@@ -5,11 +5,16 @@ import { BlockType } from '../../types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faClone, faEdit } from '@fortawesome/free-regular-svg-icons'
 import { faLink, faLevelUpAlt } from '@fortawesome/free-solid-svg-icons'
-import OptionControls, { IOptionElements, OptionType } from 'components/common/option-controls'
-import { BlockTypeProperties, getBlockOptions } from '../blocks'
+import OptionControls, { IOptionElements, IOptionHeader, OptionType } from 'components/common/option-controls'
+import { BlockTypeProperties } from '../blocks'
 import Image from 'next/image'
 
 import styles from './BlockControls.module.scss'
+
+const HeaderItem: IOptionHeader = {
+  type: OptionType.Header,
+  title: 'Basic Blocks',
+}
 
 const BlockControls = ({ position, filterText, onClick, onDismiss }: IProps) => {
   const items: IOptionElements[] = Object.values(BlockTypeProperties).map((item, i) => ({
@@ -22,7 +27,7 @@ const BlockControls = ({ position, filterText, onClick, onDismiss }: IProps) => 
 
   return (
     <OptionControls
-      items={items}
+      items={[HeaderItem, ...items]}
       position={position}
       filterText={filterText}
       iconClassName={styles.icon}

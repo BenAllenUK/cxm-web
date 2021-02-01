@@ -1,34 +1,59 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { Block, BlockType } from 'components/types'
-import { DEFAULT_BLOCK_START } from './blocks'
+import { BlockTypeProperties, DEFAULT_BLOCK_START } from './blocks'
 import Content from './Content'
 import styles from './Editor.module.scss'
 import Modals from './modals'
+import Header from './header'
 
-function Editor({ id, blocks, onBlocksUpsert, onBlockDelete }: IProps) {
-  let content = blocks
+function Editor({ id, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IProps) {
+  let content = initialBlocks
   if (content.length === 0) {
     content = [DEFAULT_BLOCK_START]
   }
 
+  const [blocks, setBlocks] = useState<Block[]>(content)
+
   const _onBlockItemClick = (index: number, key: BlockType) => {
-    const block = blocks[index]
-    onBlocksUpsert([
-      {
-        ...block,
-        type: key,
-        payload: {},
-      },
-    ])
+    setBlocks((state) => {
+      const payload = BlockTypeProperties[key].isEditable
+        ? {
+            value: '',
+          }
+        : {}
+      return [
+        ...state,
+        {
+          id: Math.round(Math.random() * -1000000),
+          parentId: null,
+          editingUserId: null,
+
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          position: index,
+          type: key,
+          payload,
+        },
+      ]
+    })
+  }
+
+  const _onBlocksUpsert = (_blocks: Block[]) => {
+    const newIds = _blocks.map((s) => s.id)
+
+    setBlocks((state) => {
+      return [...state.filter((item) => newIds.indexOf(item.id) === -1), ..._blocks]
+    })
   }
 
   return (
     <>
-      <div className={styles.container}>
-        <Modals onBlockItemClick={_onBlockItemClick}>
-          <Content blocks={content} onBlocksUpsert={onBlocksUpsert} onBlockDelete={onBlockDelete} />
-        </Modals>
-      </div>
+      <Modals onBlockItemClick={_onBlockItemClick}>
+        <div className={styles.container}>
+          <Header />
+          <Content blocks={blocks} onBlocksUpsert={_onBlocksUpsert} onBlockDelete={onBlockDelete} />
+        </div>
+      </Modals>
     </>
   )
 }

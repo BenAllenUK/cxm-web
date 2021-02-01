@@ -1,0 +1,73 @@
+@import 'styles/variables';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+}
+
+.historyControls {
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+}
+
+.historyControlsButton {
+  height: 16px;
+  width: 16px;
+  font-size: 14px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 3px;
+  color: $text2-color;
+
+  &:hover {
+    background-color: $line-color;
+    color: $text2-color;
+  }
+}
+
+.historyBreadcrumbs {
+  margin: 5px;
+}
+
+.headerRight {
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+  justify-content: flex-end;
+}
+
+.miscControls {
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+  justify-content: flex-end;
+}
+
+.miscControlsButton {
+  height: 16px;
+  width: 20px;
+  font-size: 18px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 3px;
+  color: $text2-color;
+
+  &:hover {
+    background-color: $line-color;
+    color: $text2-color;
+  }
+}

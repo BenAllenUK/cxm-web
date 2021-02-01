@@ -11,6 +11,7 @@ export const Button = ({
   hint,
   selected,
   iconClassName,
+  innerRef,
   onClick,
   onMouseEnter,
   ...otherProps
@@ -28,6 +29,7 @@ export const Button = ({
       onClick={_onClick}
       onMouseEnter={_onMouseEnter}
       style={selected ? { backgroundColor: Colors.line } : {}}
+      ref={innerRef}
       {...otherProps}
     >
       {icon && <div className={iconClassName || styles.icon}>{icon}</div>}
@@ -45,6 +47,7 @@ export default Button
 
 interface IProps {
   id: number
+  innerRef: any
   title: string
   selected?: boolean
   icon?: ReactNode
