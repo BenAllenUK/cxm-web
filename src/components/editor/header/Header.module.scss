@@ -1,4 +1,5 @@
 @import 'styles/variables';
+@import 'components/common/Button.module.scss';
 
 .header {
   display: flex;
@@ -19,15 +20,9 @@
 }
 
 .historyControlsButton {
+  @extend .button;
   height: 16px;
   width: 16px;
-  font-size: 14px;
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  padding: 3px;
   color: $text2-color;
 
   &:hover {
@@ -54,20 +49,6 @@
   justify-content: flex-end;
 }
 
-.miscControlsButton {
-  height: 16px;
-  width: 20px;
-  font-size: 18px;
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  padding: 3px;
-  color: $text2-color;
-
-  &:hover {
-    background-color: $line-color;
-    color: $text2-color;
-  }
+.button {
+  @extend .buttonBase;
 }

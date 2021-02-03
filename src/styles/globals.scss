@@ -32,3 +32,8 @@ a {
 .MuiLinearProgress-bar2Indeterminate {
   background-color: $border-color !important;
 }
+
+.MuiLink-root {
+  color: $text1-color !important;
+  cursor: pointer;
+}

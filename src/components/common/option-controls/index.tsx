@@ -1,11 +1,9 @@
 import { memo, useCallback, useRef, useState, ReactNode } from 'react'
 import { useOnClickOutside, useWindowKeyDown } from 'utils/hooks'
-import Button from './Button'
-import Line from './Line'
 import styles from './OptionControls.module.scss'
 import findIndex from 'lodash/findIndex'
-import Switch from './Switch'
-import Header from './Header'
+import flatten from 'lodash/flatten'
+import Section from './Section'
 
 export enum OptionType {
   Button = 1,
@@ -40,49 +38,25 @@ interface IOptionSwitch {
   type: OptionType.Switch
 }
 
-type IOptionActionElements = IOptionButton | IOptionSwitch
-type IOptionNonActionElements = IOptionLine | IOptionHeader
+export type IOptionElements = IOptionButton | IOptionSwitch
 
-export type IOptionElements = IOptionNonActionElements | IOptionActionElements
+export type IOptionSections = {
+  title?: string
+  items: IOptionElements[]
+  showLine?: boolean
+}
 
-// , hint: null, icon: null, size: 'NORMAL'
-const items1 = [
-  { id: 1, type: OptionType.Switch, title: 'Small text', state: false },
-  { id: 2, type: OptionType.Switch, title: 'Full width', state: false },
-  { type: OptionType.Line },
-  { id: 3, type: OptionType.Button, title: 'Customize page' },
-  { id: 4, type: OptionType.Button, title: 'Lock page' },
-  { type: OptionType.Line },
-  { id: 5, type: OptionType.Button, title: 'Add to favorites' },
-  { id: 6, type: OptionType.Button, title: 'Copy link', hint: '⌘ + L' },
-  { type: OptionType.Line },
-  { id: 7, type: OptionType.Button, title: 'Undo', hint: '⌘ + Z' },
-  { id: 8, type: OptionType.Button, title: 'Page history' },
-  { id: 9, type: OptionType.Button, title: 'Show delete pages' },
-  { id: 10, type: OptionType.Button, title: 'Delete' },
-  { type: OptionType.Line },
-  { id: 11, type: OptionType.Button, title: 'Import' },
-  { id: 12, type: OptionType.Button, title: 'Export', subtitle: 'PDF, HTML, Markdown' },
-  { type: OptionType.Line },
-  { id: 13, type: OptionType.Button, title: 'Move to', subtitle: '⌘ + Shift + P' },
-  { type: OptionType.Line },
-]
-
-const OptionControls = ({ items, position, filterText, className, iconClassName, onClick, onDismiss }: IProps) => {
+const OptionControls = ({ sections, position, className, iconClassName, onClick, onDismiss }: IProps) => {
   const [selectedIndex, setSelected] = useState<number>(0)
 
   const itemRefs = useRef<HTMLDivElement[]>([])
-
-  const controls = items.filter((item) => item.type !== OptionType.Line) as IOptionActionElements[]
-
-  const filteredControls = filterText ? controls.filter((item) => item.title?.indexOf(filterText)) : controls
-  const filteredControlsLength = filteredControls.length
+  const actionItems = flatten(sections.map((section) => section.items))
 
   useWindowKeyDown(
     'Enter',
     useCallback(
       (e) => {
-        const selectedItem = filteredControls[selectedIndex] as IOptionActionElements
+        const selectedItem = actionItems[selectedIndex] as IOptionElements
         if (!selectedIndex) {
           return
         }
@@ -90,7 +64,7 @@ const OptionControls = ({ items, position, filterText, className, iconClassName,
         onClick(selectedItem.id)
         e.preventDefault()
       },
-      [filteredControls, selectedIndex]
+      [actionItems, selectedIndex]
     )
   )
 
@@ -107,13 +81,13 @@ const OptionControls = ({ items, position, filterText, className, iconClassName,
   useWindowKeyDown(
     'ArrowDown',
     (_) => {
-      const index = selectedIndex < filteredControlsLength - 1 ? selectedIndex + 1 : filteredControlsLength - 1
+      const index = selectedIndex < actionItems.length - 1 ? selectedIndex + 1 : actionItems.length - 1
 
       setSelected(index)
 
       scrollIntoView(index)
     },
-    [filteredControlsLength, selectedIndex]
+    [actionItems, selectedIndex]
   )
 
   const scrollIntoView = useCallback(
@@ -129,10 +103,10 @@ const OptionControls = ({ items, position, filterText, className, iconClassName,
 
   const _onItemMouseEnter = useCallback(
     (id: number) => {
-      const index = findIndex(filteredControls, (item) => item.id === id)
+      const index = findIndex(actionItems, (item) => item.id === id)
       setSelected(index)
     },
-    [filteredControls]
+    [actionItems]
   )
 
   const _onMouseLeave = useCallback((id) => {
@@ -144,13 +118,17 @@ const OptionControls = ({ items, position, filterText, className, iconClassName,
     onClick(id)
   }, [])
 
+  const _onSwitchClick = useCallback((id) => {
+    onClick(id)
+  }, [])
+
   const ref = useRef<HTMLDivElement>(null)
 
   useOnClickOutside(ref, () => {
     onDismiss()
   })
 
-  if (filteredControls.length === 0) {
+  if (sections.length === 0) {
     return <div />
   }
 
@@ -164,41 +142,23 @@ const OptionControls = ({ items, position, filterText, className, iconClassName,
       onMouseLeave={_onMouseLeave}
       className={className || styles.defaultContainer}
     >
-      {items.map((item, i) => {
-        switch (item.type) {
-          case OptionType.Header:
-            return <Header title={item.title} />
-          case OptionType.Button:
-            return (
-              <Button
-                key={i}
-                innerRef={(ref: any) => {
-                  if (ref) {
-                    itemRefs.current[i] = ref
-                  }
-                }}
-                iconClassName={iconClassName}
-                selected={item.id === filteredControls[selectedIndex]?.id}
-                onClick={_onClick}
-                onMouseEnter={_onItemMouseEnter}
-                {...item}
-              />
-            )
-          case OptionType.Switch:
-            return (
-              <Switch
-                key={i}
-                selected={item.id === filteredControls[selectedIndex]?.id}
-                onClick={_onClick}
-                onMouseEnter={_onItemMouseEnter}
-                {...item}
-              />
-            )
-          case OptionType.Line:
-            return <Line key={i} />
-          default:
-            return <div />
-        }
+      {sections.map((section, i) => {
+        return (
+          <Section
+            key={`${i}`}
+            {...section}
+            innerRef={(ref: any) => {
+              if (ref) {
+                itemRefs.current[i] = ref
+              }
+            }}
+            selectedId={actionItems[selectedIndex]?.id}
+            iconClassName={iconClassName}
+            onClick={_onClick}
+            onItemMouseEnter={_onItemMouseEnter}
+            onSwitchClick={_onSwitchClick}
+          />
+        )
       })}
     </div>
   )
@@ -207,11 +167,10 @@ const OptionControls = ({ items, position, filterText, className, iconClassName,
 export default memo(OptionControls)
 
 interface IProps {
-  items: Array<IOptionElements>
+  sections: IOptionSections[]
   className?: string
   iconClassName?: string
   position: { x: number; y: number }
-  filterText?: string | null
   onClick: (id: number) => void
   onDismiss: () => void
 }

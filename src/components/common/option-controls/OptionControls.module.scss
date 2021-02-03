@@ -37,8 +37,8 @@
 }
 
 .line {
-  height: 1px;
-  background-color: $border-color;
+  border-top: 1px $border-color solid;
+  width: 100%;
 }
 
 .icon {

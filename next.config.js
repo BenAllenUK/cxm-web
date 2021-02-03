@@ -3,7 +3,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 module.exports = {
   sassOptions: {
-    includePaths: [path.join(__dirname, 'styles')],
+    // includePaths: [path.join(__dirname, 'styles')],
   },
   webpack(config, { buildId, dev, isServer, defaultLoaders, webpack }) {
     config.module.rules.push({
@@ -29,7 +29,20 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'graphql-tag/loader',
     })
+    // config.module.rules.push({
+    //   test: /\.(css|scss)$/,
+    //   exclude: /node_modules/,
+    //   use: [
+    //     'style-loader',
+    //     '@teamsupercell/typings-for-css-modules-loader',
+    //     {
+    //       loader: 'css-loader',
+    //       options: { modules: true },
+    //     },
+    //   ],
+    // })
     if (process.env.ANALYZE) {
+      // https://github.com/vercel/next.js/tree/canary/packages/next-bundle-analyzer
       config.plugins.push(
         new BundleAnalyzerPlugin({
           analyzerMode: 'server',

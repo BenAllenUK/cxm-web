@@ -1,15 +1,18 @@
 @import 'styles/variables';
 
-.container {
+.buttonBase {
   border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  padding: 3px;
+  font-size: 14px;
+  padding: 5px;
+  align-self: flex-start;
+  color: $text2-color;
 
   &:hover {
     background-color: $line-color;
-    color: $background-color;
+    color: $text2-color;
   }
 }

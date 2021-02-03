@@ -1,54 +1,93 @@
-import OptionControls, { OptionType, IOptionElements, IOptionSections } from 'components/common/option-controls'
+import OptionControls, { OptionType, IOptionSections } from 'components/common/option-controls'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faClone, faEdit } from '@fortawesome/free-regular-svg-icons'
-import { faLink, faLevelUpAlt } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt, faStar, faEdit } from '@fortawesome/free-regular-svg-icons'
+import { faLink, faLock, faLevelUpAlt, faDownload, faUndo } from '@fortawesome/free-solid-svg-icons'
 import { createContext, ReactNode, useCallback, useContext, useState } from 'react'
+import styles from './PageControls.module.scss'
 
 const sections: IOptionSections[] = [
   {
+    items: [
+      { id: 1, type: OptionType.Switch, title: 'Small text', state: false },
+      { id: 2, type: OptionType.Switch, title: 'Full width', state: false },
+    ],
     showLine: true,
+  },
+  {
     items: [
       {
-        id: 1,
+        id: 4,
+        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faLock} />,
+        type: OptionType.Button,
+        title: 'Lock page',
+      },
+    ],
+    showLine: true,
+  },
+  {
+    items: [
+      {
+        id: 5,
+        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faStar} />,
+        type: OptionType.Button,
+        title: 'Add to favorites',
+      },
+      {
+        id: 6,
+        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faLink} />,
+        type: OptionType.Button,
+        title: 'Copy link',
+        hint: '⌘ + L',
+      },
+    ],
+    showLine: true,
+  },
+  {
+    items: [
+      {
+        id: 7,
+        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faUndo} />,
+        type: OptionType.Button,
+        title: 'Undo',
+        hint: '⌘ + Z',
+      },
+      // { id: 8, type: OptionType.Button, title: 'Page history' },
+      {
+        id: 10,
         icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faTrashAlt} />,
         type: OptionType.Button,
         title: 'Delete',
       },
-      {
-        id: 2,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faClone} />,
-        type: OptionType.Button,
-        title: 'Duplicate',
-        hint: '⌘ + D',
-      },
-      {
-        id: 3,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faLink} />,
-        type: OptionType.Button,
-        title: 'Copy Link',
-      },
-      {
-        id: 4,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faEdit} />,
-        type: OptionType.Button,
-        title: 'Rename',
-        hint: '⌘ + Shift + R',
-      },
     ],
+    showLine: true,
   },
   {
+    items: [
+      { id: 11, type: OptionType.Button, title: 'Import' },
+      {
+        id: 12,
+        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faDownload} />,
+        type: OptionType.Button,
+        title: 'Export',
+        subtitle: 'PDF, HTML, Markdown',
+      },
+    ],
     showLine: true,
+  },
+  {
     items: [
       {
-        id: 5,
+        id: 13,
         icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faLevelUpAlt} />,
         type: OptionType.Button,
         title: 'Move to',
-        hint: '⌘ + Shift + P',
+        subtitle: '⌘ + Shift + P',
       },
     ],
+    showLine: true,
   },
 ]
+
 interface Context {
   id: number | null
   enabled: boolean
@@ -89,13 +128,19 @@ const PageControls = ({ children, onClick }: IProps) => {
 
   const _onClick = useCallback((id: number) => {
     onClick(id)
-    hideControls()
   }, [])
 
+  console.log(state)
   return (
     <Context.Provider value={{ ...state, showControls, hideControls }}>
       {state.enabled && state.position && (
-        <OptionControls sections={sections} position={state.position} onClick={_onClick} onDismiss={hideControls} />
+        <OptionControls
+          className={styles.container}
+          sections={sections}
+          position={state.position}
+          onClick={_onClick}
+          onDismiss={hideControls}
+        />
       )}
       {children}
     </Context.Provider>

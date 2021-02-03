@@ -5,6 +5,7 @@ import Content from './Content'
 import styles from './Editor.module.scss'
 import Modals from './modals'
 import Header from './header'
+import PageControls from 'components/editor/page-controls'
 
 function Editor({ id, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IProps) {
   let content = initialBlocks
@@ -49,10 +50,12 @@ function Editor({ id, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IP
   return (
     <>
       <Modals onBlockItemClick={_onBlockItemClick}>
-        <div className={styles.container}>
-          <Header />
-          <Content blocks={blocks} onBlocksUpsert={_onBlocksUpsert} onBlockDelete={onBlockDelete} />
-        </div>
+        <PageControls onClick={() => {}}>
+          <div className={styles.container}>
+            <Header />
+            <Content blocks={blocks} onBlocksUpsert={_onBlocksUpsert} onBlockDelete={onBlockDelete} />
+          </div>
+        </PageControls>
       </Modals>
     </>
   )

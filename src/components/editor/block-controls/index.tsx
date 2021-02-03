@@ -11,11 +11,6 @@ import Image from 'next/image'
 
 import styles from './BlockControls.module.scss'
 
-const HeaderItem: IOptionHeader = {
-  type: OptionType.Header,
-  title: 'Basic Blocks',
-}
-
 const BlockControls = ({ position, filterText, onClick, onDismiss }: IProps) => {
   const items: IOptionElements[] = Object.values(BlockTypeProperties).map((item, i) => ({
     id: item.id,
@@ -27,9 +22,8 @@ const BlockControls = ({ position, filterText, onClick, onDismiss }: IProps) => 
 
   return (
     <OptionControls
-      items={[HeaderItem, ...items]}
+      sections={[{ items: items, title: 'Basic Blocks' }]}
       position={position}
-      filterText={filterText}
       iconClassName={styles.icon}
       onClick={onClick}
       onDismiss={onDismiss}

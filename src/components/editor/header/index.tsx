@@ -2,12 +2,25 @@ import MUIBreadcrumbs from '@material-ui/core/Breadcrumbs'
 import MUILink from '@material-ui/core/Link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faArrowRight, faEllipsisH } from '@fortawesome/free-solid-svg-icons'
-import IconButton from 'components/common/IconButton'
+import Button from 'components/common/Button'
 import LinearProgress from '@material-ui/core/LinearProgress'
-
+import MoreIcon from 'images/icons/more.svg'
 import styles from './Header.module.scss'
+import { usePageControlModals } from '../page-controls'
+import { useRef } from 'react'
+import Colors from 'config/colors'
 
 export const Header = ({}: IProps) => {
+  const { showControls } = usePageControlModals()
+
+  const ref = useRef<HTMLDivElement>(null)
+
+  const _onPageControlsClick = (e: any) => {
+    showControls(1, {
+      x: ref.current?.offsetLeft || 0,
+      y: (ref.current?.offsetTop || 0) + (ref.current?.offsetHeight || 0) + 10,
+    })
+  }
   return (
     <div>
       {false && <LinearProgress />}
@@ -15,12 +28,12 @@ export const Header = ({}: IProps) => {
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <div className={styles.historyControls}>
-            <IconButton className={styles.historyControlsButton}>
+            <Button className={styles.button}>
               <FontAwesomeIcon icon={faArrowLeft} />
-            </IconButton>
-            <IconButton className={styles.historyControlsButton}>
+            </Button>
+            <Button className={styles.button}>
               <FontAwesomeIcon icon={faArrowRight} />
-            </IconButton>
+            </Button>
           </div>
           <div className={styles.historyBreadcrumbs}>
             <MUIBreadcrumbs maxItems={4}>
@@ -33,9 +46,13 @@ export const Header = ({}: IProps) => {
           </div>
         </div>
         <div className={styles.headerRight}>
-          <IconButton className={styles.miscControlsButton}>
-            <FontAwesomeIcon icon={faEllipsisH} />
-          </IconButton>
+          <Button style={{ alignSelf: 'center' }} className={styles.button}>
+            Publish
+          </Button>
+
+          <Button ref={ref} style={{ alignSelf: 'center', padding: 2 }} onClick={_onPageControlsClick} className={styles.button}>
+            <MoreIcon width={22} height={22} />
+          </Button>
         </div>
       </div>
     </div>

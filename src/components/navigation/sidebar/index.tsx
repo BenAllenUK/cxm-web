@@ -74,7 +74,7 @@ export function Sidebar({ project, sections, onViewArticle, onCreateArticle }: I
 
   const onMenuMoreItemClick = async (e: MouseEvent<HTMLDivElement>, sectionIndex: number, item: MenuItem) => {
     e.stopPropagation()
-    showControls(true, item.id, { x: e.clientX, y: e.clientY })
+    showControls(item.id, { x: e.clientX, y: e.clientY })
   }
 
   return (
