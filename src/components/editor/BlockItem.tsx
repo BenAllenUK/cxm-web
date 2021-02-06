@@ -18,35 +18,29 @@ const BlockItem = ({
   onFocus,
   onBlur,
 }: IProps) => {
-  const _onNew = useCallback(() => {
+  const _onNew = () => {
     onNew(index)
-  }, [index])
+  }
 
-  const _onUpdate = useCallback(
-    (value: string) => {
-      onUpdate(index, { value } as BlockDataText) // TODO: change to any type
-    },
-    [index]
-  )
+  const _onUpdate = (value: string) => {
+    onUpdate(index, { value } as BlockDataText) // TODO: change to any type
+  }
 
-  const _onDelete = useCallback(() => {
+  const _onDelete = () => {
     onDelete(index)
-  }, [index])
+  }
 
-  const _onFocus = useCallback(() => {
+  const _onFocus = () => {
     onFocus(index)
-  }, [index])
+  }
 
-  const _onBlur = useCallback(() => {
+  const _onBlur = () => {
     onBlur(index)
-  }, [index])
+  }
 
-  const _onTextChange = useCallback(
-    (value: string) => {
-      onTextChange(index, value)
-    },
-    [index]
-  )
+  const _onTextChange = (value: string) => {
+    onTextChange(index, value)
+  }
 
   switch (type) {
     case BlockType.TEXT:
@@ -60,6 +54,7 @@ const BlockItem = ({
 
       return (
         <ControlledText
+          debugPosition={index}
           focus={focus}
           tabIndex={index + 1}
           initialValue={initialPayload.value}
@@ -85,7 +80,7 @@ const BlockItem = ({
   }
 }
 
-export default memo(BlockItem)
+export default BlockItem
 
 interface IProps {
   focus: boolean
@@ -93,7 +88,6 @@ interface IProps {
   type: BlockType
   payload: BlockData
   index: number
-  xData: string
 
   onTextChange: (index: number, value: string) => void
   onNew: (index: number) => void

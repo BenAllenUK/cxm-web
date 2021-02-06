@@ -87,10 +87,13 @@ const PageControls = ({ children, onClick }: IProps) => {
     setState({ enabled: false, id: null, position: null })
   }, [])
 
-  const _onClick = useCallback((id: number) => {
-    onClick(id)
-    hideControls()
-  }, [])
+  const _onClick = useCallback(
+    (id: number) => {
+      onClick(id)
+      hideControls()
+    },
+    [onClick]
+  )
 
   return (
     <Context.Provider value={{ ...state, showControls, hideControls }}>

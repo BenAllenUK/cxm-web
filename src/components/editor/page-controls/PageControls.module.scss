@@ -1,6 +1,16 @@
+@import 'styles/variables';
 @import 'components/common/option-controls/OptionControls.module.scss';
 
 .container {
   @extend .defaultContainer;
   max-height: 80vh;
+}
+
+.footer {
+  font-size: 12px;
+  color: $controls-color;
+  padding: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 18px;
 }

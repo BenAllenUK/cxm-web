@@ -18,10 +18,10 @@ export const Button = ({
 }: IProps) => {
   const _onClick = useCallback(() => {
     onClick(id)
-  }, [id])
+  }, [onClick, id])
   const _onMouseEnter = useCallback(() => {
     onMouseEnter(id)
-  }, [id])
+  }, [onMouseEnter, id])
 
   return (
     <div

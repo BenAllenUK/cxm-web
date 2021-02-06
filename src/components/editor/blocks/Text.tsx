@@ -8,10 +8,13 @@ import styles from './Text.module.scss'
 import { useKeyDown } from 'utils/hooks'
 
 const Text = ({ value, type, filteringMode, tabIndex, innerRef, onFocus, onBlur, onNew, onUpdate, onDelete }: IProps) => {
-  const _onValueChange = useCallback((event: TextInputEvent) => {
-    const value = event.target.value.replace('&nbsp;', ' ')
-    onUpdate(value)
-  }, [])
+  const _onValueChange = useCallback(
+    (event: TextInputEvent) => {
+      const value = event.target.value.replace('&nbsp;', ' ')
+      onUpdate(value)
+    },
+    [onUpdate]
+  )
 
   const className = getClassName(type)
   const blurredPlaceholder = getBlurredPlaceholder(type)
@@ -23,6 +26,7 @@ const Text = ({ value, type, filteringMode, tabIndex, innerRef, onFocus, onBlur,
     (e) => {
       if (!value && !e.shiftKey) {
         e.preventDefault()
+        console.log('calling delete')
         onDelete()
       }
     },

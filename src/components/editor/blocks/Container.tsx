@@ -11,16 +11,16 @@ const Container = ({ index, enableHandle, initialHeight, onDoubleClick, onClick,
     (event: React.MouseEvent) => {
       onDoubleClick(index, { x: event.clientX, y: event.clientY })
     },
-    [index]
+    [onDoubleClick, index]
   )
 
   const _onClick = useCallback(() => {
     onClick(index)
-  }, [index])
+  }, [onClick, index])
 
   const _onAddClick = useCallback(() => {
     onAddClick(index)
-  }, [index])
+  }, [onAddClick, index])
 
   const [hoverRef, isHovered] = useHover<HTMLDivElement>()
 
@@ -51,10 +51,6 @@ interface IProps {
   onDoubleClick: (index: number, pos: { x: number; y: number }) => void
   enableHandle?: boolean
   onAddClick: (index: number) => void
-}
-
-interface IState {
-  showControls: boolean
 }
 
 export default memo(Container)

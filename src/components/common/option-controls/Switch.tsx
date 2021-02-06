@@ -7,10 +7,10 @@ import MUISwitch from '@material-ui/core/Switch'
 export const Switch = ({ id, title, subtitle, state, icon, selected, onClick, onMouseEnter, ...otherProps }: IProps) => {
   const _onClick = useCallback(() => {
     onClick(id)
-  }, [id])
+  }, [onClick, id])
   const _onMouseEnter = useCallback(() => {
     onMouseEnter(id)
-  }, [id])
+  }, [onMouseEnter, id])
 
   return (
     <div

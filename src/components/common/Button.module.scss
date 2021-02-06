@@ -10,6 +10,7 @@
   padding: 5px;
   align-self: flex-start;
   color: $text2-color;
+  user-select: none;
 
   &:hover {
     background-color: $line-color;

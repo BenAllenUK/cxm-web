@@ -4,6 +4,7 @@ import { faTrashAlt, faStar, faEdit } from '@fortawesome/free-regular-svg-icons'
 import { faLink, faLock, faLevelUpAlt, faDownload, faUndo } from '@fortawesome/free-solid-svg-icons'
 import { createContext, ReactNode, useCallback, useContext, useState } from 'react'
 import styles from './PageControls.module.scss'
+import Footer from './Footer'
 
 const sections: IOptionSections[] = [
   {
@@ -126,11 +127,13 @@ const PageControls = ({ children, onClick }: IProps) => {
     setState({ enabled: false, id: null, position: null })
   }, [])
 
-  const _onClick = useCallback((id: number) => {
-    onClick(id)
-  }, [])
+  const _onClick = useCallback(
+    (id: number) => {
+      onClick(id)
+    },
+    [onClick]
+  )
 
-  console.log(state)
   return (
     <Context.Provider value={{ ...state, showControls, hideControls }}>
       {state.enabled && state.position && (
@@ -140,6 +143,7 @@ const PageControls = ({ children, onClick }: IProps) => {
           position={state.position}
           onClick={_onClick}
           onDismiss={hideControls}
+          footer={<Footer wordCount={300} lastEditedName={'Ben Allen'} lastEditedAt={new Date().toISOString()} />}
         />
       )}
       {children}

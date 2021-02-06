@@ -46,49 +46,11 @@ export type IOptionSections = {
   showLine?: boolean
 }
 
-const OptionControls = ({ sections, position, className, iconClassName, onClick, onDismiss }: IProps) => {
+const OptionControls = ({ header, footer, sections, position, className, iconClassName, onClick, onDismiss }: IProps) => {
   const [selectedIndex, setSelected] = useState<number>(0)
 
   const itemRefs = useRef<HTMLDivElement[]>([])
   const actionItems = flatten(sections.map((section) => section.items))
-
-  useWindowKeyDown(
-    'Enter',
-    useCallback(
-      (e) => {
-        const selectedItem = actionItems[selectedIndex] as IOptionElements
-        if (!selectedIndex) {
-          return
-        }
-
-        onClick(selectedItem.id)
-        e.preventDefault()
-      },
-      [actionItems, selectedIndex]
-    )
-  )
-
-  useWindowKeyDown(
-    'ArrowUp',
-    (_) => {
-      const index = selectedIndex > -1 ? selectedIndex - 1 : -1
-      setSelected(index)
-      scrollIntoView(index)
-    },
-    [selectedIndex]
-  )
-
-  useWindowKeyDown(
-    'ArrowDown',
-    (_) => {
-      const index = selectedIndex < actionItems.length - 1 ? selectedIndex + 1 : actionItems.length - 1
-
-      setSelected(index)
-
-      scrollIntoView(index)
-    },
-    [actionItems, selectedIndex]
-  )
 
   const scrollIntoView = useCallback(
     (index: number) => {
@@ -113,14 +75,57 @@ const OptionControls = ({ sections, position, className, iconClassName, onClick,
     setSelected(-1)
   }, [])
 
-  const _onClick = useCallback((id) => {
-    onDismiss()
-    onClick(id)
-  }, [])
+  const _onClick = useCallback(
+    (id) => {
+      onDismiss()
+      onClick(id)
+    },
+    [onClick, onDismiss]
+  )
 
-  const _onSwitchClick = useCallback((id) => {
-    onClick(id)
-  }, [])
+  const _onSwitchClick = useCallback(
+    (id) => {
+      onClick(id)
+    },
+    [onClick]
+  )
+
+  useWindowKeyDown(
+    'Enter',
+
+    (e) => {
+      const selectedItem = actionItems[selectedIndex] as IOptionElements
+      if (!selectedItem) {
+        return
+      }
+      onDismiss()
+      onClick(selectedItem.id)
+      e.preventDefault()
+    },
+    [onClick, actionItems, selectedIndex]
+  )
+
+  useWindowKeyDown(
+    'ArrowUp',
+    (_) => {
+      const index = selectedIndex > -1 ? selectedIndex - 1 : -1
+      setSelected(index)
+      scrollIntoView(index)
+    },
+    [scrollIntoView, selectedIndex]
+  )
+
+  useWindowKeyDown(
+    'ArrowDown',
+    (_) => {
+      const index = selectedIndex < actionItems.length - 1 ? selectedIndex + 1 : actionItems.length - 1
+
+      setSelected(index)
+
+      scrollIntoView(index)
+    },
+    [scrollIntoView, actionItems, selectedIndex]
+  )
 
   const ref = useRef<HTMLDivElement>(null)
 
@@ -142,6 +147,7 @@ const OptionControls = ({ sections, position, className, iconClassName, onClick,
       onMouseLeave={_onMouseLeave}
       className={className || styles.defaultContainer}
     >
+      {header}
       {sections.map((section, i) => {
         return (
           <Section
@@ -160,6 +166,7 @@ const OptionControls = ({ sections, position, className, iconClassName, onClick,
           />
         )
       })}
+      {footer}
     </div>
   )
 }
@@ -169,6 +176,8 @@ export default memo(OptionControls)
 interface IProps {
   sections: IOptionSections[]
   className?: string
+  header?: ReactNode
+  footer?: ReactNode
   iconClassName?: string
   position: { x: number; y: number }
   onClick: (id: number) => void
