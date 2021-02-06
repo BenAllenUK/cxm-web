@@ -11,8 +11,8 @@ import Container from './blocks/Container'
 
 import BlockItem from './BlockItem'
 import { useWindowKeyUp } from 'utils/hooks'
-import { useModals as useBlockModals } from './block-controls'
-import { useModals as useTextModals } from './text-controls'
+import { useModals as useBlockModals } from './modals/block-controls'
+import { useModals as useTextModals } from './modals/text-controls'
 
 const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex }: IProps) => {
   const blockRefs = useRef<HTMLDivElement[]>([])
@@ -56,16 +56,6 @@ const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIn
     openBlockControl(index + 1)
   }
 
-  // const manageControls = () => {
-
-  //   const filterText = this.getCurrentFilterText()
-  //   const options = getBlockOptions(filterText)
-  //   const { modalBlockEnabled } = this.props
-  //   if (modalBlockEnabled && options.length === 0) {
-  //     toggleBlockControls(false)
-  //   }
-  // }
-
   const _onBlockClick = (index: number) => {}
 
   const _onBlockDoubleClick = (index: number, pos: { x: number; y: number }) => {
@@ -104,8 +94,6 @@ const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIn
       payload,
       position: index,
     })
-
-    // this.manageControls()
   }
 
   const _onDeleteBlock = (index: number) => {

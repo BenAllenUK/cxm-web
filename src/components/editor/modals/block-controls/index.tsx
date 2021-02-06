@@ -1,9 +1,9 @@
 import { createContext, memo, ReactNode, RefObject, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
-import { BlockType } from '../../types'
+import { BlockType } from '../../../types'
 
 import OptionControls, { IOptionElements, IOptionHeader, OptionType } from 'components/common/option-controls'
-import { BlockTypeProperties } from '../blocks'
+import { BlockTypeProperties } from '../../blocks'
 import Image from 'next/image'
 
 import styles from './BlockControls.module.scss'

@@ -6,7 +6,7 @@ import Button from 'components/common/Button'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import MoreIcon from 'images/icons/more.svg'
 import styles from './Header.module.scss'
-import { usePageControlModals } from '../page-controls'
+import { usePageControlModals } from '../modals/page-controls'
 import { useRef } from 'react'
 import Colors from 'config/colors'
 
