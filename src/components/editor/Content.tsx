@@ -110,6 +110,9 @@ const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIn
   const _onBlockBlur = (index: number) => {
     // TOOD: Unlock block
     // TODO: Enable auto undo/redo
+    if (index === focusIndex) {
+      setFocusIndex(-1)
+    }
   }
 
   const _onBodyClick = () => {

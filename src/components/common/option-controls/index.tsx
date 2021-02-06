@@ -153,6 +153,7 @@ const OptionControls = ({ header, footer, sections, position, className, iconCla
           <Section
             key={`${i}`}
             {...section}
+            // TODO: Change inner ref
             innerRef={(ref: any) => {
               if (ref) {
                 itemRefs.current[i] = ref

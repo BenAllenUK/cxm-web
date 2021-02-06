@@ -32,12 +32,12 @@ const ControlledText = ({
   }, [focus])
 
   const onBlur = useCallback(() => {
-    // onParentBlur()
+    onParentBlur()
     // TODO: Optimise (use dirty flag on block item)
     // if (JSON.stringify(initialValue) !== JSON.stringify(value)) {
     //   onParentUpdate(value)
     // }
-  }, [initialValue, value])
+  }, [onParentBlur])
 
   return (
     <>
