@@ -7,14 +7,14 @@ import styles from './Container.module.scss'
 import { SortableHandle } from 'react-sortable-hoc'
 
 const AddButton = memo((props: React.HTMLAttributes<HTMLDivElement>) => (
-  <Button style={{ cursor: 'pointer', height: 16 }} {...props}>
+  <Button className={styles.addButton} {...props}>
     <AddIcon className={styles.add} width={16} height={16} />
   </Button>
 ))
 
 const DragButton = memo(
   SortableHandle(() => (
-    <Button style={{ cursor: 'grab', height: 16 }}>
+    <Button className={styles.grabButton}>
       <DragIcon className={styles.add} width={16} height={16} />
     </Button>
   ))

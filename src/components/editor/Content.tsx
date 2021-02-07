@@ -97,12 +97,17 @@ const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIn
   }
 
   const _onDeleteBlock = (index: number) => {
-    onBlockDelete(blocks[index].id)
     setFocusIndex(index - 1)
+    onBlockDelete(blocks[index].id)
   }
 
   const _onBlockFocus = (index: number) => {
+    // This often gets called multiple times because when we programmatically focus, it will also call this.
+    if (index === focusIndex) {
+      return
+    }
     setFocusIndex(index)
+
     // TODO: Lock block
     // TODO: Disable auto undo/redo
   }

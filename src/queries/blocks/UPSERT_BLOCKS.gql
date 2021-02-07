@@ -1,12 +1,15 @@
 #import "./BLOCK_FRAGMENT.gql"
 
-mutation UpsertBlocks($objects: [blocks_insert_input!]!) {
+mutation UpsertBlocks($articleId: Int!, $objects: [blocks_insert_input!]!) {
+  delete_blocks(where: { articleId: { _eq: $articleId } }) {
+    returning {
+      id
+    }
+  }
+
   insert_blocks(
     objects: $objects
-    on_conflict: {
-      constraint: blocks_pkey
-      update_columns: [parentId, payload, articleId, type, editingUserId, position]
-    }
+    on_conflict: { constraint: blocks_pkey, update_columns: [parentId, payload, articleId, type, editingUserId, position] }
   ) {
     returning {
       ...Block

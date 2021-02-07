@@ -6036,13 +6036,20 @@ export type DeleteBlockMutation = (
 );
 
 export type UpsertBlocksMutationVariables = Exact<{
+  articleId: Scalars['Int'];
   objects: Array<BlocksInsertInput> | BlocksInsertInput;
 }>;
 
 
 export type UpsertBlocksMutation = (
   { __typename?: 'mutation_root' }
-  & { insert_blocks?: Maybe<(
+  & { delete_blocks?: Maybe<(
+    { __typename?: 'blocks_mutation_response' }
+    & { returning: Array<(
+      { __typename?: 'blocks' }
+      & Pick<Blocks, 'id'>
+    )> }
+  )>, insert_blocks?: Maybe<(
     { __typename?: 'blocks_mutation_response' }
     & { returning: Array<(
       { __typename?: 'blocks' }
@@ -6454,7 +6461,12 @@ export type DeleteBlockMutationHookResult = ReturnType<typeof useDeleteBlockMuta
 export type DeleteBlockMutationResult = Apollo.MutationResult<DeleteBlockMutation>;
 export type DeleteBlockMutationOptions = Apollo.BaseMutationOptions<DeleteBlockMutation, DeleteBlockMutationVariables>;
 export const UpsertBlocksDocument = gql`
-    mutation UpsertBlocks($objects: [blocks_insert_input!]!) {
+    mutation UpsertBlocks($articleId: Int!, $objects: [blocks_insert_input!]!) {
+  delete_blocks(where: {articleId: {_eq: $articleId}}) {
+    returning {
+      id
+    }
+  }
   insert_blocks(
     objects: $objects
     on_conflict: {constraint: blocks_pkey, update_columns: [parentId, payload, articleId, type, editingUserId, position]}
@@ -6480,6 +6492,7 @@ export type UpsertBlocksMutationFn = Apollo.MutationFunction<UpsertBlocksMutatio
  * @example
  * const [upsertBlocksMutation, { data, loading, error }] = useUpsertBlocksMutation({
  *   variables: {
+ *      articleId: // value for 'articleId'
  *      objects: // value for 'objects'
  *   },
  * });

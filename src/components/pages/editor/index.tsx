@@ -26,6 +26,7 @@ import { DEFAULT_ARTICLE } from 'components/editor/blocks'
 import { useEditor } from 'components/editor/Provider'
 import { Block } from 'components/types'
 import PageControls from 'components/navigation/sidebar/page-controls'
+import debounce from 'lodash/debounce'
 
 const EditorPage = ({ article, project, onCreateArticleMutation, onUpsertBlockMutation, onDeleteBlockMutation }: IProps) => {
   const { setArticleSlug, setProjectSlug } = useEditor()
@@ -46,7 +47,7 @@ const EditorPage = ({ article, project, onCreateArticleMutation, onUpsertBlockMu
       return
     }
     setArticleSlug(article.slug)
-    window.history.replaceState({}, '', `/admin/${project.slug}/editor/${article.slug}`)
+    window.history.pushState({}, '', `/admin/${project.slug}/editor/${article.slug}`)
   }
 
   const onCreateArticle = useCallback(
@@ -81,11 +82,12 @@ const EditorPage = ({ article, project, onCreateArticleMutation, onUpsertBlockMu
     const res = await onDeleteBlockMutation(params)
   }
 
+  // TODO: Updates should be cached locally between pages and only debounce remote requests
+  // This requires an architectural change...
   const onBlocksUpsert = useCallback(
     async (blocks: Block[]) => {
-      console.log('update')
-
-      const o = blocks.map(({ payload, id: oldId, ...data }) => {
+      const articleId = article.id
+      const revisedBlocks = blocks.map(({ payload, id: oldId, ...data }) => {
         let newId
         if (oldId < 0) {
         } else {
@@ -95,35 +97,40 @@ const EditorPage = ({ article, project, onCreateArticleMutation, onUpsertBlockMu
         return {
           ...data,
           id: newId,
-          articleId: article.id,
+          articleId,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           payload: JSON.stringify(payload),
         }
       })
-      const params = createUpsertMutationParams(article.id, {
-        objects: o,
-      })
-
+      const params = createUpsertMutationParams(articleId, { articleId, objects: revisedBlocks })
       const { data } = await onUpsertBlockMutation(params)
+      console.log('Sync complete')
       return data?.insert_blocks?.returning.map((item) => item.id)
     },
-    [article.id]
+    [article?.id]
   )
+
+  // TODO: Does this need memoizing to avoid article updates conflicting?
+  const onDebouncedBlockUpsert = debounce(onBlocksUpsert, 500)
+
   const _onPageControlsClick = (id: number) => {
     console.log({ id })
   }
+
   return (
     <div className={styles.container}>
       <PageControls onClick={_onPageControlsClick}>
         <Sidebar project={project} sections={sections} onCreateArticle={onCreateArticle} onViewArticle={onViewArticle} />
 
         <div className={styles.editor}>
-          {article ? (
-            <Editor id={article.id} blocks={initialBlocks} onBlockDelete={onBlockDelete} onBlocksUpsert={onBlocksUpsert} />
-          ) : (
-            <div>Loading...</div>
-          )}
+          <Editor
+            key={article?.id}
+            id={article?.id}
+            blocks={initialBlocks}
+            onBlockDelete={onBlockDelete}
+            onBlocksUpsert={onDebouncedBlockUpsert}
+          />
         </div>
       </PageControls>
     </div>

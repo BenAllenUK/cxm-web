@@ -1,4 +1,4 @@
-import { memo, useRef, useState } from 'react'
+import { memo, useCallback, useRef, useState } from 'react'
 import { Block, BlockDataText, BlockType } from 'components/types'
 import { BlockTypeProperties, DEFAULT_BLOCK_START } from './blocks'
 import Content from './Content'
@@ -7,11 +7,11 @@ import Modals from './modals'
 import Header from './header'
 import PageControls from 'components/editor/modals/page-controls'
 
-function Editor({ blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IProps) {
+function Editor({ id, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IProps) {
   const [focusIndex, setFocusIndex] = useState(-1)
 
   let content = initialBlocks
-  if (content.length === 0) {
+  if (!!id && content.length === 0) {
     content = [DEFAULT_BLOCK_START]
   }
 
@@ -47,6 +47,7 @@ function Editor({ blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IProps
         }
         return item
       })
+      onBlocksUpsert([...existingItems, _block])
       // console.log(' final blocks', [...existingItems, _block])
       return [...existingItems, _block]
     })
@@ -76,7 +77,7 @@ function Editor({ blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IProps
       <Modals onBlockItemClick={_onBlockItemClick}>
         <PageControls onClick={() => {}}>
           <div className={styles.container}>
-            <Header />
+            <Header loading={!id} />
             <Content
               focusIndex={focusIndex}
               blocks={blocks}
@@ -93,7 +94,8 @@ function Editor({ blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IProps
 
 export default memo(Editor)
 interface IProps {
+  id: number | null
   blocks: Block[]
-  onBlocksUpsert: (blocks: Block) => Promise<number[] | undefined>
+  onBlocksUpsert: (blocks: Block[]) => void
   onBlockDelete: (id: number) => void
 }

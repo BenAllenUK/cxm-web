@@ -26,7 +26,6 @@ const Text = ({ value, type, filteringMode, tabIndex, innerRef, onFocus, onBlur,
     (e) => {
       if (!value && !e.shiftKey) {
         e.preventDefault()
-        console.log('calling delete')
         onDelete()
       }
     },

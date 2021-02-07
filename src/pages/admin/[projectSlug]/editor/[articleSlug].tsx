@@ -79,9 +79,6 @@ export function Content() {
   // }
 
   const [article] = articleData?.articles || []
-  if (!article) {
-    console.error(`Article not found: ${articleSlug}`)
-  }
 
   const [createArticleMutation] = useCreateArticleMutation()
 

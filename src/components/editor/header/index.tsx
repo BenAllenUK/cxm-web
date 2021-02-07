@@ -10,7 +10,7 @@ import { usePageControlModals } from '../modals/page-controls'
 import { useRef } from 'react'
 import Colors from 'config/colors'
 
-export const Header = ({}: IProps) => {
+export const Header = ({ loading }: IProps) => {
   const { showControls } = usePageControlModals()
 
   const ref = useRef<HTMLDivElement>(null)
@@ -23,7 +23,7 @@ export const Header = ({}: IProps) => {
   }
   return (
     <div>
-      {false && <LinearProgress />}
+      {loading ? <LinearProgress /> : <div style={{ height: 4 }}></div>}
 
       <div className={styles.header}>
         <div className={styles.headerLeft}>
@@ -59,6 +59,8 @@ export const Header = ({}: IProps) => {
   )
 }
 
-interface IProps {}
+interface IProps {
+  loading: boolean
+}
 
 export default Header

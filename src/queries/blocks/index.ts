@@ -27,23 +27,13 @@ export const deleteMutationParams = (articleId: number, id: number) => {
 }
 
 export const createUpsertMutationParams = (articleId: number, variables: UpsertBlocksMutationVariables) => {
-  let returning = null
-  if (Array.isArray(variables.objects)) {
-    returning = variables.objects.map((item) => ({
-      __typename: 'blocks',
-      ...item,
-      id: item.id || Math.round(Math.random() * -1000000),
-    }))
-  } else {
-    returning = variables
-  }
   return {
     variables,
     optimisticResponse: {
       __typename: 'mutation_root',
       insert_blocks: {
         __typename: 'blocks_mutation_response',
-        returning,
+        returning: variables.objects,
       },
     } as UpsertBlocksMutation,
     update: (cache: ApolloCache<UpsertBlocksMutation>, result: FetchResult<UpsertBlocksMutation>) => {
@@ -56,13 +46,6 @@ export const createUpsertMutationParams = (articleId: number, variables: UpsertB
         id: `articles:${articleId}`,
         fields: {
           blocks(blockRefs = [], { readField }) {
-            const ids = blocks.map((i) => i.id)
-            const existingRefs = blockRefs.filter((ref: any) => {
-              const tId = Number(readField('id', ref))
-              if (!tId) return
-              return ids.indexOf(tId) === -1
-            })
-
             const newBlockRefs = blocks.map((item) => {
               const [existingRef] = blockRefs.filter((ref: any) => readField('id', ref) === item.id)
               if (existingRef) {
@@ -81,9 +64,7 @@ export const createUpsertMutationParams = (articleId: number, variables: UpsertB
               })
               return newRef
             })
-            // console.log('new refs', [...newBlockRefs])
-            // console.log('all refs', [...existingRefs, ...newBlockRefs])
-            return [...existingRefs, ...newBlockRefs]
+            return newBlockRefs
           },
         },
       })

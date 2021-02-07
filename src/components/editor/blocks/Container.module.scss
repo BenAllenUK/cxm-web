@@ -1,4 +1,5 @@
 @import 'styles/variables';
+@import 'components/common/Button.module.scss';
 
 .block {
   max-width: 900px;
@@ -17,8 +18,33 @@
 
 .add {
   fill: $controls-color;
+  width: 16px;
+  height: 16px;
 }
 
 .drag {
   fill: $controls-color;
+}
+
+.addButton {
+  @extend .buttonBase;
+  cursor: pointer;
+  height: 16px;
+  padding-right: 2px;
+  padding-left: 2px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.grabButton {
+  @extend .buttonBase;
+  cursor: grab;
+  height: 16px;
+  padding-right: 2px;
+  padding-left: 2px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  &:hover {
+    background-color: transparent;
+  }
 }
