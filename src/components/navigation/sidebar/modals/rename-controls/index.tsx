@@ -39,7 +39,7 @@ const Provider = ({ children }: IProps) => {
   }
 
   const hideControls = useCallback(() => {
-    setState({ enabled: false, sectionId: null, itemId: null, position: null })
+    setState(initialState)
   }, [])
 
   return <Context.Provider value={{ ...state, showControls, hideControls }}>{children}</Context.Provider>

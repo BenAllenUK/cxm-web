@@ -7,7 +7,7 @@
   top: 100px;
   left: 100px;
   background-color: $background-color;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: $box-shadow;
   border: 1px solid $line-color;
   border-right: none;
   z-index: 1;

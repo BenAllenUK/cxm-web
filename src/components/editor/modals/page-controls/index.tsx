@@ -140,8 +140,8 @@ const PageControls = ({ children, onClick }: IProps) => {
         <OptionControls
           className={styles.container}
           sections={sections}
-          position={state.position}
-          onClick={_onClick}
+          style={{ left: state.position.x, top: state.position.y }}
+          onItemClick={_onClick}
           onDismiss={hideControls}
           footer={<Footer wordCount={300} lastEditedName={'Ben Allen'} lastEditedAt={new Date().toISOString()} />}
         />

@@ -74,21 +74,14 @@ export default class TextInput extends React.Component<Props, State> {
   componentDidMount() {}
 
   render() {
-    const {
-      focusedPlaceholder,
-      blurredPlaceholder,
-      html,
-      innerRef,
-      disabled,
-      ...props
-    } = this.props
+    const { focusedPlaceholder, blurredPlaceholder, html, innerRef, disabled, ...props } = this.props
     const { isFocused } = this.state
     const focusedPlaceholderText = focusedPlaceholder || ''
     const blurredPlaceholderText = blurredPlaceholder || ''
 
     return (
       <div
-        className={styles.container}
+        className={styles.textInputContainer}
         {...props}
         placeholder={isFocused ? focusedPlaceholderText : blurredPlaceholderText}
         ref={innerRef}
@@ -174,7 +167,7 @@ type DivProps = Modify<JSX.IntrinsicElements['div'], { onChange: (event: TextInp
 export interface Props extends DivProps {
   focusedPlaceholder?: string
   blurredPlaceholder?: string
-  innerRef?: React.RefObject<HTMLDivElement>
+  innerRef: React.RefObject<HTMLDivElement>
   html: string
   disabled?: boolean
   className?: string

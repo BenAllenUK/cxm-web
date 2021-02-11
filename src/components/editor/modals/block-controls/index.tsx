@@ -92,9 +92,9 @@ const BlockControls = ({ rootRef, children, onBlockItemClick }: IProps) => {
       {state.enabled && state.position && items.length > 0 && (
         <OptionControls
           sections={[{ items: items, title: 'Basic Blocks' }]}
-          position={state.position}
+          style={{ left: state.position.x, top: state.position.y }}
           iconClassName={styles.icon}
-          onClick={_onClick}
+          onItemClick={_onClick}
           onDismiss={hideControls}
         />
       )}

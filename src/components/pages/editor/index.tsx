@@ -20,6 +20,7 @@ import {
   ArticleFragment,
   BlockFragment,
   useUpsertArticlesMutation,
+  ArticlesInsertInput,
 } from 'generated/graphql'
 
 import { createArticleMutationParams } from 'queries/articles'
@@ -94,7 +95,7 @@ const EditorPage = ({
     [project.id]
   )
 
-  const onUpdateArticle = async (updatedArticles: ArticleFragment[]) => {
+  const onUpdateArticle = async (updatedArticles: ArticlesInsertInput[]) => {
     const articleId = article?.id
     const [newCurrentArticle] = updatedArticles.filter((item) => item.id == articleId)
     if (newCurrentArticle) {

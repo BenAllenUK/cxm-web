@@ -54,12 +54,12 @@ const Navbar = ({}: IProps) => {
         <ul className={styles.list}>
           {controls.map((item, i) => {
             if (item.type === 'LINE') {
-              return <li className={styles.line} />
+              return <li key={i} className={styles.line} />
             }
 
             return (
               <li
-                key={item.id}
+                key={i}
                 onClick={() => console.log(item.id)}
                 className={item.selected ? styles.buttonSelected : styles.button}
                 data-tip={item.tip}

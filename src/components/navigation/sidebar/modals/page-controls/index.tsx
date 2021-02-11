@@ -94,7 +94,7 @@ const Provider = ({ children }: IProps) => {
   }
 
   const hideControls = useCallback(() => {
-    setState({ enabled: false, sectionId: null, itemId: null, position: null })
+    setState(initialState)
   }, [])
 
   return <Context.Provider value={{ ...state, showControls, hideControls }}>{children}</Context.Provider>
@@ -115,7 +115,12 @@ const Component = ({ onClick }: IComponentProps) => {
   return (
     <>
       {enabled && position && (
-        <OptionControls sections={sections} position={position} onClick={_onClick} onDismiss={hideControls} />
+        <OptionControls
+          sections={sections}
+          style={{ left: position.x, top: position.y }}
+          onItemClick={_onClick}
+          onDismiss={hideControls}
+        />
       )}
     </>
   )

@@ -14,19 +14,25 @@ import { usePageControlModals } from './modals/page-controls'
 import Modals from './modals'
 import { useMenuItemRefs } from './modals/menu-item-refs'
 import { parseMenu } from 'utils/menu'
-import { ArticleFragment, GetProjectOneQuery } from 'generated/graphql'
+import { ArticleFragment, ArticlesInsertInput, GetProjectOneQuery } from 'generated/graphql'
 import AddButton from './AddButton'
+import { useSearchModal } from './modals/search'
 
 export const SIDEBAR_INDENT = 20
 
+enum AppMenuOptions {
+  Search = 0,
+  Feed,
+}
+
 const appMenu = [
   {
-    id: 1,
+    id: AppMenuOptions.Search,
     icon: SearchIcon,
     label: 'Quick Find',
   },
   {
-    id: 2,
+    id: AppMenuOptions.Feed,
     icon: MenuIcon,
     label: 'Feed',
   },
@@ -49,6 +55,7 @@ export function ControlledSidebar({ project, articles, onViewArticle, onCreateAr
   // TODO: Assumes ids have different numbers
 
   const { showControls } = usePageControlModals()
+  const { showControls: showSearchModal } = useSearchModal()
 
   const [openState, setOpenState] = useState({})
 
@@ -87,13 +94,21 @@ export function ControlledSidebar({ project, articles, onViewArticle, onCreateAr
     { id: 1, label: 'CONTENT', items: parseMenu(articles), suffix: <AddButton onClick={() => onCreateArticle(null)} /> },
   ]
 
+  const _onAppMenuClick = (id: number) => {
+    switch (id) {
+      case AppMenuOptions.Search:
+        showSearchModal()
+        return
+    }
+  }
+
   return (
     <>
       <div className={styles.container}>
         <Title name={project.name} />
         <ul className={styles.projectMenu}>
           {appMenu.map((item, index) => (
-            <li key={index} onClick={() => console.log(item.id)}>
+            <li key={index} onClick={() => _onAppMenuClick(item.id)}>
               {item.icon({ style: { marginRight: 20 } })}
               <div>{item.label}</div>
             </li>
@@ -137,12 +152,12 @@ interface IProps {
 
   onViewArticle: (id: number) => void
   onCreateArticle: (id: number | null) => void
-  onUpdateArticles: (articles: ArticleFragment[]) => void
+  onUpdateArticles: (articles: ArticlesInsertInput[]) => void
 }
 
 const ControlledSidebarWithModals = (props: IProps) => {
   return (
-    <Modals articles={props.articles} onUpdateArticles={props.onUpdateArticles}>
+    <Modals articles={props.articles} onUpdateArticles={props.onUpdateArticles} onViewArticle={props.onViewArticle}>
       <ControlledSidebar {...props} articles={props.articles} />
     </Modals>
   )

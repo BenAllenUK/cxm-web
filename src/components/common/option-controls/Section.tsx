@@ -10,10 +10,9 @@ const OptionSection = ({
   selectedId,
   iconClassName,
   items,
-  filterText,
   title,
   showLine,
-  onClick,
+  onItemClick,
   onSwitchClick,
   onItemMouseEnter,
 }: ISecProps) => {
@@ -30,7 +29,7 @@ const OptionSection = ({
                 innerRef={innerRef}
                 iconClassName={iconClassName}
                 selected={item.id === selectedId}
-                onClick={onClick}
+                onClick={onItemClick}
                 onMouseEnter={onItemMouseEnter}
                 {...item}
               />
@@ -62,11 +61,10 @@ interface ISecProps {
   innerRef: any
   items: IOptionElements[]
   title?: string
-  filterText?: string
   showLine?: boolean
   selectedId?: number
   iconClassName?: string
-  onClick: (id: number) => void
+  onItemClick: (id: number) => void
   onSwitchClick: (id: number) => void
   onItemMouseEnter: (id: number) => void
 }

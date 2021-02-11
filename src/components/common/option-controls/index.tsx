@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef, useState, ReactNode } from 'react'
+import { memo, useCallback, useRef, useState, ReactNode, HTMLProps } from 'react'
 import { useOnClickOutside, useWindowKeyDown } from 'utils/hooks'
 import styles from './OptionControls.module.scss'
 import findIndex from 'lodash/findIndex'
@@ -46,7 +46,7 @@ export type IOptionSections = {
   showLine?: boolean
 }
 
-const OptionControls = ({ header, footer, sections, position, className, iconClassName, onClick, onDismiss }: IProps) => {
+const OptionControls = memo(({ header, footer, sections, iconClassName, onItemClick, onDismiss, ...otherProps }: IProps) => {
   const [selectedIndex, setSelected] = useState<number>(0)
 
   const itemRefs = useRef<HTMLDivElement[]>([])
@@ -75,19 +75,19 @@ const OptionControls = ({ header, footer, sections, position, className, iconCla
     setSelected(-1)
   }, [])
 
-  const _onClick = useCallback(
+  const _onItemClick = useCallback(
     (id) => {
       onDismiss()
-      onClick(id)
+      onItemClick(id)
     },
-    [onClick, onDismiss]
+    [onItemClick, onDismiss]
   )
 
   const _onSwitchClick = useCallback(
     (id) => {
-      onClick(id)
+      onItemClick(id)
     },
-    [onClick]
+    [onItemClick]
   )
 
   useWindowKeyDown(
@@ -99,10 +99,10 @@ const OptionControls = ({ header, footer, sections, position, className, iconCla
         return
       }
       onDismiss()
-      onClick(selectedItem.id)
+      onItemClick(selectedItem.id)
       e.preventDefault()
     },
-    [onClick, actionItems, selectedIndex]
+    [onItemClick, actionItems, selectedIndex]
   )
 
   useWindowKeyDown(
@@ -138,15 +138,7 @@ const OptionControls = ({ header, footer, sections, position, className, iconCla
   }
 
   return (
-    <div
-      ref={ref}
-      style={{
-        left: position.x,
-        top: position.y,
-      }}
-      onMouseLeave={_onMouseLeave}
-      className={className || styles.defaultContainer}
-    >
+    <div className={styles.defaultContainer} onMouseLeave={_onMouseLeave} {...otherProps} ref={ref}>
       {header}
       {sections.map((section, i) => {
         return (
@@ -161,7 +153,7 @@ const OptionControls = ({ header, footer, sections, position, className, iconCla
             }}
             selectedId={actionItems[selectedIndex]?.id}
             iconClassName={iconClassName}
-            onClick={_onClick}
+            onItemClick={_onItemClick}
             onItemMouseEnter={_onItemMouseEnter}
             onSwitchClick={_onSwitchClick}
           />
@@ -170,17 +162,15 @@ const OptionControls = ({ header, footer, sections, position, className, iconCla
       {footer}
     </div>
   )
-}
+})
 
-export default memo(OptionControls)
+export default OptionControls
 
-interface IProps {
+interface IProps extends HTMLProps<HTMLDivElement> {
   sections: IOptionSections[]
-  className?: string
   header?: ReactNode
   footer?: ReactNode
   iconClassName?: string
-  position: { x: number; y: number }
-  onClick: (id: number) => void
+  onItemClick: (id: number) => void
   onDismiss: () => void
 }

@@ -1,10 +1,11 @@
 import PageControls, { PageControlOptions } from 'components/navigation/sidebar/modals/page-controls'
 import RenameControls, { useRenameControlModals } from 'components/navigation/sidebar/modals/rename-controls'
-import { ArticleFragment } from 'generated/graphql'
+import { ArticleFragment, ArticlesInsertInput } from 'generated/graphql'
 import { ReactNode, useState } from 'react'
 import MenuItemRefs, { useMenuItemRefs } from './menu-item-refs'
+import Search from './search'
 
-const ControlledModals = ({ articles, children, onUpdateArticles }: IProps) => {
+const ControlledModals = ({ articles, children, onUpdateArticles, onViewArticle }: IProps) => {
   const [renameValue, setRenameValue] = useState<string | null>(null)
   const { showControls: showRenameControls } = useRenameControlModals()
 
@@ -29,6 +30,7 @@ const ControlledModals = ({ articles, children, onUpdateArticles }: IProps) => {
       }
 
       case PageControlOptions.Duplicate:
+        onArticleDuplicate(article.id)
         return
       case PageControlOptions.Rename: {
         const { top, left, height } = locationRefs?.current[sectionId][itemId].getBoundingClientRect()
@@ -57,8 +59,24 @@ const ControlledModals = ({ articles, children, onUpdateArticles }: IProps) => {
     onUpdateArticles([{ ...articleData, title: renameValue }])
   }
 
-  const onArticleDelete = (itemId: number) => {
-    const [article] = articles.filter((item) => item.id === itemId)
+  const onArticleDuplicate = (id: number) => {
+    const [article] = articles.filter((item) => item.id === id)
+    if (!article) {
+      console.error(`Article not found`)
+      return
+    }
+    const { __typename, id: _, ...articleData } = article
+    onUpdateArticles([
+      {
+        ...articleData,
+        title: `${articleData.title} Copy`,
+        slug: `${articleData.slug}-copy`,
+      },
+    ])
+  }
+
+  const onArticleDelete = (id: number) => {
+    const [article] = articles.filter((item) => item.id === id)
     if (!article) {
       console.error(`Article not found`)
       return
@@ -72,6 +90,7 @@ const ControlledModals = ({ articles, children, onUpdateArticles }: IProps) => {
     <>
       <PageControls.Component onClick={_onClick} />
       <RenameControls.Component value={renameValue} onTextChange={onArticleRenameTextChange} onSubmit={_onArticleRenameSubmit} />
+      <Search.Component articles={articles} onItemClick={onViewArticle} />
       {children}
     </>
   )
@@ -80,19 +99,22 @@ const ControlledModals = ({ articles, children, onUpdateArticles }: IProps) => {
 interface IProps {
   articles: ArticleFragment[]
   children: ReactNode
-  onUpdateArticles: (articles: ArticleFragment[]) => void
+  onUpdateArticles: (articles: ArticlesInsertInput[]) => void
+  onViewArticle: (id: number) => void
 }
 
 const Modals = (props: IProps) => {
   return (
     <div>
-      <MenuItemRefs.Provider>
-        <RenameControls.Provider>
-          <PageControls.Provider>
-            <ControlledModals {...props} />
-          </PageControls.Provider>
-        </RenameControls.Provider>
-      </MenuItemRefs.Provider>
+      <Search.Provider>
+        <MenuItemRefs.Provider>
+          <RenameControls.Provider>
+            <PageControls.Provider>
+              <ControlledModals {...props} />
+            </PageControls.Provider>
+          </RenameControls.Provider>
+        </MenuItemRefs.Provider>
+      </Search.Provider>
     </div>
   )
 }

@@ -36,7 +36,7 @@ const RenameControlsModal = ({ value, position, onDismiss, onTextChange, onSubmi
       inputRef.current.focus()
       document.execCommand('selectAll', false)
     }
-  }, [focus])
+  }, [inputRef])
 
   return (
     <div ref={ref} className={styles.container} style={{ left: position.x, top: position.y }}>
