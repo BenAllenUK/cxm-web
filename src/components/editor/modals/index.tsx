@@ -3,15 +3,18 @@ import { useState, useContext, memo, useCallback, createContext, ReactNode, RefO
 
 import BlockControls from './block-controls'
 import TextControls from './text-controls'
+import PageControls from './page-controls'
 
 const Modals = ({ children, onBlockItemClick }: IProps) => {
   const bodyRef = useRef<HTMLDivElement>(null)
 
   return (
     <div style={{ position: 'relative' }} ref={bodyRef}>
-      <BlockControls rootRef={bodyRef} onBlockItemClick={onBlockItemClick}>
-        <TextControls rootRef={bodyRef}>{children}</TextControls>
-      </BlockControls>
+      <PageControls onClick={() => {}}>
+        <BlockControls rootRef={bodyRef} onBlockItemClick={onBlockItemClick}>
+          <TextControls rootRef={bodyRef}>{children}</TextControls>
+        </BlockControls>
+      </PageControls>
     </div>
   )
 }

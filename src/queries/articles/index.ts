@@ -1,14 +1,16 @@
 import { ApolloCache, FetchResult } from '@apollo/client'
-import { CreateArticleMutation, CreateArticleMutationVariables } from 'generated/graphql'
+import {
+  ArticlesInsertInput,
+  CreateArticleMutation,
+  CreateArticleMutationVariables,
+  UpsertArticlesMutationVariables,
+} from 'generated/graphql'
 
 import BLOCK_FRAGMENT from 'queries/blocks/BLOCK_FRAGMENT.gql'
 import ARTICLE_FRAGMENT from 'queries/articles/ARTICLE_FRAGMENT.gql'
 
-export const createArticleMutationParams = (
-  projectId: number,
-  variables: CreateArticleMutationVariables
-) => {
-  const { blocks, ...articleParams } = variables.object
+export const createArticleMutationParams = (projectId: number, variables: UpsertArticlesMutationVariables) => {
+  const { blocks, ...articleParams } = variables.objects as ArticlesInsertInput
   const id = Math.round(Math.random() * -1000000)
 
   return {
@@ -22,10 +24,7 @@ export const createArticleMutationParams = (
         blocks: blocks?.data,
       },
     } as CreateArticleMutation,
-    update: (
-      cache: ApolloCache<CreateArticleMutation>,
-      result: FetchResult<CreateArticleMutation>
-    ) => {
+    update: (cache: ApolloCache<CreateArticleMutation>, result: FetchResult<CreateArticleMutation>) => {
       const article = result.data?.insert_articles_one
       if (!article) {
         return []

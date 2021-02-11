@@ -1,8 +1,0 @@
-mutation UpdateArticle($id: Int!, $parentId: Int, $title: String, $projectId: Int, $slug: String) {
-  update_articles_by_pk(
-    pk_columns: { id: $id }
-    _set: { parentId: $parentId, title: $title, projectId: $projectId, slug: $slug }
-  ) {
-    id
-  }
-}

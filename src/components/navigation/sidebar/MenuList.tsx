@@ -1,22 +1,16 @@
 import styles from './Sidebar.module.scss'
 import MenuItem from './MenuItem'
 import { MenuItem as MenuItemType, SIDEBAR_INDENT } from '.'
+import { RefObject } from 'react'
 
 export function MenuList(props: IProps) {
-  const {
-    items,
-    openState,
-    depth = -1,
-    onItemClick,
-    onItemArrowClick,
-    onItemAddClick,
-    onItemMoreClick,
-  } = props
+  const { itemRef, items, openState, depth = -1, onItemClick, onItemArrowClick, onItemAddClick, onItemMoreClick } = props
   return (
     <ul className={styles.menu}>
       {items.map((item, index) => (
         <div key={index}>
           <MenuItem
+            ref={(ref) => itemRef(ref, item)}
             subList={item.children.length > 0}
             innerStyle={{ paddingLeft: SIDEBAR_INDENT * (depth + 1) }}
             isOpen={openState[item.id]}
@@ -34,6 +28,7 @@ export function MenuList(props: IProps) {
   )
 }
 interface IProps {
+  itemRef: (ref: HTMLDivElement | null, item: MenuItemType) => void
   items: MenuItemType[]
   openState: { [key: string]: boolean }
   depth?: number

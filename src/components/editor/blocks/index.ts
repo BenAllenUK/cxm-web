@@ -21,8 +21,6 @@ export const DEFAULT_BLOCK_START = {
   id: -1,
   parentId: null,
   editingUserId: null,
-  createdAt: '',
-  updatedAt: '',
   position: 0,
 }
 

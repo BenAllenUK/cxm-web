@@ -16,6 +16,10 @@ import {
   useCreateArticleMutation,
   useUpsertBlocksMutation,
   useDeleteBlockMutation,
+  ProjectFragment,
+  ArticleFragment,
+  BlockFragment,
+  useUpsertArticlesMutation,
 } from 'generated/graphql'
 
 import { createArticleMutationParams } from 'queries/articles'
@@ -25,13 +29,18 @@ import { useRouter } from 'next/router'
 import { DEFAULT_ARTICLE } from 'components/editor/blocks'
 import { useEditor } from 'components/editor/Provider'
 import { Block } from 'components/types'
-import PageControls from 'components/navigation/sidebar/page-controls'
 import debounce from 'lodash/debounce'
+import Navbar from 'components/navigation/navbar'
 
-const EditorPage = ({ article, project, onCreateArticleMutation, onUpsertBlockMutation, onDeleteBlockMutation }: IProps) => {
+const EditorPage = ({
+  article,
+  project,
+  onCreateArticleMutation,
+  onUpsertArticlesMutation,
+  onUpsertBlockMutation,
+  onDeleteBlockMutation,
+}: IProps) => {
   const { setArticleSlug, setProjectSlug } = useEditor()
-
-  const sections = [{ id: 1, label: 'CONTENT', items: parseMenu(project.articles) }]
 
   const router = useRouter()
   const initialBlocks = article ? parseBlocks(article.blocks) : []
@@ -52,20 +61,28 @@ const EditorPage = ({ article, project, onCreateArticleMutation, onUpsertBlockMu
 
   const onCreateArticle = useCallback(
     async (parentId: number | null) => {
+      const slug = 'new-' + encodeURI(new Date().toISOString())
       const { blocks, ...articleParams } = DEFAULT_ARTICLE
       const projectId = project.id
       const params = createArticleMutationParams(projectId, {
-        object: {
+        objects: {
           ...articleParams,
           parentId,
           projectId: project.id,
-          slug: 'new-' + encodeURI(new Date().toISOString()),
-          blocks: { data: blocks },
+          slug,
+          blocks: {
+            data: blocks.map((item) => ({
+              ...item,
+              id: undefined,
+              payload: JSON.stringify(item.payload),
+            })),
+          },
         },
       })
-      const { data } = await onCreateArticleMutation(params)
 
-      const articleSlug = data?.insert_articles_one?.slug
+      const { data } = await onUpsertArticlesMutation(params)
+
+      const articleSlug = data?.insert_articles?.returning[0].slug
       if (!articleSlug) {
         console.error('Article failed to create')
         return
@@ -76,6 +93,15 @@ const EditorPage = ({ article, project, onCreateArticleMutation, onUpsertBlockMu
     },
     [project.id]
   )
+
+  const onUpdateArticle = async (articles: ArticleFragment[]) => {
+    const { data } = await onUpsertArticlesMutation({
+      variables: {
+        objects: articles,
+      },
+    })
+    console.log(data)
+  }
 
   const onBlockDelete = async (id: number) => {
     const params = deleteMutationParams(article.id, id)
@@ -120,19 +146,25 @@ const EditorPage = ({ article, project, onCreateArticleMutation, onUpsertBlockMu
 
   return (
     <div className={styles.container}>
-      <PageControls onClick={_onPageControlsClick}>
-        <Sidebar project={project} sections={sections} onCreateArticle={onCreateArticle} onViewArticle={onViewArticle} />
+      <Navbar />
 
-        <div className={styles.editor}>
-          <Editor
-            key={article?.id}
-            id={article?.id}
-            blocks={initialBlocks}
-            onBlockDelete={onBlockDelete}
-            onBlocksUpsert={onDebouncedBlockUpsert}
-          />
-        </div>
-      </PageControls>
+      <Sidebar
+        project={project}
+        articles={project.articles}
+        onCreateArticle={onCreateArticle}
+        onUpdateArticles={onUpdateArticle}
+        onViewArticle={onViewArticle}
+      />
+
+      <div className={styles.editor}>
+        <Editor
+          key={article?.id}
+          id={article?.id}
+          blocks={initialBlocks}
+          onBlockDelete={onBlockDelete}
+          onBlocksUpsert={onDebouncedBlockUpsert}
+        />
+      </div>
     </div>
   )
 }
@@ -140,9 +172,10 @@ const EditorPage = ({ article, project, onCreateArticleMutation, onUpsertBlockMu
 export default memo(EditorPage)
 
 interface IProps {
-  article: NonNullable<GetArticleOneQuery['articles'][0]>
-  project: NonNullable<NonNullable<GetProjectOneQuery['projects']>[0]>
+  article: ArticleFragment & { blocks: BlockFragment[] }
+  project: ProjectFragment
   onCreateArticleMutation: ReturnType<typeof useCreateArticleMutation>[0]
+  onUpsertArticlesMutation: ReturnType<typeof useUpsertArticlesMutation>[0]
   onUpsertBlockMutation: ReturnType<typeof useUpsertBlocksMutation>[0]
   onDeleteBlockMutation: ReturnType<typeof useDeleteBlockMutation>[0]
 }

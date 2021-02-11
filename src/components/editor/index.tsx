@@ -75,18 +75,16 @@ function Editor({ id, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IP
   return (
     <>
       <Modals onBlockItemClick={_onBlockItemClick}>
-        <PageControls onClick={() => {}}>
-          <div className={styles.container}>
-            <Header loading={!id} />
-            <Content
-              focusIndex={focusIndex}
-              blocks={blocks}
-              onBlocksUpsert={_onBlocksUpsert}
-              onBlockDelete={_onBlockDelete}
-              setFocusIndex={setFocusIndex}
-            />
-          </div>
-        </PageControls>
+        <div className={styles.container}>
+          <Header loading={!id} />
+          <Content
+            focusIndex={focusIndex}
+            blocks={blocks}
+            onBlocksUpsert={_onBlocksUpsert}
+            onBlockDelete={_onBlockDelete}
+            setFocusIndex={setFocusIndex}
+          />
+        </div>
       </Modals>
     </>
   )

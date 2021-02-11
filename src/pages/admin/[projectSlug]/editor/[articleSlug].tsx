@@ -13,6 +13,7 @@ import {
   // useGetArticlesSubscriptionSubscription as useGetArticlesSubscription,
   useGetArticlesQuery,
   useGetArticleOneSubscriptionSubscription,
+  useUpsertArticlesMutation,
   useGetProjectOneQuery,
   useUpsertBlocksMutation,
   useDeleteBlockMutation,
@@ -81,6 +82,7 @@ export function Content() {
   const [article] = articleData?.articles || []
 
   const [createArticleMutation] = useCreateArticleMutation()
+  const [upsertArticlesMutation] = useUpsertArticlesMutation()
 
   const [upsertBlockMutation] = useUpsertBlocksMutation()
 
@@ -91,6 +93,7 @@ export function Content() {
       project={project}
       article={article}
       onCreateArticleMutation={createArticleMutation}
+      onUpsertArticlesMutation={upsertArticlesMutation}
       onUpsertBlockMutation={upsertBlockMutation}
       onDeleteBlockMutation={deleteBlockMutation}
     />

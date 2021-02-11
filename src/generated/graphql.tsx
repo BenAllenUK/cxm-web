@@ -5968,20 +5968,23 @@ export type GetArticleOneSubscriptionSubscription = (
   )> }
 );
 
-export type UpdateArticleMutationVariables = Exact<{
-  id: Scalars['Int'];
-  parentId?: Maybe<Scalars['Int']>;
-  title?: Maybe<Scalars['String']>;
-  projectId?: Maybe<Scalars['Int']>;
-  slug?: Maybe<Scalars['String']>;
+export type UpsertArticlesMutationVariables = Exact<{
+  objects: Array<ArticlesInsertInput> | ArticlesInsertInput;
 }>;
 
 
-export type UpdateArticleMutation = (
+export type UpsertArticlesMutation = (
   { __typename?: 'mutation_root' }
-  & { update_articles_by_pk?: Maybe<(
-    { __typename?: 'articles' }
-    & Pick<Articles, 'id'>
+  & { insert_articles?: Maybe<(
+    { __typename?: 'articles_mutation_response' }
+    & { returning: Array<(
+      { __typename?: 'articles' }
+      & { blocks: Array<(
+        { __typename?: 'blocks' }
+        & BlockFragment
+      )> }
+      & ArticleFragment
+    )> }
   )> }
 );
 
@@ -6314,45 +6317,47 @@ export function useGetArticleOneSubscriptionSubscription(baseOptions: Apollo.Sub
       }
 export type GetArticleOneSubscriptionSubscriptionHookResult = ReturnType<typeof useGetArticleOneSubscriptionSubscription>;
 export type GetArticleOneSubscriptionSubscriptionResult = Apollo.SubscriptionResult<GetArticleOneSubscriptionSubscription>;
-export const UpdateArticleDocument = gql`
-    mutation UpdateArticle($id: Int!, $parentId: Int, $title: String, $projectId: Int, $slug: String) {
-  update_articles_by_pk(
-    pk_columns: {id: $id}
-    _set: {parentId: $parentId, title: $title, projectId: $projectId, slug: $slug}
+export const UpsertArticlesDocument = gql`
+    mutation UpsertArticles($objects: [articles_insert_input!]!) {
+  insert_articles(
+    objects: $objects
+    on_conflict: {constraint: articles_pkey, update_columns: [parentId, projectId, slug, title]}
   ) {
-    id
+    returning {
+      ...Article
+      blocks {
+        ...Block
+      }
+    }
   }
 }
-    `;
-export type UpdateArticleMutationFn = Apollo.MutationFunction<UpdateArticleMutation, UpdateArticleMutationVariables>;
+    ${ArticleFragmentDoc}
+${BlockFragmentDoc}`;
+export type UpsertArticlesMutationFn = Apollo.MutationFunction<UpsertArticlesMutation, UpsertArticlesMutationVariables>;
 
 /**
- * __useUpdateArticleMutation__
+ * __useUpsertArticlesMutation__
  *
- * To run a mutation, you first call `useUpdateArticleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateArticleMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpsertArticlesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpsertArticlesMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateArticleMutation, { data, loading, error }] = useUpdateArticleMutation({
+ * const [upsertArticlesMutation, { data, loading, error }] = useUpsertArticlesMutation({
  *   variables: {
- *      id: // value for 'id'
- *      parentId: // value for 'parentId'
- *      title: // value for 'title'
- *      projectId: // value for 'projectId'
- *      slug: // value for 'slug'
+ *      objects: // value for 'objects'
  *   },
  * });
  */
-export function useUpdateArticleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateArticleMutation, UpdateArticleMutationVariables>) {
-        return Apollo.useMutation<UpdateArticleMutation, UpdateArticleMutationVariables>(UpdateArticleDocument, baseOptions);
+export function useUpsertArticlesMutation(baseOptions?: Apollo.MutationHookOptions<UpsertArticlesMutation, UpsertArticlesMutationVariables>) {
+        return Apollo.useMutation<UpsertArticlesMutation, UpsertArticlesMutationVariables>(UpsertArticlesDocument, baseOptions);
       }
-export type UpdateArticleMutationHookResult = ReturnType<typeof useUpdateArticleMutation>;
-export type UpdateArticleMutationResult = Apollo.MutationResult<UpdateArticleMutation>;
-export type UpdateArticleMutationOptions = Apollo.BaseMutationOptions<UpdateArticleMutation, UpdateArticleMutationVariables>;
+export type UpsertArticlesMutationHookResult = ReturnType<typeof useUpsertArticlesMutation>;
+export type UpsertArticlesMutationResult = Apollo.MutationResult<UpsertArticlesMutation>;
+export type UpsertArticlesMutationOptions = Apollo.BaseMutationOptions<UpsertArticlesMutation, UpsertArticlesMutationVariables>;
 export const GetUserActivityDocument = gql`
     subscription getUserActivity($articleId: Int!) {
   articles_user_activity(

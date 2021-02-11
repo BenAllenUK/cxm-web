@@ -1,0 +1,47 @@
+@import 'styles/variables';
+
+.container {
+  background-color: $tooltip-color;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  flex: 0 1;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.button {
+  list-style: none;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  padding-left: 15px;
+  padding-right: 15px;
+  cursor: pointer;
+  text-align: center;
+
+  &:hover {
+    background-color: rgba($text2-color, 0.2);
+    color: $background-color;
+  }
+}
+
+.buttonSelected {
+  @extend .button;
+  box-shadow: inset 2px 0px 0px #fff;
+
+  .icon {
+    color: white;
+  }
+}
+
+.line {
+  border-top: 1px solid $nav-line-color;
+}
+
+.icon {
+  font-size: 20px;
+  color: $text2-color;
+}

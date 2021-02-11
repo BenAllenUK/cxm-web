@@ -1,0 +1,16 @@
+#import "./ARTICLE_FRAGMENT.gql"
+#import "../blocks/BLOCK_FRAGMENT.gql"
+
+mutation UpsertArticles($objects: [articles_insert_input!]!) {
+  insert_articles(
+    objects: $objects
+    on_conflict: { constraint: articles_pkey, update_columns: [parentId, projectId, slug, title] }
+  ) {
+    returning {
+      ...Article
+      blocks {
+        ...Block
+      }
+    }
+  }
+}

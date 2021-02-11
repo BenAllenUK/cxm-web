@@ -2,7 +2,7 @@ import OptionControls, { OptionType, IOptionElements, IOptionSections } from 'co
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faClone, faEdit } from '@fortawesome/free-regular-svg-icons'
 import { faLink, faLevelUpAlt } from '@fortawesome/free-solid-svg-icons'
-import { createContext, ReactNode, useCallback, useContext, useState } from 'react'
+import { createContext, ReactNode, RefObject, useCallback, useContext, useRef, useState } from 'react'
 
 const sections: IOptionSections[] = [
   {
@@ -50,64 +50,79 @@ const sections: IOptionSections[] = [
   },
 ]
 interface Context {
-  id: number | null
+  sectionId: number | null
+  itemId: number | null
   enabled: boolean
   position: { x: number; y: number } | null
 }
 
 interface ContextActions extends Context {
-  showControls: (id: number, position: { x: number; y: number }) => void
+  showControls: (sectionId: number, itemId: number, position: { x: number; y: number }) => void
   hideControls: () => void
 }
 
 const initialState = {
-  id: null,
+  itemId: null,
+  sectionId: null,
   enabled: false,
   position: null,
   showControls: () => {},
   hideControls: () => {},
 }
 
-const Context = createContext<ContextActions>(initialState)
+const Context = createContext<ContextActions>({ ...initialState })
 
 export const usePageControlModals = () => useContext(Context)
 
-const PageControls = ({ children, onClick }: IProps) => {
+const Provider = ({ children }: IProps) => {
   const [state, setState] = useState<Context>(initialState)
 
-  const showControls = (id: number, position: { x: number; y: number }) => {
+  const showControls = (sectionId: number, itemId: number, position: { x: number; y: number }) => {
     setState({
       enabled: true,
-      id,
+      sectionId,
+      itemId,
       position,
     })
   }
 
   const hideControls = useCallback(() => {
-    setState({ enabled: false, id: null, position: null })
+    setState({ enabled: false, sectionId: null, itemId: null, position: null })
   }, [])
 
-  const _onClick = useCallback(
-    (id: number) => {
-      onClick(id)
-      hideControls()
-    },
-    [onClick]
-  )
+  return <Context.Provider value={{ ...state, showControls, hideControls }}>{children}</Context.Provider>
+}
+
+const Component = ({ onClick }: IComponentProps) => {
+  const { sectionId, itemId, enabled, position, hideControls } = usePageControlModals()
+  const _onClick = (id: number) => {
+    if (sectionId === null || itemId === null) {
+      console.error(`Section ID and Item ID cannot be null. sectionId: ${sectionId} itemId: ${itemId}`)
+      return
+    }
+
+    onClick(sectionId, itemId, id)
+    hideControls()
+  }
 
   return (
-    <Context.Provider value={{ ...state, showControls, hideControls }}>
-      {state.enabled && state.position && (
-        <OptionControls sections={sections} position={state.position} onClick={_onClick} onDismiss={hideControls} />
+    <>
+      {enabled && position && (
+        <OptionControls sections={sections} position={position} onClick={_onClick} onDismiss={hideControls} />
       )}
-      {children}
-    </Context.Provider>
+    </>
   )
 }
 
-export default PageControls
+export default {
+  Component,
+  Provider,
+}
+
+interface IComponentProps {
+  onClick: (sectionId: number, itemId: number, optionId: number) => void
+}
 
 interface IProps {
   children: ReactNode
-  onClick: (id: number) => void
 }
