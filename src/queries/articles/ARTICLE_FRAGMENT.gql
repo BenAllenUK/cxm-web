@@ -6,4 +6,10 @@ fragment Article on articles {
   title
   updatedAt
   createdAt
+  archived
+  archivedAt
+  # archivedUser {
+  #   id
+  #   name
+  # }
 }

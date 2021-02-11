@@ -87,13 +87,17 @@ ul.projectMenu {
   flex-direction: flex-end;
 }
 
-.itemControlsButton {
+.itemAddButtonIcon {
   width: 22px;
   height: 22px;
   border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.itemControlsButton {
+  @extend .itemAddButtonIcon;
 
   &:hover {
     background-color: rgba($text2-color, 0.2);

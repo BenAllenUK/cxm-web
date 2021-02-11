@@ -5,7 +5,10 @@ fragment Project on projects {
   name
   image
   slug
-  articles {
+  articles: articles(where: { archived: { _eq: false } }) {
+    ...Article
+  }
+  archivedArticles: articles(where: { archived: { _eq: true } }) {
     ...Article
   }
 }

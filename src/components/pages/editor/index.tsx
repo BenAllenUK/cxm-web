@@ -94,10 +94,26 @@ const EditorPage = ({
     [project.id]
   )
 
-  const onUpdateArticle = async (articles: ArticleFragment[]) => {
+  const onUpdateArticle = async (updatedArticles: ArticleFragment[]) => {
+    const articleId = article?.id
+    const [newCurrentArticle] = updatedArticles.filter((item) => item.id == articleId)
+    if (newCurrentArticle) {
+      if (article.archived === false && newCurrentArticle.archived === true) {
+        // TODO: Order by position
+        const [nextViewingArticle] = project.articles.filter((item) => item.id !== articleId)
+        if (nextViewingArticle) {
+          setArticleSlug(nextViewingArticle.slug)
+          window.history.replaceState({}, '', `/admin/${project.slug}/editor/${nextViewingArticle.slug}`)
+        } else {
+          console.error('Cannot delete only page')
+          return
+        }
+      }
+    }
+
     const { data } = await onUpsertArticlesMutation({
       variables: {
-        objects: articles,
+        objects: updatedArticles,
       },
     })
     console.log(data)

@@ -15,6 +15,7 @@ import Modals from './modals'
 import { useMenuItemRefs } from './modals/menu-item-refs'
 import { parseMenu } from 'utils/menu'
 import { ArticleFragment, GetProjectOneQuery } from 'generated/graphql'
+import AddButton from './AddButton'
 
 export const SIDEBAR_INDENT = 20
 
@@ -46,7 +47,6 @@ export type MenuItem = {
 
 export function ControlledSidebar({ project, articles, onViewArticle, onCreateArticle }: IProps) {
   // TODO: Assumes ids have different numbers
-  const sections = [{ id: 1, label: 'CONTENT', items: parseMenu(articles) }]
 
   const { showControls } = usePageControlModals()
 
@@ -83,6 +83,10 @@ export function ControlledSidebar({ project, articles, onViewArticle, onCreateAr
   }
   const { locationRefs } = useMenuItemRefs()
 
+  const sections = [
+    { id: 1, label: 'CONTENT', items: parseMenu(articles), suffix: <AddButton onClick={() => onCreateArticle(null)} /> },
+  ]
+
   return (
     <>
       <div className={styles.container}>
@@ -113,6 +117,7 @@ export function ControlledSidebar({ project, articles, onViewArticle, onCreateAr
                 onItemAddClick={(e, item) => onMenuAddItemClick(e, section, item)}
                 onItemMoreClick={(e, item) => onMenuMoreItemClick(e, section, item)}
               />
+              {section.suffix}
             </div>
           ))}
         </div>

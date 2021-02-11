@@ -4,31 +4,38 @@ import { faTrashAlt, faClone, faEdit } from '@fortawesome/free-regular-svg-icons
 import { faLink, faLevelUpAlt } from '@fortawesome/free-solid-svg-icons'
 import { createContext, ReactNode, RefObject, useCallback, useContext, useRef, useState } from 'react'
 
+export enum PageControlOptions {
+  Delete = 0,
+  Duplicate,
+  Copy,
+  Rename,
+}
+
 const sections: IOptionSections[] = [
   {
     showLine: true,
     items: [
       {
-        id: 1,
+        id: PageControlOptions.Delete,
         icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faTrashAlt} />,
         type: OptionType.Button,
         title: 'Delete',
       },
       {
-        id: 2,
+        id: PageControlOptions.Duplicate,
         icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faClone} />,
         type: OptionType.Button,
         title: 'Duplicate',
         hint: '⌘ + D',
       },
       {
-        id: 3,
+        id: PageControlOptions.Copy,
         icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faLink} />,
         type: OptionType.Button,
         title: 'Copy Link',
       },
       {
-        id: 4,
+        id: PageControlOptions.Rename,
         icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faEdit} />,
         type: OptionType.Button,
         title: 'Rename',
@@ -120,7 +127,7 @@ export default {
 }
 
 interface IComponentProps {
-  onClick: (sectionId: number, itemId: number, optionId: number) => void
+  onClick: (sectionId: number, itemId: number, optionId: PageControlOptions) => void
 }
 
 interface IProps {

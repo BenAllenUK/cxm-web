@@ -64,6 +64,11 @@ export type StringComparisonExp = {
 /** columns and relationships of "articles" */
 export type Articles = {
   __typename?: 'articles';
+  archived: Scalars['Boolean'];
+  archivedAt?: Maybe<Scalars['timestamptz']>;
+  archivedBy?: Maybe<Scalars['Int']>;
+  /** An object relationship */
+  archivedUser?: Maybe<Users>;
   /** An array relationship */
   articles: Array<Articles>;
   /** An aggregated array relationship */
@@ -203,6 +208,7 @@ export type ArticlesArrRelInsertInput = {
 /** aggregate avg on columns */
 export type ArticlesAvgFields = {
   __typename?: 'articles_avg_fields';
+  archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
@@ -210,6 +216,7 @@ export type ArticlesAvgFields = {
 
 /** order by avg() on columns of table "articles" */
 export type ArticlesAvgOrderBy = {
+  archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
@@ -220,6 +227,10 @@ export type ArticlesBoolExp = {
   _and?: Maybe<Array<Maybe<ArticlesBoolExp>>>;
   _not?: Maybe<ArticlesBoolExp>;
   _or?: Maybe<Array<Maybe<ArticlesBoolExp>>>;
+  archived?: Maybe<BooleanComparisonExp>;
+  archivedAt?: Maybe<TimestamptzComparisonExp>;
+  archivedBy?: Maybe<IntComparisonExp>;
+  archivedUser?: Maybe<UsersBoolExp>;
   articles?: Maybe<ArticlesBoolExp>;
   articles_user_activities?: Maybe<ArticlesUserActivityBoolExp>;
   blocks?: Maybe<BlocksBoolExp>;
@@ -244,6 +255,7 @@ export enum ArticlesConstraint {
 
 /** input type for incrementing integer column in table "articles" */
 export type ArticlesIncInput = {
+  archivedBy?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
   projectId?: Maybe<Scalars['Int']>;
@@ -251,6 +263,10 @@ export type ArticlesIncInput = {
 
 /** input type for inserting data into table "articles" */
 export type ArticlesInsertInput = {
+  archived?: Maybe<Scalars['Boolean']>;
+  archivedAt?: Maybe<Scalars['timestamptz']>;
+  archivedBy?: Maybe<Scalars['Int']>;
+  archivedUser?: Maybe<UsersObjRelInsertInput>;
   articles?: Maybe<ArticlesArrRelInsertInput>;
   articles_user_activities?: Maybe<ArticlesUserActivityArrRelInsertInput>;
   blocks?: Maybe<BlocksArrRelInsertInput>;
@@ -268,6 +284,8 @@ export type ArticlesInsertInput = {
 /** aggregate max on columns */
 export type ArticlesMaxFields = {
   __typename?: 'articles_max_fields';
+  archivedAt?: Maybe<Scalars['timestamptz']>;
+  archivedBy?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
@@ -279,6 +297,8 @@ export type ArticlesMaxFields = {
 
 /** order by max() on columns of table "articles" */
 export type ArticlesMaxOrderBy = {
+  archivedAt?: Maybe<OrderBy>;
+  archivedBy?: Maybe<OrderBy>;
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
@@ -291,6 +311,8 @@ export type ArticlesMaxOrderBy = {
 /** aggregate min on columns */
 export type ArticlesMinFields = {
   __typename?: 'articles_min_fields';
+  archivedAt?: Maybe<Scalars['timestamptz']>;
+  archivedBy?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
@@ -302,6 +324,8 @@ export type ArticlesMinFields = {
 
 /** order by min() on columns of table "articles" */
 export type ArticlesMinOrderBy = {
+  archivedAt?: Maybe<OrderBy>;
+  archivedBy?: Maybe<OrderBy>;
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
@@ -335,6 +359,10 @@ export type ArticlesOnConflict = {
 
 /** ordering options when selecting data from "articles" */
 export type ArticlesOrderBy = {
+  archived?: Maybe<OrderBy>;
+  archivedAt?: Maybe<OrderBy>;
+  archivedBy?: Maybe<OrderBy>;
+  archivedUser?: Maybe<UsersOrderBy>;
   articles_aggregate?: Maybe<ArticlesAggregateOrderBy>;
   articles_user_activities_aggregate?: Maybe<ArticlesUserActivityAggregateOrderBy>;
   blocks_aggregate?: Maybe<BlocksAggregateOrderBy>;
@@ -357,6 +385,12 @@ export type ArticlesPkColumnsInput = {
 /** select columns of table "articles" */
 export enum ArticlesSelectColumn {
   /** column name */
+  Archived = 'archived',
+  /** column name */
+  ArchivedAt = 'archivedAt',
+  /** column name */
+  ArchivedBy = 'archivedBy',
+  /** column name */
   CreatedAt = 'createdAt',
   /** column name */
   Id = 'id',
@@ -374,6 +408,9 @@ export enum ArticlesSelectColumn {
 
 /** input type for updating data in table "articles" */
 export type ArticlesSetInput = {
+  archived?: Maybe<Scalars['Boolean']>;
+  archivedAt?: Maybe<Scalars['timestamptz']>;
+  archivedBy?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
@@ -386,6 +423,7 @@ export type ArticlesSetInput = {
 /** aggregate stddev on columns */
 export type ArticlesStddevFields = {
   __typename?: 'articles_stddev_fields';
+  archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
@@ -393,6 +431,7 @@ export type ArticlesStddevFields = {
 
 /** order by stddev() on columns of table "articles" */
 export type ArticlesStddevOrderBy = {
+  archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
@@ -401,6 +440,7 @@ export type ArticlesStddevOrderBy = {
 /** aggregate stddev_pop on columns */
 export type ArticlesStddevPopFields = {
   __typename?: 'articles_stddev_pop_fields';
+  archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
@@ -408,6 +448,7 @@ export type ArticlesStddevPopFields = {
 
 /** order by stddev_pop() on columns of table "articles" */
 export type ArticlesStddevPopOrderBy = {
+  archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
@@ -416,6 +457,7 @@ export type ArticlesStddevPopOrderBy = {
 /** aggregate stddev_samp on columns */
 export type ArticlesStddevSampFields = {
   __typename?: 'articles_stddev_samp_fields';
+  archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
@@ -423,6 +465,7 @@ export type ArticlesStddevSampFields = {
 
 /** order by stddev_samp() on columns of table "articles" */
 export type ArticlesStddevSampOrderBy = {
+  archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
@@ -431,6 +474,7 @@ export type ArticlesStddevSampOrderBy = {
 /** aggregate sum on columns */
 export type ArticlesSumFields = {
   __typename?: 'articles_sum_fields';
+  archivedBy?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
   projectId?: Maybe<Scalars['Int']>;
@@ -438,6 +482,7 @@ export type ArticlesSumFields = {
 
 /** order by sum() on columns of table "articles" */
 export type ArticlesSumOrderBy = {
+  archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
@@ -445,6 +490,12 @@ export type ArticlesSumOrderBy = {
 
 /** update columns of table "articles" */
 export enum ArticlesUpdateColumn {
+  /** column name */
+  Archived = 'archived',
+  /** column name */
+  ArchivedAt = 'archivedAt',
+  /** column name */
+  ArchivedBy = 'archivedBy',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
@@ -800,6 +851,7 @@ export type ArticlesUserActivityVarianceOrderBy = {
 /** aggregate var_pop on columns */
 export type ArticlesVarPopFields = {
   __typename?: 'articles_var_pop_fields';
+  archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
@@ -807,6 +859,7 @@ export type ArticlesVarPopFields = {
 
 /** order by var_pop() on columns of table "articles" */
 export type ArticlesVarPopOrderBy = {
+  archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
@@ -815,6 +868,7 @@ export type ArticlesVarPopOrderBy = {
 /** aggregate var_samp on columns */
 export type ArticlesVarSampFields = {
   __typename?: 'articles_var_samp_fields';
+  archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
@@ -822,6 +876,7 @@ export type ArticlesVarSampFields = {
 
 /** order by var_samp() on columns of table "articles" */
 export type ArticlesVarSampOrderBy = {
+  archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
@@ -830,6 +885,7 @@ export type ArticlesVarSampOrderBy = {
 /** aggregate variance on columns */
 export type ArticlesVarianceFields = {
   __typename?: 'articles_variance_fields';
+  archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
@@ -837,6 +893,7 @@ export type ArticlesVarianceFields = {
 
 /** order by variance() on columns of table "articles" */
 export type ArticlesVarianceOrderBy = {
+  archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
@@ -5499,6 +5556,8 @@ export type UserActivitiesVarianceOrderBy = {
 /** columns and relationships of "users" */
 export type Users = {
   __typename?: 'users';
+  /** An object relationship */
+  archives?: Maybe<Articles>;
   /** An array relationship */
   articles_user_activities: Array<ArticlesUserActivity>;
   /** An aggregated array relationship */
@@ -5626,6 +5685,7 @@ export type UsersBoolExp = {
   _and?: Maybe<Array<Maybe<UsersBoolExp>>>;
   _not?: Maybe<UsersBoolExp>;
   _or?: Maybe<Array<Maybe<UsersBoolExp>>>;
+  archives?: Maybe<ArticlesBoolExp>;
   articles_user_activities?: Maybe<ArticlesUserActivityBoolExp>;
   editor_activities?: Maybe<UserActivitiesBoolExp>;
   email?: Maybe<StringComparisonExp>;
@@ -5653,6 +5713,7 @@ export type UsersIncInput = {
 
 /** input type for inserting data into table "users" */
 export type UsersInsertInput = {
+  archives?: Maybe<ArticlesObjRelInsertInput>;
   articles_user_activities?: Maybe<ArticlesUserActivityArrRelInsertInput>;
   editor_activities?: Maybe<UserActivitiesArrRelInsertInput>;
   email?: Maybe<Scalars['String']>;
@@ -5730,6 +5791,7 @@ export type UsersOnConflict = {
 
 /** ordering options when selecting data from "users" */
 export type UsersOrderBy = {
+  archives?: Maybe<ArticlesOrderBy>;
   articles_user_activities_aggregate?: Maybe<ArticlesUserActivityAggregateOrderBy>;
   editor_activities_aggregate?: Maybe<UserActivitiesAggregateOrderBy>;
   email?: Maybe<OrderBy>;
@@ -5881,7 +5943,7 @@ export type UsersVarianceOrderBy = {
 
 export type ArticleFragment = (
   { __typename?: 'articles' }
-  & Pick<Articles, 'id' | 'parentId' | 'projectId' | 'slug' | 'title' | 'updatedAt' | 'createdAt'>
+  & Pick<Articles, 'id' | 'parentId' | 'projectId' | 'slug' | 'title' | 'updatedAt' | 'createdAt' | 'archived' | 'archivedAt'>
 );
 
 export type CreateArticleMutationVariables = Exact<{
@@ -6104,6 +6166,9 @@ export type ProjectFragment = (
   & { articles: Array<(
     { __typename?: 'articles' }
     & ArticleFragment
+  )>, archivedArticles: Array<(
+    { __typename?: 'articles' }
+    & ArticleFragment
   )> }
 );
 
@@ -6130,6 +6195,8 @@ export const ArticleFragmentDoc = gql`
   title
   updatedAt
   createdAt
+  archived
+  archivedAt
 }
     `;
 export const ProjectFragmentDoc = gql`
@@ -6138,7 +6205,10 @@ export const ProjectFragmentDoc = gql`
   name
   image
   slug
-  articles {
+  articles: articles(where: {archived: {_eq: false}}) {
+    ...Article
+  }
+  archivedArticles: articles(where: {archived: {_eq: true}}) {
     ...Article
   }
 }
@@ -6321,7 +6391,7 @@ export const UpsertArticlesDocument = gql`
     mutation UpsertArticles($objects: [articles_insert_input!]!) {
   insert_articles(
     objects: $objects
-    on_conflict: {constraint: articles_pkey, update_columns: [parentId, projectId, slug, title]}
+    on_conflict: {constraint: articles_pkey, update_columns: [parentId, projectId, slug, title, archived, archivedAt]}
   ) {
     returning {
       ...Article
