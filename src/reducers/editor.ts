@@ -1,6 +1,6 @@
 import { IAction } from 'actions'
 import { types } from 'actions/editor'
-import { Block } from 'components/types'
+import { Block } from 'components/editor/blocks/types'
 
 export interface IEditorState {
   textControlOpen: boolean

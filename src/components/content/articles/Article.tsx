@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Block, BlockType, BlockDataText, BlockDataImage } from 'components/types'
+import { Block, BlockType, BlockDataText, BlockDataImage } from 'components/editor/blocks/types'
 
 import Text from './blocks/Text'
 import Image from './blocks/Image'
@@ -45,9 +45,7 @@ class Article extends React.Component<IProps> {
 
   render() {
     const { blocks } = this.props
-    return (
-      <div className={styles.container}>{blocks.map((item, i) => this.renderBlock(item, i))}</div>
-    )
+    return <div className={styles.container}>{blocks.map((item, i) => this.renderBlock(item, i))}</div>
   }
 }
 

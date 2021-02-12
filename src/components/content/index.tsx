@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Block } from 'components/types'
+import { Block } from 'components/editor/blocks/types'
 import styles from './Content.module.scss'
 import Article from './articles/Article'
 

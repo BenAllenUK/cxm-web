@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef, useState } from 'react'
-import { Block, BlockDataText, BlockType } from 'components/types'
+import { Block, BlockDataText, BlockType } from 'components/editor/blocks/types'
 import { BlockTypeProperties, DEFAULT_BLOCK_START } from './blocks'
 import Content from './Content'
 import styles from './Editor.module.scss'

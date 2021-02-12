@@ -1,4 +1,4 @@
-import { BlockDataText, BlockType } from 'components/types'
+import { BlockDataText, BlockType } from 'components/editor/blocks/types'
 import styles from './Text.module.scss'
 
 export default function Text({ content }: IProps) {

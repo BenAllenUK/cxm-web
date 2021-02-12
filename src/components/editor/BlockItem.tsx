@@ -2,8 +2,9 @@ import { memo, useCallback } from 'react'
 
 import Divider from 'components/editor/blocks/Divider'
 import Image from 'components/editor/blocks/Image'
-import { Block, BlockData, BlockDataImage, BlockDataText, BlockType } from 'components/types'
+import { Block, BlockData, BlockDataImage, BlockDataListBullet, BlockDataText, BlockType } from 'components/editor/blocks/types'
 import ControlledText from './blocks/ControlledText'
+import ControlledList from './blocks/ControlledList'
 
 const BlockItem = ({
   blockControlOpen,
@@ -22,8 +23,13 @@ const BlockItem = ({
     onNew(index)
   }
 
-  const _onUpdate = (value: string) => {
+  // Remove to payload update
+  const _onTextUpdate = (value: string) => {
     onUpdate(index, { value } as BlockDataText) // TODO: change to any type
+  }
+
+  const _onListUpdate = (items: string[]) => {
+    onUpdate(index, { items } as BlockDataListBullet) // TODO: change to any type
   }
 
   const _onDelete = () => {
@@ -62,7 +68,7 @@ const BlockItem = ({
           filteringMode={blockControlOpen}
           onTextChange={_onTextChange}
           onNew={_onNew}
-          onUpdate={_onUpdate}
+          onUpdate={_onTextUpdate}
           onDelete={_onDelete}
           onFocus={_onFocus}
           onBlur={_onBlur}
@@ -75,6 +81,26 @@ const BlockItem = ({
     }
     case BlockType.DIVIDER:
       return <Divider />
+    case BlockType.LIST_BULLET:
+    case BlockType.LIST_CHECK:
+    case BlockType.LIST_NUMBER:
+      const initialPayload = payload as BlockDataListBullet
+
+      return (
+        <ControlledList
+          focus={focus}
+          tabIndex={index + 1}
+          initialPayload={initialPayload}
+          type={type}
+          filteringMode={blockControlOpen}
+          onTextChange={_onTextChange}
+          onNew={_onNew}
+          onUpdate={_onListUpdate}
+          onDelete={_onDelete}
+          onFocus={_onFocus}
+          onBlur={_onBlur}
+        />
+      )
     default:
       return <div />
   }

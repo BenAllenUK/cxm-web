@@ -29,7 +29,7 @@ import { createUpsertMutationParams, deleteMutationParams } from 'queries/blocks
 import { useRouter } from 'next/router'
 import { DEFAULT_ARTICLE } from 'components/editor/blocks'
 import { useEditor } from 'components/editor/Provider'
-import { Block } from 'components/types'
+import { Block } from 'components/editor/blocks/types'
 import debounce from 'lodash/debounce'
 import Navbar from 'components/navigation/navbar'
 

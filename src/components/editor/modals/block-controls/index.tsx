@@ -1,6 +1,6 @@
 import { createContext, memo, ReactNode, RefObject, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
-import { BlockType } from '../../../types'
+import { BlockType } from '../../blocks/types'
 
 import OptionControls, { IOptionElements, IOptionHeader, OptionType } from 'components/common/option-controls'
 import { BlockTypeProperties } from '../../blocks'

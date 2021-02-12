@@ -6,13 +6,14 @@ export enum BlockType {
   H3,
   LIST_BULLET,
   // TABLE_INLINE = 'TABLE-INLINE',
-  // LIST_CHECK = 'LIST_CHECK',
-  // LIST_NUMBER = 'LIST_NUMBER',
+  LIST_CHECK,
+  LIST_NUMBER,
   QUOTE,
   DIVIDER,
   CALLOUT,
   // VIDEO = 'VIDEO',
   CODE,
+
   // TWEET = 'TWEET',
   // GOOGLE_MAPS = 'GOOGLE-MAPS',
 }
@@ -74,12 +75,11 @@ export type BlockDataTableInline = {
 }
 
 export type BlockDataCheckBullet = {
-  items: string[]
-  selected: boolean[]
+  items: { value: string; selected: boolean }[]
 }
 
 export type BlockDataListBullet = {
-  items: string[]
+  items: { value: string }[]
 }
 
 export type BlockDataNumberBullet = BlockDataListBullet

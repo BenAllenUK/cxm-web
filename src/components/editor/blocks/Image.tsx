@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { BlockDataImage } from '../../types'
+import { BlockDataImage } from './types'
 import styles from './Image.module.scss'
 import ImageIcon from 'images/icons/image.svg'
 import { default as NextImage } from 'next/image'
@@ -17,13 +17,7 @@ export const Image = ({ content }: IProps) => {
 
   return (
     <div className={styles.container}>
-      <NextImage
-        layout="intrinsic"
-        width={600}
-        height={400}
-        objectFit={'contain'}
-        src={content.source}
-      />
+      <NextImage layout="intrinsic" width={600} height={400} objectFit={'contain'} src={content.source} />
     </div>
   )
 }

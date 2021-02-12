@@ -25,7 +25,7 @@ const Header = ({ filterText, onValueChange, onResetValue }: IHeaderProps) => {
 
       <div className={styles.inputArea}>
         <TextInput
-          innerRef={inputRef}
+          ref={inputRef}
           className={styles.inputAreaText}
           blurredPlaceholder={'Start search...'}
           html={filterText || ''}

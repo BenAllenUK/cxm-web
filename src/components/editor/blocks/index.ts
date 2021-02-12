@@ -1,4 +1,4 @@
-import { BlockData, BlockDataText, BlockType, BlockDataListBullet, BlockDataImage, Block } from '../../types'
+import { BlockData, BlockDataText, BlockType, BlockDataListBullet, BlockDataImage, Block } from './types'
 
 export const BLOCK_CONTAINER_VERTICAL_PADDING = 10
 
@@ -40,7 +40,6 @@ export function isBlockEmpty(block: Block) {
     case BlockType.QUOTE:
       return !(block.payload as BlockDataText).value
     case BlockType.LIST_BULLET:
-      return false
       return (block.payload as BlockDataListBullet).items.length == 0
     case BlockType.IMAGE:
       return false
@@ -97,6 +96,22 @@ export const BlockTypeProperties = {
     id: BlockType.LIST_BULLET,
     title: 'Bulleted list',
     subtitle: 'Create a simple bullet list.',
+    image: '/preview/list_bullet.png',
+    initialHeight: 19,
+    isEditable: true,
+  },
+  [BlockType.LIST_CHECK]: {
+    id: BlockType.LIST_CHECK,
+    title: 'Checkbox list',
+    subtitle: 'Create a simple checkbox list.',
+    image: '/preview/list_bullet.png',
+    initialHeight: 19,
+    isEditable: true,
+  },
+  [BlockType.LIST_NUMBER]: {
+    id: BlockType.LIST_NUMBER,
+    title: 'Numbered list',
+    subtitle: 'Create a simple numbered list.',
     image: '/preview/list_bullet.png',
     initialHeight: 19,
     isEditable: true,

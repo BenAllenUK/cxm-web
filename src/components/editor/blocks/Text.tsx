@@ -1,7 +1,7 @@
 import { memo, RefObject, useCallback, useEffect } from 'react'
 
 import TextInput, { TextInputEvent } from 'components/common/TextInput'
-import { BlockData, BlockDataText, BlockType, Block } from '../../types'
+import { BlockData, BlockDataText, BlockType, Block } from './types'
 
 import { BlockTypeProperties } from '.'
 import styles from './Text.module.scss'
@@ -68,7 +68,7 @@ const Text = ({ value, type, filteringMode, tabIndex, innerRef, onFocus, onBlur,
         focusedPlaceholder={focusedPlaceholder}
         blurredPlaceholder={blurredPlaceholder}
         tabIndex={tabIndex}
-        innerRef={innerRef}
+        ref={innerRef}
         html={value || ''}
         onChange={_onValueChange}
         onFocus={onFocus}

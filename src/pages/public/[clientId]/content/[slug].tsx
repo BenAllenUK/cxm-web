@@ -1,4 +1,4 @@
-import { BlockType } from 'components/types'
+import { BlockType } from 'components/editor/blocks/types'
 import Content from 'components/content'
 import { initialState } from 'reducers'
 import { createGraphQLClient } from 'config/graphql'

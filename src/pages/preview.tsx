@@ -1,4 +1,4 @@
-import { BlockType } from 'components/types'
+import { BlockType } from 'components/editor/blocks/types'
 import Blog from 'components/content'
 import { initialState } from 'reducers'
 

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { sanitizeHtml } from 'utils/filter'
 import styles from './TextInput.module.scss'
+import { mergeRefs } from 'utils/refs'
 
 function normalizeHtml(str: string): string {
   return str && str.replace(/&nbsp;|\u202F|\u00A0/g, ' ')
@@ -28,12 +29,14 @@ function replaceCaret(el: HTMLElement) {
 /**
  * A simple component for an html element with editable contents.
  */
-export default class TextInput extends React.Component<Props, State> {
+class TextInput extends React.Component<ITextInputProps, State> {
   lastHtml: string = this.props.html
 
   state = {
     isFocused: false,
   }
+
+  ref = React.createRef<HTMLDivElement>()
 
   onFocus = (e: React.FocusEvent<HTMLDivElement>) => {
     const { onFocus } = this.props
@@ -84,7 +87,7 @@ export default class TextInput extends React.Component<Props, State> {
         className={styles.textInputContainer}
         {...props}
         placeholder={isFocused ? focusedPlaceholderText : blurredPlaceholderText}
-        ref={innerRef}
+        ref={mergeRefs(this.ref, innerRef)}
         onPaste={this.onPaste}
         onInput={this.emitChange}
         onFocus={this.onFocus}
@@ -97,9 +100,9 @@ export default class TextInput extends React.Component<Props, State> {
     )
   }
 
-  shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+  shouldComponentUpdate(nextProps: ITextInputProps, nextState: State): boolean {
     const { props, state } = this
-    const el = props.innerRef?.current
+    const el = this.ref?.current
 
     // We need not rerender if the change of props simply reflects the user's edits.
     // Rerendering in this case would make the cursor/caret jump
@@ -129,20 +132,19 @@ export default class TextInput extends React.Component<Props, State> {
   }
 
   componentDidUpdate() {
-    const { innerRef } = this.props
-    if (!innerRef?.current) return
+    if (!this.ref?.current) return
 
     // Perhaps React (whose VDOM gets outdated because we often prevent
     // rerendering) did not update the DOM. So we update it manually now.
-    if (this.props.html !== innerRef.current.innerHTML) {
-      innerRef.current.innerHTML = this.props.html
+    if (this.props.html !== this.ref.current.innerHTML) {
+      this.ref.current.innerHTML = this.props.html
     }
     this.lastHtml = this.props.html
-    replaceCaret(innerRef.current)
+    replaceCaret(this.ref.current)
   }
 
   emitChange = (originalEvt: React.SyntheticEvent<any>) => {
-    const el = this.props.innerRef?.current
+    const el = this.ref?.current
     if (!el) return
 
     const html = el.innerHTML
@@ -164,10 +166,9 @@ export type TextInputEvent = React.SyntheticEvent<any, Event> & { target: { valu
 type Modify<T, R> = Pick<T, Exclude<keyof T, keyof R>> & R
 type DivProps = Modify<JSX.IntrinsicElements['div'], { onChange: (event: TextInputEvent) => void }>
 
-export interface Props extends DivProps {
+export interface IBaseProps extends DivProps {
   focusedPlaceholder?: string
   blurredPlaceholder?: string
-  innerRef: React.RefObject<HTMLDivElement>
   html: string
   disabled?: boolean
   className?: string
@@ -175,6 +176,12 @@ export interface Props extends DivProps {
   tabIndex?: number
 }
 
+interface ITextInputProps extends IBaseProps {
+  innerRef: React.ForwardedRef<HTMLDivElement>
+}
+
 export interface State {
   isFocused: boolean
 }
+
+export default React.forwardRef<HTMLDivElement, any>((props, ref) => <TextInput innerRef={ref} {...props} />)

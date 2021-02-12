@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, memo, useCallback } from 'react'
 import Text from 'components/editor/blocks/Text'
-import { BlockType } from 'components/types'
+import { BlockType } from 'components/editor/blocks/types'
 import styles from './Text.module.scss'
 
 const ControlledText = ({

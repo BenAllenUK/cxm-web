@@ -1,4 +1,14 @@
-import { EventHandler, RefObject, useCallback, useEffect, useReducer, useRef, useState } from 'react'
+import {
+  EventHandler,
+  ForwardedRef,
+  MutableRefObject,
+  RefObject,
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from 'react'
 
 // https://usehooks.com/
 
@@ -174,7 +184,7 @@ export function useLocalStorage(key: string, initialValue: object | string) {
 
 export function useKeyDown<T extends Element>(
   targetKey: string,
-  ref: RefObject<T>,
+  ref: RefObject<T> | ForwardedRef<T>,
   handler: (e: KeyboardEvent) => void,
   dependents: any[] = []
 ) {
@@ -186,13 +196,14 @@ export function useKeyDown<T extends Element>(
   }
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current?.addEventListener('keydown', downHandler)
+    const r = ref as MutableRefObject<T> | null
+    if (r?.current) {
+      r.current?.addEventListener('keydown', downHandler)
     }
 
     return () => {
-      if (ref.current) {
-        ref.current?.removeEventListener('keydown', downHandler)
+      if (r?.current) {
+        r.current?.removeEventListener('keydown', downHandler)
       }
     }
   }, dependents)
@@ -232,7 +243,7 @@ export function useWindowKeyUp(targetKey: string, handler: (e: KeyboardEvent) =>
 
 export function useKeyUp<T extends Element>(
   targetKey: string,
-  ref: RefObject<T>,
+  ref: RefObject<T> | ForwardedRef<T>,
   handler: (e: KeyboardEvent) => void,
   dependents: any[] = []
 ) {
@@ -244,12 +255,13 @@ export function useKeyUp<T extends Element>(
   }
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current?.addEventListener('keyup', upHandler)
+    const r = ref as MutableRefObject<T> | null
+    if (r?.current) {
+      r.current?.addEventListener('keyup', upHandler)
     }
     return () => {
-      if (ref.current) {
-        ref.current?.removeEventListener('keyup', upHandler)
+      if (r?.current) {
+        r.current?.removeEventListener('keyup', upHandler)
       }
     }
   }, dependents)

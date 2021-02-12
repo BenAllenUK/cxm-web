@@ -1,4 +1,4 @@
-import { BlockType } from 'components/types'
+import { BlockType } from 'components/editor/blocks/types'
 import { useState, useContext, memo, useCallback, createContext, ReactNode, RefObject, useRef } from 'react'
 
 import BlockControls from './block-controls'

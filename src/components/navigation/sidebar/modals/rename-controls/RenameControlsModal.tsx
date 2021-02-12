@@ -40,12 +40,7 @@ const RenameControlsModal = ({ value, position, onDismiss, onTextChange, onSubmi
 
   return (
     <div ref={ref} className={styles.container} style={{ left: position.x, top: position.y }}>
-      <TextInput
-        className={styles.textInput}
-        html={value || ''}
-        innerRef={inputRef}
-        onChange={(e) => onTextChange(e.target.value)}
-      />
+      <TextInput className={styles.textInput} html={value || ''} ref={inputRef} onChange={(e) => onTextChange(e.target.value)} />
     </div>
   )
 }
