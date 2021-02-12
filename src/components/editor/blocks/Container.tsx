@@ -36,7 +36,7 @@ const Container = ({ index, enableHandle, initialHeight, onDoubleClick, onClick,
         onClick={_onClick}
         onDoubleClick={_onDoubleClick}
       >
-        <Controls initialHeight={initialHeight} isVisible={isVisible} onAddClick={_onAddClick} />
+        <Controls initialHeight={initialHeight} visible={isVisible} onAddClick={_onAddClick} />
         {children}
       </div>
     </div>

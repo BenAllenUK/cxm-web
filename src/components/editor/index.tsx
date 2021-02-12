@@ -5,7 +5,6 @@ import Content from './Content'
 import styles from './Editor.module.scss'
 import Modals from './modals'
 import Header from './header'
-import PageControls from 'components/editor/modals/page-controls'
 
 function Editor({ id, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IProps) {
   const [focusIndex, setFocusIndex] = useState(-1)
@@ -68,6 +67,7 @@ function Editor({ id, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IP
         return item
       })
 
+      onBlocksUpsert(existingItems)
       return existingItems
     })
   }

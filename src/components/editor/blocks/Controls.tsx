@@ -20,9 +20,9 @@ const DragButton = memo(
   ))
 )
 
-const Controls = ({ initialHeight, isVisible, onAddClick }: IProps) => {
+const Controls = ({ initialHeight, visible, onAddClick }: IProps) => {
   return (
-    <div className={styles.controls} style={{ height: initialHeight, visibility: isVisible ? 'visible' : 'hidden' }}>
+    <div className={styles.controls} style={{ height: initialHeight, visibility: visible ? 'visible' : 'hidden' }}>
       <AddButton data-tip={'Click to add a block below'} data-for="editor" onClick={onAddClick} />
       <DragButton />
     </div>
@@ -31,7 +31,7 @@ const Controls = ({ initialHeight, isVisible, onAddClick }: IProps) => {
 
 interface IProps {
   initialHeight: number
-  isVisible?: boolean
+  visible?: boolean
   onAddClick: () => void
 }
 

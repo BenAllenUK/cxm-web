@@ -1,5 +1,5 @@
 import { useRef, useCallback, useEffect, useState, memo, createRef } from 'react'
-import { SortableContainer, SortableElement, SortEvent, SortStart } from 'react-sortable-hoc'
+import { SortableContainer, SortableElement, SortEnd, SortEvent, SortStart } from 'react-sortable-hoc'
 import { Tooltip } from 'components/tooltip'
 import { BlockTypeProperties, BLOCK_CONTAINER_VERTICAL_PADDING, DEFAULT_BLOCK, getBlockOptions, isBlockEmpty } from './blocks'
 import { BlockData, BlockType, BlockDataText, BlockDataImage, Block } from '../types'
@@ -160,46 +160,51 @@ const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIn
     setFilterText(value)
   }
 
+  const _onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
+    const [block] = blocks.filter((item) => item.position === oldIndex)
+    onBlocksUpsert({ ...block, position: newIndex })
+  }
+
   return (
     <div className={styles.body} onClick={_onBodyClick}>
       <div onClick={(e) => e.stopPropagation()}>
-        {/* onSortStart={this.onSortStart} onSortEnd={this.onSortEnd} */}
-        <List useDragHandle={true}>
+        <List onSortEnd={_onSortEnd} useDragHandle={true}>
           {blocks
             .sort((a: Block, b: Block) => a.position - b.position)
             .map((item, i) => {
               return (
-                <Container
-                  key={`${item.id}-${item.position}`} // very important
-                  index={item.position}
-                  initialHeight={BlockTypeProperties[item.type].initialHeight}
-                  onClick={_onBlockClick}
-                  onAddClick={_onAddClick}
-                  onDoubleClick={_onBlockDoubleClick}
-                  enableHandle={!modalBlockEnabled}
-                >
-                  <div
-                    ref={(_ref: any) => {
-                      if (_ref) {
-                        blockRefs.current[item.position] = _ref
-                      }
-                    }}
+                <Item index={item.position} key={`${item.id}-${item.position}`}>
+                  <Container
+                    index={item.position}
+                    initialHeight={BlockTypeProperties[item.type].initialHeight}
+                    onClick={_onBlockClick}
+                    onAddClick={_onAddClick}
+                    onDoubleClick={_onBlockDoubleClick}
+                    enableHandle={!modalBlockEnabled}
                   >
-                    <BlockItem
-                      index={item.position}
-                      focus={focusIndex === item.position}
-                      blockControlOpen={modalBlockEnabled}
-                      type={item.type}
-                      payload={item.payload}
-                      onTextChange={_onTextChange}
-                      onNew={_onCreateBlock}
-                      onUpdate={_onUpdateBlock}
-                      onDelete={_onDeleteBlock}
-                      onFocus={_onBlockFocus}
-                      onBlur={_onBlockBlur}
-                    />
-                  </div>
-                </Container>
+                    <div
+                      ref={(_ref: any) => {
+                        if (_ref) {
+                          blockRefs.current[item.position] = _ref
+                        }
+                      }}
+                    >
+                      <BlockItem
+                        index={item.position}
+                        focus={focusIndex === item.position}
+                        blockControlOpen={modalBlockEnabled}
+                        type={item.type}
+                        payload={item.payload}
+                        onTextChange={_onTextChange}
+                        onNew={_onCreateBlock}
+                        onUpdate={_onUpdateBlock}
+                        onDelete={_onDeleteBlock}
+                        onFocus={_onBlockFocus}
+                        onBlur={_onBlockBlur}
+                      />
+                    </div>
+                  </Container>
+                </Item>
               )
             })}
         </List>
@@ -211,10 +216,10 @@ const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIn
 
 const StyledList = ({ children }: any) => <div className={styles.list}>{children}</div>
 
-const ItemContainer = ({ children }: any) => <div>{children}</div>
+const ItemContainer = ({ children }: any) => children
 
-const List = StyledList //SortableContainer(StyledList)
-const Item = ItemContainer // SortableElement(ItemContainer)
+const List = SortableContainer(StyledList)
+const Item = SortableElement(ItemContainer)
 
 interface IProps {
   focusIndex: number
