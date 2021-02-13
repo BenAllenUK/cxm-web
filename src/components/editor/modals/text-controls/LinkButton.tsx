@@ -1,5 +1,5 @@
 import React, { MouseEvent } from 'react'
-import styles from './TextControls.module.scss'
+import styles from './TextControlUncontrolled.module.scss'
 
 class LinkButton extends React.Component<IProps> {
   render() {
@@ -9,11 +9,7 @@ class LinkButton extends React.Component<IProps> {
         className={styles.linkButton}
         onMouseDown={(evt: MouseEvent<HTMLDivElement>) => {
           evt.preventDefault()
-          document.execCommand(
-            'createLink',
-            false,
-            'https://github.com/lovasoa/react-contenteditable'
-          )
+          document.execCommand('createLink', false, 'https://github.com/lovasoa/react-contenteditable')
         }}
       >
         Link

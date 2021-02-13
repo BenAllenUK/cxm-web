@@ -11,8 +11,8 @@ import Container from './blocks/Container'
 
 import BlockItem from './BlockItem'
 import { useWindowKeyUp } from 'utils/hooks'
-import { useModals as useBlockModals } from './modals/block-controls'
-import { useModals as useTextModals } from './modals/text-controls'
+import { useBlockControlModal } from './modals/block-controls'
+import { useTextControlModal } from './modals/text-controls'
 
 const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex }: IProps) => {
   const blockRefs = useRef<HTMLDivElement[]>([])
@@ -23,9 +23,9 @@ const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIn
     showControls: showBlockControls,
     hideControls: hideBlockControls,
     setFilterText,
-  } = useBlockModals()
+  } = useBlockControlModal()
 
-  const { showControls: showTextControls, hideControls: hideTextControls } = useTextModals()
+  const { showControls: showTextControls, hideControls: hideTextControls } = useTextControlModal()
 
   useWindowKeyUp('Tab', () => {
     hideBlockControls()

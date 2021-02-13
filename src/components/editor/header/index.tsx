@@ -6,12 +6,12 @@ import Button from 'components/common/Button'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import MoreIcon from 'images/icons/more.svg'
 import styles from './Header.module.scss'
-import { usePageControlModals } from '../modals/page-controls'
+import { usePageControlModal } from '../modals/page-controls'
 import { useRef } from 'react'
 import Colors from 'config/colors'
 
 export const Header = ({ loading }: IProps) => {
-  const { showControls } = usePageControlModals()
+  const { showControls } = usePageControlModal()
 
   const ref = useRef<HTMLDivElement>(null)
 

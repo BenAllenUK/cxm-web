@@ -1,21 +1,15 @@
-import { createContext, memo, ReactNode, RefObject, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
+import BlockControlUncontrolled from './BlockControlUncontrolled'
 
-import { BlockType } from '../../blocks/types'
-
-import OptionControls, { IOptionElements, IOptionHeader, OptionType } from 'components/common/option-controls'
-import { BlockTypeProperties } from '../../blocks'
-import Image from 'next/image'
-
-import styles from './BlockControls.module.scss'
-
-interface State {
+interface Context {
   index: number
-  enabled: boolean
   filterText: string | null
+
+  enabled: boolean
   position: { x: number; y: number } | null
 }
 
-interface Context extends State {
+interface ContextActions extends Context {
   showControls: (index: number, position: { x: number; y: number }) => void
   hideControls: () => void
   setFilterText: (value: string) => void
@@ -23,26 +17,23 @@ interface Context extends State {
 
 const initialState = {
   index: -1,
-  enabled: false,
   filterText: null,
+  enabled: false,
   position: null,
-}
-const initialContextState = {
-  ...initialState,
   showControls: () => {},
   hideControls: () => {},
   setFilterText: () => {},
 }
 
-const Context = createContext<Context>(initialContextState)
+const Context = createContext<ContextActions>(initialState)
 
-export const useModals = () => useContext(Context)
+export const useBlockControlModal = () => useContext(Context)
 
-const BlockControls = ({ rootRef, children, onBlockItemClick }: IProps) => {
-  const [state, setState] = useState<State>(initialContextState)
+const Provider = ({ children, rootRef }: { children: ReactNode; rootRef: RefObject<HTMLDivElement> }) => {
+  const [state, setState] = useState<Context>(initialState)
 
   const showControls = (index: number, position: { x: number; y: number }) => {
-    if (!position || !rootRef?.current) {
+    if (!position || !rootRef.current) {
       return
     }
 
@@ -61,52 +52,39 @@ const BlockControls = ({ rootRef, children, onBlockItemClick }: IProps) => {
     setState((state) => ({ ...state, filterText }))
   }
 
-  const hideControls = () => {
-    setState({
-      enabled: false,
-      index: -1,
-      filterText: null,
-      position: null,
-    })
-  }
+  const hideControls = useCallback(() => {
+    setState(initialState)
+  }, [])
+
+  return <Context.Provider value={{ ...state, showControls, hideControls, setFilterText }}>{children}</Context.Provider>
+}
+
+const Component = ({ onBlockItemClick, ...props }: IProps) => {
+  const { index, filterText, enabled, position, hideControls } = useBlockControlModal()
 
   const _onClick = (key: number) => {
-    onBlockItemClick(state.index, key)
-  }
-
-  let items: IOptionElements[] = Object.values(BlockTypeProperties).map((item, i) => ({
-    id: item.id,
-    icon: <Image className={styles.image} width={46} height={46} src={item.image} />,
-    title: item.title,
-    subtitle: item.subtitle,
-    type: OptionType.Button,
-  }))
-
-  if (state.filterText) {
-    const formattedFilterText = state.filterText.toLowerCase().replace('/', '')
-    items = items.filter((item) => item.title.toLowerCase().indexOf(formattedFilterText) > -1)
+    onBlockItemClick(index, key)
   }
 
   return (
-    <Context.Provider value={{ ...state, showControls, hideControls, setFilterText }}>
-      {state.enabled && state.position && items.length > 0 && (
-        <OptionControls
-          sections={[{ items: items, title: 'Basic Blocks' }]}
-          style={{ left: state.position.x, top: state.position.y }}
-          iconClassName={styles.icon}
-          onItemClick={_onClick}
+    <>
+      {enabled && position && (
+        <BlockControlUncontrolled
+          filterText={filterText}
+          style={{ left: position.x, top: position.y }}
           onDismiss={hideControls}
+          onClick={_onClick}
+          {...props}
         />
       )}
-      {children}
-    </Context.Provider>
+    </>
   )
 }
 
-interface IProps {
-  rootRef: RefObject<HTMLDivElement>
-  children: ReactNode
-  onBlockItemClick: (index: number, key: BlockType) => void
-}
+const BlockControl = { Provider, Component }
 
-export default BlockControls
+export default BlockControl
+
+interface IProps {
+  onBlockItemClick: (index: number, key: number) => void
+}

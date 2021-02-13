@@ -1,4 +1,4 @@
-import styles from './PageControls.module.scss'
+import styles from './PageControlUncontrolled.module.scss'
 
 const Footer = ({ wordCount, lastEditedName, lastEditedAt }: IProps) => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './TextControls.module.scss'
+import styles from './TextControlUncontrolled.module.scss'
 
 export enum StyleTypes {
   BOLD,

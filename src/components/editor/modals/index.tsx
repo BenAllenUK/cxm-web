@@ -5,16 +5,29 @@ import BlockControls from './block-controls'
 import TextControls from './text-controls'
 import PageControls from './page-controls'
 
-const Modals = ({ children, onBlockItemClick }: IProps) => {
+const ControlledModals = ({ children, onBlockItemClick }: IProps) => {
+  return (
+    <div>
+      <BlockControls.Component onBlockItemClick={onBlockItemClick} />
+      <PageControls.Component onClick={() => {}} />
+      <TextControls.Component />
+      {children}
+    </div>
+  )
+}
+
+const Modals = (props: IProps) => {
   const bodyRef = useRef<HTMLDivElement>(null)
 
   return (
     <div style={{ position: 'relative' }} ref={bodyRef}>
-      <PageControls onClick={() => {}}>
-        <BlockControls rootRef={bodyRef} onBlockItemClick={onBlockItemClick}>
-          <TextControls rootRef={bodyRef}>{children}</TextControls>
-        </BlockControls>
-      </PageControls>
+      <TextControls.Provider rootRef={bodyRef}>
+        <PageControls.Provider rootRef={bodyRef}>
+          <BlockControls.Provider rootRef={bodyRef}>
+            <ControlledModals {...props} />
+          </BlockControls.Provider>
+        </PageControls.Provider>
+      </TextControls.Provider>
     </div>
   )
 }

@@ -1,17 +1,12 @@
-import { createContext, memo, ReactNode, RefObject, useContext, useRef, useState } from 'react'
+import { createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
+import TextControlUncontrolled from './TextControlUncontrolled'
 
-import StyleButton, { StyleTypes } from './StyleButton'
-import LinkButton from './LinkButton'
-
-import styles from './TextControls.module.scss'
-import { useOnClickOutside } from 'utils/hooks'
-
-interface State {
+interface Context {
   enabled: boolean
   position: { x: number; y: number } | null
 }
 
-interface Context extends State {
+interface ContextActions extends Context {
   showControls: (position: { x: number; y: number }) => void
   hideControls: () => void
 }
@@ -19,20 +14,16 @@ interface Context extends State {
 const initialState = {
   enabled: false,
   position: null,
-}
-const initialContextState = {
-  ...initialState,
   showControls: () => {},
   hideControls: () => {},
 }
 
-const Context = createContext<Context>(initialContextState)
+const Context = createContext<ContextActions>(initialState)
 
-export const useModals = () => useContext(Context)
+export const useTextControlModal = () => useContext(Context)
 
-const TextControls = ({ rootRef, children }: IProps) => {
-  const [state, setState] = useState<State>(initialContextState)
-  const ref = useRef<HTMLDivElement>(null)
+const Provider = ({ children, rootRef }: { children: ReactNode; rootRef: RefObject<HTMLDivElement> }) => {
+  const [state, setState] = useState<Context>(initialState)
 
   const showControls = (position: { x: number; y: number }) => {
     if (!position || !rootRef.current) {
@@ -48,50 +39,33 @@ const TextControls = ({ rootRef, children }: IProps) => {
     })
   }
 
-  const hideControls = () => {
-    setState({
-      enabled: false,
-      position: null,
-    })
-  }
+  const hideControls = useCallback(() => {
+    setState(initialState)
+  }, [])
 
-  useOnClickOutside(ref, () => {
-    hideControls()
-  })
+  return <Context.Provider value={{ ...state, showControls, hideControls }}>{children}</Context.Provider>
+}
 
+const Component = (props: IProps) => {
+  const { enabled, position, hideControls } = useTextControlModal()
   return (
-    <Context.Provider value={{ ...state, showControls, hideControls }}>
-      {state.enabled && state.position && (
-        <div
-          ref={ref}
-          className={styles.container}
+    <>
+      {enabled && position && (
+        <TextControlUncontrolled
+          onDismiss={hideControls}
           style={{
-            left: state.position.x,
-            top: state.position.y,
+            left: position.x,
+            top: position.y,
           }}
-        >
-          <StyleButton type={StyleTypes.BOLD} />
-          <StyleButton type={StyleTypes.ITALIC} />
-          <StyleButton type={StyleTypes.UNDERLINE} />
-          <StyleButton type={StyleTypes.STRIKE_THROUGH} />
-          <LinkButton />
-          {/* <StyleButton type="formatBlock" arg="h2" name="heading2" />
-        <StyleButton type="formatBlock" arg="h3" name="heading3" /> */}
-          {/* <StyleButton
-          type="createLink"
-          arg="https://github.com/lovasoa/react-contenteditable"
-          name="hyperlink"
-        /> */}
-        </div>
+          {...props}
+        />
       )}
-      {children}
-    </Context.Provider>
+    </>
   )
 }
 
-interface IProps {
-  rootRef: RefObject<HTMLDivElement>
-  children: ReactNode
-}
+const TextControl = { Provider, Component }
 
-export default memo(TextControls)
+export default TextControl
+
+interface IProps {}

@@ -1,93 +1,5 @@
-import OptionControls, { OptionType, IOptionSections } from 'components/common/option-controls'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faStar, faEdit } from '@fortawesome/free-regular-svg-icons'
-import { faLink, faLock, faLevelUpAlt, faDownload, faUndo } from '@fortawesome/free-solid-svg-icons'
-import { createContext, ReactNode, useCallback, useContext, useState } from 'react'
-import styles from './PageControls.module.scss'
-import Footer from './Footer'
-
-const sections: IOptionSections[] = [
-  {
-    items: [
-      { id: 1, type: OptionType.Switch, title: 'Small text', state: false },
-      { id: 2, type: OptionType.Switch, title: 'Full width', state: false },
-    ],
-    showLine: true,
-  },
-  {
-    items: [
-      {
-        id: 4,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faLock} />,
-        type: OptionType.Button,
-        title: 'Lock page',
-      },
-    ],
-    showLine: true,
-  },
-  {
-    items: [
-      {
-        id: 5,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faStar} />,
-        type: OptionType.Button,
-        title: 'Add to favorites',
-      },
-      {
-        id: 6,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faLink} />,
-        type: OptionType.Button,
-        title: 'Copy link',
-        hint: '⌘ + L',
-      },
-    ],
-    showLine: true,
-  },
-  {
-    items: [
-      {
-        id: 7,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faUndo} />,
-        type: OptionType.Button,
-        title: 'Undo',
-        hint: '⌘ + Z',
-      },
-      // { id: 8, type: OptionType.Button, title: 'Page history' },
-      {
-        id: 10,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faTrashAlt} />,
-        type: OptionType.Button,
-        title: 'Delete',
-      },
-    ],
-    showLine: true,
-  },
-  {
-    items: [
-      { id: 11, type: OptionType.Button, title: 'Import' },
-      {
-        id: 12,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faDownload} />,
-        type: OptionType.Button,
-        title: 'Export',
-        subtitle: 'PDF, HTML, Markdown',
-      },
-    ],
-    showLine: true,
-  },
-  {
-    items: [
-      {
-        id: 13,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faLevelUpAlt} />,
-        type: OptionType.Button,
-        title: 'Move to',
-        subtitle: '⌘ + Shift + P',
-      },
-    ],
-    showLine: true,
-  },
-]
+import { createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
+import PageControlUncontrolled from './PageControlUncontrolled'
 
 interface Context {
   id: number | null
@@ -102,6 +14,7 @@ interface ContextActions extends Context {
 
 const initialState = {
   id: null,
+
   enabled: false,
   position: null,
   showControls: () => {},
@@ -110,50 +23,62 @@ const initialState = {
 
 const Context = createContext<ContextActions>(initialState)
 
-export const usePageControlModals = () => useContext(Context)
+export const usePageControlModal = () => useContext(Context)
 
-const PageControls = ({ children, onClick }: IProps) => {
+const Provider = ({ children, rootRef }: { children: ReactNode; rootRef: RefObject<HTMLDivElement> }) => {
   const [state, setState] = useState<Context>(initialState)
 
   const showControls = (id: number, position: { x: number; y: number }) => {
+    if (!position || !rootRef.current) {
+      return
+    }
+
+    const bodyTop = rootRef ? rootRef.current.getBoundingClientRect().top : 0
+    const bodyLeft = rootRef ? rootRef.current.getBoundingClientRect().left : 0
+
     setState({
-      enabled: true,
       id,
-      position,
+      enabled: true,
+      position: { x: position.x - bodyLeft, y: position.y - bodyTop },
     })
   }
 
   const hideControls = useCallback(() => {
-    setState({ enabled: false, id: null, position: null })
+    setState(initialState)
   }, [])
 
-  const _onClick = useCallback(
-    (id: number) => {
-      onClick(id)
-    },
-    [onClick]
-  )
+  return <Context.Provider value={{ ...state, showControls, hideControls }}>{children}</Context.Provider>
+}
+
+const Component = ({ onClick, ...props }: IProps) => {
+  const { id, enabled, position, hideControls } = usePageControlModal()
+
+  const _onClick = useCallback(() => {
+    if (id === null) {
+      return
+    }
+
+    onClick(id)
+  }, [onClick, id])
 
   return (
-    <Context.Provider value={{ ...state, showControls, hideControls }}>
-      {state.enabled && state.position && (
-        <OptionControls
-          className={styles.container}
-          sections={sections}
-          style={{ left: state.position.x, top: state.position.y }}
-          onItemClick={_onClick}
+    <>
+      {enabled && position && (
+        <PageControlUncontrolled
+          style={{ left: position.x, top: position.y }}
           onDismiss={hideControls}
-          footer={<Footer wordCount={300} lastEditedName={'Ben Allen'} lastEditedAt={new Date().toISOString()} />}
+          onClick={_onClick}
+          {...props}
         />
       )}
-      {children}
-    </Context.Provider>
+    </>
   )
 }
 
-export default PageControls
+const PageControl = { Provider, Component }
+
+export default PageControl
 
 interface IProps {
-  children: ReactNode
   onClick: (id: number) => void
 }
