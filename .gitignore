@@ -37,3 +37,6 @@ yarn-error.log*
 
 # src/generated/*.*
 graphql.schema.json
+
+.serverless
+.serverless_nextjs

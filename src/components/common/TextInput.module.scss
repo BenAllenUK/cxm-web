@@ -3,8 +3,7 @@
 .textInputContainer {
   color: $primary-text-color;
   font-size: 16px;
-  font-family: 'SF Pro Display';
-  overflow: auto;
+  overflow: hidden;
   background: none;
   border: none;
   -webkit-box-shadow: none;
@@ -20,4 +19,20 @@
   &[placeholder]:empty:before {
     color: $controls-color;
   }
+}
+
+.borderedTextInput {
+  @extend .textInputContainer;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 3px 6px;
+  position: relative;
+  border-radius: 3px;
+  box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px inset;
+  background: rgba(242, 241, 238, 0.6);
+  cursor: text;
+  height: 28px;
 }

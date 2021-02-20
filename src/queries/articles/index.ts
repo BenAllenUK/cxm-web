@@ -30,43 +30,43 @@ export const createArticleMutationParams = (projectId: number, variables: Upsert
         return []
       }
       return
-      cache.modify({
-        id: `projects:${projectId}`,
-        fields: {
-          articles(articlesRef = [], { readField }) {
-            const newBlockRefs = article.blocks.map((item) => {
-              const id = Math.round(Math.random() * -1000000)
-              return cache.writeFragment({
-                id: `blocks:${id}`,
-                data: {
-                  ...item,
-                  id,
-                  updatedAt: new Date().toISOString(),
-                  createdAt: new Date().toISOString(),
-                },
-                fragment: BLOCK_FRAGMENT,
-              })
-            })
+      // cache.modify({
+      //   id: `projects:${projectId}`,
+      //   fields: {
+      //     articles(articlesRef = [], { readField }) {
+      //       const newBlockRefs = article.blocks.map((item) => {
+      //         const id = Math.round(Math.random() * -1000000)
+      //         return cache.writeFragment({
+      //           id: `blocks:${id}`,
+      //           data: {
+      //             ...item,
+      //             id,
+      //             updatedAt: new Date().toISOString(),
+      //             createdAt: new Date().toISOString(),
+      //           },
+      //           fragment: BLOCK_FRAGMENT,
+      //         })
+      //       })
 
-            const newArticleRef = cache.writeFragment({
-              id: cache.identify(article),
-              data: {
-                ...article,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-                blocks: newBlockRefs,
-              },
-              fragment: ARTICLE_FRAGMENT,
-            })
+      //       const newArticleRef = cache.writeFragment({
+      //         id: cache.identify(article),
+      //         data: {
+      //           ...article,
+      //           createdAt: new Date().toISOString(),
+      //           updatedAt: new Date().toISOString(),
+      //           blocks: newBlockRefs,
+      //         },
+      //         fragment: ARTICLE_FRAGMENT,
+      //       })
 
-            if (articlesRef.some((ref: any) => readField('id', ref) === article.id)) {
-              return articlesRef
-            }
+      //       if (articlesRef.some((ref: any) => readField('id', ref) === article.id)) {
+      //         return articlesRef
+      //       }
 
-            return [...articlesRef, newArticleRef]
-          },
-        },
-      })
+      //       return [...articlesRef, newArticleRef]
+      //     },
+      //   },
+      // })
     },
   }
 }

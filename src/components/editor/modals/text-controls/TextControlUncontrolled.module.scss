@@ -1,53 +1,128 @@
 @import 'styles/variables';
 
 .container {
-  display: flex;
+  // display: flex;
   flex-direction: row;
   position: absolute;
   top: 100px;
   left: 100px;
-  background-color: $background-color;
-  box-shadow: $box-shadow;
-  border: 1px solid $line-color;
-  border-right: none;
+  // background-color: $background-color;
+  // box-shadow: $box-shadow;
+  // border: 1px solid $line-color;
+  // border-right: none;
   z-index: 1;
   transform: translate(-50%, -150%);
+
+  display: inline-flex;
+  align-items: stretch;
+  height: 32px;
+  background: white;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.2;
+  border-radius: 3px;
+  box-shadow: $box-shadow-large;
+  pointer-events: auto;
 }
 
-.linkButton {
-  padding: 10px;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  border-right: 1px solid $line-color;
-  font-size: 12px;
+.externalLinkIcon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  fill: rgba(55, 53, 47, 0.8);
+  flex-shrink: 0;
+  backface-visibility: hidden;
+  margin-right: 4px;
+}
+
+.button {
+  user-select: none;
+  // transition: background 20ms ease-in 0s;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0px 8px;
+  white-space: nowrap;
+  box-shadow: rgb(55 53 47 / 9%) 1px 0px 0px;
+  margin-right: 1px;
+  font-size: 14px;
+  line-height: 1.2;
+  color: rgb(55, 53, 47);
 
   &:hover {
     background-color: $line-color;
   }
 }
 
-.styleButton {
-  padding: 10px;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  border-right: 1px solid $line-color;
-  font-size: 12px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $line-color;
-  }
+.chevronDownIcon {
+  width: 10px;
+  height: 100%;
+  display: block;
+  fill: rgba(55, 53, 47, 0.3);
+  flex-shrink: 0;
+  backface-visibility: hidden;
+  margin-left: 4px;
 }
 
-.italic {
-  font-style: italic;
+.codeIcon {
+  width: 15px;
+  height: 15px;
+  display: block;
+  fill: inherit;
+  flex-shrink: 0;
+  backface-visibility: hidden;
+}
+
+.textStyleIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  text-align: center;
+  font-size: 15px;
+  border-radius: 2px;
+  width: 18px;
+  font-weight: 500;
+  margin-bottom: 2px;
+  color: rgb(55, 53, 47);
+}
+
+.dotsIcon {
+  width: 14px;
+  height: 14px;
+  display: block;
+  fill: rgb(55, 53, 47);
+  flex-shrink: 0;
+  backface-visibility: hidden;
+}
+
+.commentIcon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  fill: inherit;
+  flex-shrink: 0;
+  backface-visibility: hidden;
+  margin-top: 1px;
+  margin-right: 4px;
 }
 
 .underline {
+  border-bottom: 1px solid rgba(55, 53, 47, 0.25);
+}
+
+.linkButton {
+  @extend .button;
+}
+
+.underlineIcon {
   text-decoration: underline;
 }
 
-.strikeThrough {
+.italicIcon {
+  font-style: italic;
+}
+
+.strikeThroughIcon {
   text-decoration: line-through;
 }

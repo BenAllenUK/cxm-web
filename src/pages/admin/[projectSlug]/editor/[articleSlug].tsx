@@ -21,7 +21,7 @@ import {
 import Root, { UserContext, useUser } from 'components/root'
 import EditorProvider, { useEditor } from 'components/editor/Provider'
 import EditorPage from 'components/pages/editor'
-import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { GetServerSidePropsContext } from 'next'
 
 export default function EditorRoot(props: any) {
   const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
@@ -153,6 +153,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         projectSlug: project.slug,
         articleSlug: article.slug,
       },
+      namespacesRequired: ['common', 'editor'],
     },
   }
 }

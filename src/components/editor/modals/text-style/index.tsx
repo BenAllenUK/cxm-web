@@ -1,7 +1,6 @@
+import { insertSpanWithStyle } from 'components/editor/utils/html'
 import { createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
-import { useLinkModal } from '../link'
-import { useTextStyleModal } from '../text-style'
-import TextControlUncontrolled from './TextControlUncontrolled'
+import TextStyleUncontrolled, { backgroundColorOptions, textColorOptions } from './TextStyleUncontrolled'
 
 interface Context {
   enabled: boolean
@@ -22,7 +21,7 @@ const initialState = {
 
 const Context = createContext<ContextActions>(initialState)
 
-export const useTextControlModal = () => useContext(Context)
+export const useTextStyleModal = () => useContext(Context)
 
 const Provider = ({ children, rootRef }: { children: ReactNode; rootRef: RefObject<HTMLDivElement> }) => {
   const [state, setState] = useState<Context>(initialState)
@@ -49,54 +48,28 @@ const Provider = ({ children, rootRef }: { children: ReactNode; rootRef: RefObje
 }
 
 const Component = (props: IProps) => {
-  const { enabled, position, hideControls } = useTextControlModal()
-  const { showControls: showTextStyleModal } = useTextStyleModal()
-  const { showControls: showLinkModal } = useLinkModal()
+  const { enabled, position, hideControls } = useTextStyleModal()
 
-  const _onShowTextStyleModal = () => {
-    if (!position) {
-      return
+  const _onClick = (id: number) => {
+    const [textColorOption] = textColorOptions.filter((item) => item.id === id)
+    const [backgroundColorOption] = backgroundColorOptions.filter((item) => item.id === id)
+
+    if (textColorOption) {
+      insertSpanWithStyle({ color: textColorOption.color })
+    } else if (backgroundColorOption) {
+      insertSpanWithStyle({ backgroundColor: backgroundColorOption.color })
+    } else {
+      console.error(`Text style not found: ${id}`)
     }
-
-    // const s = window.getSelection()
-    // const oRange = s.getRangeAt(0) //get the text range
-    // console.log(oRange)
-    // console.log(oRange.getClientRects())
-    // const oRect = oRange.getBoundingClientRect()
-
-    // console.log(oRect)
-
-    showTextStyleModal(position)
   }
-
-  const _onShowLinkModal = () => {
-    if (!position) {
-      return
-    }
-
-    showLinkModal(position)
-  }
-
-  const _onShowConversionModal = () => {}
-
-  const _onShowCommentModal = () => {}
-
-  const _onShowMoreModal = () => {}
 
   return (
     <>
       {enabled && position && (
-        <TextControlUncontrolled
+        <TextStyleUncontrolled
+          style={{ left: position.x, top: position.y }}
           onDismiss={hideControls}
-          style={{
-            left: position.x,
-            top: position.y,
-          }}
-          onShowTextStyleModal={_onShowTextStyleModal}
-          onShowLinkModal={_onShowLinkModal}
-          onShowConversionModal={_onShowConversionModal}
-          onShowCommentModal={_onShowCommentModal}
-          onShowMoreModal={_onShowMoreModal}
+          onClick={_onClick}
           {...props}
         />
       )}
@@ -104,8 +77,8 @@ const Component = (props: IProps) => {
   )
 }
 
-const TextControl = { Provider, Component }
+const TextStyle = { Provider, Component }
 
-export default TextControl
+export default TextStyle
 
 interface IProps {}

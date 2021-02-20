@@ -9,6 +9,7 @@ import { faLink, faLock, faLevelUpAlt, faDownload, faUndo } from '@fortawesome/f
 
 const sections: IOptionSections[] = [
   {
+    id: 1,
     items: [
       { id: 1, type: OptionType.Switch, title: 'Small text', state: false },
       { id: 2, type: OptionType.Switch, title: 'Full width', state: false },
@@ -16,6 +17,7 @@ const sections: IOptionSections[] = [
     showLine: true,
   },
   {
+    id: 2,
     items: [
       {
         id: 4,
@@ -27,6 +29,7 @@ const sections: IOptionSections[] = [
     showLine: true,
   },
   {
+    id: 3,
     items: [
       {
         id: 5,
@@ -45,6 +48,7 @@ const sections: IOptionSections[] = [
     showLine: true,
   },
   {
+    id: 4,
     items: [
       {
         id: 7,
@@ -64,6 +68,7 @@ const sections: IOptionSections[] = [
     showLine: true,
   },
   {
+    id: 5,
     items: [
       { id: 11, type: OptionType.Button, title: 'Import' },
       {
@@ -77,6 +82,7 @@ const sections: IOptionSections[] = [
     showLine: true,
   },
   {
+    id: 6,
     items: [
       {
         id: 13,

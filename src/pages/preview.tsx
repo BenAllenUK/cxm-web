@@ -1,6 +1,5 @@
 import { BlockType } from 'components/editor/blocks/types'
 import Blog from 'components/content'
-import { initialState } from 'reducers'
 
 export default function BlogPage({ blocks }: any) {
   return <Blog blocks={blocks} />
@@ -22,14 +21,8 @@ export function getStaticProps() {
 
   return {
     props: {
+      namespacesRequired: ['common'],
       blocks,
-      initialReduxState: {
-        ...initialState,
-        editor: {
-          ...initialState.editor,
-          blocks: blocks,
-        },
-      },
     },
   }
 }

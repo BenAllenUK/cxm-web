@@ -29,7 +29,7 @@ const Header = ({ filterText, onValueChange, onResetValue }: IHeaderProps) => {
           className={styles.inputAreaText}
           blurredPlaceholder={'Start search...'}
           html={filterText || ''}
-          onChange={(e) => onValueChange(e.target.value)}
+          onChange={(e: any) => onValueChange(e.target.value)}
         />
       </div>
 
@@ -77,6 +77,7 @@ const Search = ({ articles, onItemClick, onDismiss }: ISearchProps & { onDismiss
 
   const sections: IOptionSections[] = [
     {
+      id: 0,
       items: filteredArticles.slice(0, 10).map((item) => ({
         id: item.id,
         type: OptionType.Button,

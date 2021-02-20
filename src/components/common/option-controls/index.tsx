@@ -41,6 +41,7 @@ interface IOptionSwitch {
 export type IOptionElements = IOptionButton | IOptionSwitch
 
 export type IOptionSections = {
+  id: number
   title?: string
   items: IOptionElements[]
   showLine?: boolean
@@ -50,7 +51,7 @@ const OptionControls = memo(({ header, footer, sections, iconClassName, onItemCl
   const [selectedIndex, setSelected] = useState<number>(0)
 
   const itemRefs = useRef<HTMLDivElement[]>([])
-  const actionItems = flatten(sections.map((section) => section.items))
+  const actionItems = flatten(sections.map((section) => section.items.map((item) => ({ ...item, sectionId: section.id }))))
 
   const scrollIntoView = useCallback(
     (index: number) => {
@@ -64,7 +65,7 @@ const OptionControls = memo(({ header, footer, sections, iconClassName, onItemCl
   )
 
   const _onItemMouseEnter = useCallback(
-    (id: number) => {
+    (sectionId: number, id: number) => {
       const index = findIndex(actionItems, (item) => item.id === id)
       setSelected(index)
     },
@@ -76,16 +77,16 @@ const OptionControls = memo(({ header, footer, sections, iconClassName, onItemCl
   }, [])
 
   const _onItemClick = useCallback(
-    (id) => {
+    (sectionId, id) => {
       onDismiss()
-      onItemClick(id)
+      onItemClick(sectionId, id)
     },
     [onItemClick, onDismiss]
   )
 
   const _onSwitchClick = useCallback(
-    (id) => {
-      onItemClick(id)
+    (sectionId, id) => {
+      onItemClick(sectionId, id)
     },
     [onItemClick]
   )
@@ -94,12 +95,12 @@ const OptionControls = memo(({ header, footer, sections, iconClassName, onItemCl
     'Enter',
 
     (e) => {
-      const selectedItem = actionItems[selectedIndex] as IOptionElements
+      const selectedItem = actionItems[selectedIndex]
       if (!selectedItem) {
         return
       }
       onDismiss()
-      onItemClick(selectedItem.id)
+      onItemClick(selectedItem.sectionId, selectedItem.id)
       e.preventDefault()
     },
     [onItemClick, actionItems, selectedIndex]
@@ -132,10 +133,6 @@ const OptionControls = memo(({ header, footer, sections, iconClassName, onItemCl
   useOnClickOutside(ref, () => {
     onDismiss()
   })
-
-  if (sections.length === 0) {
-    return <div />
-  }
 
   return (
     <div className={styles.defaultContainer} onMouseLeave={_onMouseLeave} {...otherProps} ref={ref}>
@@ -171,6 +168,6 @@ interface IProps extends HTMLProps<HTMLDivElement> {
   header?: ReactNode
   footer?: ReactNode
   iconClassName?: string
-  onItemClick: (id: number) => void
+  onItemClick: (sectionId: number, id: number) => void
   onDismiss: () => void
 }

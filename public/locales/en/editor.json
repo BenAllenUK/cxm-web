@@ -1,0 +1,52 @@
+{
+  "link": {
+    "header": "Link to content...",
+    "newUrl": "Link to URL",
+    "newPagePrefix": "New ",
+    "newPageSuffix": " page in...",
+    "placeholder": "Paste link or search pages"
+  },
+  "textControls": {
+    "buttonConversion": "Text",
+    "buttonConversionTip": "Turn into",
+    "buttonLink": "Link",
+    "buttonLinkTip": "Link",
+    "buttonComment": "Comment",
+    "buttonCommentTip": "Comment on selected text",
+    "buttonBoldTip": "Bold",
+    "buttonItalicTip": "Italic",
+    "buttonUnderlineTip": "Underline",
+    "buttonStrikeThroughTip": "Strike through",
+    "buttonCodeTip": "Code",
+    "buttonTextStyleTip": "Change text style",
+    "buttonMoreTip": "More"
+  },
+  "textStyles": {
+    "colorTitle": "COLOR",
+    "backgroundTitle": "BACKGROUND",
+    "colors": {
+      "default": "Default",
+      "gray": "Gray",
+      "brown": "Brown",
+      "orange": "Orange",
+      "yellow": "Yellow",
+      "green": "Green",
+      "blue": "Blue",
+      "purple": "Purple",
+      "pink": "Pink",
+      "red": "Red"
+    },
+    "backgrounds": {
+      "default": "Default background",
+      "gray": "Gray background",
+      "brown": "Brown background",
+      "orange": "Orange background",
+      "yellow": "Yellow background",
+      "green": "Green background",
+      "blue": "Blue background",
+      "purple": "Purple background",
+      "pink": "Pink background",
+      "red": "Red background"
+    }
+  }
+}

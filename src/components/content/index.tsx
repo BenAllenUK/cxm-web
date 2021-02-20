@@ -6,11 +6,7 @@ import Article from './articles/Article'
 
 class Content extends React.Component<IProps> {
   render() {
-    return (
-      <div className={styles.body}>
-        <Article blocks={this.props.blocks} />
-      </div>
-    )
+    return <div className={styles.body}>{/* <Article blocks={this.props.blocks} /> */}</div>
   }
 }
 

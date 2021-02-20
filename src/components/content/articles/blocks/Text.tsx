@@ -1,8 +1,8 @@
 import { BlockDataText, BlockType } from 'components/editor/blocks/types'
 import styles from './Text.module.scss'
 
-export default function Text({ content }: IProps) {
-  const { value, type } = content
+export default function Text({ content, type }: IProps) {
+  const { value } = content
   switch (type) {
     case BlockType.H1:
       return <h1 className={styles.text}>{value}</h1>
@@ -36,5 +36,6 @@ export default function Text({ content }: IProps) {
 }
 
 interface IProps {
+  type: BlockType
   content: BlockDataText
 }

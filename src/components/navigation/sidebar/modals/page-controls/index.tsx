@@ -13,6 +13,7 @@ export enum PageControlOptions {
 
 const sections: IOptionSections[] = [
   {
+    id: 0,
     showLine: true,
     items: [
       {
@@ -44,6 +45,7 @@ const sections: IOptionSections[] = [
     ],
   },
   {
+    id: 1,
     showLine: true,
     items: [
       {

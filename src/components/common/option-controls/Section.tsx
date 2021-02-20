@@ -6,6 +6,7 @@ import Line from './Line'
 import Switch from './Switch'
 
 const OptionSection = ({
+  id: sectionId,
   innerRef,
   selectedId,
   iconClassName,
@@ -16,9 +17,20 @@ const OptionSection = ({
   onSwitchClick,
   onItemMouseEnter,
 }: ISecProps) => {
+  const _onItemClick = (id: number) => {
+    onItemClick(sectionId, id)
+  }
+
+  const _onItemMouseEnter = (id: number) => {
+    onItemMouseEnter(sectionId, id)
+  }
+
+  const _onSwitchClick = (id: number) => {
+    onSwitchClick(sectionId, id)
+  }
   return (
     <>
-      {title && <Header title={title} />}
+      {items.length > 0 && title && <Header title={title} />}
 
       {items.map((item, i) => {
         switch (item.type) {
@@ -29,8 +41,8 @@ const OptionSection = ({
                 innerRef={innerRef}
                 iconClassName={iconClassName}
                 selected={item.id === selectedId}
-                onClick={onItemClick}
-                onMouseEnter={onItemMouseEnter}
+                onClick={_onItemClick}
+                onMouseEnter={_onItemMouseEnter}
                 {...item}
               />
             )
@@ -39,8 +51,8 @@ const OptionSection = ({
               <Switch
                 key={i}
                 selected={item.id === selectedId}
-                onClick={onSwitchClick}
-                onMouseEnter={onItemMouseEnter}
+                onClick={_onSwitchClick}
+                onMouseEnter={_onItemMouseEnter}
                 {...item}
               />
             )
@@ -50,7 +62,7 @@ const OptionSection = ({
         }
       })}
 
-      {showLine && <Line />}
+      {items.length > 0 && showLine && <Line />}
     </>
   )
 }
@@ -58,13 +70,14 @@ const OptionSection = ({
 export default memo(OptionSection)
 
 interface ISecProps {
+  id: number
   innerRef: any
   items: IOptionElements[]
   title?: string
   showLine?: boolean
   selectedId?: number
   iconClassName?: string
-  onItemClick: (id: number) => void
-  onSwitchClick: (id: number) => void
-  onItemMouseEnter: (id: number) => void
+  onItemClick: (sectionId: number, id: number) => void
+  onSwitchClick: (sectionId: number, id: number) => void
+  onItemMouseEnter: (sectionId: number, id: number) => void
 }

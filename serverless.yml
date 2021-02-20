@@ -1,0 +1,6 @@
+omnea:
+  component: '@sls-next/serverless-component@1.19.0-alpha.32'
+  inputs:
+    bucketName: omnea
+    build:
+      postBuildCommands: ['node post-build.js']

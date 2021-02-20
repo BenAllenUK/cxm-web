@@ -1,7 +1,18 @@
 const path = require('path')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+// const { localeSubpaths } = require('next/config').default().publicRuntimeConfig
 
 module.exports = {
+  i18n: {
+    // These are all the locales you want to support in
+    // your application
+    locales: ['en-US', 'fr', 'nl-NL'],
+    // This is the default locale you want to be used when visiting
+    // a non-locale prefixed path e.g. `/hello`
+    defaultLocale: 'en-US',
+    // localeSubpaths,
+    // localeStructure: `{{ns}}/{{lng}}`,
+  },
   sassOptions: {
     // includePaths: [path.join(__dirname, 'styles')],
   },

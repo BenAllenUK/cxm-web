@@ -28,8 +28,8 @@ const BlockItem = ({
     onUpdate(index, { value } as BlockDataText) // TODO: change to any type
   }
 
-  const _onListUpdate = (items: string[]) => {
-    onUpdate(index, { items } as BlockDataListBullet) // TODO: change to any type
+  const _onListUpdate = (value: { value: string; selected?: boolean }[]) => {
+    onUpdate(index, value)
   }
 
   const _onDelete = () => {

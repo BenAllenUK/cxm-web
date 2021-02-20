@@ -177,6 +177,7 @@ const EditorPage = ({
         <Editor
           key={article?.id}
           id={article?.id}
+          articles={project.articles}
           blocks={initialBlocks}
           onBlockDelete={onBlockDelete}
           onBlocksUpsert={onDebouncedBlockUpsert}

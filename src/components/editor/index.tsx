@@ -5,13 +5,14 @@ import Content from './Content'
 import styles from './Editor.module.scss'
 import Modals from './modals'
 import Header from './header'
+import { ArticleFragment } from 'generated/graphql'
 
-function Editor({ id, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IProps) {
+function Editor({ id, articles, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IProps) {
   const [focusIndex, setFocusIndex] = useState(-1)
 
   let content = initialBlocks
   if (!!id && content.length === 0) {
-    content = [DEFAULT_BLOCK_START]
+    content = [{ ...DEFAULT_BLOCK_START, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }]
   }
 
   const [blocks, setBlocks] = useState<Block[]>(content)
@@ -74,7 +75,7 @@ function Editor({ id, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IP
 
   return (
     <>
-      <Modals onBlockItemClick={_onBlockItemClick}>
+      <Modals articles={articles} onBlockItemClick={_onBlockItemClick}>
         <div className={styles.container}>
           <Header loading={!id} />
           <Content
@@ -93,6 +94,7 @@ function Editor({ id, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IP
 export default memo(Editor)
 interface IProps {
   id: number | null
+  articles: ArticleFragment[]
   blocks: Block[]
   onBlocksUpsert: (blocks: Block[]) => void
   onBlockDelete: (id: number) => void

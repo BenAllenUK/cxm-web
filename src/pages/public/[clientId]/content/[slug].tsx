@@ -1,6 +1,5 @@
 import { BlockType } from 'components/editor/blocks/types'
 import Content from 'components/content'
-import { initialState } from 'reducers'
 import { createGraphQLClient } from 'config/graphql'
 import GET_PROJECTS from 'queries/project/GET_PROJECTS.gql'
 
@@ -36,12 +35,11 @@ export async function getStaticProps() {
 
   return {
     props: {
+      namespacesRequired: ['common'],
       blocks,
       initialReduxState: {
-        ...initialState,
         // project: projectData,
         editor: {
-          ...initialState.editor,
           blocks: blocks,
         },
       },

@@ -19,7 +19,7 @@ class Article extends React.Component<IProps> {
       case BlockType.CALLOUT:
       case BlockType.CODE:
       case BlockType.QUOTE:
-        return <Text content={item.payload as BlockDataText} />
+        return <Text type={item.type} content={item.payload as BlockDataText} />
       case BlockType.DIVIDER:
         return <Divider />
       case BlockType.IMAGE:
