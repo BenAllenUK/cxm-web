@@ -40,3 +40,7 @@ graphql.schema.json
 
 .serverless
 .serverless_nextjs
+.json-autotranslate-cache
+translate-account-key.json
+public/locales/*
+!public/locales/en/*

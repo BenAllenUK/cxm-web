@@ -1,6 +1,14 @@
 omnea:
   component: '@sls-next/serverless-component@1.19.0-alpha.32'
   inputs:
+    cloudfront:
+      defaults:
+        forward:
+          headers: [Host]
+    domain: ['omnea.co']
+    domainType: 'both'
+    domainRedirects:
+      www.omnea.co: https://omnea.co
     bucketName: omnea
     build:
       postBuildCommands: ['node post-build.js']
