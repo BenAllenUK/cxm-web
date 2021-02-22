@@ -1,9 +1,5 @@
 import { useCallback } from 'react'
 
-import { initialState } from 'reducers'
-
-import { initializeStore } from 'store'
-
 import GET_PROJECT_ONE from 'queries/project/GET_PROJECT_ONE.gql'
 import GET_ARTICLE_ONE from 'queries/articles/GET_ARTICLE_ONE.gql'
 import { initializeApollo } from 'config/graphql'
