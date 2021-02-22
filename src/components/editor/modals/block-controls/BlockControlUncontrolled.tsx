@@ -18,12 +18,16 @@ const BlockControlUncontrolled = ({ filterText, style, onClick, onDismiss }: IPr
     items = items.filter((item) => item.title.toLowerCase().indexOf(formattedFilterText) > -1)
   }
 
+  const _onClick = (sectionId: number, itemId: number) => {
+    onClick(itemId)
+  }
+
   return (
     <OptionControls
       sections={[{ id: -1, items: items, title: 'Basic Blocks' }]}
       style={style}
       iconClassName={styles.icon}
-      onItemClick={onClick}
+      onItemClick={_onClick}
       onDismiss={onDismiss}
     />
   )

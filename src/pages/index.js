@@ -1,3 +1,6 @@
+import { useTranslation } from 'config/translation'
+
 export default function Home() {
-  return <h1>Hello</h1>
+  const { t } = useTranslation(['common'])
+  return <h1>{t('welcome')}</h1>
 }

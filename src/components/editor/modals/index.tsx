@@ -9,7 +9,6 @@ import Link from './link'
 import { ArticleFragment } from 'generated/graphql'
 
 const ControlledModals = ({ articles, children, onBlockItemClick }: IProps) => {
-  console.log({ articles })
   return (
     <div>
       <BlockControls.Component onBlockItemClick={onBlockItemClick} />

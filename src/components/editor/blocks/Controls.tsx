@@ -8,23 +8,25 @@ import { SortableHandle } from 'react-sortable-hoc'
 
 const AddButton = memo((props: React.HTMLAttributes<HTMLDivElement>) => (
   <Button className={styles.addButton} {...props}>
-    <AddIcon className={styles.add} width={16} height={16} />
+    <AddIcon className={styles.add} width={14} height={14} />
   </Button>
 ))
 
 const DragButton = memo(
   SortableHandle(() => (
     <Button className={styles.grabButton}>
-      <DragIcon className={styles.add} width={16} height={16} />
+      <DragIcon className={styles.add} width={14} height={14} />
     </Button>
   ))
 )
 
 const Controls = ({ initialHeight, visible, onAddClick }: IProps) => {
   return (
-    <div className={styles.controls} style={{ height: initialHeight, visibility: visible ? 'visible' : 'hidden' }}>
-      <AddButton data-tip={'Click to add a block below'} data-for="editor" onClick={onAddClick} />
-      <DragButton />
+    <div className={styles.controls} style={{ height: initialHeight, visibility: true ? 'visible' : 'hidden' }}>
+      <div className={styles.controlsInner}>
+        <AddButton data-tip={'Click to add a block below'} data-for="editor" onClick={onAddClick} />
+        <DragButton />
+      </div>
     </div>
   )
 }

@@ -4,8 +4,8 @@ import TextInput from 'components/common/TextInput'
 import { useKeyDown } from 'utils/hooks'
 import { forwardRef, MutableRefObject, RefObject, useEffect, useRef } from 'react'
 import { mergeRefs } from 'utils/refs'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import CheckboxEmpty from 'images/icons/checkbox.svg'
+import CheckboxFilled from 'images/icons/checkbox-filled.svg'
 
 const Item = forwardRef<HTMLDivElement, IItemProps>(
   ({ selected, type, focus, index, value, onDelete, onNew, onTextChange, onFocus, onBlur, onSelectedToggle }, parentRef) => {
@@ -63,7 +63,14 @@ const Item = forwardRef<HTMLDivElement, IItemProps>(
         <div className={styles.listItemContainer}>
           {type === BlockType.LIST_CHECK && (
             <div className={styles.itemCheckbox} onClick={_onSelectedToggle}>
-              {selected && <FontAwesomeIcon style={{ fontSize: 13, paddingTop: 1 }} icon={faCheck} />}
+              <div className={`${styles.itemCheckboxInner} ${selected ? styles.itemCheckboxInnerFilled : ''}`}>
+                {selected ? (
+                  <CheckboxFilled className={styles.itemCheckboxFilled} />
+                ) : (
+                  <CheckboxEmpty className={styles.itemCheckboxUnfilled} />
+                )}
+              </div>
+              {/* {selected && <FontAwesomeIcon style={{ fontSize: 13, paddingTop: 1 }} icon={faCheck} />} */}
             </div>
           )}
           {type === BlockType.LIST_NUMBER && (

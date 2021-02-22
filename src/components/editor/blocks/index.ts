@@ -65,7 +65,7 @@ export const BlockTypeProperties = {
     title: 'Text',
     subtitle: 'Start writing with plain text.',
     image: '/preview/text.png',
-    initialHeight: 19,
+    initialHeight: 20,
     isEditable: true,
   },
   [BlockType.H1]: {
@@ -105,7 +105,7 @@ export const BlockTypeProperties = {
     title: 'Checkbox list',
     subtitle: 'Create a simple checkbox list.',
     image: '/preview/list_bullet.png',
-    initialHeight: 19,
+    initialHeight: 22,
     isEditable: true,
   },
   [BlockType.LIST_NUMBER]: {
@@ -113,7 +113,7 @@ export const BlockTypeProperties = {
     title: 'Numbered list',
     subtitle: 'Create a simple numbered list.',
     image: '/preview/list_bullet.png',
-    initialHeight: 19,
+    initialHeight: 20,
     isEditable: true,
   },
   [BlockType.IMAGE]: {
@@ -153,7 +153,7 @@ export const BlockTypeProperties = {
     title: 'Divider',
     subtitle: 'Visually divide blocks.',
     image: '/preview/image.png',
-    initialHeight: 13,
+    initialHeight: 20,
     isEditable: false,
   },
 }

@@ -41,7 +41,7 @@ const ControlledText = ({
 
   return (
     <>
-      <div className={styles.debug}>{debugPosition}</div>
+      {/* <div className={styles.debug}>{debugPosition}</div> */}
       <Text {...otherProps} value={initialValue} innerRef={inputRef} onBlur={onBlur} onUpdate={onValueChange} />
     </>
   )

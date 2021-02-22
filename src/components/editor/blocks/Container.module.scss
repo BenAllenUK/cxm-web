@@ -12,14 +12,18 @@
   left: -45px;
   top: 0px;
   display: flex;
-  flex-direction: row;
   align-items: center;
+}
+
+.controlsInner {
+  display: flex;
+  flex-direction: row;
 }
 
 .add {
   fill: $controls-color;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
 
 .drag {
@@ -29,21 +33,14 @@
 .addButton {
   @extend .buttonBase;
   cursor: pointer;
-  height: 16px;
-  padding-right: 2px;
-  padding-left: 2px;
-  padding-top: 1px;
-  padding-bottom: 1px;
+  padding: 2px;
 }
 
 .grabButton {
   @extend .buttonBase;
   cursor: grab;
-  height: 16px;
-  padding-right: 2px;
-  padding-left: 2px;
-  padding-top: 1px;
-  padding-bottom: 1px;
+  padding: 2px;
+
   &:hover {
     background-color: transparent;
   }
