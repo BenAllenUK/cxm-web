@@ -6172,6 +6172,19 @@ export type ProjectFragment = (
   )> }
 );
 
+export type GetProjectOneSubscriptionSubscriptionVariables = Exact<{
+  slug: Scalars['String'];
+}>;
+
+
+export type GetProjectOneSubscriptionSubscription = (
+  { __typename?: 'subscription_root' }
+  & { projects: Array<(
+    { __typename?: 'projects' }
+    & ProjectFragment
+  )> }
+);
+
 export const BlockFragmentDoc = gql`
     fragment Block on blocks {
   __typename
@@ -6675,3 +6688,32 @@ export function useGetProjectOneLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetProjectOneQueryHookResult = ReturnType<typeof useGetProjectOneQuery>;
 export type GetProjectOneLazyQueryHookResult = ReturnType<typeof useGetProjectOneLazyQuery>;
 export type GetProjectOneQueryResult = Apollo.QueryResult<GetProjectOneQuery, GetProjectOneQueryVariables>;
+export const GetProjectOneSubscriptionDocument = gql`
+    subscription GetProjectOneSubscription($slug: String!) {
+  projects(where: {slug: {_eq: $slug}}) {
+    ...Project
+  }
+}
+    ${ProjectFragmentDoc}`;
+
+/**
+ * __useGetProjectOneSubscriptionSubscription__
+ *
+ * To run a query within a React component, call `useGetProjectOneSubscriptionSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectOneSubscriptionSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectOneSubscriptionSubscription({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetProjectOneSubscriptionSubscription(baseOptions: Apollo.SubscriptionHookOptions<GetProjectOneSubscriptionSubscription, GetProjectOneSubscriptionSubscriptionVariables>) {
+        return Apollo.useSubscription<GetProjectOneSubscriptionSubscription, GetProjectOneSubscriptionSubscriptionVariables>(GetProjectOneSubscriptionDocument, baseOptions);
+      }
+export type GetProjectOneSubscriptionSubscriptionHookResult = ReturnType<typeof useGetProjectOneSubscriptionSubscription>;
+export type GetProjectOneSubscriptionSubscriptionResult = Apollo.SubscriptionResult<GetProjectOneSubscriptionSubscription>;

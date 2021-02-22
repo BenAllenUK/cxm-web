@@ -7,6 +7,7 @@ const translator = new NextI18Next({
   otherLanguages: ['fr', 'es'],
   localePath: path.resolve('./public/locales'),
   localeSubpaths,
+  fallbackLng: 'en',
 })
 
 export const appWithTranslation = translator.appWithTranslation

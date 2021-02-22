@@ -2,6 +2,7 @@ const path = require('path')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { nextI18NextRewrites } = require('next-i18next/rewrites')
 const localeSubpaths = {
+  en: 'en',
   fr: 'fr',
   de: 'de',
 }

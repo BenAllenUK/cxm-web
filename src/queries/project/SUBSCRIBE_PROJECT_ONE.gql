@@ -1,0 +1,7 @@
+#import "./PROJECT_FRAGMENT.gql"
+
+subscription GetProjectOneSubscription($slug: String!) {
+  projects(where: { slug: { _eq: $slug } }) {
+    ...Project
+  }
+}

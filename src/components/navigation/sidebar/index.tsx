@@ -7,7 +7,7 @@ import Title from './Title'
 import styles from './Sidebar.module.scss'
 import { MenuList } from './MenuList'
 
-import { Tooltip } from 'components/tooltip'
+import { Tooltip } from 'components/common/tooltip'
 
 import produce from 'immer'
 import { usePageControlModals } from './modals/page-controls'

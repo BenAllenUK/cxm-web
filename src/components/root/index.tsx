@@ -1,6 +1,5 @@
 import { Provider } from 'react-redux'
 
-import { useStore } from 'store'
 import { ApolloProvider } from '@apollo/client'
 import { useApollo } from 'config/graphql'
 import { createContext, useContext } from 'react'
@@ -20,19 +19,11 @@ export const UserContext = createContext<UserContext>({
 
 export const useUser = () => useContext(UserContext)
 
-export default function Root({
-  initialApolloState,
-  initialReduxState,
-  initialUserContext,
-  children,
-}: any) {
-  const store = useStore(initialReduxState)
+export default function Root({ initialApolloState, initialReduxState, initialUserContext, children }: any) {
   const apolloClient = useApollo(initialApolloState)
   return (
     <ApolloProvider client={apolloClient}>
-      <Provider store={store}>
-        <UserContext.Provider value={initialUserContext}>{children}</UserContext.Provider>
-      </Provider>
+      <UserContext.Provider value={initialUserContext}>{children}</UserContext.Provider>
     </ApolloProvider>
   )
 }

@@ -1,6 +1,6 @@
 import { useRef, useCallback, useEffect, useState, memo, createRef } from 'react'
 import { SortableContainer, SortableElement, SortEnd, SortEvent, SortStart } from 'react-sortable-hoc'
-import { Tooltip } from 'components/tooltip'
+import { Tooltip } from 'components/common/tooltip'
 import { BlockTypeProperties, BLOCK_CONTAINER_VERTICAL_PADDING, DEFAULT_BLOCK, getBlockOptions, isBlockEmpty } from './blocks'
 import { BlockData, BlockType, BlockDataText, BlockDataImage, Block } from './blocks/types'
 

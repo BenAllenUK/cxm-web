@@ -14,7 +14,7 @@ import {
   useUpsertBlocksMutation,
   useDeleteBlockMutation,
 } from 'generated/graphql'
-import Root, { UserContext, useUser } from 'components/root'
+import Root, { useUser } from 'components/root'
 import EditorProvider, { useEditor } from 'components/editor/Provider'
 import EditorPage from 'components/pages/editor'
 import { GetServerSidePropsContext } from 'next'
@@ -134,12 +134,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   }
 
-  // const reduxStore = initializeStore(initialState)
-
   return {
     props: {
       initialApolloState: client.cache.extract(),
-      initialReduxState: {}, //reduxStore.getState(),
       initialUserContext: {
         userId: 1,
         organisationId: 1,
