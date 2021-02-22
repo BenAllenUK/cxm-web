@@ -108,13 +108,12 @@ const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIn
     }
     setFocusIndex(index)
 
-    // TODO: Lock block
     // TODO: Disable auto undo/redo
   }
 
   const _onBlockBlur = (index: number) => {
-    // TOOD: Unlock block
     // TODO: Enable auto undo/redo
+    // Why do we need to do this?: Answer when pressing /heading 2 and it will not move onto next item
     if (index === focusIndex) {
       setFocusIndex(-1)
     }

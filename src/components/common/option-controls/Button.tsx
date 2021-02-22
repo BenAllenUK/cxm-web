@@ -16,9 +16,14 @@ export const Button = ({
   onMouseEnter,
   ...otherProps
 }: IProps) => {
-  const _onClick = useCallback(() => {
-    onClick(id)
-  }, [onClick, id])
+  const _onClick = useCallback(
+    (e) => {
+      onClick(id)
+      e.stopPropagation()
+      e.preventDefault()
+    },
+    [onClick, id]
+  )
   const _onMouseEnter = useCallback(() => {
     onMouseEnter(id)
   }, [onMouseEnter, id])

@@ -18,7 +18,7 @@ const BlockControlUncontrolled = ({ filterText, style, onClick, onDismiss }: IPr
     items = items.filter((item) => item.title.toLowerCase().indexOf(formattedFilterText) > -1)
   }
 
-  const _onClick = (sectionId: number, itemId: number) => {
+  const _onClick = (_: number, itemId: number) => {
     onClick(itemId)
   }
 

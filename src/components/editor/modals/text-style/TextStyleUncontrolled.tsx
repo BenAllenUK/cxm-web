@@ -67,8 +67,12 @@ const TextStyleUncontrolled = ({ style, onDismiss, onClick }: IProps) => {
     },
   ]
 
+  const _onClick = (_: number, id: number) => {
+    onClick(id)
+  }
+
   return (
-    <OptionControls sections={sections} style={style} iconClassName={styles.icon} onItemClick={onClick} onDismiss={onDismiss} />
+    <OptionControls sections={sections} style={style} iconClassName={styles.icon} onItemClick={_onClick} onDismiss={onDismiss} />
   )
 }
 

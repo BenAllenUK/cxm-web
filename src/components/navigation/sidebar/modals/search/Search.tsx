@@ -87,6 +87,10 @@ const Search = ({ articles, onItemClick, onDismiss }: ISearchProps & { onDismiss
     },
   ]
 
+  const _onClick = (_: number, id: number) => {
+    onItemClick(id)
+  }
+
   return (
     <div className={styles.background}>
       <>
@@ -95,7 +99,7 @@ const Search = ({ articles, onItemClick, onDismiss }: ISearchProps & { onDismiss
           sections={sections}
           footer={filteredArticles.length === 0 ? <NoResults /> : <div />}
           header={<Header filterText={filterText} onValueChange={_onValueChange} onResetValue={_onResetValue} />}
-          onItemClick={onItemClick}
+          onItemClick={_onClick}
           onDismiss={onDismiss}
         />
       </>
