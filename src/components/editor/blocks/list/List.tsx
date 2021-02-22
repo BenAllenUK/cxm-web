@@ -1,5 +1,5 @@
 import styles from './List.module.scss'
-import { BlockDataCheckBullet, BlockDataListBullet, BlockDataNumberBullet, BlockType } from './types'
+import { BlockDataCheckBullet, BlockDataListBullet, BlockDataNumberBullet, BlockType } from '../types'
 import TextInput from 'components/common/TextInput'
 import { useKeyDown } from 'utils/hooks'
 import { forwardRef, MutableRefObject, RefObject, useEffect, useRef } from 'react'

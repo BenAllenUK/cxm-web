@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, memo, useCallback } from 'react'
-import Text from 'components/editor/blocks/Text'
+import Text from 'components/editor/blocks/text/Text'
 import { BlockType } from 'components/editor/blocks/types'
 import styles from './Text.module.scss'
 

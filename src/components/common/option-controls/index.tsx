@@ -78,6 +78,8 @@ const OptionControls = memo(({ header, footer, sections, iconClassName, onItemCl
 
   const _onItemClick = useCallback(
     (sectionId, id) => {
+      console.log(sectionId, id)
+      // not being called?
       onDismiss()
       onItemClick(sectionId, id)
     },

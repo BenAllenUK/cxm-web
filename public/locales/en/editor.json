@@ -1,4 +1,6 @@
 {
+  "title": "Omnea | {{title}}",
+  "loading": "Loading...",
   "link": {
     "header": "Link to content...",
     "newUrl": "Link to URL",

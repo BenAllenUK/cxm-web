@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { BlockDataImage } from './types'
+import { BlockDataImage } from '../types'
 import styles from './Image.module.scss'
 import ImageIcon from 'images/icons/image.svg'
 import { default as NextImage } from 'next/image'

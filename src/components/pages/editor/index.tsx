@@ -32,6 +32,7 @@ import { useEditor } from 'components/editor/Provider'
 import { Block } from 'components/editor/blocks/types'
 import debounce from 'lodash/debounce'
 import Navbar from 'components/navigation/navbar'
+import { useTranslation } from 'config/translation'
 
 const EditorPage = ({
   article,
@@ -46,8 +47,10 @@ const EditorPage = ({
   const router = useRouter()
   const initialBlocks = article ? parseBlocks(article.blocks) : []
 
+  const { t } = useTranslation(['editor'])
+
   useEffect(() => {
-    document.title = `Omnia | ${article?.title ?? 'Loading...'}`
+    document.title = article?.title ? t('title', { title: article.title }) : t('loading')
   })
 
   const onViewArticle = (id: number) => {

@@ -3,6 +3,11 @@ import { CSSProperties } from 'react'
 import { useTranslation } from 'config/translation'
 import styles from './TextStyle.module.scss'
 
+export enum StyleSections {
+  textColor = 0,
+  backgroundColor,
+}
+
 export const textColorOptions = [
   { id: 0, key: 'default', color: 'rgb(55, 53, 47)' },
   { id: 1, key: 'gray', color: 'rgba(55, 53, 47, 0.6)' },
@@ -67,8 +72,8 @@ const TextStyleUncontrolled = ({ style, onDismiss, onClick }: IProps) => {
     },
   ]
 
-  const _onClick = (_: number, id: number) => {
-    onClick(id)
+  const _onClick = (sectionId: number, id: number) => {
+    onClick(sectionId, id)
   }
 
   return (
@@ -81,5 +86,5 @@ export default TextStyleUncontrolled
 interface IProps {
   style: CSSProperties
   onDismiss: () => void
-  onClick: (id: number) => void
+  onClick: (sectionId: number, id: number) => void
 }

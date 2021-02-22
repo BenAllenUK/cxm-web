@@ -7,7 +7,7 @@ import { BlockData, BlockType, BlockDataText, BlockDataImage, Block } from './bl
 import ReactTooltip from 'react-tooltip'
 
 import styles from './Editor.module.scss'
-import Container from './blocks/Container'
+import Container from './blocks/core/Container'
 
 import BlockItem from './BlockItem'
 import { useWindowKeyUp } from 'utils/hooks'

@@ -1,6 +1,6 @@
 import { insertSpanWithStyle } from 'components/editor/utils/html'
 import { createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
-import TextStyleUncontrolled, { backgroundColorOptions, textColorOptions } from './TextStyleUncontrolled'
+import TextStyleUncontrolled, { backgroundColorOptions, StyleSections, textColorOptions } from './TextStyleUncontrolled'
 
 interface Context {
   enabled: boolean
@@ -50,16 +50,14 @@ const Provider = ({ children, rootRef }: { children: ReactNode; rootRef: RefObje
 const Component = (props: IProps) => {
   const { enabled, position, hideControls } = useTextStyleModal()
 
-  const _onClick = (id: number) => {
-    const [textColorOption] = textColorOptions.filter((item) => item.id === id)
-    const [backgroundColorOption] = backgroundColorOptions.filter((item) => item.id === id)
-
-    if (textColorOption) {
+  const _onClick = (sectionId: number, id: number) => {
+    console.log(sectionId, id)
+    if (sectionId === StyleSections.textColor) {
+      const [textColorOption] = textColorOptions.filter((item) => item.id === id)
       insertSpanWithStyle({ color: textColorOption.color })
-    } else if (backgroundColorOption) {
+    } else if (sectionId === StyleSections.backgroundColor) {
+      const [backgroundColorOption] = backgroundColorOptions.filter((item) => item.id === id)
       insertSpanWithStyle({ backgroundColor: backgroundColorOption.color })
-    } else {
-      console.error(`Text style not found: ${id}`)
     }
   }
 

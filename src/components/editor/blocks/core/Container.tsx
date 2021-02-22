@@ -1,7 +1,7 @@
 import { useCallback, useState, memo, ReactNode } from 'react'
 import { useHover, useToggle } from 'utils/hooks'
 
-import { BLOCK_CONTAINER_VERTICAL_PADDING } from '.'
+import { BLOCK_CONTAINER_VERTICAL_PADDING } from '..'
 
 import styles from './Container.module.scss'
 import Controls from './Controls'

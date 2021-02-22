@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import List from './List'
-import { BlockDataCheckBullet, BlockDataListBullet, BlockDataNumberBullet, BlockType } from './types'
+import { BlockDataCheckBullet, BlockDataListBullet, BlockDataNumberBullet, BlockType } from '../types'
 
 const ControlledList = (props: IProps) => {
   const [focusIndex, setFocusIndex] = useState(-1)

@@ -1,9 +1,9 @@
 import { memo, RefObject, useCallback, useEffect } from 'react'
 
 import TextInput, { TextInputEvent } from 'components/common/TextInput'
-import { BlockData, BlockDataText, BlockType, Block } from './types'
+import { BlockData, BlockDataText, BlockType, Block } from '../types'
 
-import { BlockTypeProperties } from '.'
+import { BlockTypeProperties } from '..'
 import styles from './Text.module.scss'
 import { useKeyDown } from 'utils/hooks'
 
