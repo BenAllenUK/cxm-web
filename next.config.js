@@ -3,8 +3,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { nextI18NextRewrites } = require('next-i18next/rewrites')
 const localeSubpaths = {
   fr: 'fr',
-  de: 'german',
-  en: 'en',
+  de: 'de',
 }
 
 module.exports = {
