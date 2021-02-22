@@ -9,12 +9,12 @@ import ReactTooltip from 'react-tooltip'
 import styles from './Editor.module.scss'
 import Container from './blocks/core/Container'
 
-import BlockItem from './BlockItem'
+import Item from './Item'
 import { useWindowKeyUp } from 'utils/hooks'
 import { useBlockControlModal } from './modals/block-controls'
 import { useTextControlModal } from './modals/text-controls'
 
-const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex }: IProps) => {
+const List = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex }: IProps) => {
   const blockRefs = useRef<HTMLDivElement[]>([])
 
   const {
@@ -167,12 +167,12 @@ const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIn
   return (
     <div className={styles.body} onClick={_onBodyClick}>
       <div onClick={(e) => e.stopPropagation()}>
-        <List onSortEnd={_onSortEnd} useDragHandle={true}>
+        <SortableList onSortEnd={_onSortEnd} useDragHandle={true}>
           {blocks
             .sort((a: Block, b: Block) => a.position - b.position)
             .map((item, i) => {
               return (
-                <Item index={item.position} key={`${item.id}-${item.position}`}>
+                <SortableItem index={item.position} key={`${item.id}-${item.position}`}>
                   <Container
                     index={item.position}
                     initialHeight={BlockTypeProperties[item.type].initialHeight}
@@ -188,7 +188,7 @@ const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIn
                         }
                       }}
                     >
-                      <BlockItem
+                      <Item
                         index={item.position}
                         focus={focusIndex === item.position}
                         blockControlOpen={modalBlockEnabled}
@@ -203,10 +203,10 @@ const Content = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIn
                       />
                     </div>
                   </Container>
-                </Item>
+                </SortableItem>
               )
             })}
-        </List>
+        </SortableList>
         <Tooltip id={'editor'} />
       </div>
     </div>
@@ -217,8 +217,8 @@ const StyledList = ({ children }: any) => <div className={styles.list}>{children
 
 const ItemContainer = ({ children }: any) => children
 
-const List = SortableContainer(StyledList)
-const Item = SortableElement(ItemContainer)
+const SortableList = SortableContainer(StyledList)
+const SortableItem = SortableElement(ItemContainer)
 
 interface IProps {
   focusIndex: number
@@ -228,4 +228,4 @@ interface IProps {
   setFocusIndex: (n: number) => void
 }
 
-export default Content
+export default List

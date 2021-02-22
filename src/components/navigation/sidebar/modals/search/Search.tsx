@@ -1,4 +1,4 @@
-import TextInput from 'components/common/TextInput'
+import TextInput from 'components/common/text-input/TextInput'
 import styles from './Search.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 

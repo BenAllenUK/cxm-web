@@ -1,6 +1,6 @@
 import { memo, RefObject, useCallback, useEffect } from 'react'
 
-import TextInput, { TextInputEvent } from 'components/common/TextInput'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import { BlockData, BlockDataText, BlockType, Block } from '../types'
 
 import { BlockTypeProperties } from '..'

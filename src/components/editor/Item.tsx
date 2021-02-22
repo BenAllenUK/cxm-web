@@ -6,7 +6,7 @@ import { Block, BlockData, BlockDataImage, BlockDataListBullet, BlockDataText, B
 import ControlledText from './blocks/text/ControlledText'
 import ControlledList from './blocks/list/ControlledList'
 
-const BlockItem = ({
+const Item = ({
   blockControlOpen,
   type,
   payload,
@@ -106,7 +106,7 @@ const BlockItem = ({
   }
 }
 
-export default BlockItem
+export default Item
 
 interface IProps {
   focus: boolean

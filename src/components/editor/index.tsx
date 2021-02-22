@@ -1,7 +1,7 @@
 import { memo, useCallback, useRef, useState } from 'react'
 import { Block, BlockDataText, BlockType } from 'components/editor/blocks/types'
 import { BlockTypeProperties, DEFAULT_BLOCK_START } from './blocks'
-import Content from './Content'
+import Content from './List'
 import styles from './Editor.module.scss'
 import Modals from './modals'
 import Header from './header'

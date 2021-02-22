@@ -1,4 +1,4 @@
-import TextInput from 'components/common/TextInput'
+import TextInput from 'components/common/text-input/TextInput'
 import { useEffect, useRef } from 'react'
 import { useOnClickOutside, useWindowKeyDown } from 'utils/hooks'
 import styles from './RenameControlsModal.module.scss'

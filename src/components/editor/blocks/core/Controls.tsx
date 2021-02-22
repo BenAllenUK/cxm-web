@@ -1,5 +1,5 @@
 import { useCallback, useState, memo, ReactNode } from 'react'
-import Button from 'components/common/Button'
+import Button from 'components/common/button/Button'
 import AddIcon from 'images/icons/add.svg'
 import DragIcon from 'images/icons/drag.svg'
 
