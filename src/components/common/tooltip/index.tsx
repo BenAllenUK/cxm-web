@@ -1,6 +1,6 @@
 import ReactTooltip, { TooltipProps } from 'react-tooltip'
 
-import tooltipStyles from 'components/tooltip/Tooltip.module.scss'
+import tooltipStyles from 'components/common/tooltip/Tooltip.module.scss'
 
 export function Tooltip({ id = 'root', ...props }: IProps) {
   return (
