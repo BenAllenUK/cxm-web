@@ -2,6 +2,7 @@ import { memo } from 'react'
 
 import Sidebar, { Section } from 'components/navigation/sidebar'
 import Editor from 'components/editor'
+import ARTICLE_FRAGMENT from 'queries/articles/ARTICLE_FRAGMENT.gql'
 import parseMenu from 'utils/menu/parseMenu'
 import parseBlocks from 'utils/blocks/parseBlocks'
 import { useEffect, useCallback } from 'react'
@@ -21,6 +22,7 @@ import {
   BlockFragment,
   useUpsertArticlesMutation,
   ArticlesInsertInput,
+  ArticlesSetInput,
 } from 'generated/graphql'
 
 import { createArticleMutationParams } from 'queries/articles'
@@ -33,6 +35,8 @@ import { Block } from 'components/editor/blocks/types'
 import debounce from 'lodash/debounce'
 import Navbar from 'components/navigation/navbar'
 import { useTranslation } from 'config/translation'
+import { uniqBy } from 'lodash'
+import { ArticleBlocksFragment } from 'types/types'
 
 const EditorPage = ({
   article,
@@ -63,42 +67,42 @@ const EditorPage = ({
     window.history.pushState({}, '', `/admin/${project.slug}/editor/${article.slug}`)
   }
 
-  const onCreateArticle = useCallback(
-    async (parentId: number | null) => {
-      const slug = 'new-' + encodeURI(new Date().toISOString())
-      const { blocks, ...articleParams } = DEFAULT_ARTICLE
-      const projectId = project.id
-      const params = createArticleMutationParams(projectId, {
-        objects: {
-          ...articleParams,
-          parentId,
-          projectId: project.id,
-          slug,
-          blocks: {
-            data: blocks.map((item) => ({
-              ...item,
-              id: undefined,
-              payload: JSON.stringify(item.payload),
-            })),
-          },
-        },
-      })
+  // const onCreateArticle = useCallback(
+  //   async (parentId: number | null) => {
+  //     const slug = 'new-' + encodeURI(new Date().toISOString())
+  //     const { blocks, ...articleParams } = DEFAULT_ARTICLE
+  //     const projectId = project.id
+  //     const params = createArticleMutationParams(projectId, {
+  //       objects: {
+  //         ...articleParams,
+  //         parentId,
+  //         projectId: project.id,
+  //         slug,
+  //         blocks: {
+  //           data: blocks.map((item) => ({
+  //             ...item,
+  //             id: undefined,
+  //             payload: JSON.stringify(item.payload),
+  //           })),
+  //         },
+  //       },
+  //     })
 
-      const { data } = await onUpsertArticlesMutation(params)
+  //     const { data } = await onUpsertArticlesMutation(params)
 
-      const articleSlug = data?.insert_articles?.returning[0].slug
-      if (!articleSlug) {
-        console.error('Article failed to create')
-        return
-      }
+  //     const articleSlug = data?.insert_articles?.returning[0].slug
+  //     if (!articleSlug) {
+  //       console.error('Article failed to create')
+  //       return
+  //     }
 
-      setArticleSlug(articleSlug)
-      window.history.replaceState({}, '', `/admin/${project.slug}/editor/${articleSlug}`)
-    },
-    [project.id]
-  )
+  //     setArticleSlug(articleSlug)
+  //     window.history.replaceState({}, '', `/admin/${project.slug}/editor/${articleSlug}`)
+  //   },
+  //   [project.id]
+  // )
 
-  const onUpdateArticle = async (updatedArticles: ArticlesInsertInput[]) => {
+  const onUpsertArticle = async (updatedArticles: ArticleBlocksFragment[]) => {
     const articleId = article?.id
     const [newCurrentArticle] = updatedArticles.filter((item) => item.id == articleId)
     if (newCurrentArticle) {
@@ -117,10 +121,37 @@ const EditorPage = ({
 
     const { data } = await onUpsertArticlesMutation({
       variables: {
-        objects: updatedArticles,
+        objects: updatedArticles.map((item) => {
+          return {
+            ...item,
+            projectId: project.id,
+            blocks: { data: (item.blocks || []).map((item) => ({ ...item, payload: JSON.stringify(item) })) },
+          }
+        }),
+      },
+      optimisticResponse: {},
+      update: (cache, { data }) => {
+        const items = data?.insert_articles?.returning || updatedArticles
+
+        const newRefs = items.map((item: any) => {
+          const { blocks, ...otherItem } = item
+          return cache.writeFragment({
+            id: `articles:${item.id || Math.round(Math.random() * -1000000)}`,
+            fragment: ARTICLE_FRAGMENT,
+            data: otherItem,
+          })
+        })
+        cache.modify({
+          id: `projects:${items[0].projectId}`,
+          fields: {
+            articles(existingRefs = []) {
+              return uniqBy([...existingRefs, ...newRefs], '__ref')
+            },
+          },
+        })
       },
     })
-    console.log(data)
+    return data
   }
 
   const onBlockDelete = async (id: number) => {
@@ -157,7 +188,6 @@ const EditorPage = ({
     [article?.id]
   )
 
-  // TODO: Does this need memoizing to avoid article updates conflicting?
   const onDebouncedBlockUpsert = debounce(onBlocksUpsert, 500)
 
   const _onPageControlsClick = (id: number) => {
@@ -168,13 +198,7 @@ const EditorPage = ({
     <div className={styles.container}>
       <Navbar />
 
-      <Sidebar
-        project={project}
-        articles={project.articles}
-        onCreateArticle={onCreateArticle}
-        onUpdateArticles={onUpdateArticle}
-        onViewArticle={onViewArticle}
-      />
+      <Sidebar project={project} articles={project.articles} onUpsertArticle={onUpsertArticle} onViewArticle={onViewArticle} />
 
       <div className={styles.editor}>
         <Editor

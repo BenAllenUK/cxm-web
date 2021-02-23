@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faClone, faEdit } from '@fortawesome/free-regular-svg-icons'
 import { faLink, faLevelUpAlt } from '@fortawesome/free-solid-svg-icons'
 import { createContext, ReactNode, RefObject, useCallback, useContext, useRef, useState } from 'react'
+import TargetContext from './TargetContext'
 
 export enum PageControlOptions {
   Delete = 0,
@@ -59,20 +60,16 @@ const sections: IOptionSections[] = [
   },
 ]
 interface Context {
-  sectionId: number | null
-  itemId: number | null
   enabled: boolean
   position: { x: number; y: number } | null
 }
 
 interface ContextActions extends Context {
-  showControls: (sectionId: number, itemId: number, position: { x: number; y: number }) => void
+  showControls: (position: { x: number; y: number }) => void
   hideControls: () => void
 }
 
 const initialState = {
-  itemId: null,
-  sectionId: null,
   enabled: false,
   position: null,
   showControls: () => {},
@@ -86,11 +83,9 @@ export const usePageControlModals = () => useContext(Context)
 const Provider = ({ children }: IProps) => {
   const [state, setState] = useState<Context>(initialState)
 
-  const showControls = (sectionId: number, itemId: number, position: { x: number; y: number }) => {
+  const showControls = (position: { x: number; y: number }) => {
     setState({
       enabled: true,
-      sectionId,
-      itemId,
       position,
     })
   }
@@ -99,18 +94,17 @@ const Provider = ({ children }: IProps) => {
     setState(initialState)
   }, [])
 
-  return <Context.Provider value={{ ...state, showControls, hideControls }}>{children}</Context.Provider>
+  return (
+    <Context.Provider value={{ ...state, showControls, hideControls }}>
+      <TargetContext.Provider>{children}</TargetContext.Provider>
+    </Context.Provider>
+  )
 }
 
 const Component = ({ onClick }: IComponentProps) => {
-  const { sectionId, itemId, enabled, position, hideControls } = usePageControlModals()
-  const _onClick = (id: number) => {
-    if (sectionId === null || itemId === null) {
-      console.error(`Section ID and Item ID cannot be null. sectionId: ${sectionId} itemId: ${itemId}`)
-      return
-    }
-
-    onClick(sectionId, itemId, id)
+  const { enabled, position, hideControls } = usePageControlModals()
+  const _onClick = (sectionId: number, id: number) => {
+    onClick(sectionId, id)
     hideControls()
   }
 
@@ -134,7 +128,7 @@ export default {
 }
 
 interface IComponentProps {
-  onClick: (sectionId: number, itemId: number, optionId: PageControlOptions) => void
+  onClick: (sectionId: number, itemId: PageControlOptions) => void
 }
 
 interface IProps {

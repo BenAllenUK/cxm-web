@@ -1,22 +1,25 @@
-import PageControls, { PageControlOptions } from 'components/navigation/sidebar/modals/page-controls'
+import PageControls, { PageControlOptions, usePageControlModals } from 'components/navigation/sidebar/modals/page-controls'
 import RenameControls, { useRenameControlModals } from 'components/navigation/sidebar/modals/rename-controls'
-import { ArticleFragment, ArticlesInsertInput } from 'generated/graphql'
+import { ArticleFragment, ArticlesInsertInput, ArticlesSetInput } from 'generated/graphql'
 import { ReactNode, useState } from 'react'
+import { ArticleBlocksFragment } from 'types/types'
 import MenuItemRefs, { useMenuItemRefs } from './menu-item-refs'
+import TargetContext, { useSidebarPageControlsContext } from './page-controls/TargetContext'
 import Search from './search'
 
-const ControlledModals = ({ articles, children, onUpdateArticles, onViewArticle }: IProps) => {
+const ControlledModals = ({ articles, children, onUpsertArticle, onViewArticle }: IProps) => {
   const [renameValue, setRenameValue] = useState<string | null>(null)
+  const { articleId: targetArticleId, sectionId: targetSectionId } = useSidebarPageControlsContext()
   const { showControls: showRenameControls } = useRenameControlModals()
 
   const { locationRefs } = useMenuItemRefs()
 
-  const _onClick = (sectionId: number, itemId: number, optionId: PageControlOptions) => {
+  const _onClick = (_: number, optionId: PageControlOptions) => {
     if (!locationRefs?.current) {
       return
     }
 
-    const [article] = articles.filter((item) => item.id === itemId)
+    const [article] = articles.filter((item) => item.id === targetArticleId)
     if (!article) {
       return
     }
@@ -28,35 +31,35 @@ const ControlledModals = ({ articles, children, onUpdateArticles, onViewArticle 
         onArticleDelete(article.id)
         return
       }
-
       case PageControlOptions.Duplicate:
         onArticleDuplicate(article.id)
         return
       case PageControlOptions.Rename: {
-        const { top, left, height } = locationRefs?.current[sectionId][itemId].getBoundingClientRect()
-        showRenameControls(sectionId, itemId, { x: left - 20, y: top + height + 5 })
+        console.log({ targetArticleId, targetSectionId })
+        const { top, left, height } = locationRefs?.current[targetSectionId][article.id].getBoundingClientRect()
+        showRenameControls({ x: left - 20, y: top + height + 5 })
         setRenameValue(article.title)
         return
       }
     }
   }
 
-  const onArticleRenameTextChange = (sectionId: number, itemId: number, value: string) => {
+  const onArticleRenameTextChange = (value: string) => {
     setRenameValue(value)
   }
 
-  const _onArticleRenameSubmit = (_: number, itemId: number) => {
+  const _onArticleRenameSubmit = () => {
     if (!renameValue) {
       return
     }
 
-    const [article] = articles.filter((item) => item.id === itemId)
+    const [article] = articles.filter((item) => item.id === targetArticleId)
     if (!article) {
-      console.error(`Article not found`)
+      console.error(`Article not found: ${targetArticleId}`)
       return
     }
     const { __typename, ...articleData } = article
-    onUpdateArticles([{ ...articleData, title: renameValue }])
+    onUpsertArticle([{ ...articleData, title: renameValue }])
   }
 
   const onArticleDuplicate = (id: number) => {
@@ -66,8 +69,9 @@ const ControlledModals = ({ articles, children, onUpdateArticles, onViewArticle 
       return
     }
     const { __typename, id: _, ...articleData } = article
-    onUpdateArticles([
+    onUpsertArticle([
       {
+        id: -1,
         ...articleData,
         title: `${articleData.title} Copy`,
         slug: `${articleData.slug}-copy`,
@@ -83,7 +87,7 @@ const ControlledModals = ({ articles, children, onUpdateArticles, onViewArticle 
     }
     const { __typename, ...articleData } = article
     // TODO: Set archived user
-    onUpdateArticles([{ ...articleData, archived: true, archivedAt: new Date().toISOString() }])
+    onUpsertArticle([{ ...articleData, archived: true, archivedAt: new Date().toISOString() }])
   }
 
   return (
@@ -99,7 +103,7 @@ const ControlledModals = ({ articles, children, onUpdateArticles, onViewArticle 
 interface IProps {
   articles: ArticleFragment[]
   children: ReactNode
-  onUpdateArticles: (articles: ArticlesInsertInput[]) => void
+  onUpsertArticle: (articles: ArticleBlocksFragment[]) => void
   onViewArticle: (id: number) => void
 }
 
