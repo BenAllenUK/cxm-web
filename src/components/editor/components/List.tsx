@@ -1,19 +1,19 @@
 import { useRef, useCallback, useEffect, useState, memo, createRef } from 'react'
 import { SortableContainer, SortableElement, SortEnd, SortEvent, SortStart } from 'react-sortable-hoc'
 import { Tooltip } from 'components/common/tooltip'
-import { BlockTypeProperties, BLOCK_CONTAINER_VERTICAL_PADDING, DEFAULT_BLOCK, getBlockOptions, isBlockEmpty } from './blocks'
-import { BlockData, BlockType, BlockDataText, BlockDataImage, Block } from './blocks/types'
+import { BlockTypeProperties, BLOCK_CONTAINER_VERTICAL_PADDING, DEFAULT_BLOCK, getBlockOptions, isBlockEmpty } from '../blocks'
+import { BlockData, BlockType, BlockDataText, BlockDataImage, Block } from '../blocks/types'
 
 import ReactTooltip from 'react-tooltip'
 
-import styles from './Editor.module.scss'
-import Container from './blocks/core/Container'
+import styles from '../Editor.module.scss'
+import Container from '../blocks/core/Container'
 
 import Item from './Item'
 import useWindowKeyUp from 'utils/hooks/useWindowKeyUp'
-import { useBlockControlModal } from './modals/block-controls'
-import { useTextControlModal } from './modals/text-controls'
-import { useBlockControlsContext } from './modals/block-controls/BlockControlsContext'
+import { useBlockControlModal } from '../modals/block-controls'
+import { useTextControlModal } from '../modals/text-controls'
+import { useBlockControlsContext } from '../modals/block-controls/BlockControlsContext'
 
 const List = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex }: IProps) => {
   const blockRefs = useRef<HTMLDivElement[]>([])
@@ -163,6 +163,7 @@ const List = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex
     onBlocksUpsert({ ...block, position: newIndex })
   }
 
+  console.log({ blocks })
   return (
     <div className={styles.body} onClick={_onBodyClick}>
       <div onClick={(e) => e.stopPropagation()}>

@@ -30,7 +30,7 @@ import { createUpsertMutationParams, deleteMutationParams } from 'queries/blocks
 
 import { useRouter } from 'next/router'
 import { DEFAULT_ARTICLE } from 'components/editor/blocks'
-import { useEditor } from 'components/editor/Provider'
+import { useEditor } from 'components/editor/components/Provider'
 import { Block } from 'components/editor/blocks/types'
 import debounce from 'lodash/debounce'
 import Navbar from 'components/navigation/navbar'
@@ -125,7 +125,7 @@ const EditorPage = ({
           return {
             ...item,
             projectId: project.id,
-            blocks: { data: (item.blocks || []).map((item) => ({ ...item, payload: JSON.stringify(item) })) },
+            blocks: { data: (item.blocks || []).map((subItem) => ({ ...subItem, payload: JSON.stringify(subItem.payload) })) },
           }
         }),
       },

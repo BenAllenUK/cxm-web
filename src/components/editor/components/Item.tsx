@@ -3,8 +3,8 @@ import { memo, useCallback } from 'react'
 import Divider from 'components/editor/blocks/divider/Divider'
 import Image from 'components/editor/blocks/image/Image'
 import { Block, BlockData, BlockDataImage, BlockDataListBullet, BlockDataText, BlockType } from 'components/editor/blocks/types'
-import ControlledText from './blocks/text/ControlledText'
-import ControlledList from './blocks/list/ControlledList'
+import ControlledText from '../blocks/text/ControlledText'
+import ControlledList from '../blocks/list/ControlledList'
 
 const Item = ({
   blockControlOpen,
@@ -57,7 +57,6 @@ const Item = ({
     case BlockType.CODE:
     case BlockType.QUOTE: {
       const initialPayload = payload as BlockDataText
-
       return (
         <ControlledText
           debugPosition={index}

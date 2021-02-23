@@ -1,14 +1,14 @@
 import { memo, useCallback, useRef, useState } from 'react'
 import { Block, BlockDataText, BlockType } from 'components/editor/blocks/types'
 import { BlockTypeProperties, DEFAULT_BLOCK_START } from './blocks'
-import Content from './List'
+import Content from './components/List'
 import styles from './Editor.module.scss'
 import Modals from './modals'
 import Header from './header'
 import { ArticleFragment } from 'generated/graphql'
 
 function Editor({ id, articles, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IProps) {
-  const [focusIndex, setFocusIndex] = useState(-1)
+  const [focusIndex, setFocusIndex] = useState(initialBlocks.length <= 1 ? 0 : -1)
 
   let content = initialBlocks
   if (!!id && content.length === 0) {
@@ -39,8 +39,6 @@ function Editor({ id, articles, blocks: initialBlocks, onBlocksUpsert, onBlockDe
   const upsertBlocks = (_block: Block) => {
     setBlocks((state) => {
       var existingItems = state.filter((item) => _block.id !== item.id).sort((a: Block, b: Block) => a.position - b.position)
-      // console.log('new block:', _block)
-      // console.log('existing blocks: ', existingItems)
       existingItems = existingItems.map((item, i) => {
         if (item.position >= _block.position) {
           return { ...item, position: i + 1 }
@@ -48,7 +46,6 @@ function Editor({ id, articles, blocks: initialBlocks, onBlocksUpsert, onBlockDe
         return item
       })
       onBlocksUpsert([...existingItems, _block])
-      // console.log(' final blocks', [...existingItems, _block])
       return [...existingItems, _block]
     })
   }

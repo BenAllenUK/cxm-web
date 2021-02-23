@@ -15,7 +15,7 @@ import {
   useDeleteBlockMutation,
 } from 'generated/graphql'
 import Root, { useUser } from 'components/root'
-import EditorProvider, { useEditor } from 'components/editor/Provider'
+import EditorProvider, { useEditor } from 'components/editor/components/Provider'
 import EditorPage from 'components/pages/editor'
 import { GetServerSidePropsContext } from 'next'
 

@@ -10,10 +10,10 @@ function createArticleEmpty(parentId: number | null) {
       blocks: [
         {
           type: BlockType.TEXT,
-          payload: JSON.stringify({
-            value: 'Start writing...',
-          }),
-          position: 9, // TODO: Update position
+          payload: {
+            value: '',
+          },
+          position: 0,
         },
       ],
     },
