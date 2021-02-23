@@ -86,6 +86,7 @@ export type Articles = {
   createdAt: Scalars['timestamptz'];
   id: Scalars['Int'];
   parentId?: Maybe<Scalars['Int']>;
+  position: Scalars['Int'];
   /** An object relationship */
   project?: Maybe<Projects>;
   projectId?: Maybe<Scalars['Int']>;
@@ -211,6 +212,7 @@ export type ArticlesAvgFields = {
   archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
+  position?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
 };
 
@@ -219,6 +221,7 @@ export type ArticlesAvgOrderBy = {
   archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
+  position?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
 };
 
@@ -238,6 +241,7 @@ export type ArticlesBoolExp = {
   createdAt?: Maybe<TimestamptzComparisonExp>;
   id?: Maybe<IntComparisonExp>;
   parentId?: Maybe<IntComparisonExp>;
+  position?: Maybe<IntComparisonExp>;
   project?: Maybe<ProjectsBoolExp>;
   projectId?: Maybe<IntComparisonExp>;
   slug?: Maybe<StringComparisonExp>;
@@ -258,6 +262,7 @@ export type ArticlesIncInput = {
   archivedBy?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
+  position?: Maybe<Scalars['Int']>;
   projectId?: Maybe<Scalars['Int']>;
 };
 
@@ -274,6 +279,7 @@ export type ArticlesInsertInput = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
+  position?: Maybe<Scalars['Int']>;
   project?: Maybe<ProjectsObjRelInsertInput>;
   projectId?: Maybe<Scalars['Int']>;
   slug?: Maybe<Scalars['String']>;
@@ -289,6 +295,7 @@ export type ArticlesMaxFields = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
+  position?: Maybe<Scalars['Int']>;
   projectId?: Maybe<Scalars['Int']>;
   slug?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
@@ -302,6 +309,7 @@ export type ArticlesMaxOrderBy = {
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
+  position?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
   slug?: Maybe<OrderBy>;
   title?: Maybe<OrderBy>;
@@ -316,6 +324,7 @@ export type ArticlesMinFields = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
+  position?: Maybe<Scalars['Int']>;
   projectId?: Maybe<Scalars['Int']>;
   slug?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
@@ -329,6 +338,7 @@ export type ArticlesMinOrderBy = {
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
+  position?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
   slug?: Maybe<OrderBy>;
   title?: Maybe<OrderBy>;
@@ -370,6 +380,7 @@ export type ArticlesOrderBy = {
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
+  position?: Maybe<OrderBy>;
   project?: Maybe<ProjectsOrderBy>;
   projectId?: Maybe<OrderBy>;
   slug?: Maybe<OrderBy>;
@@ -397,6 +408,8 @@ export enum ArticlesSelectColumn {
   /** column name */
   ParentId = 'parentId',
   /** column name */
+  Position = 'position',
+  /** column name */
   ProjectId = 'projectId',
   /** column name */
   Slug = 'slug',
@@ -414,6 +427,7 @@ export type ArticlesSetInput = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
+  position?: Maybe<Scalars['Int']>;
   projectId?: Maybe<Scalars['Int']>;
   slug?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
@@ -426,6 +440,7 @@ export type ArticlesStddevFields = {
   archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
+  position?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
 };
 
@@ -434,6 +449,7 @@ export type ArticlesStddevOrderBy = {
   archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
+  position?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
 };
 
@@ -443,6 +459,7 @@ export type ArticlesStddevPopFields = {
   archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
+  position?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
 };
 
@@ -451,6 +468,7 @@ export type ArticlesStddevPopOrderBy = {
   archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
+  position?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
 };
 
@@ -460,6 +478,7 @@ export type ArticlesStddevSampFields = {
   archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
+  position?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
 };
 
@@ -468,6 +487,7 @@ export type ArticlesStddevSampOrderBy = {
   archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
+  position?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
 };
 
@@ -477,6 +497,7 @@ export type ArticlesSumFields = {
   archivedBy?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
+  position?: Maybe<Scalars['Int']>;
   projectId?: Maybe<Scalars['Int']>;
 };
 
@@ -485,6 +506,7 @@ export type ArticlesSumOrderBy = {
   archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
+  position?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
 };
 
@@ -502,6 +524,8 @@ export enum ArticlesUpdateColumn {
   Id = 'id',
   /** column name */
   ParentId = 'parentId',
+  /** column name */
+  Position = 'position',
   /** column name */
   ProjectId = 'projectId',
   /** column name */
@@ -854,6 +878,7 @@ export type ArticlesVarPopFields = {
   archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
+  position?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
 };
 
@@ -862,6 +887,7 @@ export type ArticlesVarPopOrderBy = {
   archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
+  position?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
 };
 
@@ -871,6 +897,7 @@ export type ArticlesVarSampFields = {
   archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
+  position?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
 };
 
@@ -879,6 +906,7 @@ export type ArticlesVarSampOrderBy = {
   archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
+  position?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
 };
 
@@ -888,6 +916,7 @@ export type ArticlesVarianceFields = {
   archivedBy?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   parentId?: Maybe<Scalars['Float']>;
+  position?: Maybe<Scalars['Float']>;
   projectId?: Maybe<Scalars['Float']>;
 };
 
@@ -896,6 +925,7 @@ export type ArticlesVarianceOrderBy = {
   archivedBy?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
+  position?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
 };
 
@@ -5943,7 +5973,7 @@ export type UsersVarianceOrderBy = {
 
 export type ArticleFragment = (
   { __typename?: 'articles' }
-  & Pick<Articles, 'id' | 'parentId' | 'projectId' | 'slug' | 'title' | 'updatedAt' | 'createdAt' | 'archived' | 'archivedAt'>
+  & Pick<Articles, 'id' | 'parentId' | 'projectId' | 'slug' | 'title' | 'updatedAt' | 'createdAt' | 'archived' | 'archivedAt' | 'position'>
 );
 
 export type CreateArticleMutationVariables = Exact<{
@@ -6210,6 +6240,7 @@ export const ArticleFragmentDoc = gql`
   createdAt
   archived
   archivedAt
+  position
 }
     `;
 export const ProjectFragmentDoc = gql`
@@ -6404,7 +6435,7 @@ export const UpsertArticlesDocument = gql`
     mutation UpsertArticles($objects: [articles_insert_input!]!) {
   insert_articles(
     objects: $objects
-    on_conflict: {constraint: articles_pkey, update_columns: [parentId, projectId, slug, title, archived, archivedAt]}
+    on_conflict: {constraint: articles_pkey, update_columns: [parentId, projectId, slug, title, archived, archivedAt, position]}
   ) {
     returning {
       ...Article

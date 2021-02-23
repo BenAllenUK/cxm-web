@@ -1,11 +1,11 @@
-import { debounce, List, reverse, uniqBy, ValueIteratee } from 'lodash'
+import { debounce, reverse, uniqBy, ValueIteratee } from 'lodash'
 
 interface DebouncedMergedFunc<T extends unknown> {
   (args: T): void
 }
 
 const debounceMerged = <T extends unknown>(
-  func: (_: List<T>) => any,
+  func: (_: Array<T>) => any,
   delay: number,
   property: ValueIteratee<T>
 ): DebouncedMergedFunc<T> => {
