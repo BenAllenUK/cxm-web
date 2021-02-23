@@ -10,7 +10,7 @@ import styles from './Editor.module.scss'
 import Container from './blocks/core/Container'
 
 import Item from './Item'
-import { useWindowKeyUp } from 'utils/hooks'
+import useWindowKeyUp from 'utils/hooks/useWindowKeyUp'
 import { useBlockControlModal } from './modals/block-controls'
 import { useTextControlModal } from './modals/text-controls'
 

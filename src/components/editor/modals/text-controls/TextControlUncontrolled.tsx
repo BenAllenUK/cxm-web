@@ -1,5 +1,5 @@
 import { HTMLProps, useRef } from 'react'
-import { useOnClickOutside } from 'utils/hooks'
+import useOnClickOnOutside from 'utils/hooks/useOnClickOnOutside'
 import LinkButton from './LinkButton'
 import Button from './Button'
 import styles from './TextControlUncontrolled.module.scss'
@@ -23,7 +23,7 @@ const TextControlsUncontrolled = ({
   const ref = useRef<HTMLDivElement>(null)
   const { t } = useTranslation(['editor'])
 
-  useOnClickOutside(ref, () => {
+  useOnClickOnOutside(ref, () => {
     onDismiss()
   })
 

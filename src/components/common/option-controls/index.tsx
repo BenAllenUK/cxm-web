@@ -1,5 +1,6 @@
 import { memo, useCallback, useRef, useState, ReactNode, HTMLProps } from 'react'
-import { useOnClickOutside, useWindowKeyDown } from 'utils/hooks'
+import useWindowKeyDown from 'utils/hooks/useWindowKeyDown'
+import useOnClickOutside from 'utils/hooks/useOnClickOnOutside'
 import styles from './OptionControls.module.scss'
 import findIndex from 'lodash/findIndex'
 import flatten from 'lodash/flatten'

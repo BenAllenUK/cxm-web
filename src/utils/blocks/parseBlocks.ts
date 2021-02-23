@@ -1,7 +1,7 @@
 import { Block, BlockType } from 'components/editor/blocks/types'
 import { GetArticleOneQuery } from 'generated/graphql'
 
-export function parseBlocks(data: NonNullable<GetArticleOneQuery['articles'][0]>['blocks']): Block[] {
+function parseBlocks(data: NonNullable<GetArticleOneQuery['articles'][0]>['blocks']): Block[] {
   try {
     return data.map(({ __typename, ...item }) => ({
       ...item,
@@ -14,3 +14,5 @@ export function parseBlocks(data: NonNullable<GetArticleOneQuery['articles'][0]>
     return []
   }
 }
+
+export default parseBlocks

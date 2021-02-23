@@ -5,7 +5,7 @@ import { BlockData, BlockDataText, BlockType, Block } from '../types'
 
 import { BlockTypeProperties } from '..'
 import styles from './Text.module.scss'
-import { useKeyDown } from 'utils/hooks'
+import useKeyDown from 'utils/hooks/useKeyDown'
 
 const Text = ({ value, type, filteringMode, tabIndex, innerRef, onFocus, onBlur, onNew, onUpdate, onDelete }: IProps) => {
   const _onValueChange = useCallback(

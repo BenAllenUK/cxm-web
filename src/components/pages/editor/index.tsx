@@ -2,8 +2,8 @@ import { memo } from 'react'
 
 import Sidebar, { Section } from 'components/navigation/sidebar'
 import Editor from 'components/editor'
-import { parseMenu } from 'utils/menu'
-import { parseBlocks } from 'utils/blocks'
+import parseMenu from 'utils/menu/parseMenu'
+import parseBlocks from 'utils/blocks/parseBlocks'
 import { useEffect, useCallback } from 'react'
 import styles from './Editor.module.scss'
 

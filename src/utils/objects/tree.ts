@@ -6,7 +6,7 @@ type Node = {
 }
 
 // https://typeofnan.dev/an-easy-way-to-build-a-tree-with-object-references/
-export function unflatten<T extends Node>(list: T[]) {
+function tree<T extends Node>(list: T[]) {
   let root: Node[] = []
   var tree = [...list]
 
@@ -31,3 +31,5 @@ export function unflatten<T extends Node>(list: T[]) {
   })
   return root
 }
+
+export default tree
