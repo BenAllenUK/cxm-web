@@ -22,6 +22,7 @@ export const useSidebarPageControlsContext = () => useContext(Context)
 const Provider = ({ children }: IProps) => {
   const [state, setState] = useState<State>(initialState)
   const setTarget = (sectionId: number, articleId: number) => {
+    console.log(sectionId, articleId)
     setState({
       sectionId,
       articleId,

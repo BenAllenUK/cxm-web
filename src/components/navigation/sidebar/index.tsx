@@ -20,7 +20,7 @@ import { useSearchModal } from './modals/search'
 import { DEFAULT_ARTICLE } from 'components/editor/blocks'
 import { BlockType } from 'components/editor/blocks/types'
 import createArticleEmpty from 'utils/article/createEmptyArticle'
-import { useSidebarPageControlsContext } from './modals/page-controls/TargetContext'
+import { useSidebarPageControlsContext } from './modals/page-controls/PageControlsTargetContext'
 import { ArticleBlocksFragment } from 'types/types'
 
 export const SIDEBAR_INDENT = 20
@@ -96,6 +96,7 @@ export function ControlledSidebar({ project, articles, onViewArticle, onUpsertAr
 
   const onMenuMoreItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
     showControls({ x: e.clientX, y: e.clientY })
+    console.log('set target')
     setTarget(section.id, item.id)
     e.stopPropagation()
   }

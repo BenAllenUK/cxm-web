@@ -16,7 +16,7 @@ export const Header = ({ loading }: IProps) => {
   const ref = useRef<HTMLDivElement>(null)
 
   const _onPageControlsClick = (e: any) => {
-    showControls(1, {
+    showControls({
       x: ref.current?.offsetLeft || 0,
       y: (ref.current?.offsetTop || 0) + (ref.current?.offsetHeight || 0) + 10,
     })

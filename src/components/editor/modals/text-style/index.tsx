@@ -1,51 +1,9 @@
+import createPositionModal from 'components/common/modals/position'
 import { insertSpanWithStyle } from 'components/editor/utils/html'
-import { createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
 import TextStyleUncontrolled, { backgroundColorOptions, StyleSections, textColorOptions } from './TextStyleUncontrolled'
 
-interface Context {
-  enabled: boolean
-  position: { x: number; y: number } | null
-}
-
-interface ContextActions extends Context {
-  showControls: (position: { x: number; y: number }) => void
-  hideControls: () => void
-}
-
-const initialState = {
-  enabled: false,
-  position: null,
-  showControls: () => {},
-  hideControls: () => {},
-}
-
-const Context = createContext<ContextActions>(initialState)
-
-export const useTextStyleModal = () => useContext(Context)
-
-const Provider = ({ children, rootRef }: { children: ReactNode; rootRef: RefObject<HTMLDivElement> }) => {
-  const [state, setState] = useState<Context>(initialState)
-
-  const showControls = (position: { x: number; y: number }) => {
-    if (!position || !rootRef.current) {
-      return
-    }
-
-    const bodyTop = rootRef ? rootRef.current.getBoundingClientRect().top : 0
-    const bodyLeft = rootRef ? rootRef.current.getBoundingClientRect().left : 0
-
-    setState({
-      enabled: true,
-      position: { x: position.x - bodyLeft, y: position.y - bodyTop },
-    })
-  }
-
-  const hideControls = useCallback(() => {
-    setState(initialState)
-  }, [])
-
-  return <Context.Provider value={{ ...state, showControls, hideControls }}>{children}</Context.Provider>
-}
+const { Provider, useModal } = createPositionModal()
+export const useTextStyleModal = useModal
 
 const Component = (props: IProps) => {
   const { enabled, position, hideControls } = useTextStyleModal()

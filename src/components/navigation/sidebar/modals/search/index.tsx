@@ -1,42 +1,10 @@
-import { ArticleFragment } from 'generated/graphql'
-import { createContext, ReactNode, useCallback, useContext, useState } from 'react'
+import createModal from 'components/common/modals/simple'
+
 import SearchComponent, { ISearchProps } from './Search'
-import styles from './Search.module.scss'
 
-interface Context {
-  enabled: boolean
-}
+const { Provider, useModal } = createModal()
 
-interface ContextActions extends Context {
-  showControls: () => void
-  hideControls: () => void
-}
-
-const initialState = {
-  enabled: false,
-  showControls: () => {},
-  hideControls: () => {},
-}
-
-const Context = createContext<ContextActions>(initialState)
-
-export const useSearchModal = () => useContext(Context)
-
-const Provider = ({ children }: { children: ReactNode }) => {
-  const [state, setState] = useState<Context>(initialState)
-
-  const showControls = () => {
-    setState({
-      enabled: true,
-    })
-  }
-
-  const hideControls = useCallback(() => {
-    setState(initialState)
-  }, [])
-
-  return <Context.Provider value={{ ...state, showControls, hideControls }}>{children}</Context.Provider>
-}
+export const useSearchModal = useModal
 
 const Component = (props: ISearchProps) => {
   const { enabled, hideControls } = useSearchModal()

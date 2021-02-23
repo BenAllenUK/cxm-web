@@ -2,8 +2,7 @@ import OptionControls, { OptionType, IOptionElements, IOptionSections } from 'co
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faClone, faEdit } from '@fortawesome/free-regular-svg-icons'
 import { faLink, faLevelUpAlt } from '@fortawesome/free-solid-svg-icons'
-import { createContext, ReactNode, RefObject, useCallback, useContext, useRef, useState } from 'react'
-import TargetContext from './TargetContext'
+import createPositionModal from 'components/common/modals/position'
 
 export enum PageControlOptions {
   Delete = 0,
@@ -59,47 +58,10 @@ const sections: IOptionSections[] = [
     ],
   },
 ]
-interface Context {
-  enabled: boolean
-  position: { x: number; y: number } | null
-}
 
-interface ContextActions extends Context {
-  showControls: (position: { x: number; y: number }) => void
-  hideControls: () => void
-}
+const { Provider, useModal } = createPositionModal()
 
-const initialState = {
-  enabled: false,
-  position: null,
-  showControls: () => {},
-  hideControls: () => {},
-}
-
-const Context = createContext<ContextActions>({ ...initialState })
-
-export const usePageControlModals = () => useContext(Context)
-
-const Provider = ({ children }: IProps) => {
-  const [state, setState] = useState<Context>(initialState)
-
-  const showControls = (position: { x: number; y: number }) => {
-    setState({
-      enabled: true,
-      position,
-    })
-  }
-
-  const hideControls = useCallback(() => {
-    setState(initialState)
-  }, [])
-
-  return (
-    <Context.Provider value={{ ...state, showControls, hideControls }}>
-      <TargetContext.Provider>{children}</TargetContext.Provider>
-    </Context.Provider>
-  )
-}
+export const usePageControlModals = useModal
 
 const Component = ({ onClick }: IComponentProps) => {
   const { enabled, position, hideControls } = usePageControlModals()
@@ -129,8 +91,4 @@ export default {
 
 interface IComponentProps {
   onClick: (sectionId: number, itemId: PageControlOptions) => void
-}
-
-interface IProps {
-  children: ReactNode
 }

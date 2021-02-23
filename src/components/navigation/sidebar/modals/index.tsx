@@ -4,7 +4,8 @@ import { ArticleFragment, ArticlesInsertInput, ArticlesSetInput } from 'generate
 import { ReactNode, useState } from 'react'
 import { ArticleBlocksFragment } from 'types/types'
 import MenuItemRefs, { useMenuItemRefs } from './menu-item-refs'
-import TargetContext, { useSidebarPageControlsContext } from './page-controls/TargetContext'
+import PageControlsTargetContext from './page-controls/PageControlsTargetContext'
+import { useSidebarPageControlsContext } from './page-controls/PageControlsTargetContext'
 import Search from './search'
 
 const ControlledModals = ({ articles, children, onUpsertArticle, onViewArticle }: IProps) => {
@@ -112,11 +113,13 @@ const Modals = (props: IProps) => {
     <div>
       <Search.Provider>
         <MenuItemRefs.Provider>
-          <RenameControls.Provider>
-            <PageControls.Provider>
-              <ControlledModals {...props} />
-            </PageControls.Provider>
-          </RenameControls.Provider>
+          <PageControlsTargetContext.Provider>
+            <RenameControls.Provider>
+              <PageControls.Provider>
+                <ControlledModals {...props} />
+              </PageControls.Provider>
+            </RenameControls.Provider>
+          </PageControlsTargetContext.Provider>
         </MenuItemRefs.Provider>
       </Search.Provider>
     </div>

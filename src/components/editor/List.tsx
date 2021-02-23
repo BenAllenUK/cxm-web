@@ -13,17 +13,15 @@ import Item from './Item'
 import useWindowKeyUp from 'utils/hooks/useWindowKeyUp'
 import { useBlockControlModal } from './modals/block-controls'
 import { useTextControlModal } from './modals/text-controls'
+import { useBlockControlsContext } from './modals/block-controls/BlockControlsContext'
 
 const List = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex }: IProps) => {
   const blockRefs = useRef<HTMLDivElement[]>([])
 
-  const {
-    filterText: modalFilterText,
-    enabled: modalBlockEnabled,
-    showControls: showBlockControls,
-    hideControls: hideBlockControls,
-    setFilterText,
-  } = useBlockControlModal()
+  const { enabled: modalBlockEnabled, showControls: showBlockControls, hideControls: hideBlockControls } = useBlockControlModal()
+  const { setIndex: setBlockControlsIndex } = useBlockControlsContext()
+
+  const { filterText: modalFilterText, setFilterText } = useBlockControlsContext()
 
   const { showControls: showTextControls, hideControls: hideTextControls } = useTextControlModal()
 
@@ -140,7 +138,8 @@ const List = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex
 
       const block = blocks[index]
       const initialHeight = BlockTypeProperties[block.type].initialHeight
-      showBlockControls(index, {
+      setBlockControlsIndex(index)
+      showBlockControls({
         x: blockLeft,
         y: blockTop + initialHeight + BLOCK_CONTAINER_VERTICAL_PADDING,
       })
