@@ -129,16 +129,7 @@ function Content() {
     const { __typename, ...existingArticle } = articlesObject[id]
 
     const { data } = await upsertArticlesMutation({
-      optimisticResponse: {
-        insert_articles: {
-          returning: [
-            {
-              ...existingArticle,
-              blocks: [],
-            },
-          ],
-        },
-      },
+      optimisticResponse: {},
       update: (cache, { data }) => {
         cache.writeFragment({
           id: `articles:${id}`,

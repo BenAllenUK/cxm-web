@@ -1,19 +1,19 @@
 import { createContext, ReactNode, useContext, useState } from 'react'
 
 interface State {
-  index: number
+  id: number
   filterText: string | null
 }
 
 interface ContextActions extends State {
-  setIndex: (index: number) => void
+  setBlockId: (id: number) => void
   setFilterText: (value: string) => void
 }
 
 const initialState = {
-  index: -1,
+  id: -1,
   filterText: null,
-  setIndex: () => {},
+  setBlockId: () => {},
   setFilterText: () => {},
 }
 
@@ -24,10 +24,10 @@ export const useBlockControlsContext = () => useContext(Context)
 const Provider = ({ children }: IProps) => {
   const [state, setState] = useState<State>(initialState)
 
-  const setIndex = (index: number) => {
+  const setBlockId = (id: number) => {
     setState({
       ...state,
-      index,
+      id,
     })
   }
 
@@ -35,7 +35,7 @@ const Provider = ({ children }: IProps) => {
     setState((state) => ({ ...state, filterText }))
   }
 
-  return <Context.Provider value={{ ...state, setFilterText, setIndex }}>{children}</Context.Provider>
+  return <Context.Provider value={{ ...state, setFilterText, setBlockId }}>{children}</Context.Provider>
 }
 
 export default {

@@ -19,7 +19,7 @@ export function MenuList(props: IProps) {
             onAddClick={(e) => onItemAddClick(e, item)}
             onMoreClick={(e) => onItemMoreClick(e, item)}
           >
-            {item.label}
+            ({item.id}) {item.label}
           </MenuItem>
           {openState[item.id] && <MenuList {...props} items={item.children} depth={depth + 1} />}
         </div>

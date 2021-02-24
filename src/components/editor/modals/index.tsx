@@ -10,11 +10,15 @@ import { ArticleFragment } from 'generated/graphql'
 import BlockControlsContext, { useBlockControlsContext } from './block-controls/BlockControlsContext'
 import PageControlsTargetContext from 'components/navigation/sidebar/modals/page-controls/PageControlsTargetContext'
 
-const ControlledModals = ({ articles, children, onBlockItemClick }: IProps) => {
-  const { index, filterText } = useBlockControlsContext()
+const ControlledModals = ({ articles, children, onModifyBlockType }: IProps) => {
+  const { id, filterText } = useBlockControlsContext()
+
+  const _onModifyBlockType = (key: BlockType) => {
+    onModifyBlockType(id, key)
+  }
   return (
     <div>
-      <BlockControls.Component filterText={filterText} index={index} onBlockItemClick={onBlockItemClick} />
+      <BlockControls.Component filterText={filterText} id={id} onBlockItemClick={_onModifyBlockType} />
       <PageControls.Component onClick={() => {}} />
       <TextControls.Component />
       <TextStyle.Component />
@@ -53,5 +57,5 @@ export default memo(Modals)
 interface IProps {
   articles: ArticleFragment[]
   children: ReactNode
-  onBlockItemClick: (index: number, key: BlockType) => void
+  onModifyBlockType: (index: number, key: BlockType) => void
 }

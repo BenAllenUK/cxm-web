@@ -12,12 +12,15 @@ import {
   useUpsertArticlesMutation,
   useGetProjectOneQuery,
   useUpsertBlocksMutation,
-  useDeleteBlockMutation,
+  useDeleteBlocksMutation,
 } from 'generated/graphql'
 import Root, { useUser } from 'components/root'
 import EditorProvider, { useEditor } from 'components/editor/components/Provider'
 import EditorPage from 'components/pages/editor'
 import { GetServerSidePropsContext } from 'next'
+import useUpsertArticlesMutationScoped from 'operations/articles/upsert'
+import useDeleteBlocksMutationScoped from 'operations/blocks/delete'
+import useUpsertBlocksMutationScoped from 'operations/blocks/upsert'
 
 export default function EditorRoot(props: any) {
   const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
@@ -77,21 +80,22 @@ export function Content() {
 
   const [article] = articleData?.articles || []
 
-  const [createArticleMutation] = useCreateArticleMutation()
   const [upsertArticlesMutation] = useUpsertArticlesMutation()
+  const upsertArticlesMutationScoped = useUpsertArticlesMutationScoped(project?.id, upsertArticlesMutation)
 
   const [upsertBlockMutation] = useUpsertBlocksMutation()
+  const upsertBlocksMutationScoped = useUpsertBlocksMutationScoped(article?.id, upsertBlockMutation)
 
-  const [deleteBlockMutation] = useDeleteBlockMutation()
+  const [deleteBlocksMutation] = useDeleteBlocksMutation()
+  const deleteBlocksMutationScoped = useDeleteBlocksMutationScoped(article?.id, deleteBlocksMutation)
 
   return (
     <EditorPage
       project={project}
       article={article}
-      onCreateArticleMutation={createArticleMutation}
-      onUpsertArticlesMutation={upsertArticlesMutation}
-      onUpsertBlockMutation={upsertBlockMutation}
-      onDeleteBlockMutation={deleteBlockMutation}
+      onUpsertArticlesMutation={upsertArticlesMutationScoped}
+      onUpsertBlocksMutation={upsertBlocksMutationScoped}
+      onDeleteBlockMutation={deleteBlocksMutationScoped}
     />
   )
 }

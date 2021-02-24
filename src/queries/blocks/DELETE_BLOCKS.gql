@@ -1,5 +1,5 @@
-mutation DeleteBlock($id: Int!) {
-  delete_blocks_by_pk(id: $id) {
-    id
+mutation DeleteBlocks($ids: [Int!]) {
+  delete_blocks(where: { id: { _in: $ids } }) {
+    affected_rows
   }
 }

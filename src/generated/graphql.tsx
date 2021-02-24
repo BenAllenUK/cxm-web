@@ -6117,16 +6117,16 @@ export type BlockFragment = (
   & Pick<Blocks, 'id' | 'articleId' | 'parentId' | 'editingUserId' | 'updatedAt' | 'createdAt' | 'payload' | 'type' | 'position'>
 );
 
-export type DeleteBlockMutationVariables = Exact<{
-  id: Scalars['Int'];
+export type DeleteBlocksMutationVariables = Exact<{
+  ids?: Maybe<Array<Scalars['Int']> | Scalars['Int']>;
 }>;
 
 
-export type DeleteBlockMutation = (
+export type DeleteBlocksMutation = (
   { __typename?: 'mutation_root' }
-  & { delete_blocks_by_pk?: Maybe<(
-    { __typename?: 'blocks' }
-    & Pick<Blocks, 'id'>
+  & { delete_blocks?: Maybe<(
+    { __typename?: 'blocks_mutation_response' }
+    & Pick<BlocksMutationResponse, 'affected_rows'>
   )> }
 );
 
@@ -6547,38 +6547,38 @@ export function useUpdateUserActivityMutation(baseOptions?: Apollo.MutationHookO
 export type UpdateUserActivityMutationHookResult = ReturnType<typeof useUpdateUserActivityMutation>;
 export type UpdateUserActivityMutationResult = Apollo.MutationResult<UpdateUserActivityMutation>;
 export type UpdateUserActivityMutationOptions = Apollo.BaseMutationOptions<UpdateUserActivityMutation, UpdateUserActivityMutationVariables>;
-export const DeleteBlockDocument = gql`
-    mutation DeleteBlock($id: Int!) {
-  delete_blocks_by_pk(id: $id) {
-    id
+export const DeleteBlocksDocument = gql`
+    mutation DeleteBlocks($ids: [Int!]) {
+  delete_blocks(where: {id: {_in: $ids}}) {
+    affected_rows
   }
 }
     `;
-export type DeleteBlockMutationFn = Apollo.MutationFunction<DeleteBlockMutation, DeleteBlockMutationVariables>;
+export type DeleteBlocksMutationFn = Apollo.MutationFunction<DeleteBlocksMutation, DeleteBlocksMutationVariables>;
 
 /**
- * __useDeleteBlockMutation__
+ * __useDeleteBlocksMutation__
  *
- * To run a mutation, you first call `useDeleteBlockMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteBlockMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteBlocksMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBlocksMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteBlockMutation, { data, loading, error }] = useDeleteBlockMutation({
+ * const [deleteBlocksMutation, { data, loading, error }] = useDeleteBlocksMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      ids: // value for 'ids'
  *   },
  * });
  */
-export function useDeleteBlockMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBlockMutation, DeleteBlockMutationVariables>) {
-        return Apollo.useMutation<DeleteBlockMutation, DeleteBlockMutationVariables>(DeleteBlockDocument, baseOptions);
+export function useDeleteBlocksMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBlocksMutation, DeleteBlocksMutationVariables>) {
+        return Apollo.useMutation<DeleteBlocksMutation, DeleteBlocksMutationVariables>(DeleteBlocksDocument, baseOptions);
       }
-export type DeleteBlockMutationHookResult = ReturnType<typeof useDeleteBlockMutation>;
-export type DeleteBlockMutationResult = Apollo.MutationResult<DeleteBlockMutation>;
-export type DeleteBlockMutationOptions = Apollo.BaseMutationOptions<DeleteBlockMutation, DeleteBlockMutationVariables>;
+export type DeleteBlocksMutationHookResult = ReturnType<typeof useDeleteBlocksMutation>;
+export type DeleteBlocksMutationResult = Apollo.MutationResult<DeleteBlocksMutation>;
+export type DeleteBlocksMutationOptions = Apollo.BaseMutationOptions<DeleteBlocksMutation, DeleteBlocksMutationVariables>;
 export const UpsertBlocksDocument = gql`
     mutation UpsertBlocks($articleId: Int!, $objects: [blocks_insert_input!]!) {
   delete_blocks(where: {articleId: {_eq: $articleId}}) {

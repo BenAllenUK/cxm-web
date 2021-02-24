@@ -1,7 +1,7 @@
 import { Block, BlockType } from 'components/editor/blocks/types'
-import { GetArticleOneQuery } from 'generated/graphql'
+import { BlockFragment } from 'generated/graphql'
 
-function parseBlocks(data: NonNullable<GetArticleOneQuery['articles'][0]>['blocks']): Block[] {
+export function fromBlockFragments(data: BlockFragment[]): Block[] {
   try {
     return data.map(({ __typename, ...item }) => ({
       ...item,
@@ -15,4 +15,18 @@ function parseBlocks(data: NonNullable<GetArticleOneQuery['articles'][0]>['block
   }
 }
 
-export default parseBlocks
+export function toBlockFragments(articleId: number, data: Block[]): BlockFragment[] {
+  try {
+    return data.map((item) => ({
+      __typename: 'blocks',
+      articleId,
+      ...item,
+      type: Number(item.type),
+      payload: item.payload ? JSON.stringify(item.payload) : null,
+    }))
+  } catch (e) {
+    console.error(data)
+    console.error(e)
+    return []
+  }
+}
