@@ -1,6 +1,6 @@
 import OptionControls, { IOptionElements, IOptionSections, OptionType } from 'components/common/option-controls'
 import TextInput from 'components/common/text-input/TextInput'
-import { useTranslation } from 'config/translation'
+import { useTranslation } from 'next-i18next'
 import { CSSProperties, useEffect, useRef, useState } from 'react'
 import styles from './LinkUncontrolled.module.scss'
 

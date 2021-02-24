@@ -1,6 +1,7 @@
 const path = require('path')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { nextI18NextRewrites } = require('next-i18next/rewrites')
+const { i18n } = require('./next-i18next.config')
+
 const localeSubpaths = {
   en: 'en',
   fr: 'fr',
@@ -8,10 +9,7 @@ const localeSubpaths = {
 }
 
 module.exports = {
-  rewrites: async () => nextI18NextRewrites(localeSubpaths),
-  publicRuntimeConfig: {
-    localeSubpaths,
-  },
+  i18n,
   webpack(config, { buildId, dev, isServer, defaultLoaders, webpack }) {
     config.module.rules.push({
       test: /\.svg$/,
