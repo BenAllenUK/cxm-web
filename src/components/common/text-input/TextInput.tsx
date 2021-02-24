@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { sanitizeHtml } from 'utils/filter'
+import sanitize from 'utils/html/sanitize'
 import styles from './TextInput.module.scss'
-import { mergeRefs } from 'utils/refs'
+import mergeRefs from 'utils/refs/mergeRefs'
 
 function normalizeHtml(str: string): string {
   return str && str.replace(/&nbsp;|\u202F|\u00A0/g, ' ')
@@ -70,7 +70,7 @@ class TextInput extends React.Component<ITextInputProps, State> {
   onPaste = async (e: React.ClipboardEvent<HTMLDivElement>) => {
     e.preventDefault()
     const html = e.clipboardData.getData('text/html') || e.clipboardData.getData('text/plain')
-    const safeHtml = await sanitizeHtml(html)
+    const safeHtml = await sanitize(html)
     document.execCommand('insertHTML', false, safeHtml)
   }
 

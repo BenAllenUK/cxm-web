@@ -1,4 +1,4 @@
-export async function sanitizeHtml(html: string) {
+async function sanitize(html: string) {
   const xss = await import('xss')
   const filter = new xss.FilterXSS({
     onTag: (tag, _, options: any) => {
@@ -22,3 +22,5 @@ export async function sanitizeHtml(html: string) {
   })
   return filter.process(html)
 }
+
+export default sanitize

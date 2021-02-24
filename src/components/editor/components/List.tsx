@@ -1,29 +1,27 @@
 import { useRef, useCallback, useEffect, useState, memo, createRef } from 'react'
 import { SortableContainer, SortableElement, SortEnd, SortEvent, SortStart } from 'react-sortable-hoc'
 import { Tooltip } from 'components/common/tooltip'
-import { BlockTypeProperties, BLOCK_CONTAINER_VERTICAL_PADDING, DEFAULT_BLOCK, getBlockOptions, isBlockEmpty } from './blocks'
-import { BlockData, BlockType, BlockDataText, BlockDataImage, Block } from './blocks/types'
+import { BlockTypeProperties, BLOCK_CONTAINER_VERTICAL_PADDING, DEFAULT_BLOCK, getBlockOptions, isBlockEmpty } from '../blocks'
+import { BlockData, BlockType, BlockDataText, BlockDataImage, Block } from '../blocks/types'
 
 import ReactTooltip from 'react-tooltip'
 
-import styles from './Editor.module.scss'
-import Container from './blocks/core/Container'
+import styles from '../Editor.module.scss'
+import Container from '../blocks/core/Container'
 
 import Item from './Item'
-import { useWindowKeyUp } from 'utils/hooks'
-import { useBlockControlModal } from './modals/block-controls'
-import { useTextControlModal } from './modals/text-controls'
+import useWindowKeyUp from 'utils/hooks/useWindowKeyUp'
+import { useBlockControlModal } from '../modals/block-controls'
+import { useTextControlModal } from '../modals/text-controls'
+import { useBlockControlsContext } from '../modals/block-controls/BlockControlsContext'
 
-const List = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex }: IProps) => {
+const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusIndex }: IProps) => {
   const blockRefs = useRef<HTMLDivElement[]>([])
 
-  const {
-    filterText: modalFilterText,
-    enabled: modalBlockEnabled,
-    showControls: showBlockControls,
-    hideControls: hideBlockControls,
-    setFilterText,
-  } = useBlockControlModal()
+  const { enabled: modalBlockEnabled, showControls: showBlockControls, hideControls: hideBlockControls } = useBlockControlModal()
+  const { setBlockId: setBlockControlsId } = useBlockControlsContext()
+
+  const { filterText: modalFilterText, setFilterText } = useBlockControlsContext()
 
   const { showControls: showTextControls, hideControls: hideTextControls } = useTextControlModal()
 
@@ -72,33 +70,37 @@ const List = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex
     }
 
     setFocusIndex(newPosition)
-    onBlocksUpsert({
-      type: BlockType.TEXT,
-      payload: {
-        value: '',
+    onBlocksUpsert([
+      {
+        type: BlockType.TEXT,
+        payload: {
+          value: '',
+        },
+        id: Math.round(Math.random() * -1000000),
+        parentId: null,
+        editingUserId: null,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        position: newPosition,
       },
-      id: Math.round(Math.random() * -1000000),
-      parentId: null,
-      editingUserId: null,
-
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      position: newPosition,
-    })
+    ])
   }
 
   const _onUpdateBlock = (index: number, payload: BlockData) => {
     const block = blocks[index]
-    onBlocksUpsert({
-      ...block,
-      payload,
-      position: index,
-    })
+    console.log(payload)
+    onBlocksUpsert([
+      {
+        ...block,
+        payload,
+        position: index,
+      },
+    ])
   }
 
   const _onDeleteBlock = (index: number) => {
     setFocusIndex(index - 1)
-    onBlockDelete(blocks[index].id)
+    onBlocksDelete([blocks[index].id])
   }
 
   const _onBlockFocus = (index: number) => {
@@ -140,7 +142,8 @@ const List = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex
 
       const block = blocks[index]
       const initialHeight = BlockTypeProperties[block.type].initialHeight
-      showBlockControls(index, {
+      setBlockControlsId(block.id)
+      showBlockControls({
         x: blockLeft,
         y: blockTop + initialHeight + BLOCK_CONTAINER_VERTICAL_PADDING,
       })
@@ -161,9 +164,10 @@ const List = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex
 
   const _onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
     const [block] = blocks.filter((item) => item.position === oldIndex)
-    onBlocksUpsert({ ...block, position: newIndex })
+    onBlocksUpsert([{ ...block, position: newIndex }])
   }
 
+  // TODO: Move into sortable list / sortable item
   return (
     <div className={styles.body} onClick={_onBodyClick}>
       <div onClick={(e) => e.stopPropagation()}>
@@ -223,8 +227,8 @@ const SortableItem = SortableElement(ItemContainer)
 interface IProps {
   focusIndex: number
   blocks: Block[]
-  onBlocksUpsert: (blocks: Block) => void
-  onBlockDelete: (id: number) => void
+  onBlocksUpsert: (blocks: Block[]) => void
+  onBlocksDelete: (ids: number[]) => void
   setFocusIndex: (n: number) => void
 }
 

@@ -13,10 +13,15 @@ import produce from 'immer'
 import { usePageControlModals } from './modals/page-controls'
 import Modals from './modals'
 import { useMenuItemRefs } from './modals/menu-item-refs'
-import { parseMenu } from 'utils/menu'
-import { ArticleFragment, ArticlesInsertInput, GetProjectOneQuery } from 'generated/graphql'
+import parseMenu from 'utils/menu/parseMenu'
+import { ArticleFragment, ArticlesInsertInput, ArticlesSetInput, GetProjectOneQuery } from 'generated/graphql'
 import AddButton from './AddButton'
 import { useSearchModal } from './modals/search'
+import { DEFAULT_ARTICLE } from 'components/editor/blocks'
+import { BlockType } from 'components/editor/blocks/types'
+import createArticleEmpty from 'utils/article/createEmptyArticle'
+import { useSidebarPageControlsContext } from './modals/page-controls/PageControlsTargetContext'
+import { ArticleBlocksFragment } from 'types/types'
 
 export const SIDEBAR_INDENT = 20
 
@@ -51,7 +56,7 @@ export type MenuItem = {
   parentId: number | null
 }
 
-export function ControlledSidebar({ project, articles, onViewArticle, onCreateArticle }: IProps) {
+export function ControlledSidebar({ project, articles, onViewArticle, onUpsertArticle }: IProps) {
   // TODO: Assumes ids have different numbers
 
   const { showControls } = usePageControlModals()
@@ -64,7 +69,10 @@ export function ControlledSidebar({ project, articles, onViewArticle, onCreateAr
   }
 
   const onMenuAddItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
-    onCreateArticle(item.id)
+    const newArticle = createArticleEmpty(item.id)
+    const newArticleResponses = await onUpsertArticle(newArticle)
+    console.log({ newArticleResponses })
+
     setOpenState(
       produce((draftOpenState) => {
         draftOpenState[item.id] = true
@@ -84,15 +92,22 @@ export function ControlledSidebar({ project, articles, onViewArticle, onCreateAr
     e.stopPropagation()
   }
 
+  const { setTarget } = useSidebarPageControlsContext()
+
   const onMenuMoreItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
+    showControls({ x: e.clientX, y: e.clientY })
+    console.log('set target')
+    setTarget(section.id, item.id)
     e.stopPropagation()
-    showControls(section.id, item.id, { x: e.clientX, y: e.clientY })
   }
   const { locationRefs } = useMenuItemRefs()
 
-  const sections = [
-    { id: 1, label: 'CONTENT', items: parseMenu(articles), suffix: <AddButton onClick={() => onCreateArticle(null)} /> },
-  ]
+  const _onSidebarAddItemClick = async () => {
+    const newArticle = createArticleEmpty(null)
+    console.log({ newArticle })
+    const newArticleResponses = await onUpsertArticle(newArticle)
+    console.log({ newArticleResponses })
+  }
 
   const _onAppMenuClick = (id: number) => {
     switch (id) {
@@ -101,6 +116,10 @@ export function ControlledSidebar({ project, articles, onViewArticle, onCreateAr
         return
     }
   }
+
+  const sections = [
+    { id: 0, label: 'CONTENT', items: parseMenu(articles), suffix: <AddButton onClick={_onSidebarAddItemClick} /> },
+  ]
 
   return (
     <>
@@ -151,13 +170,12 @@ interface IProps {
   articles: ArticleFragment[]
 
   onViewArticle: (id: number) => void
-  onCreateArticle: (id: number | null) => void
-  onUpdateArticles: (articles: ArticlesInsertInput[]) => void
+  onUpsertArticle: (articles: ArticleBlocksFragment[]) => void
 }
 
 const ControlledSidebarWithModals = (props: IProps) => {
   return (
-    <Modals articles={props.articles} onUpdateArticles={props.onUpdateArticles} onViewArticle={props.onViewArticle}>
+    <Modals articles={props.articles} onUpsertArticle={props.onUpsertArticle} onViewArticle={props.onViewArticle}>
       <ControlledSidebar {...props} articles={props.articles} />
     </Modals>
   )

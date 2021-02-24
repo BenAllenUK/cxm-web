@@ -1,5 +1,6 @@
 import { useCallback, useState, memo, ReactNode } from 'react'
-import { useHover, useToggle } from 'utils/hooks'
+import useHover from 'utils/hooks/useHover'
+import useToggle from 'utils/hooks/useToggle'
 
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from '..'
 

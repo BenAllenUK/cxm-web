@@ -1,12 +1,13 @@
 type KeyedItem = { [key: number]: number }
 
 type Node = {
+  id: number | null
   parentId: number | null
   children: Node[]
 }
 
 // https://typeofnan.dev/an-easy-way-to-build-a-tree-with-object-references/
-export function unflatten<T extends Node>(list: T[]) {
+function tree<T extends Node>(list: T[]) {
   let root: Node[] = []
   var tree = [...list]
 
@@ -26,8 +27,15 @@ export function unflatten<T extends Node>(list: T[]) {
     const newId = idMapping[el.parentId]
     const parentEl = tree[newId]
 
+    if (!parentEl) {
+      // console.log(`Orphaned child in data. Parent (${el.parentId}) does not exist on ${el.id}`)
+      return
+    }
+
     // Add our current el to its parent's `children` array
     parentEl.children = [...(parentEl.children || []), el]
   })
   return root
 }
+
+export default tree
