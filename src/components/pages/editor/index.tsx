@@ -2,7 +2,7 @@ import { memo } from 'react'
 
 import Sidebar, { Section } from 'components/navigation/sidebar'
 import Editor from 'components/editor'
-import { fromBlockFragments, toBlockFragments } from 'utils/blocks/parseBlocks'
+import { fromBlockFragments, toBlockFragments } from 'utils/blocks/parse'
 import { useEffect, useCallback } from 'react'
 import styles from './Editor.module.scss'
 
@@ -19,10 +19,15 @@ import { useTranslation } from 'next-i18next'
 import { ArticleBlocksFragment } from 'types/types'
 import { DeleteBlocksMutationScopedFunc } from 'operations/blocks/delete'
 import { UpsertBlocksMutationScopedFunc } from 'operations/blocks/upsert'
+import { fromArticleFragments, toArticleFragments } from 'utils/article/parse'
+import { Article } from 'operations/articles/types'
+import { fromProjectFragments } from 'utils/project/parse'
+import Routes from 'navigation/routes'
+import { navigate } from 'navigation/utils'
 
 const EditorPage = ({
-  article,
-  project,
+  article: articleRaw,
+  project: projectRaw,
 
   onUpsertArticlesMutation,
   onUpsertBlocksMutation,
@@ -34,38 +39,48 @@ const EditorPage = ({
 
   const { t } = useTranslation(['editor'])
 
+  const [project] = fromProjectFragments([projectRaw])
+  const articles = project.articles || []
+  const [article] = articleRaw ? fromArticleFragments([articleRaw]) : [null]
+  const blocks = article?.blocks || []
+
   useEffect(() => {
     document.title = article?.title ? t('title', { title: article.title }) : t('loading')
   })
 
-  const onViewArticle = (id: number) => {
-    const [article] = project.articles.filter((item) => item.id === id)
-    if (!article) {
-      console.error("Clicked on an article that didn't exist")
-      return
-    }
-    setArticleSlug(article.slug)
-    window.history.pushState({}, '', `/admin/${project.slug}/editor/${article.slug}`)
+  const onViewArticle = (slug: string) => {
+    setArticleSlug(slug)
+    const path = Routes.admin.editor.path(project.slug, slug)
+    navigate(path)
   }
 
-  const onUpsertArticle = async (updatedArticles: ArticleBlocksFragment[]) => {
-    const articleId = article?.id
-    const [newCurrentArticle] = updatedArticles.filter((item) => item.id == articleId)
-    if (newCurrentArticle) {
-      if (article && article.archived === false && newCurrentArticle.archived === true) {
-        // TODO: Order by position
-        const [nextViewingArticle] = project.articles.filter((item) => item.id !== articleId)
-        if (nextViewingArticle) {
-          setArticleSlug(nextViewingArticle.slug)
-          window.history.replaceState({}, '', `/admin/${project.slug}/editor/${nextViewingArticle.slug}`)
-        } else {
-          console.error('Cannot delete only page')
-          return
-        }
-      }
+  const onUpsertArticles = async (updatedArticles: Article[]) => {
+    // const articleId = article?.id
+
+    // const [newCurrentArticle] = updatedArticles.filter((item) => item.id == articleId)
+    // if (newCurrentArticle) {
+    //   if (article && article.archived === false && newCurrentArticle.archived === true) {
+    //     // TODO: Order by position
+    //     const [nextViewingArticle] = articles.filter((item) => item.id !== articleId)
+    //     if (nextViewingArticle) {
+    //       setArticleSlug(nextViewingArticle.slug)
+    //       const path = Routes.admin.editor.path(project.slug, nextViewingArticle.slug)
+    //       navigate(path)
+    //     } else {
+    //       console.error('Cannot delete only page')
+    //       return
+    //     }
+    //   }
+    // }
+
+    const newArticles = toArticleFragments(project?.id, updatedArticles)
+    const newArticlesResponse = await onUpsertArticlesMutation(newArticles)
+    if (!newArticlesResponse) {
+      console.error(`Error upserting`)
+      return []
     }
 
-    return onUpsertArticlesMutation(updatedArticles)
+    return fromArticleFragments(newArticlesResponse)
   }
 
   const onBlocksDelete = async (ids: number[]) => {
@@ -78,24 +93,34 @@ const EditorPage = ({
     }
 
     const blockFragments = toBlockFragments(article.id, blocks)
-    return onUpsertBlocksMutation(blockFragments)
+    const blockFragmentsResponse = await onUpsertBlocksMutation(blockFragments)
+    if (!blockFragmentsResponse) {
+      console.error(`Error upserting`)
+      return []
+    }
+
+    return fromBlockFragments(blockFragmentsResponse)
   }
 
   const onDebouncedBlockUpsert = debounce(onBlocksUpsert, 500)
-
-  const blocks = fromBlockFragments(article?.blocks || [])
 
   return (
     <div className={styles.container}>
       <Navbar />
 
-      <Sidebar project={project} articles={project.articles} onUpsertArticle={onUpsertArticle} onViewArticle={onViewArticle} />
+      <Sidebar
+        currentViewingArticleId={article?.id}
+        project={project}
+        articles={articles}
+        onUpsertArticles={onUpsertArticles}
+        onViewArticle={onViewArticle}
+      />
 
       <div className={styles.editor}>
         <Editor
           key={article?.id}
           id={article?.id}
-          articles={project.articles}
+          articles={articles}
           blocks={blocks}
           onBlocksDelete={onBlocksDelete}
           onBlocksUpsert={onDebouncedBlockUpsert}

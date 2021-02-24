@@ -1,12 +1,12 @@
 import { IOptionSections, OptionType } from 'components/common/option-controls'
 import { useTranslation } from 'next-i18next'
-import { ArticleFragment } from 'generated/graphql'
 import { createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
 import LinkUncontrolled from './LinkUncontrolled'
 import ExternalLinkIcon from 'images/icons/external-link.svg'
 import LinkIcon from 'images/icons/link.svg'
 import { isURL } from 'components/editor/utils/links'
 import createPositionModal from 'components/common/modals/position'
+import { Article } from 'operations/articles/types'
 
 enum LinkSections {
   Results = 0,
@@ -108,5 +108,5 @@ const Link = { Provider, Component }
 export default Link
 
 interface IProps {
-  articles: ArticleFragment[]
+  articles: Article[]
 }

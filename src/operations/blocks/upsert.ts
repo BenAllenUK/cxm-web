@@ -12,13 +12,16 @@ const useUpsertBlocksMutationScoped = (
       return
     }
 
-    return upsertFunc({
+    const { data } = await upsertFunc({
       optimisticResponse: {},
       variables: {
         articleId,
         objects: blocks.map((item) => {
-          const { __typename, ...itemData } = item
-          return itemData
+          const { __typename, id, ...itemData } = item
+          return {
+            id: id < 0 ? undefined : id,
+            ...itemData,
+          }
         }),
       },
       update: (cache, { data }) => {
@@ -26,12 +29,11 @@ const useUpsertBlocksMutationScoped = (
         const newRefs = items.map((item: any) => {
           const { __typename, ...itemData } = item
           return cache.writeFragment({
-            id: `blocks:${item.id || Math.round(Math.random() * -1000000)}`,
+            id: `blocks:${item.id}`,
             fragment: BLOCK_FRAGMENT,
             data: itemData,
           })
         })
-
         cache.modify({
           id: `articles:${articleId}`,
           fields: {
@@ -42,6 +44,7 @@ const useUpsertBlocksMutationScoped = (
         })
       },
     })
+    return data?.insert_blocks?.returning
   }
 }
 

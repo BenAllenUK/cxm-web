@@ -57,6 +57,12 @@ ul.menu {
   }
 }
 
+.itemSelected {
+  @extend .item;
+  background-color: #fafbff;
+  color: $text2-color;
+}
+
 ul.projectMenu {
   @extend .menu;
 

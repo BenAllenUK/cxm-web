@@ -1,15 +1,29 @@
 import styles from './Sidebar.module.scss'
 import MenuItem from './MenuItem'
 import { MenuItem as MenuItemType, SIDEBAR_INDENT } from '.'
-import { RefObject } from 'react'
+import { useTranslation } from 'next-i18next'
 
 export function MenuList(props: IProps) {
-  const { itemRef, items, openState, depth = -1, onItemClick, onItemArrowClick, onItemAddClick, onItemMoreClick } = props
+  const {
+    selectedId,
+    itemRef,
+    items,
+    openState,
+    depth = -1,
+    onItemClick,
+    onItemArrowClick,
+    onItemAddClick,
+    onItemMoreClick,
+  } = props
+  const { t } = useTranslation('common')
+
   return (
     <ul className={styles.menu}>
       {items.map((item, index) => (
         <div key={index}>
           <MenuItem
+            selected={selectedId === item?.id}
+            disable={!item.id}
             ref={(ref) => itemRef(ref, item)}
             subList={item.children.length > 0}
             innerStyle={{ paddingLeft: SIDEBAR_INDENT * (depth + 1) }}
@@ -19,7 +33,13 @@ export function MenuList(props: IProps) {
             onAddClick={(e) => onItemAddClick(e, item)}
             onMoreClick={(e) => onItemMoreClick(e, item)}
           >
-            ({item.id}) {item.label}
+            {item.id ? (
+              <>
+                ({item.id}) {item.label}
+              </>
+            ) : (
+              <>{t('loading')}</>
+            )}
           </MenuItem>
           {openState[item.id] && <MenuList {...props} items={item.children} depth={depth + 1} />}
         </div>
@@ -28,6 +48,7 @@ export function MenuList(props: IProps) {
   )
 }
 interface IProps {
+  selectedId?: number | null
   itemRef: (ref: HTMLDivElement | null, item: MenuItemType) => void
   items: MenuItemType[]
   openState: { [key: string]: boolean }

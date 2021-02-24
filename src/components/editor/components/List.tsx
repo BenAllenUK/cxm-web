@@ -14,6 +14,7 @@ import useWindowKeyUp from 'utils/hooks/useWindowKeyUp'
 import { useBlockControlModal } from '../modals/block-controls'
 import { useTextControlModal } from '../modals/text-controls'
 import { useBlockControlsContext } from '../modals/block-controls/BlockControlsContext'
+import createEmptyBlock from 'utils/blocks/createEmptyBlock'
 
 const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusIndex }: IProps) => {
   const blockRefs = useRef<HTMLDivElement[]>([])
@@ -70,20 +71,8 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     }
 
     setFocusIndex(newPosition)
-    onBlocksUpsert([
-      {
-        type: BlockType.TEXT,
-        payload: {
-          value: '',
-        },
-        id: Math.round(Math.random() * -1000000),
-        parentId: null,
-        editingUserId: null,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        position: newPosition,
-      },
-    ])
+    const newBlock = createEmptyBlock(newPosition)
+    onBlocksUpsert([newBlock])
   }
 
   const _onUpdateBlock = (index: number, payload: BlockData) => {

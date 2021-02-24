@@ -1,14 +1,14 @@
 import PageControls, { PageControlOptions, usePageControlModals } from 'components/navigation/sidebar/modals/page-controls'
 import RenameControls, { useRenameControlModals } from 'components/navigation/sidebar/modals/rename-controls'
-import { ArticleFragment, ArticlesInsertInput, ArticlesSetInput } from 'generated/graphql'
 import { ReactNode, useState } from 'react'
-import { ArticleBlocksFragment } from 'types/types'
+import { Article } from 'operations/articles/types'
 import MenuItemRefs, { useMenuItemRefs } from './menu-item-refs'
 import PageControlsTargetContext from './page-controls/PageControlsTargetContext'
 import { useSidebarPageControlsContext } from './page-controls/PageControlsTargetContext'
 import Search from './search'
+import createDuplicateArticle from 'utils/article/createDuplicateArticle'
 
-const ControlledModals = ({ articles, children, onUpsertArticle, onViewArticle }: IProps) => {
+const ControlledModals = ({ currentViewingArticleId, articles, children, onUpsertArticles, onViewArticle }: IProps) => {
   const [renameValue, setRenameValue] = useState<string | null>(null)
   const { articleId: targetArticleId, sectionId: targetSectionId } = useSidebarPageControlsContext()
   const { showControls: showRenameControls } = useRenameControlModals()
@@ -59,8 +59,8 @@ const ControlledModals = ({ articles, children, onUpsertArticle, onViewArticle }
       console.error(`Article not found: ${targetArticleId}`)
       return
     }
-    const { __typename, ...articleData } = article
-    onUpsertArticle([{ ...articleData, title: renameValue }])
+
+    onUpsertArticles([{ ...article, title: renameValue }])
   }
 
   const onArticleDuplicate = (id: number) => {
@@ -69,15 +69,9 @@ const ControlledModals = ({ articles, children, onUpsertArticle, onViewArticle }
       console.error(`Article not found`)
       return
     }
-    const { __typename, id: _, ...articleData } = article
-    onUpsertArticle([
-      {
-        id: -1,
-        ...articleData,
-        title: `${articleData.title} Copy`,
-        slug: `${articleData.slug}-copy`,
-      },
-    ])
+
+    const duplicatedArticle = createDuplicateArticle(article)
+    onUpsertArticles([duplicatedArticle])
   }
 
   const onArticleDelete = (id: number) => {
@@ -86,9 +80,13 @@ const ControlledModals = ({ articles, children, onUpsertArticle, onViewArticle }
       console.error(`Article not found`)
       return
     }
-    const { __typename, ...articleData } = article
     // TODO: Set archived user
-    onUpsertArticle([{ ...articleData, archived: true, archivedAt: new Date().toISOString() }])
+    onUpsertArticles([{ ...article, archived: true, archivedAt: new Date().toISOString() }])
+
+    if (article.id === currentViewingArticleId) {
+      const [alternativeArticle] = articles
+      onViewArticle(alternativeArticle.slug)
+    }
   }
 
   return (
@@ -102,10 +100,11 @@ const ControlledModals = ({ articles, children, onUpsertArticle, onViewArticle }
 }
 
 interface IProps {
-  articles: ArticleFragment[]
+  currentViewingArticleId?: number | null
+  articles: Article[]
   children: ReactNode
-  onUpsertArticle: (articles: ArticleBlocksFragment[]) => void
-  onViewArticle: (id: number) => void
+  onUpsertArticles: (articles: Article[]) => Promise<Article[]>
+  onViewArticle: (slug: string) => void
 }
 
 const Modals = (props: IProps) => {
