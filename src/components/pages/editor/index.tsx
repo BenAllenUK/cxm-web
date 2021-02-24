@@ -52,7 +52,7 @@ const EditorPage = ({
     const articleId = article?.id
     const [newCurrentArticle] = updatedArticles.filter((item) => item.id == articleId)
     if (newCurrentArticle) {
-      if (article.archived === false && newCurrentArticle.archived === true) {
+      if (article && article.archived === false && newCurrentArticle.archived === true) {
         // TODO: Order by position
         const [nextViewingArticle] = project.articles.filter((item) => item.id !== articleId)
         if (nextViewingArticle) {
