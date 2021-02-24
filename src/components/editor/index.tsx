@@ -102,7 +102,7 @@ function Editor({
 
 export default memo(Editor)
 interface IProps {
-  id: number | null
+  id?: number | null
   articles: ArticleFragment[]
   blocks: Block[]
   onBlocksUpsert: (blocks: Block[]) => void

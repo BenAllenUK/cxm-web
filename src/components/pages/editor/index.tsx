@@ -108,7 +108,7 @@ const EditorPage = ({
 export default memo(EditorPage)
 
 interface IProps {
-  article: ArticleBlocksFragment | null
+  article?: ArticleBlocksFragment | null
   project: ProjectFragment
   onUpsertArticlesMutation: UpsertArticlesMutationScopedFunc
   onUpsertBlocksMutation: UpsertBlocksMutationScopedFunc
