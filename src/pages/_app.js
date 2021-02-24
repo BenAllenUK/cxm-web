@@ -1,5 +1,5 @@
 import '../styles/globals.scss'
-import { appWithTranslation } from '../config/translation'
+import { appWithTranslation } from 'next-i18next'
 
 function App({ Component, pageProps }) {
   return <Component {...pageProps} />

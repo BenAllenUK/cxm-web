@@ -2,12 +2,13 @@ import { BlockType } from 'components/editor/blocks/types'
 import Content from 'components/content'
 import { createGraphQLClient } from 'config/graphql'
 import GET_PROJECTS from 'queries/project/GET_PROJECTS.gql'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function ContentPage({ blocks }: any) {
   return <Content blocks={blocks} />
 }
 
-export async function getStaticProps() {
+export async function getStaticProps({ locale }: any) {
   const client = createGraphQLClient()
   const { data } = await client.query({ query: GET_PROJECTS })
   // const { projects_by_pk: projectData } = data
@@ -35,7 +36,6 @@ export async function getStaticProps() {
 
   return {
     props: {
-      namespacesRequired: ['common'],
       blocks,
       initialReduxState: {
         // project: projectData,
@@ -43,6 +43,7 @@ export async function getStaticProps() {
           blocks: blocks,
         },
       },
+      ...(await serverSideTranslations(locale, ['common'])),
     },
   }
 }

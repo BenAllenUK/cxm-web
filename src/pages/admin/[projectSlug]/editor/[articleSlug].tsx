@@ -21,6 +21,7 @@ import { GetServerSidePropsContext } from 'next'
 import useUpsertArticlesMutationScoped from 'operations/articles/upsert'
 import useDeleteBlocksMutationScoped from 'operations/blocks/delete'
 import useUpsertBlocksMutationScoped from 'operations/blocks/upsert'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function EditorRoot(props: any) {
   const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
@@ -103,11 +104,11 @@ export function Content() {
 /**
  * Block client data only
  */
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getServerSideProps({ params, locale }: GetServerSidePropsContext) {
   const client = initializeApollo()
 
-  const projectSlug = context.params?.projectSlug
-  const articleSlug = context.params?.articleSlug
+  const projectSlug = params?.projectSlug
+  const articleSlug = params?.articleSlug
 
   const { data: projectsData } = await client.query({
     query: GET_PROJECT_ONE,
@@ -150,7 +151,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         projectSlug: project.slug,
         articleSlug: article.slug,
       },
-      namespacesRequired: ['common', 'editor'],
+      ...(await serverSideTranslations(locale, ['common', 'editor'])),
     },
   }
 }

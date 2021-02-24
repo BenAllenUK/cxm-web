@@ -1,5 +1,5 @@
 import { IOptionSections, OptionType } from 'components/common/option-controls'
-import { useTranslation } from 'config/translation'
+import { useTranslation } from 'next-i18next'
 import { ArticleFragment } from 'generated/graphql'
 import { createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
 import LinkUncontrolled from './LinkUncontrolled'

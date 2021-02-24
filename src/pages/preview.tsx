@@ -1,11 +1,12 @@
 import { BlockType } from 'components/editor/blocks/types'
 import Blog from 'components/content'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function BlogPage({ blocks }: any) {
   return <Blog blocks={blocks} />
 }
 
-export function getStaticProps() {
+export async function getStaticProps({ locale }: any) {
   // Note that in this case we're returning the state directly, without creating
   // the store first (like in /pages/ssr.js), this approach can be better and easier
   const blocks = [
@@ -21,8 +22,8 @@ export function getStaticProps() {
 
   return {
     props: {
-      namespacesRequired: ['common'],
       blocks,
+      ...(await serverSideTranslations(locale, ['common'])),
     },
   }
 }
