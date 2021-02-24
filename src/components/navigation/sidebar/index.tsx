@@ -52,11 +52,12 @@ export type Section = {
 export type MenuItem = {
   id: number
   label: string
+  slug: string
   children: MenuItem[]
   parentId: number | null
 }
 
-export function ControlledSidebar({ project, articles, onViewArticle, onUpsertArticles }: IProps) {
+export function ControlledSidebar({ currentViewingArticleId, project, articles, onViewArticle, onUpsertArticles }: IProps) {
   // TODO: Assumes ids have different numbers
 
   const { showControls } = usePageControlModals()
@@ -65,18 +66,23 @@ export function ControlledSidebar({ project, articles, onViewArticle, onUpsertAr
   const [openState, setOpenState] = useState({})
 
   const onMenuItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
-    onViewArticle(item.id)
+    onViewArticle(item.slug)
   }
 
   const onMenuAddItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
-    const newArticle = createArticleEmpty(item.id, 999)
-    await onUpsertArticles([newArticle])
+    const newArticle = createArticleEmpty(item.id, 999) //TODO: update position
+    const [newArticleItem] = await onUpsertArticles([newArticle])
+
+    if (newArticleItem) {
+      onViewArticle(newArticleItem.slug)
+    }
 
     setOpenState(
       produce((draftOpenState) => {
         draftOpenState[item.id] = true
       })
     )
+
     e.stopPropagation()
   }
 
@@ -103,7 +109,11 @@ export function ControlledSidebar({ project, articles, onViewArticle, onUpsertAr
 
   const _onSidebarAddItemClick = async () => {
     const newArticle = createArticleEmpty(null, 9999)
-    const newArticleResponses = await onUpsertArticles([newArticle])
+    const [newArticleItem] = await onUpsertArticles([newArticle])
+
+    if (newArticleItem) {
+      onViewArticle(newArticleItem.slug)
+    }
   }
 
   const _onAppMenuClick = (id: number) => {
@@ -135,6 +145,7 @@ export function ControlledSidebar({ project, articles, onViewArticle, onUpsertAr
             <div key={index}>
               <div className={styles.label}>{section.label}</div>
               <MenuList
+                selectedId={currentViewingArticleId}
                 itemRef={(ref: HTMLDivElement | null, item: MenuItem) => {
                   if (locationRefs && locationRefs.current && ref) {
                     locationRefs.current[section.id] ||= []
@@ -160,19 +171,26 @@ export function ControlledSidebar({ project, articles, onViewArticle, onUpsertAr
 }
 
 interface IProps {
+  currentViewingArticleId?: number | null
+
   project: {
     name: string
     image?: string | null
   }
   articles: Article[]
 
-  onViewArticle: (id: number) => void
-  onUpsertArticles: (articles: Article[]) => void
+  onViewArticle: (slug: string) => void
+  onUpsertArticles: (articles: Article[]) => Promise<Article[]>
 }
 
 const ControlledSidebarWithModals = (props: IProps) => {
   return (
-    <Modals articles={props.articles} onUpsertArticles={props.onUpsertArticles} onViewArticle={props.onViewArticle}>
+    <Modals
+      currentViewingArticleId={props.currentViewingArticleId}
+      articles={props.articles}
+      onUpsertArticles={props.onUpsertArticles}
+      onViewArticle={props.onViewArticle}
+    >
       <ControlledSidebar {...props} articles={props.articles} />
     </Modals>
   )

@@ -21,7 +21,7 @@ const useUpsertArticlesMutationScoped = (
       return
     }
 
-    return upsertFunc({
+    const { data } = await upsertFunc({
       variables: {
         objects: articles.map((item) => {
           const { __typename, id, ...itemData } = item
@@ -31,8 +31,8 @@ const useUpsertArticlesMutationScoped = (
             projectId,
             blocks: {
               data: (item.blocks || []).map((subItem) => {
-                const { __typename, articleId, ...blockData } = subItem
-                return { ...blockData, payload: JSON.stringify(subItem.payload) }
+                const { __typename, id: blockId, articleId, ...blockData } = subItem
+                return { ...blockData, id: blockId < 0 ? undefined : blockId, payload: JSON.stringify(subItem.payload) }
               }),
             },
           }
@@ -68,6 +68,8 @@ const useUpsertArticlesMutationScoped = (
         })
       },
     })
+
+    return data?.insert_articles?.returning
   }
 }
 

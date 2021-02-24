@@ -6,8 +6,9 @@ import MenuItemRefs, { useMenuItemRefs } from './menu-item-refs'
 import PageControlsTargetContext from './page-controls/PageControlsTargetContext'
 import { useSidebarPageControlsContext } from './page-controls/PageControlsTargetContext'
 import Search from './search'
+import createDuplicateArticle from 'utils/article/createDuplicateArticle'
 
-const ControlledModals = ({ articles, children, onUpsertArticles, onViewArticle }: IProps) => {
+const ControlledModals = ({ currentViewingArticleId, articles, children, onUpsertArticles, onViewArticle }: IProps) => {
   const [renameValue, setRenameValue] = useState<string | null>(null)
   const { articleId: targetArticleId, sectionId: targetSectionId } = useSidebarPageControlsContext()
   const { showControls: showRenameControls } = useRenameControlModals()
@@ -68,15 +69,9 @@ const ControlledModals = ({ articles, children, onUpsertArticles, onViewArticle 
       console.error(`Article not found`)
       return
     }
-    const { id: _, ...articleData } = article
-    onUpsertArticles([
-      {
-        id: -1,
-        ...articleData,
-        title: `${articleData.title} Copy`,
-        slug: `${articleData.slug}-copy`,
-      },
-    ])
+
+    const duplicatedArticle = createDuplicateArticle(article)
+    onUpsertArticles([duplicatedArticle])
   }
 
   const onArticleDelete = (id: number) => {
@@ -87,6 +82,11 @@ const ControlledModals = ({ articles, children, onUpsertArticles, onViewArticle 
     }
     // TODO: Set archived user
     onUpsertArticles([{ ...article, archived: true, archivedAt: new Date().toISOString() }])
+
+    if (article.id === currentViewingArticleId) {
+      const [alternativeArticle] = articles
+      onViewArticle(alternativeArticle.slug)
+    }
   }
 
   return (
@@ -100,10 +100,11 @@ const ControlledModals = ({ articles, children, onUpsertArticles, onViewArticle 
 }
 
 interface IProps {
+  currentViewingArticleId?: number | null
   articles: Article[]
   children: ReactNode
-  onUpsertArticles: (articles: Article[]) => void
-  onViewArticle: (id: number) => void
+  onUpsertArticles: (articles: Article[]) => Promise<Article[]>
+  onViewArticle: (slug: string) => void
 }
 
 const Modals = (props: IProps) => {

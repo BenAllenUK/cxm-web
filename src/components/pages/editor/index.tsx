@@ -22,6 +22,8 @@ import { UpsertBlocksMutationScopedFunc } from 'operations/blocks/upsert'
 import { fromArticleFragments, toArticleFragments } from 'utils/article/parse'
 import { Article } from 'operations/articles/types'
 import { fromProjectFragments } from 'utils/project/parse'
+import Routes from 'navigation/routes'
+import { navigate } from 'navigation/utils'
 
 const EditorPage = ({
   article: articleRaw,
@@ -46,34 +48,39 @@ const EditorPage = ({
     document.title = article?.title ? t('title', { title: article.title }) : t('loading')
   })
 
-  const onViewArticle = (id: number) => {
-    const [article] = articles.filter((item) => item.id === id)
-    if (!article) {
-      console.error("Clicked on an article that didn't exist")
-      return
-    }
-    setArticleSlug(article.slug)
-    window.history.pushState({}, '', `/admin/${project.slug}/editor/${article.slug}`)
+  const onViewArticle = (slug: string) => {
+    setArticleSlug(slug)
+    const path = Routes.admin.editor.path(project.slug, slug)
+    navigate(path)
   }
 
   const onUpsertArticles = async (updatedArticles: Article[]) => {
-    const articleId = article?.id
-    const [newCurrentArticle] = updatedArticles.filter((item) => item.id == articleId)
-    if (newCurrentArticle) {
-      if (article && article.archived === false && newCurrentArticle.archived === true) {
-        // TODO: Order by position
-        const [nextViewingArticle] = articles.filter((item) => item.id !== articleId)
-        if (nextViewingArticle) {
-          setArticleSlug(nextViewingArticle.slug)
-          window.history.replaceState({}, '', `/admin/${project.slug}/editor/${nextViewingArticle.slug}`)
-        } else {
-          console.error('Cannot delete only page')
-          return
-        }
-      }
-    }
+    // const articleId = article?.id
+
+    // const [newCurrentArticle] = updatedArticles.filter((item) => item.id == articleId)
+    // if (newCurrentArticle) {
+    //   if (article && article.archived === false && newCurrentArticle.archived === true) {
+    //     // TODO: Order by position
+    //     const [nextViewingArticle] = articles.filter((item) => item.id !== articleId)
+    //     if (nextViewingArticle) {
+    //       setArticleSlug(nextViewingArticle.slug)
+    //       const path = Routes.admin.editor.path(project.slug, nextViewingArticle.slug)
+    //       navigate(path)
+    //     } else {
+    //       console.error('Cannot delete only page')
+    //       return
+    //     }
+    //   }
+    // }
+
     const newArticles = toArticleFragments(project?.id, updatedArticles)
-    return onUpsertArticlesMutation(newArticles)
+    const newArticlesResponse = await onUpsertArticlesMutation(newArticles)
+    if (!newArticlesResponse) {
+      console.error(`Error upserting`)
+      return []
+    }
+
+    return fromArticleFragments(newArticlesResponse)
   }
 
   const onBlocksDelete = async (ids: number[]) => {
@@ -86,7 +93,13 @@ const EditorPage = ({
     }
 
     const blockFragments = toBlockFragments(article.id, blocks)
-    return onUpsertBlocksMutation(blockFragments)
+    const blockFragmentsResponse = await onUpsertBlocksMutation(blockFragments)
+    if (!blockFragmentsResponse) {
+      console.error(`Error upserting`)
+      return []
+    }
+
+    return fromBlockFragments(blockFragmentsResponse)
   }
 
   const onDebouncedBlockUpsert = debounce(onBlocksUpsert, 500)
@@ -95,7 +108,13 @@ const EditorPage = ({
     <div className={styles.container}>
       <Navbar />
 
-      <Sidebar project={project} articles={articles} onUpsertArticles={onUpsertArticles} onViewArticle={onViewArticle} />
+      <Sidebar
+        currentViewingArticleId={article?.id}
+        project={project}
+        articles={articles}
+        onUpsertArticles={onUpsertArticles}
+        onViewArticle={onViewArticle}
+      />
 
       <div className={styles.editor}>
         <Editor

@@ -12,7 +12,7 @@ const useUpsertBlocksMutationScoped = (
       return
     }
 
-    return upsertFunc({
+    const { data } = await upsertFunc({
       optimisticResponse: {},
       variables: {
         articleId,
@@ -44,6 +44,7 @@ const useUpsertBlocksMutationScoped = (
         })
       },
     })
+    return data?.insert_blocks?.returning
   }
 }
 

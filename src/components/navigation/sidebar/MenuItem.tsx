@@ -7,9 +7,13 @@ import Colors, { hexToRGB } from 'config/colors'
 import { CSSProperties, forwardRef, HTMLAttributes, ReactNode } from 'react'
 
 const MenuItem = forwardRef<HTMLDivElement, IProps>(
-  ({ disable, children, isOpen, subList, innerStyle, onClick, onArrowClick, onAddClick, onMoreClick }, ref) => {
+  ({ selected, disable, children, isOpen, subList, innerStyle, onClick, onArrowClick, onAddClick, onMoreClick }, ref) => {
     return (
-      <div style={{ pointerEvents: disable ? 'none' : 'inherit' }} className={styles.item} onClick={onClick}>
+      <div
+        style={{ pointerEvents: disable ? 'none' : 'inherit' }}
+        className={selected ? styles.itemSelected : styles.item}
+        onClick={onClick}
+      >
         <div className={styles.itemMain} style={innerStyle}>
           <ArrowButton onClick={onArrowClick} disable={!subList || disable} isDown={isOpen} />
           <div ref={ref} className={styles.itemMainText}>
@@ -78,6 +82,7 @@ export function MoreButton(props: HTMLAttributes<HTMLDivElement> & { disable: bo
 }
 
 interface IProps {
+  selected: boolean
   disable: boolean
   children: ReactNode
   subList?: boolean

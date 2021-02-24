@@ -89,7 +89,8 @@ const Search = ({ articles, onItemClick, onDismiss }: ISearchProps & { onDismiss
   ]
 
   const _onClick = (_: number, id: number) => {
-    onItemClick(id)
+    const [article] = filteredArticles.filter((item) => item.id === id)
+    onItemClick(article.slug)
   }
 
   return (
@@ -112,5 +113,5 @@ export default Search
 
 export interface ISearchProps {
   articles: Article[]
-  onItemClick: (id: number) => void
+  onItemClick: (id: string) => void
 }
