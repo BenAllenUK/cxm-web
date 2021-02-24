@@ -6,6 +6,7 @@ import { faSearch, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import OptionControls, { IOptionSections, OptionType } from 'components/common/option-controls'
 import { ArticleFragment } from 'generated/graphql'
 import { useEffect, useRef, useState } from 'react'
+import { Article } from 'operations/articles/types'
 
 const Header = ({ filterText, onValueChange, onResetValue }: IHeaderProps) => {
   const inputRef = useRef<HTMLDivElement>(null)
@@ -110,6 +111,6 @@ const Search = ({ articles, onItemClick, onDismiss }: ISearchProps & { onDismiss
 export default Search
 
 export interface ISearchProps {
-  articles: ArticleFragment[]
+  articles: Article[]
   onItemClick: (id: number) => void
 }

@@ -6,9 +6,9 @@ import TextControls from './text-controls'
 import PageControls from './page-controls'
 import TextStyle from './text-style'
 import Link from './link'
-import { ArticleFragment } from 'generated/graphql'
 import BlockControlsContext, { useBlockControlsContext } from './block-controls/BlockControlsContext'
 import PageControlsTargetContext from 'components/navigation/sidebar/modals/page-controls/PageControlsTargetContext'
+import { Article } from 'operations/articles/types'
 
 const ControlledModals = ({ articles, children, onModifyBlockType }: IProps) => {
   const { id, filterText } = useBlockControlsContext()
@@ -55,7 +55,7 @@ const Modals = (props: IProps) => {
 export default memo(Modals)
 
 interface IProps {
-  articles: ArticleFragment[]
+  articles: Article[]
   children: ReactNode
   onModifyBlockType: (index: number, key: BlockType) => void
 }

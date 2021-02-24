@@ -14,14 +14,14 @@ import { usePageControlModals } from './modals/page-controls'
 import Modals from './modals'
 import { useMenuItemRefs } from './modals/menu-item-refs'
 import parseMenu from 'utils/menu/parseMenu'
-import { ArticleFragment, ArticlesInsertInput, ArticlesSetInput, GetProjectOneQuery } from 'generated/graphql'
+
 import AddButton from './AddButton'
 import { useSearchModal } from './modals/search'
 import { DEFAULT_ARTICLE } from 'components/editor/blocks'
 import { BlockType } from 'components/editor/blocks/types'
 import createArticleEmpty from 'utils/article/createEmptyArticle'
 import { useSidebarPageControlsContext } from './modals/page-controls/PageControlsTargetContext'
-import { ArticleBlocksFragment } from 'types/types'
+import { Article } from 'operations/articles/types'
 
 export const SIDEBAR_INDENT = 20
 
@@ -56,7 +56,7 @@ export type MenuItem = {
   parentId: number | null
 }
 
-export function ControlledSidebar({ project, articles, onViewArticle, onUpsertArticle }: IProps) {
+export function ControlledSidebar({ project, articles, onViewArticle, onUpsertArticles }: IProps) {
   // TODO: Assumes ids have different numbers
 
   const { showControls } = usePageControlModals()
@@ -69,9 +69,8 @@ export function ControlledSidebar({ project, articles, onViewArticle, onUpsertAr
   }
 
   const onMenuAddItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
-    const newArticle = createArticleEmpty(item.id)
-    const newArticleResponses = await onUpsertArticle(newArticle)
-    console.log({ newArticleResponses })
+    const newArticle = createArticleEmpty(item.id, 999)
+    await onUpsertArticles([newArticle])
 
     setOpenState(
       produce((draftOpenState) => {
@@ -103,10 +102,8 @@ export function ControlledSidebar({ project, articles, onViewArticle, onUpsertAr
   const { locationRefs } = useMenuItemRefs()
 
   const _onSidebarAddItemClick = async () => {
-    const newArticle = createArticleEmpty(null)
-    console.log({ newArticle })
-    const newArticleResponses = await onUpsertArticle(newArticle)
-    console.log({ newArticleResponses })
+    const newArticle = createArticleEmpty(null, 9999)
+    const newArticleResponses = await onUpsertArticles([newArticle])
   }
 
   const _onAppMenuClick = (id: number) => {
@@ -167,15 +164,15 @@ interface IProps {
     name: string
     image?: string | null
   }
-  articles: ArticleFragment[]
+  articles: Article[]
 
   onViewArticle: (id: number) => void
-  onUpsertArticle: (articles: ArticleBlocksFragment[]) => void
+  onUpsertArticles: (articles: Article[]) => void
 }
 
 const ControlledSidebarWithModals = (props: IProps) => {
   return (
-    <Modals articles={props.articles} onUpsertArticle={props.onUpsertArticle} onViewArticle={props.onViewArticle}>
+    <Modals articles={props.articles} onUpsertArticles={props.onUpsertArticles} onViewArticle={props.onViewArticle}>
       <ControlledSidebar {...props} articles={props.articles} />
     </Modals>
   )

@@ -30,6 +30,7 @@ const useUpsertArticlesMutationScoped = (
 
         const newRefs = items.map((item: any) => {
           const { __typename, blocks, ...itemData } = item
+          console.log(itemData)
           return cache.writeFragment({
             id: `articles:${item.id || Math.round(Math.random() * -1000000)}`,
             fragment: ARTICLE_FRAGMENT,
@@ -38,7 +39,6 @@ const useUpsertArticlesMutationScoped = (
         })
 
         const archivedItems = items.filter((item) => item.archived).map((item) => item.id)
-        console.log('newRefs:', newRefs)
         cache.modify({
           id: `projects:${projectId}`,
           fields: {

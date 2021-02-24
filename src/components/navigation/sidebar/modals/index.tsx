@@ -1,14 +1,13 @@
 import PageControls, { PageControlOptions, usePageControlModals } from 'components/navigation/sidebar/modals/page-controls'
 import RenameControls, { useRenameControlModals } from 'components/navigation/sidebar/modals/rename-controls'
-import { ArticleFragment, ArticlesInsertInput, ArticlesSetInput } from 'generated/graphql'
 import { ReactNode, useState } from 'react'
-import { ArticleBlocksFragment } from 'types/types'
+import { Article } from 'operations/articles/types'
 import MenuItemRefs, { useMenuItemRefs } from './menu-item-refs'
 import PageControlsTargetContext from './page-controls/PageControlsTargetContext'
 import { useSidebarPageControlsContext } from './page-controls/PageControlsTargetContext'
 import Search from './search'
 
-const ControlledModals = ({ articles, children, onUpsertArticle, onViewArticle }: IProps) => {
+const ControlledModals = ({ articles, children, onUpsertArticles, onViewArticle }: IProps) => {
   const [renameValue, setRenameValue] = useState<string | null>(null)
   const { articleId: targetArticleId, sectionId: targetSectionId } = useSidebarPageControlsContext()
   const { showControls: showRenameControls } = useRenameControlModals()
@@ -59,8 +58,8 @@ const ControlledModals = ({ articles, children, onUpsertArticle, onViewArticle }
       console.error(`Article not found: ${targetArticleId}`)
       return
     }
-    const { __typename, ...articleData } = article
-    onUpsertArticle([{ ...articleData, title: renameValue }])
+
+    onUpsertArticles([{ ...article, title: renameValue }])
   }
 
   const onArticleDuplicate = (id: number) => {
@@ -69,8 +68,8 @@ const ControlledModals = ({ articles, children, onUpsertArticle, onViewArticle }
       console.error(`Article not found`)
       return
     }
-    const { __typename, id: _, ...articleData } = article
-    onUpsertArticle([
+    const { id: _, ...articleData } = article
+    onUpsertArticles([
       {
         id: -1,
         ...articleData,
@@ -86,9 +85,8 @@ const ControlledModals = ({ articles, children, onUpsertArticle, onViewArticle }
       console.error(`Article not found`)
       return
     }
-    const { __typename, ...articleData } = article
     // TODO: Set archived user
-    onUpsertArticle([{ ...articleData, archived: true, archivedAt: new Date().toISOString() }])
+    onUpsertArticles([{ ...article, archived: true, archivedAt: new Date().toISOString() }])
   }
 
   return (
@@ -102,9 +100,9 @@ const ControlledModals = ({ articles, children, onUpsertArticle, onViewArticle }
 }
 
 interface IProps {
-  articles: ArticleFragment[]
+  articles: Article[]
   children: ReactNode
-  onUpsertArticle: (articles: ArticleBlocksFragment[]) => void
+  onUpsertArticles: (articles: Article[]) => void
   onViewArticle: (id: number) => void
 }
 

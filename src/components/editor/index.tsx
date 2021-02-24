@@ -5,7 +5,7 @@ import Content from './components/List'
 import styles from './Editor.module.scss'
 import Modals from './modals'
 import Header from './header'
-import { ArticleFragment, BlockFragment } from 'generated/graphql'
+import { Article } from 'operations/articles/types'
 
 function Editor({
   id,
@@ -103,7 +103,7 @@ function Editor({
 export default memo(Editor)
 interface IProps {
   id?: number | null
-  articles: ArticleFragment[]
+  articles: Article[]
   blocks: Block[]
   onBlocksUpsert: (blocks: Block[]) => void
   onBlocksDelete: (ids: number[]) => void
