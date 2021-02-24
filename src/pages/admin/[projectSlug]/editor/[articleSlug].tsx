@@ -39,20 +39,15 @@ export function Content() {
 
   const { projectSlug, articleSlug } = useEditor()
 
-  if (projectSlug === null || articleSlug === null) {
-    return <div />
-  }
-
   const { data: projectsData } = useGetProjectOneQuery({
     variables: {
-      slug: projectSlug,
+      slug: projectSlug || '', // TODO: avoid default to none
     },
   })
 
   const [project] = projectsData?.projects || []
   if (!project) {
     console.error(`Project not found: ${projectSlug}`)
-    return <div />
   }
 
   // Check to see if article Id is in article data
@@ -62,7 +57,7 @@ export function Content() {
 
   const response = useGetArticleOneQuery({
     variables: {
-      slug: articleSlug,
+      slug: articleSlug || '',
     },
   })
 
@@ -89,6 +84,10 @@ export function Content() {
 
   const [deleteBlocksMutation] = useDeleteBlocksMutation()
   const deleteBlocksMutationScoped = useDeleteBlocksMutationScoped(article?.id, deleteBlocksMutation)
+
+  if (!project) {
+    return <div />
+  }
 
   return (
     <EditorPage
@@ -122,7 +121,6 @@ export async function getServerSideProps({ params, locale }: GetServerSidePropsC
     return {
       notFound: true,
     }
-    return
   }
 
   const { data: articleData } = await client.query({

@@ -4,21 +4,21 @@ import ArrowIcon from 'images/icons/arrow-filled-right.svg'
 import PlusIcon from 'images/icons/plus.svg'
 import MoreIcon from 'images/icons/more.svg'
 import Colors, { hexToRGB } from 'config/colors'
-import { CSSProperties, forwardRef, HTMLAttributes } from 'react'
+import { CSSProperties, forwardRef, HTMLAttributes, ReactNode } from 'react'
 
 const MenuItem = forwardRef<HTMLDivElement, IProps>(
-  ({ children, isOpen, subList, innerStyle, onClick, onArrowClick, onAddClick, onMoreClick }, ref) => {
+  ({ disable, children, isOpen, subList, innerStyle, onClick, onArrowClick, onAddClick, onMoreClick }, ref) => {
     return (
-      <div className={styles.item} onClick={onClick}>
+      <div style={{ pointerEvents: disable ? 'none' : 'inherit' }} className={styles.item} onClick={onClick}>
         <div className={styles.itemMain} style={innerStyle}>
-          <ArrowButton onClick={onArrowClick} disable={!subList} isDown={isOpen} />
+          <ArrowButton onClick={onArrowClick} disable={!subList || disable} isDown={isOpen} />
           <div ref={ref} className={styles.itemMainText}>
             {children}
           </div>
         </div>
         <div className={styles.itemControls}>
-          <AddButton onClick={onAddClick} />
-          <MoreButton onClick={onMoreClick} />
+          <AddButton onClick={onAddClick} disable={disable} />
+          <MoreButton onClick={onMoreClick} disable={disable} />
         </div>
       </div>
     )
@@ -33,7 +33,7 @@ export function ArrowButton({
   onClick,
 }: HTMLAttributes<HTMLDivElement> & {
   isDown?: boolean
-  disable: boolean
+  disable?: boolean
 }) {
   return (
     <div
@@ -46,24 +46,40 @@ export function ArrowButton({
   )
 }
 
-export function AddButton(props: HTMLAttributes<HTMLDivElement>) {
+export function AddButton(props: HTMLAttributes<HTMLDivElement> & { disable: boolean }) {
+  const { disable, ...otherProps } = props
+
   return (
-    <div className={styles.itemControlsButton} data-tip={'Quickly add a page inside'} data-for="sidebar" {...props}>
+    <div
+      style={{ pointerEvents: disable ? 'none' : 'inherit' }}
+      className={styles.itemControlsButton}
+      data-tip={'Quickly add a page inside'}
+      data-for="sidebar"
+      {...otherProps}
+    >
       <PlusIcon fill={Colors.text2} width={12} height={12} />
     </div>
   )
 }
 
-export function MoreButton(props: HTMLAttributes<HTMLDivElement>) {
+export function MoreButton(props: HTMLAttributes<HTMLDivElement> & { disable: boolean }) {
+  const { disable, ...otherProps } = props
   return (
-    <div className={styles.itemControlsButton} data-tip={'Delete, duplicate and more...'} data-for="sidebar" {...props}>
+    <div
+      style={{ pointerEvents: disable ? 'none' : 'inherit' }}
+      className={styles.itemControlsButton}
+      data-tip={'Delete, duplicate and more...'}
+      data-for="sidebar"
+      {...otherProps}
+    >
       <MoreIcon fill={Colors.text2} width={20} height={20} />
     </div>
   )
 }
 
 interface IProps {
-  children: any
+  disable: boolean
+  children: ReactNode
   subList?: boolean
   isOpen: boolean
   innerStyle: CSSProperties

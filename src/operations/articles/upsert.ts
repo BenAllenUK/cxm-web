@@ -1,8 +1,16 @@
-import { useUpsertArticlesMutation } from 'generated/graphql'
+import { ArticleFragment, useUpsertArticlesMutation } from 'generated/graphql'
 
 import ARTICLE_FRAGMENT from 'queries/articles/ARTICLE_FRAGMENT.gql'
 import { ArticleBlocksFragment } from 'types/types'
 import { uniqBy } from 'lodash'
+
+/**
+ * Notes:
+ * - make sure not to pass in __typename to variables
+ * - make sure to pass in  __typename to write fragment
+ * - make sure source object has an id (randomly generated if not known)
+ * - use `id < 0 ? undefined : id` to allow server to generate id
+ */
 
 const useUpsertArticlesMutationScoped = (
   projectId: number | undefined,
@@ -16,11 +24,17 @@ const useUpsertArticlesMutationScoped = (
     return upsertFunc({
       variables: {
         objects: articles.map((item) => {
-          const { __typename, ...itemData } = item
+          const { __typename, id, ...itemData } = item
           return {
             ...itemData,
+            id: id < 0 ? undefined : id,
             projectId,
-            blocks: { data: (item.blocks || []).map((subItem) => ({ ...subItem, payload: JSON.stringify(subItem.payload) })) },
+            blocks: {
+              data: (item.blocks || []).map((subItem) => {
+                const { __typename, articleId, ...blockData } = subItem
+                return { ...blockData, payload: JSON.stringify(subItem.payload) }
+              }),
+            },
           }
         }),
       },
@@ -28,13 +42,12 @@ const useUpsertArticlesMutationScoped = (
       update: (cache, { data }) => {
         const items = data?.insert_articles?.returning || articles
 
-        const newRefs = items.map((item: any) => {
+        const newRefs = items.map((item: ArticleBlocksFragment) => {
           const { __typename, blocks, ...itemData } = item
-          console.log(itemData)
           return cache.writeFragment({
-            id: `articles:${item.id || Math.round(Math.random() * -1000000)}`,
+            id: `articles:${item.id}`,
             fragment: ARTICLE_FRAGMENT,
-            data: itemData,
+            data: { ...itemData },
           })
         })
 

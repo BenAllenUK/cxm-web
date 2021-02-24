@@ -1,8 +1,8 @@
 import { MenuItem } from 'components/navigation/sidebar'
-import { GetProjectOneQuery } from 'generated/graphql'
+import { Article } from 'operations/articles/types'
 import tree from '../objects/tree'
 
-function parseMenu(data: NonNullable<NonNullable<NonNullable<GetProjectOneQuery['projects']>[0]>['articles']>): MenuItem[] {
+function parseMenu(data: Article[]): MenuItem[] {
   if (data.length === 0) {
     return []
   }
