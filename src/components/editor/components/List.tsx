@@ -4,31 +4,55 @@ import { Tooltip } from 'components/common/tooltip'
 import { BlockTypeProperties, BLOCK_CONTAINER_VERTICAL_PADDING, DEFAULT_BLOCK, getBlockOptions, isBlockEmpty } from '../blocks'
 import { BlockData, BlockType, BlockDataText, BlockDataImage, Block } from '../blocks/types'
 
-import ReactTooltip from 'react-tooltip'
-
 import styles from '../Editor.module.scss'
 import Container from '../blocks/core/Container'
 
 import Item from './Item'
 import useWindowKeyUp from 'utils/hooks/useWindowKeyUp'
-import { useBlockControlModal } from '../modals/block-controls'
+import { calculateBlockControlsPosition, useBlockControlModal } from '../modals/block-controls'
 import { useTextControlModal } from '../modals/text-controls'
 import { useBlockControlsContext } from '../modals/block-controls/BlockControlsContext'
 import createEmptyBlock from 'utils/blocks/createEmptyBlock'
+import SortableList from './SortableList'
 
 const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusIndex }: IProps) => {
   const blockRefs = useRef<HTMLDivElement[]>([])
 
-  const { enabled: modalBlockEnabled, showControls: showBlockControls, hideControls: hideBlockControls } = useBlockControlModal()
+  const {
+    enabled: modalBlockEnabled,
+    showControls: showBlockControlsModal,
+    hideControls: hideBlockControls,
+  } = useBlockControlModal()
   const { setBlockId: setBlockControlsId } = useBlockControlsContext()
 
   const { filterText: modalFilterText, setFilterText } = useBlockControlsContext()
 
-  const { showControls: showTextControls, hideControls: hideTextControls } = useTextControlModal()
+  const { showControls: showTextControls } = useTextControlModal()
 
-  useWindowKeyUp('Tab', () => {
-    hideBlockControls()
-  })
+  const _showBlockControls = useCallback(
+    (index: number) => {
+      const blockRef = blockRefs.current[index]
+      if (!blockRef) {
+        return
+      }
+
+      const block = blocks[index]
+
+      const position = calculateBlockControlsPosition(blockRef, block)
+
+      setBlockControlsId(block.id)
+      showBlockControlsModal(position)
+    },
+    [showBlockControlsModal, blocks]
+  )
+
+  useWindowKeyUp(
+    'Tab',
+    () => {
+      hideBlockControls()
+    },
+    [hideBlockControls]
+  )
 
   useWindowKeyUp(
     'Backspace',
@@ -40,19 +64,26 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     [hideBlockControls, modalFilterText]
   )
 
-  const _onAddClick = (index: number) => {
-    ReactTooltip.hide()
+  useWindowKeyUp(
+    '/',
+    () => {
+      _showBlockControls(focusIndex)
+    },
+    [_showBlockControls, focusIndex]
+  )
+
+  const _onBlockAddClick = (index: number) => {
     const block = blocks[index]
     const isEmpty = isBlockEmpty(block)
     if (isEmpty) {
-      openBlockControl(index)
+      _showBlockControls(index)
       setFocusIndex(index)
       return
     }
 
     _onCreateBlock(index)
     setFocusIndex(index + 1)
-    openBlockControl(index + 1)
+    _showBlockControls(index + 1)
   }
 
   const _onBlockClick = (index: number) => {}
@@ -77,7 +108,6 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
 
   const _onUpdateBlock = (index: number, payload: BlockData) => {
     const block = blocks[index]
-    console.log(payload)
     onBlocksUpsert([
       {
         ...block,
@@ -120,34 +150,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     _onCreateBlock(lastItemIndex)
   }
 
-  const openBlockControl = useCallback(
-    (index: number) => {
-      const blockRef = blockRefs.current[index]
-      if (!blockRef) {
-        return
-      }
-
-      const { top: blockTop, left: blockLeft } = blockRef.getBoundingClientRect()
-
-      const block = blocks[index]
-      const initialHeight = BlockTypeProperties[block.type].initialHeight
-      setBlockControlsId(block.id)
-      showBlockControls({
-        x: blockLeft,
-        y: blockTop + initialHeight + BLOCK_CONTAINER_VERTICAL_PADDING,
-      })
-    },
-    [showBlockControls, blocks]
-  )
-  useWindowKeyUp(
-    '/',
-    () => {
-      openBlockControl(focusIndex)
-    },
-    [openBlockControl, focusIndex]
-  )
-
-  const _onTextChange = (index: number, value: string) => {
+  const _onTextChange = (_: number, value: string) => {
     setFilterText(value)
   }
 
@@ -158,60 +161,29 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
 
   // TODO: Move into sortable list / sortable item
   return (
-    <div className={styles.body} onClick={_onBodyClick}>
-      <div onClick={(e) => e.stopPropagation()}>
-        <SortableList onSortEnd={_onSortEnd} useDragHandle={true}>
-          {blocks
-            .sort((a: Block, b: Block) => a.position - b.position)
-            .map((item, i) => {
-              return (
-                <SortableItem index={item.position} key={`${item.id}-${item.position}`}>
-                  <Container
-                    index={item.position}
-                    initialHeight={BlockTypeProperties[item.type].initialHeight}
-                    onClick={_onBlockClick}
-                    onAddClick={_onAddClick}
-                    onDoubleClick={_onBlockDoubleClick}
-                    enableHandle={!modalBlockEnabled}
-                  >
-                    <div
-                      ref={(_ref: any) => {
-                        if (_ref) {
-                          blockRefs.current[item.position] = _ref
-                        }
-                      }}
-                    >
-                      <Item
-                        index={item.position}
-                        focus={focusIndex === item.position}
-                        blockControlOpen={modalBlockEnabled}
-                        type={item.type}
-                        payload={item.payload}
-                        onTextChange={_onTextChange}
-                        onNew={_onCreateBlock}
-                        onUpdate={_onUpdateBlock}
-                        onDelete={_onDeleteBlock}
-                        onFocus={_onBlockFocus}
-                        onBlur={_onBlockBlur}
-                      />
-                    </div>
-                  </Container>
-                </SortableItem>
-              )
-            })}
-        </SortableList>
-        <Tooltip id={'editor'} />
-      </div>
-    </div>
+    <SortableList
+      itemRefFunc={(_ref: HTMLDivElement, position: number) => {
+        // if (_ref) {
+        blockRefs.current[position] = _ref
+        // }
+      }}
+      modalBlockEnabled={modalBlockEnabled}
+      focusIndex={focusIndex}
+      blocks={blocks}
+      onBodyClick={_onBodyClick}
+      onSortEnd={_onSortEnd}
+      onBlockClick={_onBlockClick}
+      onBlockAddClick={_onBlockAddClick}
+      onBlockDoubleClick={_onBlockDoubleClick}
+      onTextChange={_onTextChange}
+      onNew={_onCreateBlock}
+      onUpdate={_onUpdateBlock}
+      onDelete={_onDeleteBlock}
+      onFocus={_onBlockFocus}
+      onBlur={_onBlockBlur}
+    />
   )
 }
-
-const StyledList = ({ children }: any) => <div className={styles.list}>{children}</div>
-
-const ItemContainer = ({ children }: any) => children
-
-const SortableList = SortableContainer(StyledList)
-const SortableItem = SortableElement(ItemContainer)
 
 interface IProps {
   focusIndex: number

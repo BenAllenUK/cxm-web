@@ -9,6 +9,7 @@
     "export": "next build && next export",
     "docs": "swagger-jsdoc -d swagger.js src/pages/api/public/**/*.yaml -o public/docs/api.json",
     "codegen": "graphql-codegen --config codegen.js --watch",
+    "codegen:build": "graphql-codegen --config codegen.js",
     "build:translate": "./_scripts/translate/run.sh",
     "deploy": "serverless"
   },

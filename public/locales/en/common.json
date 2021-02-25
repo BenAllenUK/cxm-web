@@ -1,5 +1,6 @@
 {
   "name": "Omnea",
   "welcome": "ENWelcome",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "title": "{{title}} | Omnea "
 }
