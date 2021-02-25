@@ -18,7 +18,7 @@ const Item = ({
   onDelete,
   onFocus,
   onBlur,
-}: IProps) => {
+}: IProps & IItemHandlerProps) => {
   const _onNew = () => {
     onNew(index)
   }
@@ -113,10 +113,12 @@ interface IProps {
   type: BlockType
   payload: BlockData
   index: number
+}
 
+export interface IItemHandlerProps {
   onTextChange: (index: number, value: string) => void
   onNew: (index: number) => void
-  onUpdate: (index: number, arg0: BlockData) => void // TODO: Change BlockData to BlockPayload
+  onUpdate: (index: number, arg0: BlockData) => void
   onDelete: (index: number) => void
   onFocus: (index: number) => void
   onBlur: (index: number) => void
