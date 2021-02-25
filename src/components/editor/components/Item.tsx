@@ -1,10 +1,8 @@
-import { memo, useCallback } from 'react'
-
 import Divider from 'components/editor/blocks/divider/Divider'
 import Image from 'components/editor/blocks/image/Image'
-import { Block, BlockData, BlockDataImage, BlockDataListBullet, BlockDataText, BlockType } from 'components/editor/blocks/types'
-import ControlledText from '../blocks/text/ControlledText'
+import { BlockData, BlockDataImage, BlockDataListBullet, BlockDataText, BlockType } from 'components/editor/blocks/types'
 import ControlledList from '../blocks/list/ControlledList'
+import ControlledText from '../blocks/text/ControlledText'
 
 const Item = ({
   blockControlOpen,

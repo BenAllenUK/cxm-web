@@ -2,5 +2,9 @@
   "name": "Omnea",
   "welcome": "ENWelcome",
   "loading": "Loading...",
-  "title": "{{title}} | Omnea "
+  "title": "{{title}} | Omnea ",
+  "errors": {
+    "DEFAULT": "There was an error",
+    "INTERNET_ERROR": "There was a connection error"
+  }
 }

@@ -1,13 +1,8 @@
-import { useRef, useCallback, useEffect, useState, memo, createRef } from 'react'
-import { SortableContainer, SortableElement, SortEnd, SortEvent, SortStart } from 'react-sortable-hoc'
-import { Tooltip } from 'components/common/tooltip'
-import { BlockTypeProperties, BLOCK_CONTAINER_VERTICAL_PADDING, DEFAULT_BLOCK, getBlockOptions, isBlockEmpty } from '../blocks'
+import { useRef, useCallback } from 'react'
+import { SortEnd } from 'react-sortable-hoc'
+import { isBlockEmpty } from '../blocks'
 import { BlockData, BlockType, BlockDataText, BlockDataImage, Block } from '../blocks/types'
 
-import styles from '../Editor.module.scss'
-import Container from '../blocks/core/Container'
-
-import Item from './Item'
 import useWindowKeyUp from 'utils/hooks/useWindowKeyUp'
 import { calculateBlockControlsPosition, useBlockControlModal } from '../modals/block-controls'
 import { useTextControlModal } from '../modals/text-controls'
@@ -37,9 +32,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
       }
 
       const block = blocks[index]
-
       const position = calculateBlockControlsPosition(blockRef, block)
-
       setBlockControlsId(block.id)
       showBlockControlsModal(position)
     },
@@ -141,6 +134,14 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
   }
 
   const _onBodyClick = () => {
+    if (blocks.length === 1) {
+      const [block] = blocks
+      if (block.type === BlockType.TEXT && isBlockEmpty(block)) {
+        setFocusIndex(0)
+        return
+      }
+    }
+
     const lastItemIndex = blocks.length - 1
     const lastBlock = blocks[lastItemIndex]
     if (lastBlock.type === BlockType.TEXT && (lastBlock.payload as BlockDataText).value === '') {
@@ -159,13 +160,10 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     onBlocksUpsert([{ ...block, position: newIndex }])
   }
 
-  // TODO: Move into sortable list / sortable item
   return (
     <SortableList
       itemRefFunc={(_ref: HTMLDivElement, position: number) => {
-        // if (_ref) {
         blockRefs.current[position] = _ref
-        // }
       }}
       modalBlockEnabled={modalBlockEnabled}
       focusIndex={focusIndex}

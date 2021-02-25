@@ -1,27 +1,22 @@
-import { useCallback } from 'react'
-
-import GET_PROJECT_ONE from 'queries/project/GET_PROJECT_ONE.gql'
-import GET_ARTICLE_ONE from 'queries/articles/GET_ARTICLE_ONE.gql'
-import { initializeApollo } from 'config/graphql'
-import {
-  useCreateArticleMutation,
-  useGetArticleOneQuery,
-  // useGetArticlesSubscriptionSubscription as useGetArticlesSubscription,
-  useGetArticlesQuery,
-  useGetArticleOneSubscriptionSubscription,
-  useUpsertArticlesMutation,
-  useGetProjectOneQuery,
-  useUpsertBlocksMutation,
-  useDeleteBlocksMutation,
-} from 'generated/graphql'
-import Root, { useUser } from 'components/root'
+import ErrorModal from 'components/common/modals/error'
 import EditorProvider, { useEditor } from 'components/editor/components/Provider'
 import EditorPage from 'components/pages/editor'
+import Root, { useUser } from 'components/root'
+import { initializeApollo } from 'config/graphql'
+import {
+  useDeleteBlocksMutation,
+  useGetArticleOneQuery,
+  useGetProjectOneQuery,
+  useUpsertArticlesMutation,
+  useUpsertBlocksMutation,
+} from 'generated/graphql'
 import { GetServerSidePropsContext } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import useUpsertArticlesMutationScoped from 'operations/articles/upsert'
 import useDeleteBlocksMutationScoped from 'operations/blocks/delete'
 import useUpsertBlocksMutationScoped from 'operations/blocks/upsert'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import GET_ARTICLE_ONE from 'queries/articles/GET_ARTICLE_ONE.gql'
+import GET_PROJECT_ONE from 'queries/project/GET_PROJECT_ONE.gql'
 
 export default function EditorRoot(props: any) {
   const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
@@ -90,13 +85,16 @@ export function Content() {
   }
 
   return (
-    <EditorPage
-      project={project}
-      article={article}
-      onUpsertArticlesMutation={upsertArticlesMutationScoped}
-      onUpsertBlocksMutation={upsertBlocksMutationScoped}
-      onDeleteBlockMutation={deleteBlocksMutationScoped}
-    />
+    <ErrorModal.Provider>
+      <EditorPage
+        project={project}
+        article={article}
+        onUpsertArticlesMutation={upsertArticlesMutationScoped}
+        onUpsertBlocksMutation={upsertBlocksMutationScoped}
+        onDeleteBlockMutation={deleteBlocksMutationScoped}
+      />
+      <ErrorModal.Component />
+    </ErrorModal.Provider>
   )
 }
 

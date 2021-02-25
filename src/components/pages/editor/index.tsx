@@ -1,27 +1,24 @@
-import { memo } from 'react'
-
-import Sidebar, { Section } from 'components/navigation/sidebar'
 import Editor from 'components/editor'
-import { fromBlockFragments, toBlockFragments } from 'utils/blocks/parse'
-import styles from './Editor.module.scss'
-
-import { ProjectFragment } from 'generated/graphql'
-
-import { UpsertArticlesMutationScopedFunc } from 'operations/articles/upsert'
-
-import { useEditor } from 'components/editor/components/Provider'
 import { Block } from 'components/editor/blocks/types'
-import debounce from 'lodash/debounce'
+import { useEditor } from 'components/editor/components/Provider'
 import Navbar from 'components/navigation/navbar'
-import { ArticleBlocksFragment } from 'types/types'
-import { DeleteBlocksMutationScopedFunc } from 'operations/blocks/delete'
-import { UpsertBlocksMutationScopedFunc } from 'operations/blocks/upsert'
-import { fromArticleFragments, toArticleFragments } from 'utils/article/parse'
-import { Article } from 'operations/articles/types'
-import { fromProjectFragments } from 'utils/project/parse'
+import Sidebar from 'components/navigation/sidebar'
+import debounce from 'lodash/debounce'
 import Routes from 'navigation/routes'
 import { navigate } from 'navigation/utils'
+import { Article } from 'operations/articles/types'
+import { fromArticleFragments, toArticleFragments } from 'utils/article/parse'
+import { fromBlockFragments, toBlockFragments } from 'utils/blocks/parse'
 import useTitle from 'utils/hooks/useTitle'
+import { fromProjectFragments } from 'utils/project/parse'
+import styles from './Editor.module.scss'
+import { memo } from 'react'
+import { ArticleBlocksFragment } from 'types/types'
+import { UpsertArticlesMutationScopedFunc } from 'operations/articles/upsert'
+import { UpsertBlocksMutationScopedFunc } from 'operations/blocks/upsert'
+import { DeleteBlocksMutationScopedFunc } from 'operations/blocks/delete'
+import { ProjectFragment } from 'generated/graphql'
+import { useErrorModal } from 'components/common/modals/error'
 
 const EditorPage = ({
   article: articleRaw,
@@ -32,6 +29,7 @@ const EditorPage = ({
   onDeleteBlockMutation,
 }: IProps) => {
   const { setArticleSlug, setProjectSlug } = useEditor()
+  const { showErrorMsg } = useErrorModal()
 
   const [project] = fromProjectFragments([projectRaw])
   const articles = project.articles || []
@@ -49,8 +47,9 @@ const EditorPage = ({
   const onUpsertArticles = async (updatedArticles: Article[]) => {
     const newArticles = toArticleFragments(project?.id, updatedArticles)
     const newArticlesResponse = await onUpsertArticlesMutation(newArticles)
+
     if (!newArticlesResponse) {
-      console.error(`Error upserting`)
+      showErrorMsg(`Error updating article`)
       return []
     }
 
@@ -69,7 +68,7 @@ const EditorPage = ({
     const blockFragments = toBlockFragments(article.id, blocks)
     const blockFragmentsResponse = await onUpsertBlocksMutation(blockFragments)
     if (!blockFragmentsResponse) {
-      console.error(`Error upserting`)
+      showErrorMsg(`Error updating blocks`)
       return []
     }
 

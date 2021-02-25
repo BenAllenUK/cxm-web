@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 
-// https://usehooks.com/
-
 function useAsync(asyncFunction: () => Promise<any>, immediate = true) {
   const [status, setStatus] = useState('idle')
   const [value, setValue] = useState(null)

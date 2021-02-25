@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { DependencyList, useEffect } from 'react'
 
-function useWindowKeyDown(targetKey: string, handler: (e: KeyboardEvent) => void, dependents: any[] = []) {
+function useWindowKeyDown(targetKey: string, handler: (e: KeyboardEvent) => void, dependents: DependencyList) {
   function downHandler(e: KeyboardEvent) {
     if (e.key === targetKey) {
       handler(e)

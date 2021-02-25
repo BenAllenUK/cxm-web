@@ -101,7 +101,6 @@ export function ControlledSidebar({ currentViewingArticleId, project, articles, 
 
   const onMenuMoreItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
     showControls({ x: e.clientX, y: e.clientY })
-    console.log('set target')
     setTarget(section.id, item.id)
     e.stopPropagation()
   }

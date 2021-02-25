@@ -1,10 +1,10 @@
-import { ForwardedRef, MutableRefObject, RefObject, useEffect } from 'react'
+import { DependencyList, ForwardedRef, MutableRefObject, RefObject, useEffect } from 'react'
 
 function useKeyUp<T extends Element>(
   targetKey: string,
   ref: RefObject<T> | ForwardedRef<T>,
   handler: (e: KeyboardEvent) => void,
-  dependents: any[] = []
+  dependents: DependencyList
 ) {
   function upHandler(e: Event) {
     const _e = e as KeyboardEvent

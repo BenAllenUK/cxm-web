@@ -9,6 +9,7 @@ import Link from './link'
 import BlockControlsContext, { useBlockControlsContext } from './block-controls/BlockControlsContext'
 import PageControlsTargetContext from 'components/navigation/sidebar/modals/page-controls/PageControlsTargetContext'
 import { Article } from 'operations/articles/types'
+import styles from '../Editor.module.scss'
 
 const ControlledModals = ({ articles, children, onModifyBlockType }: IProps) => {
   const { id, filterText } = useBlockControlsContext()
@@ -17,14 +18,14 @@ const ControlledModals = ({ articles, children, onModifyBlockType }: IProps) => 
     onModifyBlockType(id, key)
   }
   return (
-    <div>
+    <>
       <BlockControls.Component filterText={filterText} id={id} onBlockItemClick={_onModifyBlockType} />
       <PageControls.Component onClick={() => {}} />
       <TextControls.Component />
       <TextStyle.Component />
       <Link.Component articles={articles} />
       {children}
-    </div>
+    </>
   )
 }
 
@@ -32,7 +33,7 @@ const Modals = (props: IProps) => {
   const bodyRef = useRef<HTMLDivElement>(null)
 
   return (
-    <div style={{ position: 'relative' }} ref={bodyRef}>
+    <div className={styles.modalContainer} ref={bodyRef}>
       <TextControls.Provider rootRef={bodyRef}>
         <PageControls.Provider rootRef={bodyRef}>
           <PageControlsTargetContext.Provider>

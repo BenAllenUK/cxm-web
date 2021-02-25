@@ -7,7 +7,7 @@ import styles from './BlockControlUncontrolled.module.scss'
 const BlockControlUncontrolled = ({ filterText, style, onClick, onDismiss }: IProps) => {
   let items: IOptionElements[] = Object.values(BlockTypeProperties).map((item, i) => ({
     id: item.id,
-    icon: <Image className={styles.image} width={46} height={46} src={item.image} />,
+    icon: <Image priority loading={'eager'} className={styles.image} width={46} height={46} src={item.image} />,
     title: item.title,
     subtitle: item.subtitle,
     type: OptionType.Button,

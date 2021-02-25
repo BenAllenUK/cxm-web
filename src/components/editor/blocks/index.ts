@@ -1,6 +1,6 @@
-import { BlockData, BlockDataText, BlockType, BlockDataListBullet, BlockDataImage, Block } from './types'
+import { BlockDataText, BlockType, BlockDataListBullet, BlockDataImage, Block } from './types'
 
-export const BLOCK_CONTAINER_VERTICAL_PADDING = 10
+export const BLOCK_CONTAINER_VERTICAL_PADDING = 2
 
 export const DEFAULT_BLOCK = {
   type: BlockType.TEXT,

@@ -1,0 +1,46 @@
+@import 'styles/variables';
+
+.messageEnter {
+  opacity: 0;
+}
+.messageEnterActive {
+  opacity: 1;
+  transition: opacity 1000ms;
+}
+.messageExit {
+  opacity: 1;
+}
+.messageExitActive {
+  opacity: 0;
+  transition: opacity 1000ms;
+}
+
+.container {
+  box-shadow: $box-shadow-large;
+  font-size: 12px;
+  padding: 10px;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: row;
+}
+
+.icon {
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.containerError {
+  @extend .container;
+  background-color: $error-text-color;
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.containerWarning {
+  @extend .container;
+  color: $warning-text-color;
+}

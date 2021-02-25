@@ -1,11 +1,12 @@
 import { memo, useCallback, useRef, useState } from 'react'
 import { Block, BlockDataText, BlockType } from 'components/editor/blocks/types'
 import { BlockTypeProperties, DEFAULT_BLOCK_START } from './blocks'
-import Content from './components/List'
+
 import styles from './Editor.module.scss'
 import Modals from './modals'
 import Header from './header'
 import { Article } from 'operations/articles/types'
+import List from './components/List'
 
 function Editor({
   id,
@@ -87,7 +88,7 @@ function Editor({
       <Modals articles={articles} onModifyBlockType={_onModifyBlockType}>
         <div className={styles.container}>
           <Header loading={!id} />
-          <Content
+          <List
             focusIndex={focusIndex}
             blocks={blocks}
             onBlocksUpsert={onBlocksUpsert}

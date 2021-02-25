@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { DependencyList, useEffect } from 'react'
 
-function useWindowKeyUp(targetKey: string, handler: (e: KeyboardEvent) => void, dependents: any[] = []) {
+function useWindowKeyUp(targetKey: string, handler: (e: KeyboardEvent) => void, dependents: DependencyList) {
   function upHandler(e: KeyboardEvent) {
     if (e.key === targetKey) {
       handler(e)

@@ -27,7 +27,7 @@ export function MenuList(props: IProps) {
             ref={(ref) => itemRef(ref, item)}
             subList={item.children.length > 0}
             innerStyle={{ paddingLeft: SIDEBAR_INDENT * (depth + 1) }}
-            isOpen={openState[item.id]}
+            isOpen={openState[item.id] && item.children.length > 0}
             onClick={(e) => onItemClick(e, item)}
             onArrowClick={(e) => onItemArrowClick(e, item)}
             onAddClick={(e) => onItemAddClick(e, item)}
