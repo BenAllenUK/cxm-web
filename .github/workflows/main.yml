@@ -42,3 +42,5 @@ jobs:
           ADMIN_SECRET: ${{ secrets.ADMIN_SECRET }}
       - name: Deploy
         run: yarn deploy
+        env:
+          CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
