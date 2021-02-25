@@ -1,3 +1,4 @@
+# https://github.com/serverless-nextjs/serverless-next.js#readme
 omnea:
   component: '@sls-next/serverless-component@1.19.0-alpha.32'
   inputs:

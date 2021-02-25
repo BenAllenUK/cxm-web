@@ -2,12 +2,6 @@ const path = require('path')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { i18n } = require('./next-i18next.config')
 
-const localeSubpaths = {
-  en: 'en',
-  fr: 'fr',
-  de: 'de',
-}
-
 module.exports = {
   i18n,
   webpack(config, { buildId, dev, isServer, defaultLoaders, webpack }) {

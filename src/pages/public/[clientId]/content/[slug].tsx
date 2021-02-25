@@ -2,7 +2,6 @@ import { BlockType } from 'components/editor/blocks/types'
 import Content from 'components/content'
 import { createGraphQLClient } from 'config/graphql'
 import GET_PROJECTS from 'queries/project/GET_PROJECTS.gql'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function ContentPage({ blocks }: any) {
   return <Content blocks={blocks} />
@@ -43,7 +42,6 @@ export async function getStaticProps({ locale }: any) {
           blocks: blocks,
         },
       },
-      ...(await serverSideTranslations(locale, ['common'])),
     },
   }
 }
