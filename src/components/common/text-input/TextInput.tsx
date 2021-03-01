@@ -79,8 +79,8 @@ class TextInput extends React.Component<ITextInputProps, State> {
   render() {
     const { focusedPlaceholder, blurredPlaceholder, html, innerRef, disabled, ...props } = this.props
     const { isFocused } = this.state
-    const focusedPlaceholderText = focusedPlaceholder || ''
-    const blurredPlaceholderText = blurredPlaceholder || ''
+    const focusedPlaceholderText = focusedPlaceholder
+    const blurredPlaceholderText = blurredPlaceholder
 
     return (
       <div
