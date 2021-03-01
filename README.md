@@ -39,3 +39,4 @@ Environment variables need to be added to multiple files:
 - `.envrc` (ignored via git)
 - `next.config.js`
 - `serverless.yml`
+- All workflows under `.github/workflows`

@@ -38,3 +38,7 @@ jobs:
           ADMIN_SECRET: ${{ secrets.ADMIN_SECRET }}
       - name: Deploy
         run: yarn build
+        env:
+          CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
+          AWS_UPLOAD_BUCKET_ID: ${{ secrets.AWS_UPLOAD_BUCKET_ID }}
+          OMNEA_UPLOAD_URL: ${{ secrets.OMNEA_UPLOAD_URL }}
