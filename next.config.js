@@ -53,4 +53,10 @@ module.exports = {
 
     return config
   },
+  images: {
+    domains: ['localhost'],
+  },
+  env: {
+    OMNEA_UPLOAD_URL: process.env.OMNEA_UPLOAD_URL,
+  },
 }

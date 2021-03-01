@@ -9,6 +9,7 @@ import {
   useGetProjectOneQuery,
   useUpsertArticlesMutation,
   useUpsertBlocksMutation,
+  useGenerateAssetUrlMutation,
 } from 'generated/graphql'
 import { GetServerSidePropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -17,14 +18,20 @@ import useDeleteBlocksMutationScoped from 'operations/blocks/delete'
 import useUpsertBlocksMutationScoped from 'operations/blocks/upsert'
 import GET_ARTICLE_ONE from 'queries/articles/GET_ARTICLE_ONE.gql'
 import GET_PROJECT_ONE from 'queries/project/GET_PROJECT_ONE.gql'
+import AssetsProvider from 'components/providers/assets'
 
 export default function EditorRoot(props: any) {
   const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
   return (
     <Root {...otherProps}>
-      <EditorProvider initialContext={initialEditorContext}>
-        <Content />
-      </EditorProvider>
+      <AssetsProvider>
+        <ErrorModal.Provider>
+          <EditorProvider initialContext={initialEditorContext}>
+            <Content />
+            <ErrorModal.Component />
+          </EditorProvider>
+        </ErrorModal.Provider>
+      </AssetsProvider>
     </Root>
   )
 }
@@ -85,16 +92,13 @@ export function Content() {
   }
 
   return (
-    <ErrorModal.Provider>
-      <EditorPage
-        project={project}
-        article={article}
-        onUpsertArticlesMutation={upsertArticlesMutationScoped}
-        onUpsertBlocksMutation={upsertBlocksMutationScoped}
-        onDeleteBlockMutation={deleteBlocksMutationScoped}
-      />
-      <ErrorModal.Component />
-    </ErrorModal.Provider>
+    <EditorPage
+      project={project}
+      article={article}
+      onUpsertArticlesMutation={upsertArticlesMutationScoped}
+      onUpsertBlocksMutation={upsertBlocksMutationScoped}
+      onDeleteBlockMutation={deleteBlocksMutationScoped}
+    />
   )
 }
 
