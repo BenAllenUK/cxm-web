@@ -45,3 +45,5 @@ translate-account-key.json
 public/locales/*
 !public/locales/en/*
 src/generated/graphql.tsx
+
+/pages/

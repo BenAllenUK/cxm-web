@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "./_scripts/copy/run.sh admin && next dev",
+    "dev:_root_": "./_scripts/copy/run.sh _root_ && next dev",
+    "dev:admin": "./_scripts/copy/run.sh admin && next dev",
+    "dev:docs": "./_scripts/copy/run.sh docs && next dev",
+    "dev:api": "./_scripts/copy/run.sh api && next dev",
     "build": "next build",
     "start": "next start",
     "export": "next build && next export",

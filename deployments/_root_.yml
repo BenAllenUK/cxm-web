@@ -1,14 +1,17 @@
 # https://github.com/serverless-nextjs/serverless-next.js#readme
-omnea-admin:
+omnea:
   component: '@sls-next/serverless-component@1.19.0-alpha.32'
   inputs:
     cloudfront:
-      # distributionId: ${env.ADMIN_CLOUDFRONT_ID}
+      # distributionId: ${env.CLOUDFRONT_ID}
       defaults:
         forward:
           headers: [Host]
-    domain: ['docs', 'omnea.co']
-    bucketName: admin.omnea
+    domain: ['omnea.co']
+    domainType: 'both'
+    domainRedirects:
+      www.omnea.co: https://omnea.co
+    bucketName: omnea
     build:
       postBuildCommands: ['node post-build.js']
       env:
