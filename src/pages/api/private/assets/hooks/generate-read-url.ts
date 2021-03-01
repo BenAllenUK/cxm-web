@@ -26,24 +26,29 @@ const URL_EXPIRATION_SECONDS = 86400
  *                   type: string
  */
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const {
-    body: {
-      input: { key },
-    },
-  } = req
+  try {
+    const {
+      body: {
+        input: { key },
+      },
+    } = req
 
-  const s3Params = {
-    Bucket: process.env.AWS_UPLOAD_BUCKET_ID,
-    Key: key,
-    Expires: URL_EXPIRATION_SECONDS,
+    const s3Params = {
+      Bucket: process.env.AWS_UPLOAD_BUCKET_ID,
+      Key: key,
+      Expires: URL_EXPIRATION_SECONDS,
+    }
+
+    console.log('Params: ', s3Params)
+    const uploadURL = await s3.getSignedUrlPromise('getObject', s3Params)
+
+    res.statusCode = 200
+    res.json({
+      url: uploadURL,
+      key: key,
+    })
+  } catch (e) {
+    res.statusCode = 500
+    res.json({ error: e })
   }
-
-  console.log('Params: ', s3Params)
-  const uploadURL = await s3.getSignedUrlPromise('getObject', s3Params)
-
-  res.statusCode = 200
-  res.json({
-    url: uploadURL,
-    key: key,
-  })
 }

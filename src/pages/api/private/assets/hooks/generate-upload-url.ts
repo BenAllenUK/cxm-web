@@ -31,31 +31,36 @@ const URL_EXPIRATION_SECONDS = 300
  *                   type: string
  */
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const randomId = Number(Math.random() * 10000000)
-  const type = req.body.input.contentType
+  try {
+    const randomId = Number(Math.random() * 10000000)
+    const type = req.body.input.contentType
 
-  if (!type) {
-    res.statusCode = 400
+    if (!type) {
+      res.statusCode = 400
+      res.json({
+        message: 'Invalid format',
+      })
+    }
+
+    const [fileType, fileExtension] = type.split('/')
+    const key = `${randomId}.${fileExtension}`
+
+    const s3Params = {
+      Bucket: process.env.AWS_UPLOAD_BUCKET_ID,
+      Key: key,
+      Expires: URL_EXPIRATION_SECONDS,
+      ContentType: type,
+    }
+
+    const uploadURL = await s3.getSignedUrlPromise('putObject', s3Params)
+
+    res.statusCode = 200
     res.json({
-      message: 'Invalid format',
+      url: uploadURL,
+      key: key,
     })
+  } catch (e) {
+    res.statusCode = 500
+    res.json({ error: e })
   }
-
-  const [fileType, fileExtension] = type.split('/')
-  const key = `${randomId}.${fileExtension}`
-
-  const s3Params = {
-    Bucket: process.env.AWS_UPLOAD_BUCKET_ID,
-    Key: key,
-    Expires: URL_EXPIRATION_SECONDS,
-    ContentType: type,
-  }
-
-  const uploadURL = await s3.getSignedUrlPromise('putObject', s3Params)
-
-  res.statusCode = 200
-  res.json({
-    url: uploadURL,
-    key: key,
-  })
 }
