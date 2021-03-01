@@ -9,7 +9,6 @@ import {
   useGetProjectOneQuery,
   useUpsertArticlesMutation,
   useUpsertBlocksMutation,
-  useGenerateAssetUrlMutation,
 } from 'generated/graphql'
 import { GetServerSidePropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
