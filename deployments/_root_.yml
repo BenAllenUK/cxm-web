@@ -13,7 +13,7 @@ omnea:
       www.omnea.co: https://omnea.co
     bucketName: omnea
     build:
-      postBuildCommands: ['node post-build.js']
+      postBuildCommands: ['node _scripts/post-build/post-build.js']
       env:
         OMNEA_UPLOAD_URL: ${env.OMNEA_UPLOAD_URL}
         AWS_UPLOAD_BUCKET_ID: ${env.AWS_UPLOAD_BUCKET_ID}
