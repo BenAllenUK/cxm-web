@@ -4,7 +4,7 @@
 mutation UpsertArticles($objects: [articles_insert_input!]!) {
   insert_articles(
     objects: $objects
-    on_conflict: { constraint: articles_pkey, update_columns: [parentId, projectId, slug, title, archived, archivedAt] }
+    on_conflict: { constraint: articles_pkey, update_columns: [parentId, projectId, slug, title, archived, archivedAt, position] }
   ) {
     returning {
       ...Article

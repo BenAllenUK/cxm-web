@@ -1,19 +1,14 @@
 const path = require('path')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { nextI18NextRewrites } = require('next-i18next/rewrites')
-const localeSubpaths = {
-  en: 'en',
-  fr: 'fr',
-  de: 'de',
-}
+const { i18n } = require('./next-i18next.config')
 
 module.exports = {
   rewrites: async () => nextI18NextRewrites(localeSubpaths),
   publicRuntimeConfig: {
     localeSubpaths,
   },
-  domains: ['images.unsplash.com'],
-  images: { domains: ['localhost:3000', '""'] },
+  images: { domains: ['localhost:3000', 'images.unsplash.com'] },
+  i18n,
   webpack(config, { buildId, dev, isServer, defaultLoaders, webpack }) {
     config.module.rules.push({
       test: /\.svg$/,
@@ -62,5 +57,12 @@ module.exports = {
     }
 
     return config
+  },
+  images: {
+    domains: ['localhost'],
+  },
+  env: {
+    OMNEA_UPLOAD_URL: process.env.OMNEA_UPLOAD_URL,
+    AWS_UPLOAD_BUCKET_ID: process.env.AWS_UPLOAD_BUCKET_ID,
   },
 }

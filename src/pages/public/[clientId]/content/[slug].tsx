@@ -7,7 +7,7 @@ export default function ContentPage({ blocks }: any) {
   return <Content blocks={blocks} />
 }
 
-export async function getStaticProps() {
+export async function getStaticProps({ locale }: any) {
   const client = createGraphQLClient()
   const { data } = await client.query({ query: GET_PROJECTS })
   // const { projects_by_pk: projectData } = data
@@ -35,7 +35,6 @@ export async function getStaticProps() {
 
   return {
     props: {
-      namespacesRequired: ['common'],
       blocks,
       initialReduxState: {
         // project: projectData,

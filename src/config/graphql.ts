@@ -1,4 +1,4 @@
-import { ApolloClient, gql, InMemoryCache, makeVar } from '@apollo/client'
+import { ApolloClient, gql, InMemoryCache, makeVar, NormalizedCacheObject } from '@apollo/client'
 
 import { HttpLink } from '@apollo/client/link/http'
 import { WebSocketLink } from '@apollo/client/link/ws'
@@ -8,7 +8,7 @@ import { ApolloProvider } from '@apollo/client'
 
 export let apolloClient: any
 
-export function initializeApollo(initialState: any = {}) {
+export function initializeApollo(initialState: any = {}): ApolloClient<NormalizedCacheObject> {
   const _apolloClient = apolloClient ?? createGraphQLClient()
 
   // If your page has Next.js data fetching methods that use Apollo Client,

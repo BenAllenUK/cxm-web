@@ -2,9 +2,13 @@
 @import 'components/common/button/Button.module.scss';
 
 .block {
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
   position: relative;
+
+  @media only screen and (max-width: 1300px) {
+    margin: 0 50px;
+  }
 }
 
 .dropzoneBlock {

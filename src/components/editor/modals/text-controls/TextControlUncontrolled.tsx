@@ -1,5 +1,5 @@
 import { HTMLProps, useRef } from 'react'
-import { useOnClickOutside } from 'utils/hooks'
+import useOnClickOnOutside from 'utils/hooks/useOnClickOnOutside'
 import LinkButton from './LinkButton'
 import Button from './Button'
 import styles from './TextControlUncontrolled.module.scss'
@@ -8,7 +8,7 @@ import CommentIcon from 'images/icons/comment.svg'
 import ExternalLinkIcon from 'images/icons/external-link.svg'
 import CodeIcon from 'images/icons/code.svg'
 import DotsIcon from 'images/icons/dots.svg'
-import { useTranslation } from 'config/translation'
+import { useTranslation } from 'next-i18next'
 import { insertSpanWithClassName } from 'components/editor/utils/html'
 
 const TextControlsUncontrolled = ({
@@ -23,7 +23,7 @@ const TextControlsUncontrolled = ({
   const ref = useRef<HTMLDivElement>(null)
   const { t } = useTranslation(['editor'])
 
-  useOnClickOutside(ref, () => {
+  useOnClickOnOutside(ref, () => {
     onDismiss()
   })
 

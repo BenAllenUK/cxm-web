@@ -57,6 +57,12 @@ ul.menu {
   }
 }
 
+.itemSelected {
+  @extend .item;
+  background-color: #fafbff;
+  color: $text2-color;
+}
+
 ul.projectMenu {
   @extend .menu;
 
@@ -132,5 +138,4 @@ ul.projectMenu {
 
 .scrollable {
   flex: 1;
-  overflow: scroll;
 }

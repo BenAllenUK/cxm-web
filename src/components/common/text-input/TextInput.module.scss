@@ -1,9 +1,9 @@
 @import 'styles/variables';
 
 .textInputContainer {
+  display: inline-block;
   color: $primary-text-color;
   font-size: 16px;
-  overflow: hidden;
   background: none;
   border: none;
   -webkit-box-shadow: none;

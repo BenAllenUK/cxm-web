@@ -1,11 +1,10 @@
-import TextInput from 'components/common/text-input/TextInput'
-import styles from './Search.module.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
 import { faSearch, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import OptionControls, { IOptionSections, OptionType } from 'components/common/option-controls'
-import { ArticleFragment } from 'generated/graphql'
+import TextInput from 'components/common/text-input/TextInput'
+import { Article } from 'operations/articles/types'
 import { useEffect, useRef, useState } from 'react'
+import styles from './Search.module.scss'
 
 const Header = ({ filterText, onValueChange, onResetValue }: IHeaderProps) => {
   const inputRef = useRef<HTMLDivElement>(null)
@@ -72,7 +71,8 @@ const Search = ({ articles, onItemClick, onDismiss }: ISearchProps & { onDismiss
 
   let filteredArticles = articles
   if (filterText) {
-    filteredArticles = articles.filter((item) => item.title.indexOf(filterText) > -1)
+    const filteredTextLower = filterText.toLowerCase()
+    filteredArticles = articles.filter((item) => item.title.toLowerCase().indexOf(filteredTextLower) > -1)
   }
 
   const sections: IOptionSections[] = [
@@ -88,7 +88,8 @@ const Search = ({ articles, onItemClick, onDismiss }: ISearchProps & { onDismiss
   ]
 
   const _onClick = (_: number, id: number) => {
-    onItemClick(id)
+    const [article] = filteredArticles.filter((item) => item.id === id)
+    onItemClick(article.slug)
   }
 
   return (
@@ -110,6 +111,6 @@ const Search = ({ articles, onItemClick, onDismiss }: ISearchProps & { onDismiss
 export default Search
 
 export interface ISearchProps {
-  articles: ArticleFragment[]
-  onItemClick: (id: number) => void
+  articles: Article[]
+  onItemClick: (id: string) => void
 }

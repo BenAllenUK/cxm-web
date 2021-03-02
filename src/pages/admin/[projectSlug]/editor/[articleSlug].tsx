@@ -1,31 +1,36 @@
-import { useCallback } from 'react'
-
-import GET_PROJECT_ONE from 'queries/project/GET_PROJECT_ONE.gql'
-import GET_ARTICLE_ONE from 'queries/articles/GET_ARTICLE_ONE.gql'
+import ErrorModal from 'components/common/modals/error'
+import EditorProvider, { useEditor } from 'components/editor/components/Provider'
+import EditorPage from 'components/pages/editor'
+import Root, { useUser } from 'components/root'
 import { initializeApollo } from 'config/graphql'
 import {
-  useCreateArticleMutation,
+  useDeleteBlocksMutation,
   useGetArticleOneQuery,
-  // useGetArticlesSubscriptionSubscription as useGetArticlesSubscription,
-  useGetArticlesQuery,
-  useGetArticleOneSubscriptionSubscription,
-  useUpsertArticlesMutation,
   useGetProjectOneQuery,
+  useUpsertArticlesMutation,
   useUpsertBlocksMutation,
-  useDeleteBlockMutation,
 } from 'generated/graphql'
-import Root, { useUser } from 'components/root'
-import EditorProvider, { useEditor } from 'components/editor/Provider'
-import EditorPage from 'components/pages/editor'
 import { GetServerSidePropsContext } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import useUpsertArticlesMutationScoped from 'operations/articles/upsert'
+import useDeleteBlocksMutationScoped from 'operations/blocks/delete'
+import useUpsertBlocksMutationScoped from 'operations/blocks/upsert'
+import GET_ARTICLE_ONE from 'queries/articles/GET_ARTICLE_ONE.gql'
+import GET_PROJECT_ONE from 'queries/project/GET_PROJECT_ONE.gql'
+import AssetsProvider from 'components/providers/assets'
 
 export default function EditorRoot(props: any) {
   const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
   return (
     <Root {...otherProps}>
-      <EditorProvider initialContext={initialEditorContext}>
-        <Content />
-      </EditorProvider>
+      <AssetsProvider>
+        <ErrorModal.Provider>
+          <EditorProvider initialContext={initialEditorContext}>
+            <Content />
+            <ErrorModal.Component />
+          </EditorProvider>
+        </ErrorModal.Provider>
+      </AssetsProvider>
     </Root>
   )
 }
@@ -35,20 +40,15 @@ export function Content() {
 
   const { projectSlug, articleSlug } = useEditor()
 
-  if (projectSlug === null || articleSlug === null) {
-    return <div />
-  }
-
   const { data: projectsData } = useGetProjectOneQuery({
     variables: {
-      slug: projectSlug,
+      slug: projectSlug || '', // TODO: avoid default to none
     },
   })
 
   const [project] = projectsData?.projects || []
   if (!project) {
     console.error(`Project not found: ${projectSlug}`)
-    return <div />
   }
 
   // Check to see if article Id is in article data
@@ -58,7 +58,7 @@ export function Content() {
 
   const response = useGetArticleOneQuery({
     variables: {
-      slug: articleSlug,
+      slug: articleSlug || '',
     },
   })
 
@@ -77,21 +77,26 @@ export function Content() {
 
   const [article] = articleData?.articles || []
 
-  const [createArticleMutation] = useCreateArticleMutation()
   const [upsertArticlesMutation] = useUpsertArticlesMutation()
+  const upsertArticlesMutationScoped = useUpsertArticlesMutationScoped(project?.id, upsertArticlesMutation)
 
   const [upsertBlockMutation] = useUpsertBlocksMutation()
+  const upsertBlocksMutationScoped = useUpsertBlocksMutationScoped(article?.id, upsertBlockMutation)
 
-  const [deleteBlockMutation] = useDeleteBlockMutation()
+  const [deleteBlocksMutation] = useDeleteBlocksMutation()
+  const deleteBlocksMutationScoped = useDeleteBlocksMutationScoped(article?.id, deleteBlocksMutation)
+
+  if (!project) {
+    return <div />
+  }
 
   return (
     <EditorPage
       project={project}
       article={article}
-      onCreateArticleMutation={createArticleMutation}
-      onUpsertArticlesMutation={upsertArticlesMutation}
-      onUpsertBlockMutation={upsertBlockMutation}
-      onDeleteBlockMutation={deleteBlockMutation}
+      onUpsertArticlesMutation={upsertArticlesMutationScoped}
+      onUpsertBlocksMutation={upsertBlocksMutationScoped}
+      onDeleteBlockMutation={deleteBlocksMutationScoped}
     />
   )
 }
@@ -99,11 +104,11 @@ export function Content() {
 /**
  * Block client data only
  */
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getServerSideProps({ params, locale }: GetServerSidePropsContext) {
   const client = initializeApollo()
 
-  const projectSlug = context.params?.projectSlug
-  const articleSlug = context.params?.articleSlug
+  const projectSlug = params?.projectSlug
+  const articleSlug = params?.articleSlug
 
   const { data: projectsData } = await client.query({
     query: GET_PROJECT_ONE,
@@ -117,7 +122,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       notFound: true,
     }
-    return
   }
 
   const { data: articleData } = await client.query({
@@ -146,7 +150,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         projectSlug: project.slug,
         articleSlug: article.slug,
       },
-      namespacesRequired: ['common', 'editor'],
+      ...(await serverSideTranslations(locale, ['common', 'editor'])),
     },
   }
 }

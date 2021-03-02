@@ -1,88 +1,98 @@
 import { memo, useCallback, useRef, useState } from 'react'
 import { Block, BlockDataText, BlockType } from 'components/editor/blocks/types'
 import { BlockTypeProperties, DEFAULT_BLOCK_START } from './blocks'
-import Content from './List'
+
 import styles from './Editor.module.scss'
 import Modals from './modals'
 import Header from './header'
-import { ArticleFragment } from 'generated/graphql'
+import { Article } from 'operations/articles/types'
+import List from './components/List'
 
-function Editor({ id, articles, blocks: initialBlocks, onBlocksUpsert, onBlockDelete }: IProps) {
-  const [focusIndex, setFocusIndex] = useState(-1)
+function Editor({
+  id,
+  articles,
+  blocks: initialBlocks,
+  onBlocksUpsert: onServerBlocksUpsert,
+  onBlocksDelete: onServerBlocksDelete,
+}: IProps) {
+  const [focusIndex, setFocusIndex] = useState(initialBlocks.length <= 1 ? 0 : -1)
 
-  let content = initialBlocks
-  if (!!id && content.length === 0) {
-    content = [{ ...DEFAULT_BLOCK_START, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }]
-  }
+  const [blocks, setBlocks] = useState<Block[]>(initialBlocks)
 
-  const [blocks, setBlocks] = useState<Block[]>(content)
-
-  const _onBlockItemClick = (index: number, key: BlockType) => {
-    const payload = BlockTypeProperties[key].isEditable
-      ? {
-          value: '',
-        }
-      : {}
-    const block = blocks[index]
+  const _onModifyBlockType = (id: number, key: BlockType) => {
+    const [block] = blocks.filter((item) => item.id === id)
     if (!block) {
       console.error('Block not found')
       return
     }
-    upsertBlocks({
-      ...block,
-      type: key,
-      payload,
-    })
-    setFocusIndex(index)
+
+    onBlocksUpsert([
+      {
+        ...block,
+        type: key,
+        payload: BlockTypeProperties[key].initialPayload,
+      },
+    ])
+    setFocusIndex(block.position)
   }
 
-  const upsertBlocks = (_block: Block) => {
-    setBlocks((state) => {
-      var existingItems = state.filter((item) => _block.id !== item.id).sort((a: Block, b: Block) => a.position - b.position)
-      // console.log('new block:', _block)
-      // console.log('existing blocks: ', existingItems)
-      existingItems = existingItems.map((item, i) => {
-        if (item.position >= _block.position) {
-          return { ...item, position: i + 1 }
-        }
-        return item
+  // ______ TEMP ________
+
+  const onBlocksUpsert = (newBlocks: Block[]) => {
+    const newBlockIds = newBlocks.map((item) => item.id)
+
+    setBlocks((prevBlocks) => {
+      var prevBlocksFiltered = prevBlocks
+        .filter((item) => newBlockIds.indexOf(item.id) === -1)
+        .sort((a: Block, b: Block) => a.position - b.position)
+
+      newBlocks.forEach((subItem, i) => {
+        prevBlocksFiltered = prevBlocksFiltered.map((item, i) => {
+          if (item.position >= subItem.position) {
+            return { ...item, position: i + 1 }
+          }
+          return item
+        })
       })
-      onBlocksUpsert([...existingItems, _block])
-      // console.log(' final blocks', [...existingItems, _block])
-      return [...existingItems, _block]
+      const finalBlocks = [...prevBlocksFiltered.filter((item) => newBlockIds.indexOf(item.id) === -1), ...newBlocks]
+      onServerBlocksUpsert(finalBlocks)
+      return finalBlocks
     })
   }
 
-  const _onBlocksUpsert = (_block: Block) => {
-    upsertBlocks(_block)
-  }
+  const onBlocksDelete = (ids: number[]) => {
+    setBlocks((prevBlocks) => {
+      var newBlocks = prevBlocks
+        .filter((item) => ids.indexOf(item.id) === -1)
+        .sort((a: Block, b: Block) => a.position - b.position)
 
-  const _onBlockDelete = (id: number) => {
-    setBlocks((state) => {
-      const [deletedBlock] = state.filter((item) => item.id == id)
-      var existingItems = state.filter((item) => id !== item.id).sort((a: Block, b: Block) => a.position - b.position)
-      existingItems = existingItems.map((item, i) => {
-        if (item.position > deletedBlock.position) {
-          return { ...item, position: i }
-        }
-        return item
+      ids.forEach((subId, i) => {
+        const [subItem] = prevBlocks.filter((item) => item.id === subId)
+        newBlocks = newBlocks.map((item, i) => {
+          if (item.position > subItem.position) {
+            return { ...item, position: i }
+          }
+          return item
+        })
       })
 
-      onBlocksUpsert(existingItems)
-      return existingItems
+      onServerBlocksUpsert(newBlocks)
+      return newBlocks
     })
   }
+
+  // ______ TEMP END ________
 
   return (
     <>
-      <Modals articles={articles} onBlockItemClick={_onBlockItemClick}>
+      <Modals articles={articles} onModifyBlockType={_onModifyBlockType}>
         <div className={styles.container}>
           <Header loading={!id} />
-          <Content
+          <List
             focusIndex={focusIndex}
             blocks={blocks}
-            onBlocksUpsert={_onBlocksUpsert}
-            onBlockDelete={_onBlockDelete}
+            onBlocksUpsert={onBlocksUpsert}
+            onBlocksDelete={onBlocksDelete}
             setFocusIndex={setFocusIndex}
           />
         </div>
@@ -93,9 +103,9 @@ function Editor({ id, articles, blocks: initialBlocks, onBlocksUpsert, onBlockDe
 
 export default memo(Editor)
 interface IProps {
-  id: number | null
-  articles: ArticleFragment[]
+  id?: number | null
+  articles: Article[]
   blocks: Block[]
   onBlocksUpsert: (blocks: Block[]) => void
-  onBlockDelete: (id: number) => void
+  onBlocksDelete: (ids: number[]) => void
 }

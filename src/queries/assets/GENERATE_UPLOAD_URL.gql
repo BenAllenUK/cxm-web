@@ -1,0 +1,6 @@
+mutation GenerateUploadAssetUrl($contentType: String!) {
+  assets_generate_upload_url(contentType: $contentType) {
+    key
+    url
+  }
+}

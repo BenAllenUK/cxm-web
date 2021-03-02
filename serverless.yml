@@ -1,7 +1,9 @@
+# https://github.com/serverless-nextjs/serverless-next.js#readme
 omnea:
   component: '@sls-next/serverless-component@1.19.0-alpha.32'
   inputs:
     cloudfront:
+      distributionId: ${env.CLOUDFRONT_ID}
       defaults:
         forward:
           headers: [Host]
@@ -12,3 +14,6 @@ omnea:
     bucketName: omnea
     build:
       postBuildCommands: ['node post-build.js']
+      env:
+        OMNEA_UPLOAD_URL: ${env.OMNEA_UPLOAD_URL}
+        AWS_UPLOAD_BUCKET_ID: ${env.AWS_UPLOAD_BUCKET_ID}

@@ -13,10 +13,15 @@ import produce from 'immer'
 import { usePageControlModals } from './modals/page-controls'
 import Modals from './modals'
 import { useMenuItemRefs } from './modals/menu-item-refs'
-import { parseMenu } from 'utils/menu'
-import { ArticleFragment, ArticlesInsertInput, GetProjectOneQuery } from 'generated/graphql'
+import parseMenu from 'utils/menu/parseMenu'
+
 import AddButton from './AddButton'
 import { useSearchModal } from './modals/search'
+import { DEFAULT_ARTICLE } from 'components/editor/blocks'
+import { BlockType } from 'components/editor/blocks/types'
+import createArticleEmpty from 'utils/article/createEmptyArticle'
+import { useSidebarPageControlsContext } from './modals/page-controls/PageControlsTargetContext'
+import { Article } from 'operations/articles/types'
 
 export const SIDEBAR_INDENT = 20
 
@@ -47,11 +52,12 @@ export type Section = {
 export type MenuItem = {
   id: number
   label: string
+  slug: string
   children: MenuItem[]
   parentId: number | null
 }
 
-export function ControlledSidebar({ project, articles, onViewArticle, onCreateArticle }: IProps) {
+export function ControlledSidebar({ currentViewingArticleId, project, articles, onViewArticle, onUpsertArticles }: IProps) {
   // TODO: Assumes ids have different numbers
 
   const { showControls } = usePageControlModals()
@@ -60,16 +66,23 @@ export function ControlledSidebar({ project, articles, onViewArticle, onCreateAr
   const [openState, setOpenState] = useState({})
 
   const onMenuItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
-    onViewArticle(item.id)
+    onViewArticle(item.slug)
   }
 
   const onMenuAddItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
-    onCreateArticle(item.id)
+    const newArticle = createArticleEmpty(item.id, 999) //TODO: update position
+    const [newArticleItem] = await onUpsertArticles([newArticle])
+
+    if (newArticleItem) {
+      onViewArticle(newArticleItem.slug)
+    }
+
     setOpenState(
       produce((draftOpenState) => {
         draftOpenState[item.id] = true
       })
     )
+
     e.stopPropagation()
   }
 
@@ -84,15 +97,23 @@ export function ControlledSidebar({ project, articles, onViewArticle, onCreateAr
     e.stopPropagation()
   }
 
+  const { setTarget } = useSidebarPageControlsContext()
+
   const onMenuMoreItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
+    showControls({ x: e.clientX, y: e.clientY })
+    setTarget(section.id, item.id)
     e.stopPropagation()
-    showControls(section.id, item.id, { x: e.clientX, y: e.clientY })
   }
   const { locationRefs } = useMenuItemRefs()
 
-  const sections = [
-    { id: 1, label: 'CONTENT', items: parseMenu(articles), suffix: <AddButton onClick={() => onCreateArticle(null)} /> },
-  ]
+  const _onSidebarAddItemClick = async () => {
+    const newArticle = createArticleEmpty(null, 9999)
+    const [newArticleItem] = await onUpsertArticles([newArticle])
+
+    if (newArticleItem) {
+      onViewArticle(newArticleItem.slug)
+    }
+  }
 
   const _onAppMenuClick = (id: number) => {
     switch (id) {
@@ -101,6 +122,10 @@ export function ControlledSidebar({ project, articles, onViewArticle, onCreateAr
         return
     }
   }
+
+  const sections = [
+    { id: 0, label: 'CONTENT', items: parseMenu(articles), suffix: <AddButton onClick={_onSidebarAddItemClick} /> },
+  ]
 
   return (
     <>
@@ -119,6 +144,7 @@ export function ControlledSidebar({ project, articles, onViewArticle, onCreateAr
             <div key={index}>
               <div className={styles.label}>{section.label}</div>
               <MenuList
+                selectedId={currentViewingArticleId}
                 itemRef={(ref: HTMLDivElement | null, item: MenuItem) => {
                   if (locationRefs && locationRefs.current && ref) {
                     locationRefs.current[section.id] ||= []
@@ -144,20 +170,26 @@ export function ControlledSidebar({ project, articles, onViewArticle, onCreateAr
 }
 
 interface IProps {
+  currentViewingArticleId?: number | null
+
   project: {
     name: string
     image?: string | null
   }
-  articles: ArticleFragment[]
+  articles: Article[]
 
-  onViewArticle: (id: number) => void
-  onCreateArticle: (id: number | null) => void
-  onUpdateArticles: (articles: ArticlesInsertInput[]) => void
+  onViewArticle: (slug: string) => void
+  onUpsertArticles: (articles: Article[]) => Promise<Article[]>
 }
 
 const ControlledSidebarWithModals = (props: IProps) => {
   return (
-    <Modals articles={props.articles} onUpdateArticles={props.onUpdateArticles} onViewArticle={props.onViewArticle}>
+    <Modals
+      currentViewingArticleId={props.currentViewingArticleId}
+      articles={props.articles}
+      onUpsertArticles={props.onUpsertArticles}
+      onViewArticle={props.onViewArticle}
+    >
       <ControlledSidebar {...props} articles={props.articles} />
     </Modals>
   )

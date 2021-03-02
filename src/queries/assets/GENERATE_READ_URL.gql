@@ -1,0 +1,6 @@
+mutation GenerateReadAssetUrl($key: String!) {
+  assets_generate_read_url(key: $key) {
+    key
+    url
+  }
+}

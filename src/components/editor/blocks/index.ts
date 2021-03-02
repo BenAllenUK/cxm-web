@@ -1,6 +1,6 @@
-import { BlockData, BlockDataText, BlockType, BlockDataListBullet, BlockDataImage, Block } from './types'
+import { BlockDataText, BlockType, BlockDataListBullet, BlockDataImage, Block } from './types'
 
-export const BLOCK_CONTAINER_VERTICAL_PADDING = 10
+export const BLOCK_CONTAINER_VERTICAL_PADDING = 2
 
 export const DEFAULT_BLOCK = {
   type: BlockType.TEXT,
@@ -67,6 +67,9 @@ export const BlockTypeProperties = {
     image: '/preview/text.png',
     initialHeight: 20,
     isEditable: true,
+    initialPayload: {
+      value: '',
+    },
   },
   [BlockType.H1]: {
     id: BlockType.H1,
@@ -75,6 +78,9 @@ export const BlockTypeProperties = {
     image: '/preview/h1.png',
     initialHeight: 38,
     isEditable: true,
+    initialPayload: {
+      value: '',
+    },
   },
   [BlockType.H2]: {
     id: BlockType.H2,
@@ -83,6 +89,9 @@ export const BlockTypeProperties = {
     image: '/preview/h2.png',
     initialHeight: 29,
     isEditable: true,
+    initialPayload: {
+      value: '',
+    },
   },
   [BlockType.H3]: {
     id: BlockType.H3,
@@ -91,6 +100,9 @@ export const BlockTypeProperties = {
     image: '/preview/h3.png',
     initialHeight: 23,
     isEditable: true,
+    initialPayload: {
+      value: '',
+    },
   },
   [BlockType.LIST_BULLET]: {
     id: BlockType.LIST_BULLET,
@@ -99,6 +111,9 @@ export const BlockTypeProperties = {
     image: '/preview/list_bullet.png',
     initialHeight: 19,
     isEditable: true,
+    initialPayload: {
+      items: [{ value: '' }],
+    },
   },
   [BlockType.LIST_CHECK]: {
     id: BlockType.LIST_CHECK,
@@ -107,6 +122,9 @@ export const BlockTypeProperties = {
     image: '/preview/list_bullet.png',
     initialHeight: 22,
     isEditable: true,
+    initialPayload: {
+      items: [{ value: '', selected: false }],
+    },
   },
   [BlockType.LIST_NUMBER]: {
     id: BlockType.LIST_NUMBER,
@@ -115,6 +133,9 @@ export const BlockTypeProperties = {
     image: '/preview/list_bullet.png',
     initialHeight: 20,
     isEditable: true,
+    initialPayload: {
+      items: [{ value: '' }],
+    },
   },
   [BlockType.IMAGE]: {
     id: BlockType.IMAGE,
@@ -123,6 +144,7 @@ export const BlockTypeProperties = {
     image: '/preview/image.png',
     initialHeight: 49,
     isEditable: false,
+    initialPayload: {},
   },
   [BlockType.CALLOUT]: {
     id: BlockType.CALLOUT,
@@ -131,6 +153,9 @@ export const BlockTypeProperties = {
     image: '/preview/image.png',
     initialHeight: 53,
     isEditable: true,
+    initialPayload: {
+      value: '',
+    },
   },
   [BlockType.CODE]: {
     id: BlockType.CODE,
@@ -139,6 +164,9 @@ export const BlockTypeProperties = {
     image: '/preview/image.png',
     initialHeight: 82,
     isEditable: true,
+    initialPayload: {
+      value: '',
+    },
   },
   [BlockType.QUOTE]: {
     id: BlockType.QUOTE,
@@ -147,6 +175,9 @@ export const BlockTypeProperties = {
     image: '/preview/image.png',
     initialHeight: 34,
     isEditable: true,
+    initialPayload: {
+      value: '',
+    },
   },
   [BlockType.DIVIDER]: {
     id: BlockType.DIVIDER,
@@ -155,5 +186,6 @@ export const BlockTypeProperties = {
     image: '/preview/image.png',
     initialHeight: 20,
     isEditable: false,
+    initialPayload: {},
   },
 }
