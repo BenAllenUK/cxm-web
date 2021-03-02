@@ -2,7 +2,7 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.tslint": true
   },
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "editor.detectIndentation": false,
   "javascript.updateImportsOnFileMove.enabled": "always",
   "javascript.preferences.importModuleSpecifier": "relative",

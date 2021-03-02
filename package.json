@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently -k \"next dev --port=3001\" \"node _scripts/development/proxy.js\"",
-    "build": "next build",
     "start": "next start",
-    "export": "next build && next export",
     "docs": "swagger-jsdoc -d swagger.js src/pages/api/public/**/*.yaml -o public/docs/api.json",
     "codegen": "graphql-codegen --config codegen.js --watch",
     "codegen:build": "graphql-codegen --config codegen.js",
@@ -15,7 +13,12 @@
     "deploy:admin": "./_scripts/deploy/run.sh admin",
     "deploy:api": "./_scripts/deploy/run.sh api",
     "deploy:docs": "./_scripts/deploy/run.sh docs",
-    "deploy:uploads": "./_scripts/deploy/run.sh uploads"
+    "deploy:uploads": "./_scripts/deploy/run.sh uploads",
+    "build:root": "./_scripts/deploy/run.sh _root_",
+    "build:admin": "./_scripts/deploy/run.sh admin",
+    "build:api": "./_scripts/deploy/run.sh api",
+    "build:docs": "./_scripts/deploy/run.sh docs",
+    "build:uploads": "./_scripts/deploy/run.sh uploads"
   },
   "dependencies": {
     "@apollo/client": "^3.3.6",
@@ -36,7 +39,7 @@
     "lodash": "^4.17.20",
     "mobx": "^6.0.4",
     "next": "^10.0.7",
-    "next-i18next": "^8.0.0",
+    "next-i18next": "^8.0.6",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
