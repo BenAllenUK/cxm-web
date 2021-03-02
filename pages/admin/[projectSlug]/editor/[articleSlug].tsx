@@ -150,7 +150,7 @@ export async function getServerSideProps({ params, locale }: GetServerSidePropsC
         projectSlug: project.slug,
         articleSlug: article.slug,
       },
-      ...(await serverSideTranslations(locale, ['common', 'editor'])),
+      ...(await serverSideTranslations(locale || 'en', ['common', 'editor'])),
     },
   }
 }
