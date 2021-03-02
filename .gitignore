@@ -34,7 +34,7 @@ yarn-error.log*
 .vercel
 
 .envrc
-/.serverless.yml
+.serverless.yml
 # src/generated/*.*
 graphql.schema.json
 

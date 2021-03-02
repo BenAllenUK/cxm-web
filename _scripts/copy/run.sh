@@ -4,7 +4,9 @@ then
   exit 1
 fi
 
-cp deployments/$1.yml serverless.yml
-rm -R -f pages
+
+cp deployments/$1.yml serverless.yml 2>/dev/null
+mv pages _pages || :
 mkdir pages
-cp -R src/paths/$1/* pages/
+cp -R _pages/$1/ pages/
+mv .serverless.$1 .serverless 2>/dev/null

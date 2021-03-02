@@ -1,0 +1,17 @@
+{
+  "name": "v16fk7g-54sbv1a",
+  "hash": "Lm4FGz2W4GD8I2yvZsAVyr1wBS7UP00CMc42D34jRKs=",
+  "description": "Image Lambda@Edge for Next CloudFront distribution",
+  "memory": 512,
+  "timeout": 10,
+  "code": "/Users/benallen/Documents/Projects/CXM/omnia/cxm/.serverless_nextjs/image-lambda",
+  "shims": [],
+  "handler": "index.handler",
+  "runtime": "nodejs12.x",
+  "env": {},
+  "role": {
+    "arn": "arn:aws:iam::887143267612:role/v16fk7g-2tgmjy4"
+  },
+  "arn": "arn:aws:lambda:us-east-1:887143267612:function:v16fk7g-54sbv1a",
+  "region": "us-east-1"
+}

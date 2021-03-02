@@ -11,7 +11,11 @@
     "codegen": "graphql-codegen --config codegen.js --watch",
     "codegen:build": "graphql-codegen --config codegen.js",
     "build:translate": "./_scripts/translate/run.sh",
-    "deploy": "serverless"
+    "deploy:root": "./_scripts/deploy/run.sh _root_",
+    "deploy:admin": "./_scripts/deploy/run.sh admin",
+    "deploy:api": "./_scripts/deploy/run.sh api",
+    "deploy:docs": "./_scripts/deploy/run.sh docs",
+    "deploy:uploads": "./_scripts/deploy/run.sh uploads"
   },
   "dependencies": {
     "@apollo/client": "^3.3.6",

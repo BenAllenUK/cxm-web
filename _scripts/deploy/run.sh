@@ -1,13 +1,10 @@
-
-# Run root script
-_scripts/copy/run.sh _root_
-
-# Admin
-_scripts/copy/run.sh admin
-
-# Api
-_scripts/copy/run.sh api
+if test -z "$1"
+then
+  echo "No module selected"
+  exit 1
+fi
 
 
-# Docs
-_scripts/copy/run.sh docs
+_scripts/copy/run.sh $1
+yarn run serverless
+_scripts/clean/run.sh $1

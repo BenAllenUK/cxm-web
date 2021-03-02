@@ -3,12 +3,11 @@ omnea-admin:
   component: '@sls-next/serverless-component@1.19.0-alpha.32'
   inputs:
     cloudfront:
-      # distributionId: ${env.ADMIN_CLOUDFRONT_ID}
       defaults:
         forward:
           headers: [Host]
-    domain: ['docs', 'omnea.co']
-    bucketName: admin.omnea
+    domain: ['admin', 'omnea.co']
+    bucketName: admin-omnea
     build:
       postBuildCommands: ['node _scripts/post-build/post-build.js']
       env:

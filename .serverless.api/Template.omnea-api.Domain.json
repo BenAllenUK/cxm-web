@@ -1,0 +1,13 @@
+{
+  "region": "us-east-1",
+  "privateZone": false,
+  "domain": "omnea.co",
+  "subdomains": [
+    {
+      "domain": "api.omnea.co",
+      "distributionId": "E2DB0C38Y99D8U",
+      "url": "https://d4t9y1fh15exb.cloudfront.net",
+      "type": "awsCloudFront"
+    }
+  ]
+}
