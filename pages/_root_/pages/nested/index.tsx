@@ -1,7 +1,9 @@
+import Button from 'components/common/button/Button'
+
 const Home = ({}: IProps) => {
   return (
     <div>
-      <>Home</>
+      <Button>Nested</Button>
     </div>
   )
 }

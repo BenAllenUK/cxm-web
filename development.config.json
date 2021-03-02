@@ -1,10 +1,12 @@
 {
-  "basePath": "src/paths",
+  "proxyHost": "localhost",
+  "proxyPort": "3000",
+  "rootHost": "localhost",
+  "rootPort": "3001",
   "modules": [
-    { "name": "_root_", "port": 3000 },
-    { "name": "admin", "port": 3001 },
-    { "name": "docs", "port": 3002 },
-    { "name": "api", "port": 3003 }
-  ],
-  "coreFiles": ["next.config.js", "next-i18next.config.js", "tsconfig.json", "next-env.d.ts"]
+    { "path": "_root_/pages", "host": "omnea.local" },
+    { "path": "admin/pages", "host": "admin.omnea.local" },
+    { "path": "docs/pages", "host": "docs.omnea.local" },
+    { "path": "api/pages", "host": "api.omnea.local" }
+  ]
 }

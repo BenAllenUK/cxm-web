@@ -60,6 +60,8 @@
     "babel-plugin-graphql-tag": "^3.1.0",
     "babel-plugin-import-graphql": "^2.8.1",
     "concurrently": "^6.0.0",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^1.0.6",
     "json-autotranslate": "^1.7.0",
     "redux-devtools-extension": "^2.13.8",
     "serverless": "^2.25.2",
