@@ -47,7 +47,3 @@ public/locales/*
 src/generated/graphql.tsx
 
 
-src/paths/*/next-env.d.ts
-src/paths/*/next-i18next.config.js
-src/paths/*/next.config.js
-src/paths/*/tsconfig.json
