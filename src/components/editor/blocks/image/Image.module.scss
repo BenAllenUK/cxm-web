@@ -13,9 +13,22 @@
   }
 }
 
+.imageContainer {
+  padding: 12px 36px 12px 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .icon {
   margin-right: 12px;
   fill: $text2-color;
+}
+
+.image {
+  width: 400px;
+  height: 400px;
+  object-fit: contain;
 }
 
 .text {

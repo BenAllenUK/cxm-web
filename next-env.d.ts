@@ -18,9 +18,9 @@ declare module '*.gql' {
 
 declare module 'updeep/dist/updateIn'
 
-type ReduxProps<T extends (...args: any) => any, U extends (...args: any) => any> = (T extends (
-  ...args: any
-) => infer R
+declare module 'cloudinary-react'
+
+type ReduxProps<T extends (...args: any) => any, U extends (...args: any) => any> = (T extends (...args: any) => infer R
   ? R
   : any) &
   (U extends (...args: any) => infer R ? R : any)

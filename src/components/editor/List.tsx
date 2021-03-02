@@ -164,6 +164,39 @@ const List = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex
     onBlocksUpsert({ ...block, position: newIndex })
   }
 
+  const handleDrop = async (event: any, index: number) => {
+    event.stopPropagation()
+    event.preventDefault()
+    let files = [...event.dataTransfer.files]
+    console.log('files', files[0])
+    var img = document.createElement('img')
+    img.classList.add('obj')
+    img.file = files[0]
+    console.log('test', img.getAttribute('src'))
+    let fileReader = new FileReader()
+    fileReader.onload = await (async function (aImg) {
+      return function (e) {
+        aImg.src = e.target.result
+        return e.target.result
+      }
+    })(img)
+    var image = await fileReader.readAsDataURL(files[0])
+
+    _onUpdateBlock(index, {
+      type: BlockType.TEXT,
+      payload: {
+        value: 'feckin test',
+      },
+      id: Math.round(Math.random() * -1000000),
+      parentId: null,
+      editingUserId: null,
+
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      position: index,
+    })
+  }
+
   return (
     <div className={styles.body} onClick={_onBodyClick}>
       <div onClick={(e) => e.stopPropagation()}>
@@ -180,6 +213,7 @@ const List = ({ blocks, onBlocksUpsert, onBlockDelete, setFocusIndex, focusIndex
                     onAddClick={_onAddClick}
                     onDoubleClick={_onBlockDoubleClick}
                     enableHandle={!modalBlockEnabled}
+                    onDrop={handleDrop}
                   >
                     <div
                       ref={(_ref: any) => {

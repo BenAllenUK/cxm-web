@@ -1,6 +1,6 @@
 import { MenuItem } from 'components/navigation/sidebar'
 import { GetProjectOneQuery } from 'generated/graphql'
-import { unflatten } from './tree'
+import tree from './tree'
 
 export function parseMenu(
   data: NonNullable<NonNullable<NonNullable<GetProjectOneQuery['projects']>[0]>['articles']>
@@ -15,6 +15,6 @@ export function parseMenu(
     children: [],
     parentId: item.parentId || null,
   }))
-  const menuItemsTree = unflatten<MenuItem>(menuItemsList)
+  const menuItemsTree = tree<MenuItem>(menuItemsList)
   return menuItemsTree as MenuItem[]
 }

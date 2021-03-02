@@ -54,12 +54,13 @@ export type BlockDataText = {
 export type BlockDataImage = {
   source: string | null
   alt: string | null
-  imageType: BlockDataImageType
+  imageType: MediaSourceType
 }
 
-export enum BlockDataImageType {
-  CUSTOM = 'CUSTOM',
-  UNSPLASH = 'UNSPLASH',
+export enum MediaSourceType {
+  UPLOAD = 'Upload',
+  EMBED_LINK = 'Embed link',
+  LIBRARY = 'LIBRARY',
 }
 
 export type BlockDataH1 = BlockDataText

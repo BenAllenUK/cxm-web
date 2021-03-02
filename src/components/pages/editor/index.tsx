@@ -151,7 +151,10 @@ const EditorPage = ({
       })
       const params = createUpsertMutationParams(articleId, { articleId, objects: revisedBlocks })
       const { data } = await onUpsertBlockMutation(params)
-      console.log('Sync complete')
+      console.log(
+        'Sync complete',
+        data?.insert_blocks?.returning.map((item) => item.id)
+      )
       return data?.insert_blocks?.returning.map((item) => item.id)
     },
     [article?.id]

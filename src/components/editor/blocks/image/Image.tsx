@@ -1,23 +1,29 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { BlockDataImage } from '../types'
 import styles from './Image.module.scss'
 import ImageIcon from 'images/icons/image.svg'
+import MediaSelector from 'components/editor/modals/media/MediaSelector'
 import { default as NextImage } from 'next/image'
 
 export const Image = ({ content }: IProps) => {
-  if (!content.source) {
+  const [showSelector, setShowSelector] = useState(false)
+  const [mediaSource, setMediaSource] = useState(content.source)
+  if (!mediaSource) {
     return (
-      <div className={styles.container}>
-        <ImageIcon className={styles.icon} width={25} height={25} />
+      <div>
+        <div className={styles.container} onClick={() => setShowSelector(!showSelector)}>
+          <ImageIcon className={styles.icon} width={25} height={25} />
 
-        <div className={styles.text}>Add an image</div>
+          <div className={styles.text}>Add an image</div>
+        </div>
+        {showSelector && <MediaSelector setMediaSource={setMediaSource} />}
       </div>
     )
   }
 
   return (
-    <div className={styles.container}>
-      <NextImage layout="intrinsic" width={600} height={400} objectFit={'contain'} src={content.source} />
+    <div className={styles.imageContainer}>
+      <img className={styles.image} src={mediaSource} />
     </div>
   )
 }

@@ -7,6 +7,14 @@
   position: relative;
 }
 
+.dropzoneBlock {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  background-color: #add8e6;
+  border-bottom: 3px solid rgba(0, 0, 139, 0.5);
+}
+
 .controls {
   position: absolute;
   left: -45px;

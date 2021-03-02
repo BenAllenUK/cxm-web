@@ -12,6 +12,8 @@ module.exports = {
   publicRuntimeConfig: {
     localeSubpaths,
   },
+  domains: ['images.unsplash.com'],
+  images: { domains: ['localhost:3000', '""'] },
   webpack(config, { buildId, dev, isServer, defaultLoaders, webpack }) {
     config.module.rules.push({
       test: /\.svg$/,
