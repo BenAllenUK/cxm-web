@@ -4,9 +4,9 @@
   "rootHost": "localhost",
   "rootPort": "3001",
   "modules": [
-    { "path": "_root_/pages", "host": "omnea.local" },
-    { "path": "admin/pages", "host": "admin.omnea.local" },
-    { "path": "docs/pages", "host": "docs.omnea.local" },
-    { "path": "api/pages", "host": "api.omnea.local" }
+    { "path": "_root_", "host": "omnea.local" },
+    { "path": "admin", "host": "admin.omnea.local" },
+    { "path": "docs", "host": "docs.omnea.local" },
+    { "path": "api", "host": "api.omnea.local" }
   ]
 }

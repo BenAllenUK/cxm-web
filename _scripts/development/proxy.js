@@ -75,8 +75,8 @@ server.use(
         return `/${firstItem}/${rootPath}/${remainingPathItems.join('/')}`
       }
 
-      console.log(`Resolved path: ${rootPath}/${path}`)
-      return `${rootPath}/${path}`
+      console.log(`Resolved path: ${rootPath}${path}`)
+      return `${rootPath}${path}`
     },
     logLevel: 'debug',
   })
