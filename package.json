@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node _scripts/development/development.js",
+    "dev": "concurrently -k \"next dev --port=3001\" \"node _scripts/development/proxy.js\"",
     "build": "next build",
     "start": "next start",
     "export": "next build && next export",

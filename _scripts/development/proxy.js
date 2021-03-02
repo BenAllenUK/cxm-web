@@ -21,13 +21,15 @@ const routerArray = modules.map((item) => {
 })
 
 const router = mapValues(keyBy(routerArray, 'key'), 'value')
-console.log(router)
+console.log(`==========`)
+routerArray.forEach((item) => {
+  console.log(`${item.key} navigates to ${item.value}`)
+})
+console.log(`==========`)
 
 server.use(
   createProxyMiddleware('/_next', {
     target: `${rootUrl}/_next`,
-    // changeOrigin: false,
-    // pathRewrite: { '^/admin': '' },
     pathRewrite: function (path, req) {
       return path.replace('/_next', '')
     },
@@ -46,19 +48,6 @@ server.use(
     logLevel: 'debug',
   })
 )
-
-// const languageRootFilter = function (pathname, req) {
-//   return pathname === '/' && req.method === 'GET'
-// }
-
-// // server.use(
-// //   createProxyMiddleware(languageRootFilter, {
-// //     target: rootUrl,
-// //     router,
-// //     ignorePath: true,
-// //     logLevel: 'debug',
-// //   })
-// // )
 
 const nonRootFilter = function (pathname, req) {
   return pathname !== '/' && req.method === 'GET'
