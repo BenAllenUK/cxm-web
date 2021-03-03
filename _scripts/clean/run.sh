@@ -7,6 +7,5 @@ fi
 
 rm serverless.yml
 rm -rf pages
-mv _pages pages
 rm -rf .serverless.$1
 mv .serverless .serverless.$1 

@@ -6,7 +6,8 @@ fi
 
 
 cp deployments/$1.yml serverless.yml 2>/dev/null
-mv pages _pages || :
-mkdir pages
-cp -R _pages/$1/ pages/
-mv .serverless.$1 .serverless 2>/dev/null
+rm -r pages 2>/dev/null
+cp -r src/pages/$1/ pages/ 2>/dev/null
+cp -r src/pages/_app.js pages/_app.js 2>/dev/null
+rm -r .serverless 2>/dev/null
+cp -r .serverless.$1 .serverless 2>/dev/null

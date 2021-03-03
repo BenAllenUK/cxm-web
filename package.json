@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "concurrently -k \"next dev --port=3001\" \"cd api && yarn dev\" \"node _scripts/development/proxy.js\" ",
-    "start": "next start",
     "docs": "swagger-jsdoc -d swagger.js src/pages/api/public/**/*.yaml -o public/docs/api.json",
     "codegen": "graphql-codegen --config codegen.js --watch",
     "codegen:build": "graphql-codegen --config codegen.js",
