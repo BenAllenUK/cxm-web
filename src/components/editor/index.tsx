@@ -7,6 +7,7 @@ import Modals from './modals'
 import Header from './header'
 import { Article } from 'operations/articles/types'
 import List from './components/List'
+import EditorEmpty from './misc/EditorEmpty'
 
 function Editor({
   id,
@@ -14,6 +15,7 @@ function Editor({
   blocks: initialBlocks,
   onBlocksUpsert: onServerBlocksUpsert,
   onBlocksDelete: onServerBlocksDelete,
+  loading,
 }: IProps) {
   const [focusIndex, setFocusIndex] = useState(initialBlocks.length <= 1 ? 0 : -1)
 
@@ -87,14 +89,19 @@ function Editor({
     <>
       <Modals articles={articles} onModifyBlockType={_onModifyBlockType}>
         <div className={styles.container}>
-          <Header loading={!id} />
-          <List
-            focusIndex={focusIndex}
-            blocks={blocks}
-            onBlocksUpsert={onBlocksUpsert}
-            onBlocksDelete={onBlocksDelete}
-            setFocusIndex={setFocusIndex}
-          />
+          {id && (
+            <>
+              <Header loading={loading} />
+              <List
+                focusIndex={focusIndex}
+                blocks={blocks}
+                onBlocksUpsert={onBlocksUpsert}
+                onBlocksDelete={onBlocksDelete}
+                setFocusIndex={setFocusIndex}
+              />
+            </>
+          )}
+          {!id && <EditorEmpty />}
         </div>
       </Modals>
     </>
@@ -106,6 +113,7 @@ interface IProps {
   id?: number | null
   articles: Article[]
   blocks: Block[]
+  loading?: boolean
   onBlocksUpsert: (blocks: Block[]) => void
   onBlocksDelete: (ids: number[]) => void
 }

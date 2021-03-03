@@ -54,15 +54,11 @@ export function Content() {
   // Check to see if article Id is in article data
   // article id might not be part of this project
 
-  let articleData = null
-
-  const response = useGetArticleOneQuery({
+  let { data: articleData, loading: articleQueryLoading } = useGetArticleOneQuery({
     variables: {
       slug: articleSlug || '',
     },
   })
-
-  articleData = response?.data
 
   // Stops the local query cache from working
   // Move to subscription after fetch
@@ -77,7 +73,7 @@ export function Content() {
 
   const [article] = articleData?.articles || []
 
-  const [upsertArticlesMutation] = useUpsertArticlesMutation()
+  const [upsertArticlesMutation, { loading: articleUpsertLoading }] = useUpsertArticlesMutation()
   const upsertArticlesMutationScoped = useUpsertArticlesMutationScoped(project?.id, upsertArticlesMutation)
 
   const [upsertBlockMutation] = useUpsertBlocksMutation()
@@ -92,6 +88,7 @@ export function Content() {
 
   return (
     <EditorPage
+      loading={articleQueryLoading || articleUpsertLoading}
       project={project}
       article={article}
       onUpsertArticlesMutation={upsertArticlesMutationScoped}
@@ -131,13 +128,6 @@ export async function getServerSideProps({ params, locale }: GetServerSidePropsC
 
   const [article] = articleData?.articles || []
 
-  if (!article) {
-    console.error(`Article not found: ${articleSlug}`)
-    return {
-      notFound: true,
-    }
-  }
-
   return {
     props: {
       initialApolloState: client.cache.extract(),
@@ -148,9 +138,9 @@ export async function getServerSideProps({ params, locale }: GetServerSidePropsC
       },
       initialEditorContext: {
         projectSlug: project.slug,
-        articleSlug: article.slug,
+        articleSlug: article?.slug ?? null,
       },
-      // ...(await serverSideTranslations(locale, ['common', 'editor'])),
+      ...(await serverSideTranslations(locale, ['common', 'editor'])),
     },
   }
 }

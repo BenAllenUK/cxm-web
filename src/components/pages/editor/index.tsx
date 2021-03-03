@@ -25,6 +25,7 @@ import isElectron from 'is-electron'
 const EditorPage = ({
   article: articleRaw,
   project: projectRaw,
+  loading,
 
   onUpsertArticlesMutation,
   onUpsertBlocksMutation,
@@ -38,7 +39,7 @@ const EditorPage = ({
   const [article] = articleRaw ? fromArticleFragments([articleRaw]) : [null]
   const blocks = article?.blocks || []
 
-  useTitle(article?.title)
+  useTitle(article?.title, loading)
 
   const onViewArticle = (slug: string) => {
     setArticleSlug(slug)
@@ -97,6 +98,7 @@ const EditorPage = ({
           <Editor
             key={article?.id}
             id={article?.id}
+            loading={loading}
             articles={articles}
             blocks={blocks}
             onBlocksDelete={onBlocksDelete}
@@ -111,6 +113,7 @@ const EditorPage = ({
 export default memo(EditorPage)
 
 interface IProps {
+  loading?: boolean
   article?: ArticleBlocksFragment | null
   project: ProjectFragment
   onUpsertArticlesMutation: UpsertArticlesMutationScopedFunc

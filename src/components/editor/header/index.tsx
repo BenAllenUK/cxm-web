@@ -62,7 +62,7 @@ export const Header = ({ loading }: IProps) => {
 }
 
 interface IProps {
-  loading: boolean
+  loading?: boolean
 }
 
 export default Header

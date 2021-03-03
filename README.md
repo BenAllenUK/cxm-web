@@ -4,7 +4,7 @@
 2) Modify `sudo nano /etc/hosts` and add this line:
 
 ```
-127.0.0.1       omnea.local admin.omnea.local api.omnea.local docs.omnea.local uploads.omnea.local
+127.0.0.1       omnea.local admin.omnea.local docs.omnea.local api.omnea.local
 ```
 
 3) Run `yarn dev`
