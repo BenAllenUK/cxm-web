@@ -101,7 +101,7 @@ function Editor({
               />
             </>
           )}
-          {!id && <EditorEmpty />}
+          {!id && !loading && <EditorEmpty />}
         </div>
       </Modals>
     </>
