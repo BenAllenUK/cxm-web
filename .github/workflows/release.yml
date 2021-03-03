@@ -42,5 +42,4 @@ jobs:
         run: yarn deploy
         env:
           CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
-          AWS_UPLOAD_BUCKET_ID: ${{ secrets.AWS_UPLOAD_BUCKET_ID }}
           OMNEA_UPLOAD_URL: ${{ secrets.OMNEA_UPLOAD_URL }}

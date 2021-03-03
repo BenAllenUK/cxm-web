@@ -19,6 +19,8 @@ import { UpsertBlocksMutationScopedFunc } from 'operations/blocks/upsert'
 import { DeleteBlocksMutationScopedFunc } from 'operations/blocks/delete'
 import { ProjectFragment } from 'generated/graphql'
 import { useErrorModal } from 'components/common/modals/error'
+import TitleBar from 'components/common/title-bar'
+import isElectron from 'is-electron'
 
 const EditorPage = ({
   article: articleRaw,
@@ -78,26 +80,29 @@ const EditorPage = ({
   const onDebouncedBlockUpsert = debounce(onBlocksUpsert, 500)
 
   return (
-    <div className={styles.container}>
-      <Navbar />
+    <div className={styles.root}>
+      {isElectron() && <TitleBar title={article?.title} />}
+      <div className={styles.container}>
+        <Navbar />
 
-      <Sidebar
-        currentViewingArticleId={article?.id}
-        project={project}
-        articles={articles}
-        onUpsertArticles={onUpsertArticles}
-        onViewArticle={onViewArticle}
-      />
-
-      <div className={styles.editor}>
-        <Editor
-          key={article?.id}
-          id={article?.id}
+        <Sidebar
+          currentViewingArticleId={article?.id}
+          project={project}
           articles={articles}
-          blocks={blocks}
-          onBlocksDelete={onBlocksDelete}
-          onBlocksUpsert={onDebouncedBlockUpsert}
+          onUpsertArticles={onUpsertArticles}
+          onViewArticle={onViewArticle}
         />
+
+        <div className={styles.editor}>
+          <Editor
+            key={article?.id}
+            id={article?.id}
+            articles={articles}
+            blocks={blocks}
+            onBlocksDelete={onBlocksDelete}
+            onBlocksUpsert={onDebouncedBlockUpsert}
+          />
+        </div>
       </div>
     </div>
   )

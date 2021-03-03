@@ -2,8 +2,8 @@
   "name": "yksf9r-4vz31t",
   "arn": "arn:aws:iam::887143267612:role/yksf9r-4vz31t",
   "service": [
-    "lambda.amazonaws.com",
-    "edgelambda.amazonaws.com"
+    "edgelambda.amazonaws.com",
+    "lambda.amazonaws.com"
   ],
   "policy": {
     "Version": "2012-10-17",

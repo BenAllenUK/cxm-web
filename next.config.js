@@ -58,6 +58,5 @@ module.exports = {
   },
   env: {
     OMNEA_UPLOAD_URL: process.env.OMNEA_UPLOAD_URL,
-    AWS_UPLOAD_BUCKET_ID: process.env.AWS_UPLOAD_BUCKET_ID,
   },
 }

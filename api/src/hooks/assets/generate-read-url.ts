@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-
 import AWS from 'aws-sdk'
+import { APIGatewayProxyHandler } from 'aws-lambda'
+
 AWS.config.update({ region: process.env.AWS_REGION })
 const s3 = new AWS.S3()
 
@@ -25,13 +25,19 @@ const URL_EXPIRATION_SECONDS = 86400
  *                 url:
  *                   type: string
  */
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const main: APIGatewayProxyHandler = async (event) => {
   try {
-    const {
-      body: {
-        input: { key },
-      },
-    } = req
+    const body = event.body ? JSON.parse(event.body) : {}
+    const key = body.input?.key
+
+    if (!key) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: 'Invalid format',
+        }),
+      }
+    }
 
     const s3Params = {
       Bucket: process.env.AWS_UPLOAD_BUCKET_ID,
@@ -42,13 +48,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log('Params: ', s3Params)
     const uploadURL = await s3.getSignedUrlPromise('getObject', s3Params)
 
-    res.statusCode = 200
-    res.json({
-      url: uploadURL,
-      key: key,
-    })
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        url: uploadURL,
+        key: key,
+      }),
+    }
   } catch (e) {
-    res.statusCode = 500
-    res.json({ error: e })
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: e,
+      }),
+    }
   }
 }
+
+module.exports = { main }

@@ -1,9 +1,9 @@
 {
-  "name": "yksf9r-6rkb8ry",
-  "arn": "arn:aws:iam::887143267612:role/yksf9r-6rkb8ry",
+  "name": "yksf9r-yhqeu48",
+  "arn": "arn:aws:iam::887143267612:role/yksf9r-yhqeu48",
   "service": [
-    "edgelambda.amazonaws.com",
-    "lambda.amazonaws.com"
+    "lambda.amazonaws.com",
+    "edgelambda.amazonaws.com"
   ],
   "policy": {
     "Version": "2012-10-17",

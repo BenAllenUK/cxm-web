@@ -8,11 +8,15 @@
   flex-direction: column;
 }
 
+.dragable {
+  height: 30px;
+  -webkit-app-region: drag;
+}
+
 .title {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 20px;
   padding-left: 20px;
   padding-right: 10px;
   font-size: 15px;
@@ -21,6 +25,12 @@
   user-select: none;
   padding-top: 10px;
   padding-bottom: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #fbfcff;
+    color: $text2-color;
+  }
 }
 
 ul.menu {

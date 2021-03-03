@@ -130,6 +130,7 @@ export function ControlledSidebar({ currentViewingArticleId, project, articles, 
   return (
     <>
       <div className={styles.container}>
+        <div className={styles.dragable} />
         <Title name={project.name} />
         <ul className={styles.projectMenu}>
           {appMenu.map((item, index) => (

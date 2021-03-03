@@ -7,7 +7,7 @@ const mapValues = require('lodash/mapValues')
 const languageConfig = require('../../next-i18next.config')
 const server = express()
 
-const { proxyHost, proxyPort, rootHost, rootPort, modules } = config
+const { proxyHost, proxyPort, rootHost, rootPort, modules, apiHost, apiPort } = config
 
 const locales = languageConfig.i18n.locales
 
@@ -37,7 +37,7 @@ server.use(
 )
 
 const rootFilter = function (pathname, req) {
-  return pathname === '/' && req.method === 'GET'
+  return pathname === '/'
 }
 
 server.use(
@@ -49,12 +49,12 @@ server.use(
   })
 )
 
-const nonRootFilter = function (pathname, req) {
-  return pathname !== '/' && req.method === 'GET'
+const nonRootFilterModule = function (pathname, req) {
+  return pathname !== '/' && router[req.headers.host]
 }
 
 server.use(
-  createProxyMiddleware(nonRootFilter, {
+  createProxyMiddleware(nonRootFilterModule, {
     target: rootUrl,
 
     pathRewrite: function (path, req) {
@@ -77,6 +77,22 @@ server.use(
 
       console.log(`Resolved path: ${rootPath}${path}`)
       return `${rootPath}${path}`
+    },
+    logLevel: 'debug',
+  })
+)
+
+const nonRootFilterAPI = function (pathname, req) {
+  return pathname !== '/'
+}
+
+server.use(
+  createProxyMiddleware(nonRootFilterAPI, {
+    target: `http://${apiHost}:${apiPort}/dev`,
+
+    pathRewrite: function (path, req) {
+      console.log(`[API] ${path}`)
+      return path
     },
     logLevel: 'debug',
   })

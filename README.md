@@ -15,8 +15,9 @@
 
 Environment variables need to be added to multiple files:
 - `.envrc` (ignored via git)
-- `next.config.js`
+- `next.config.js` 
 - `serverless.yml`
 - All workflows under `.github/workflows`
+- AWS System manager (https://console.aws.amazon.com/systems-manager/parameters/?region=us-east-1&tab=Table)
 
 

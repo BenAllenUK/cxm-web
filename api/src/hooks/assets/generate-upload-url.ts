@@ -1,8 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-
 import AWS from 'aws-sdk'
-
-// TODO: Specify upload only credentials
+import { APIGatewayProxyHandler } from 'aws-lambda'
 
 AWS.config.update({ region: process.env.AWS_REGION })
 const s3 = new AWS.S3()
@@ -30,17 +27,21 @@ const URL_EXPIRATION_SECONDS = 300
  *                 key:
  *                   type: string
  */
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const main: APIGatewayProxyHandler = async (event) => {
   try {
-    const randomId = Number(Math.random() * 10000000)
-    const type = req.body.input.contentType
+    const body = event.body ? JSON.parse(event.body) : {}
+    const type = body.input?.contentType
 
     if (!type) {
-      res.statusCode = 400
-      res.json({
-        message: 'Invalid format',
-      })
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: 'Invalid format',
+        }),
+      }
     }
+
+    const randomId = Number(Math.random() * 10000000)
 
     const [fileType, fileExtension] = type.split('/')
     const key = `${randomId}.${fileExtension}`
@@ -54,13 +55,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const uploadURL = await s3.getSignedUrlPromise('putObject', s3Params)
 
-    res.statusCode = 200
-    res.json({
-      url: uploadURL,
-      key: key,
-    })
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        url: uploadURL,
+        key: key,
+      }),
+    }
   } catch (e) {
-    res.statusCode = 500
-    res.json({ error: e })
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: e,
+      }),
+    }
   }
 }
+
+module.exports = { main }

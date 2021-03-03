@@ -1,0 +1,76 @@
+service: api-omnea
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-east-1
+  logs:
+    restApi:
+      format: '{ "httpMethod":"$context.httpMethod", "resourcePath":"$context.resourcePath", "status":"$context.status", "body": "$input.body", "params": "$input.params()", "requestId":"$context.requestId", "ip": "$context.identity.sourceIp", "caller":"$context.identity.caller" }'
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'logs:*'
+      Resource:
+        - 'arn:aws:logs:*:*:log-group:/aws/lambda/*:*:*'
+    - Effect: 'Allow'
+      Action:
+        - 's3:*'
+      Resource:
+        - 'arn:aws:s3:::*'
+  environment:
+    AWS_UPLOAD_BUCKET_ID: ${ssm:/dev/AWS_UPLOAD_BUCKET_ID}
+
+functions:
+  hello:
+    handler: src/hello.main
+    events:
+      - http:
+          path: hello
+          method: get
+          cors: true
+  uploads:
+    handler: src/uploads/get.main
+    events:
+      - http:
+          path: /uploads/{key}
+          method: get
+          cors: true
+  articles-get-one:
+    handler: src/articles/get-one.main
+    events:
+      - http:
+          path: articles/{id}
+          method: get
+          cors: true
+  generate-read-url:
+    handler: src/hooks/assets/generate-read-url.main
+    events:
+      - http:
+          path: hooks/assets/generate-read-url
+          method: post
+          cors: true
+  generate-upload-url:
+    handler: src/hooks/assets/generate-upload-url.main
+    events:
+      - http:
+          path: hooks/assets/generate-upload-url
+          method: post
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-apigw-binary
+  - serverless-domain-manager
+
+custom:
+  apigwBinary:
+    types: #list of mime-types
+      - '*/*'
+  customDomain:
+    rest:
+      domainName: 'api.omnea.co'
+      hostedZoneId: Z08726532NF9CHDVZ037S
+      certificateArn: arn:aws:acm:us-east-1:887143267612:certificate/6b8b6543-7d0d-4dd2-a72a-909c5f982dbf
+      endpointType: 'regional'
+      securityPolicy: tls_1_2
