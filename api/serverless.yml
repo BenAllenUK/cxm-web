@@ -10,6 +10,12 @@ provider:
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
+        - 'route53:ChangeResourceRecordSets'
+      Resource:
+        - 'arn:aws:route53:::hostedzone/Z1009887TDI7WN2LFGHJ'
+        - 'arn:aws:route53:::hostedzone/Z065625021HFJ6669HH5Q'
+    - Effect: 'Allow'
+      Action:
         - 'logs:*'
       Resource:
         - 'arn:aws:logs:*:*:log-group:/aws/lambda/*:*:*'
@@ -30,42 +36,42 @@ functions:
           method: get
           cors: true
   dns-subdomain-new:
-    handler: src/dns/subdomain/new.main
+    handler: src/paths/dns/subdomain/new.main
     events:
       - http:
           path: dns/subdomain/new
           method: post
           cors: true
   dns-subdomain-delete:
-    handler: src/dns/subdomain/delete.main
+    handler: src/paths/dns/subdomain/delete.main
     events:
       - http:
           path: dns/subdomain/delete
           method: post
           cors: true
   uploads:
-    handler: src/uploads/get.main
+    handler: src/paths/uploads/get.main
     events:
       - http:
           path: /uploads/{key}
           method: get
           cors: true
   articles-get-one:
-    handler: src/articles/get-one.main
+    handler: src/paths/articles/get-one.main
     events:
       - http:
           path: articles/{id}
           method: get
           cors: true
   generate-read-url:
-    handler: src/hooks/assets/generate-read-url.main
+    handler: src/paths/assets/generate-read-url.main
     events:
       - http:
-          path: hooks/assets/generate-read-url
+          path: assets/generate-read-url
           method: post
           cors: true
   generate-upload-url:
-    handler: src/hooks/assets/generate-upload-url.main
+    handler: src/paths/assets/generate-upload-url.main
     events:
       - http:
           path: hooks/assets/generate-upload-url

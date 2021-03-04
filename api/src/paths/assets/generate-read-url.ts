@@ -1,18 +1,18 @@
 import AWS from 'aws-sdk'
 import { APIGatewayProxyHandler } from 'aws-lambda'
-import error from 'utils/error'
+import error from '../../utils/error'
 
 AWS.config.update({ region: process.env.AWS_REGION })
 const s3 = new AWS.S3()
 
-const URL_EXPIRATION_SECONDS = 300
+const URL_EXPIRATION_SECONDS = 86400
 
 /**
  * @openapi
  *
  * /assets/hooks/generate-read-url:
  *   post:
- *     summary: Generate signed url to upload file
+ *     summary: Generate signed url to read file
  *     produces:
  *       - application/json
  *     responses:
@@ -25,15 +25,13 @@ const URL_EXPIRATION_SECONDS = 300
  *               properties:
  *                 url:
  *                   type: string
- *                 key:
- *                   type: string
  */
 const main: APIGatewayProxyHandler = async (event) => {
   try {
     const body = event.body ? JSON.parse(event.body) : {}
-    const type = body.input?.contentType
+    const key = body.input?.key
 
-    if (!type) {
+    if (!key) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -42,20 +40,14 @@ const main: APIGatewayProxyHandler = async (event) => {
       }
     }
 
-    const randomId = Number(Math.random() * 10000000)
-
-    const [fileType, fileExtension] = type.split('/')
-    const key = `${randomId}.${fileExtension}`
-
     const s3Params = {
       Bucket: process.env.AWS_UPLOAD_BUCKET_ID,
       Key: key,
       Expires: URL_EXPIRATION_SECONDS,
-      ContentType: type,
-      ACL: 'public-read',
     }
 
-    const uploadURL = await s3.getSignedUrlPromise('putObject', s3Params)
+    console.log('Params: ', s3Params)
+    const uploadURL = await s3.getSignedUrlPromise('getObject', s3Params)
 
     return {
       statusCode: 200,

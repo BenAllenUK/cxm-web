@@ -1,7 +1,7 @@
 import AWS from 'aws-sdk'
 import { APIGatewayProxyHandler } from 'aws-lambda'
-import error from '../../utils/error'
-import invalid from '../../utils/invalid'
+import error from '../../../utils/error'
+import invalid from '../../../utils/invalid'
 
 AWS.config.update({ region: process.env.AWS_REGION })
 var route53 = new AWS.Route53()
@@ -19,7 +19,7 @@ const main: APIGatewayProxyHandler = async (event) => {
   try {
     const body = event.body ? JSON.parse(event.body) : {}
 
-    const newSlug = body?.event?.data?.old?.slug
+    const newSlug = body?.event?.data?.new?.slug
 
     if (!newSlug) {
       return invalid()
@@ -30,7 +30,7 @@ const main: APIGatewayProxyHandler = async (event) => {
         ChangeBatch: {
           Changes: [
             {
-              Action: 'DELETE',
+              Action: 'CREATE',
               ResourceRecordSet: {
                 Name: `${newSlug}.hosted.omnea.co`,
                 AliasTarget: {
@@ -52,7 +52,7 @@ const main: APIGatewayProxyHandler = async (event) => {
         ChangeBatch: {
           Changes: [
             {
-              Action: 'DELETE',
+              Action: 'CREATE',
               ResourceRecordSet: {
                 Name: `${newSlug}.admin.omnea.co`,
                 AliasTarget: {
