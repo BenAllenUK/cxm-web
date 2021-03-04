@@ -65,8 +65,9 @@ plugins:
 
 custom:
   apigwBinary:
-    types: #list of mime-types
-      - '*/*'
+    types:
+      - 'image/avif'
+      - 'image/*'
   customDomain:
     rest:
       domainName: 'api.omnea.co'
