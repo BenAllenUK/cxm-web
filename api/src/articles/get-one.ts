@@ -1,37 +1,42 @@
-// import type { NextApiRequest, NextApiResponse } from 'next'
 import { APIGatewayProxyHandler } from 'aws-lambda'
+import { initializeApollo } from 'config/graphql'
+import error from 'utils/error'
+import notfound from 'utils/notfound'
+import GET_ARTICLE_ONE from '@omnea/queries/articles/GET_ARTICLE_ONE'
 
 /**
  * @openapi
  *
- * /login:
+ * /articles/{id}:
  *   post:
  *     produces:
  *       - application/json
- *     parameters:
- *       - name: username
- *         in: formData
- *         required: true
- *         type: string
- *       - name: password
- *         in: formData
- *         required: true
- *         type: string
  */
 const main: APIGatewayProxyHandler = async (event) => {
-  // export async function main(event: any, context: any, callback: any) {
+  try {
+    const id = event.pathParameters?.id
 
-  // const {
-  //   query: { id },
-  // } = req
+    const client = initializeApollo()
 
-  // res.statusCode = 200
-  // res.json({ name: id })
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      event: event,
-    }),
+    const { data } = await client.query({
+      query: GET_ARTICLE_ONE,
+      variables: {
+        slug: 'new-2021-02-23T17:01:20.019Z',
+      },
+    })
+
+    if (!data) {
+      return notfound()
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        id,
+      }),
+    }
+  } catch (e) {
+    return error(e)
   }
 }
 

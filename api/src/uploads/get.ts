@@ -1,4 +1,5 @@
 import { APIGatewayProxyHandler } from 'aws-lambda'
+import error from 'utils/error'
 const AWS = require('aws-sdk')
 AWS.config.update({ region: process.env.AWS_REGION })
 const s3 = new AWS.S3()
@@ -37,12 +38,7 @@ const main: APIGatewayProxyHandler = async (event) => {
       // body: JSON.stringify({ success: true }),
     }
   } catch (e) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: e,
-      }),
-    }
+    return error(e)
   }
 }
 
