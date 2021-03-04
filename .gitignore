@@ -8,6 +8,7 @@ api/.build
 /pages/
 # testing
 /coverage
+serverless.yml
 
 # next.js
 .next/
