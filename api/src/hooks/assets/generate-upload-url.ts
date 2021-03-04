@@ -51,6 +51,7 @@ const main: APIGatewayProxyHandler = async (event) => {
       Key: key,
       Expires: URL_EXPIRATION_SECONDS,
       ContentType: type,
+      ACL: 'public-read',
     }
 
     const uploadURL = await s3.getSignedUrlPromise('putObject', s3Params)
