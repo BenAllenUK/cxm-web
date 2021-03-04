@@ -7,16 +7,16 @@ const mapValues = require('lodash/mapValues')
 const languageConfig = require('../../next-i18next.config')
 const server = express()
 
-const { proxyHost, proxyPort, rootHost, rootPort, modules, apiHost, apiPort } = config
+const { sourceHost, sourcePort, baseTargetHost, baseTargetPort, modules, api } = config
 
 const locales = languageConfig.i18n.locales
 
-const rootUrl = `http://${rootHost}:${rootPort}`
+const targetBaseUrl = `http://${baseTargetHost}:${baseTargetPort}`
 
 const routerArray = modules.map((item) => {
   return {
-    key: `${item.host}:${proxyPort}`,
-    value: `${rootUrl}/${item.path}`,
+    key: `${item.host}:${sourcePort}`,
+    value: `${targetBaseUrl}/${item.path}`,
   }
 })
 
@@ -27,27 +27,44 @@ routerArray.forEach((item) => {
 })
 console.log(`==========`)
 
+//////////////////////////////////////////////////////////////////////////////////////
+// Map all /_next requests to main NextJS App. Ignores modules.
+//   i.e example.local/_next/{path...} -> localhost:3003/_next/{path...}
+//   i.e foo.example.local/fr/asdfasdf -> localhost:3003/_next/{path...}
+//////////////////////////////////////////////////////////////////////////////////////
 server.use(
   createProxyMiddleware('/_next', {
-    target: `${rootUrl}/_next`,
+    target: `${targetBaseUrl}/_next`,
     pathRewrite: function (path, req) {
       return path.replace('/_next', '')
     },
   })
 )
 
+//////////////////////////////////////////////////////////////////////////////////////
+// Map all / requests to each NextJS App. Exclude path since we are at root
+//   i.e foo.example.local/asdfasdf -> localhost:3003/foo/
+//////////////////////////////////////////////////////////////////////////////////////
+
 const rootFilter = function (pathname, req) {
-  return pathname === '/'
+  return pathname === '/' && router[req.headers.host]
 }
 
 server.use(
   createProxyMiddleware(rootFilter, {
-    target: rootUrl,
+    target: targetBaseUrl,
     router,
     ignorePath: true,
     logLevel: 'debug',
   })
 )
+
+//////////////////////////////////////////////////////////////////////////////////////
+// Map all /{path...} requests to each NextJS App. Include path since not at root
+// Also take into account language.
+//   i.e foo.example.local/fr/asdfasdf -> localhost:3003/fr/foo/asfasdfasd
+//   i.e bar.example.local/asdfasdf -> localhost:3003/bar/asfasdfasd
+//////////////////////////////////////////////////////////////////////////////////////
 
 const nonRootFilterModule = function (pathname, req) {
   return pathname !== '/' && router[req.headers.host]
@@ -55,11 +72,11 @@ const nonRootFilterModule = function (pathname, req) {
 
 server.use(
   createProxyMiddleware(nonRootFilterModule, {
-    target: rootUrl,
+    target: targetBaseUrl,
 
     pathRewrite: function (path, req) {
       const destinationPath = router[req.headers.host]
-      const rootPath = destinationPath.replace(rootUrl, '')
+      const rootPath = destinationPath.replace(targetBaseUrl, '')
 
       // Check for language
       const segments = path.split('/')
@@ -82,14 +99,19 @@ server.use(
   })
 )
 
+//////////////////////////////////////////////////////////////////////////////////////
+// Map all api.example.local requests to the API.
+//   i.e api.example.local/item/1 -> localhost:3003/item/1
+//////////////////////////////////////////////////////////////////////////////////////
+
 const nonRootFilterAPI = function (pathname, req) {
-  return pathname !== '/'
+  console.log(req.headers.host)
+  return req.headers.host === api.sourceHost
 }
 
 server.use(
   createProxyMiddleware(nonRootFilterAPI, {
-    target: `http://${apiHost}:${apiPort}/dev`,
-
+    target: `http://${api.targetHost}:${api.targetPort}/${api.targetPath}`,
     pathRewrite: function (path, req) {
       console.log(`[API] ${path}`)
       return path
@@ -98,4 +120,43 @@ server.use(
   })
 )
 
-server.listen(proxyPort)
+//////////////////////////////////////////////////////////////////////////////////////
+// Map all uncaught requests to root module
+//   i.e localhost:3000/bar -> localhost:3003/bar
+//////////////////////////////////////////////////////////////////////////////////////
+
+const localHostRootFilter = function (pathname, req) {
+  return pathname === '/' && req.headers.host === `${sourceHost}:${sourcePort}`
+}
+
+server.use(
+  createProxyMiddleware(localHostRootFilter, {
+    target: `http://${baseTargetHost}:${baseTargetPort}/_root_`,
+    pathRewrite: function (path, req) {
+      return path
+    },
+    ignorePath: true,
+    logLevel: 'debug',
+  })
+)
+
+//////////////////////////////////////////////////////////////////////////////////////
+// Map all uncaught requests to root module
+//   i.e localhost:3000/bar -> localhost:3003/bar
+//////////////////////////////////////////////////////////////////////////////////////
+
+const localHostFilter = function (pathname, req) {
+  return pathname !== '/' && req.headers.host === `${sourceHost}:${sourcePort}`
+}
+
+server.use(
+  createProxyMiddleware(localHostFilter, {
+    target: `http://${baseTargetHost}:${baseTargetPort}/_root_`,
+    pathRewrite: function (path, req) {
+      return path
+    },
+    logLevel: 'debug',
+  })
+)
+
+server.listen(sourcePort)

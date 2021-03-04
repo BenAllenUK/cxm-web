@@ -1,14 +1,18 @@
 {
-  "proxyHost": "localhost",
-  "proxyPort": "3000",
-  "rootHost": "localhost",
-  
-  "rootPort": "3001",
+  "sourceHost": "localhost",
+  "sourcePort": "3000",
+  "baseTargetHost": "localhost",
+  "baseTargetPort": "3001",
   "modules": [
     { "path": "_root_", "host": "omnea.local" },
     { "path": "admin", "host": "admin.omnea.local" },
     { "path": "docs", "host": "docs.omnea.local" }
   ],
-  "apiHost": "localhost",
-  "apiPort": "3003"
+  "api": {
+    "sourceHost": "api.omnea.local",
+    "sourcePort": "3003",
+    "targetHost": "localhost",
+    "targetPort": "3003",
+    "targetPath": "dev"
+  }
 }
