@@ -54,7 +54,7 @@ module.exports = {
     return config
   },
   images: {
-    domains: ['localhost'],
+    domains: ['localhost', 'api.omnea.co', 'omnea-upload.s3.amazonaws.com'],
   },
   env: {
     OMNEA_UPLOAD_URL: process.env.OMNEA_UPLOAD_URL,
