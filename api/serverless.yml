@@ -29,6 +29,20 @@ functions:
           path: hello
           method: get
           cors: true
+  dns-subdomain-new:
+    handler: src/dns/subdomain/new.main
+    events:
+      - http:
+          path: dns/subdomain/new
+          method: post
+          cors: true
+  dns-subdomain-delete:
+    handler: src/dns/subdomain/delete.main
+    events:
+      - http:
+          path: dns/subdomain/delete
+          method: post
+          cors: true
   uploads:
     handler: src/uploads/get.main
     events:
