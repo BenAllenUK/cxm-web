@@ -99,12 +99,13 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     onBlocksUpsert([newBlock])
   }
 
-  const _onUpdateBlock = (index: number, payload: BlockData) => {
-    const block = blocks[index]
+  const _onUpsertBlock = (index: number, payload: BlockData, type?: BlockType, createNew?: boolean) => {
+    const block = createNew ? createEmptyBlock(index) : blocks[index] || createEmptyBlock(index)
     onBlocksUpsert([
       {
         ...block,
         payload,
+        type: type ?? block.type,
         position: index,
       },
     ])
@@ -175,7 +176,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
       onBlockDoubleClick={_onBlockDoubleClick}
       onTextChange={_onTextChange}
       onNew={_onCreateBlock}
-      onUpdate={_onUpdateBlock}
+      onUpdate={_onUpsertBlock}
       onDelete={_onDeleteBlock}
       onFocus={_onBlockFocus}
       onBlur={_onBlockBlur}

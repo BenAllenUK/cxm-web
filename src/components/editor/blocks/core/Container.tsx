@@ -1,8 +1,8 @@
 import { useCallback, useState, memo, ReactNode } from 'react'
 import useHover from 'utils/hooks/useHover'
-
+import { BlockData, BlockType } from 'components/editor/blocks/types'
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from '..'
-
+import { useAsset } from 'components/providers/assets'
 import styles from './Container.module.scss'
 import Controls from './Controls'
 
@@ -14,7 +14,7 @@ const Container = ({
   onClick,
   onAddClick,
   children,
-  onDrop,
+  onUpdate,
 }: IProps & IContainerHandlerProps) => {
   const _onDoubleClick = useCallback(
     (event: React.MouseEvent) => {
@@ -32,21 +32,44 @@ const Container = ({
   }, [onAddClick, index])
 
   const _onDrop = useCallback(
-    (event: any) => {
-      onDrop(event, index)
+    async (event: any) => {
+      event.stopPropagation()
+      event.preventDefault()
+      let files = [...event.dataTransfer.files]
+      let fileReader = new FileReader()
+      fileReader.onload = async function (e) {
+        var image = fileReader.result
+        onUpdate(
+          index,
+          {
+            localValue: image,
+            uploadFile: true,
+            file: files[0],
+            type: 'image/png',
+          },
+          BlockType.IMAGE,
+          true
+        )
+        setActiveDropzone(false)
+      }
+      await fileReader.readAsDataURL(files[0])
     },
-    [onDrop, index]
+    [onUpdate, index]
   )
-
-  const dragOver = () => {}
 
   const [hoverRef, isHovered] = useHover<HTMLDivElement>()
   const [activeDropzone, setActiveDropzone] = useState(false)
   const isVisible = enableHandle && isHovered
+
+  const onDragOver = (active: boolean, event: any) => {
+    event.preventDefault()
+    setActiveDropzone(active)
+  }
+
   return (
     <div ref={hoverRef}>
       <div
-        onDragOver={() => setActiveDropzone(true)}
+        onDragOver={(e) => onDragOver(true, e)}
         onDragLeaveCapture={() => setActiveDropzone(false)}
         className={activeDropzone ? styles.dropzoneBlock : styles.block}
         style={{
@@ -76,7 +99,7 @@ export interface IContainerHandlerProps {
   onClick: (index: number) => void
   onDoubleClick: (index: number, pos: { x: number; y: number }) => void
   onAddClick: (index: number) => void
-  onDrop: (event: any, index: number) => void
+  onUpdate: (index: number, arg0: BlockData, type?: BlockType, createNew?: boolean) => void
 }
 
 export default memo(Container)

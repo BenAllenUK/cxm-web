@@ -60,6 +60,17 @@ export function getBlockOptions(filterText?: string | null) {
 }
 
 export const BlockTypeProperties = {
+  [BlockType.IMAGE]: {
+    id: BlockType.IMAGE,
+    title: 'Text',
+    subtitle: 'Start writing with plain text.',
+    image: '/preview/text.png',
+    initialHeight: 20,
+    isEditable: true,
+    initialPayload: {
+      value: '',
+    },
+  },
   [BlockType.TEXT]: {
     id: BlockType.TEXT,
     title: 'Text',

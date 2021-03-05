@@ -23,7 +23,6 @@ const SortableItem = (props: IProps) => {
   const _refCallback = (ref: HTMLDivElement) => {
     itemRefFunc(ref, item.position)
   }
-
   return (
     <SortableItemRoot index={item.position}>
       <Container
@@ -33,6 +32,7 @@ const SortableItem = (props: IProps) => {
         onClick={onBlockClick}
         onAddClick={onBlockAddClick}
         onDoubleClick={onBlockDoubleClick}
+        onUpdate={itemHandlers.onUpdate}
       >
         <div ref={_refCallback}>
           <Item

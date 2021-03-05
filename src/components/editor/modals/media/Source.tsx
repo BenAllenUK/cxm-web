@@ -1,11 +1,17 @@
 import { memo, useRef } from 'react'
+import { useAsset } from 'components/providers/assets'
 import styles from './MediaSelector.module.scss'
 import { MediaSourceObject, MediaSourceType } from './types'
+import { BlockDataImage } from '../../blocks/types'
 import Button from 'components/common/button/Button'
 import AssetLibrary from './AssetLibrary'
 import TextInput from 'components/common/text-input/TextInput'
 
-const uploadSource = (setMediaSource: React.Dispatch<React.SetStateAction<string | null>>) => {
+const uploadSource = (
+  setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage>>,
+  mediaSource: BlockDataImage,
+  setUploadFile: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   const hiddenFileInput = useRef(null)
 
   const handleClick = () => {
@@ -14,9 +20,16 @@ const uploadSource = (setMediaSource: React.Dispatch<React.SetStateAction<string
     }
   }
 
-  const handleChange = (event: any) => {
+  const handleChange = async (event: any) => {
     const fileUploaded = event.target.files[0]
-    setMediaSource(URL.createObjectURL(fileUploaded))
+    let fileReader = new FileReader()
+    fileReader.onload = async function (e) {
+      var image = fileReader.result
+      setMediaSource({ ...mediaSource, localValue: image, file: fileUploaded, type: fileUploaded.type })
+      setUploadFile(true)
+    }
+
+    await fileReader.readAsDataURL(fileUploaded)
   }
 
   return (
@@ -27,15 +40,15 @@ const uploadSource = (setMediaSource: React.Dispatch<React.SetStateAction<string
         </Button>
         <input ref={hiddenFileInput} style={{ display: 'none' }} type="file" onChange={handleChange} />
       </>
-      <text className={styles.text}>The maximum size per file is 5 MB</text>
+      <div className={styles.text}>The maximum size per file is 5 MB</div>
     </div>
   )
 }
 
-const embedLink = (setMediaSource: React.Dispatch<React.SetStateAction<string | null>>) => {
+const embedLink = (setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage>>) => {
   let link = ''
   const handleClick = () => {
-    setMediaSource(link)
+    setMediaSource({ ...mediaSource, link })
   }
 
   const onChange = (e: string) => {
@@ -54,15 +67,15 @@ const embedLink = (setMediaSource: React.Dispatch<React.SetStateAction<string | 
         Embed image
       </Button>
 
-      <text className={styles.text}>Works with any image from the web</text>
+      <div className={styles.text}>Works with any image from the web</div>
     </div>
   )
 }
 
-export const Source = ({ selected, setMediaSource, pictures, setPictures }: IProps) => {
+export const Source = ({ selected, setMediaSource, mediaSource, pictures, setPictures, setUploadFile }: IProps) => {
   switch (selected.type) {
     case MediaSourceType.UPLOAD: {
-      return uploadSource(setMediaSource)
+      return uploadSource(setMediaSource, mediaSource, setUploadFile)
     }
     case MediaSourceType.EMBED_LINK: {
       return embedLink(setMediaSource)
@@ -75,8 +88,10 @@ export const Source = ({ selected, setMediaSource, pictures, setPictures }: IPro
 interface IProps {
   pictures: any[]
   selected: MediaSourceObject
-  setMediaSource: React.Dispatch<React.SetStateAction<string | null>>
+  setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage>>
+  mediaSource: BlockDataImage
   setPictures: any
+  setUploadFile: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default memo(Source)

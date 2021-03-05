@@ -12,11 +12,15 @@
 }
 
 .dropzoneBlock {
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
   position: relative;
   background-color: #add8e6;
   border-bottom: 3px solid rgba(0, 0, 139, 0.5);
+
+  @media only screen and (max-width: 1300px) {
+    margin: 0 50px;
+  }
 }
 
 .controls {

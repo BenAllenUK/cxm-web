@@ -21,7 +21,9 @@ const Provider = ({ children }: IProps) => {
   const [readAssetUrl] = useGenerateReadAssetUrlMutation()
 
   const upload = async (data: any, contentType: string, onUploadProgress: (progress: number) => any = (i) => null) => {
+    console.log('in the upload')
     const response = await generateAssetUrl({ variables: { contentType } })
+    console.log('apollo response', response)
     const url = response.data?.assets_generate_upload_url?.url
     const key = response.data?.assets_generate_upload_url?.key
     if (url && key) {

@@ -7,13 +7,14 @@ export const SourceTabBar = ({ sources, selectSource, selected, setPictures }: I
     <div className={styles.tabBar}>
       {sources.map((source) => (
         <div
+          key={source.name}
           className={selected == source.name ? styles.selectedSource : styles.source}
           onClick={() => {
             selectSource(source)
             setPictures([])
           }}
         >
-          <text>{source.name}</text>
+          <div>{source.name}</div>
         </div>
       ))}
     </div>

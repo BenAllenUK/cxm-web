@@ -13,6 +13,14 @@
   }
 }
 
+.progress {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  background-color: black;
+  color: white;
+}
+
 .imageContainer {
   padding: 12px 36px 12px 12px;
   display: flex;

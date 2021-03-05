@@ -2,11 +2,12 @@ import { memo, useState } from 'react'
 import styles from './MediaSelector.module.scss'
 import ImageIcon from 'images/icons/image.svg'
 import { default as NextImage } from 'next/image'
+import { BlockDataImage } from '../../blocks/types'
 import SourceTabBar from './SourceTabBar'
 import Source from './Source'
 import { MediaSourceType, MediaSourceObject } from './types'
 
-export const MediaSelector = ({ setMediaSource }: IProps) => {
+export const MediaSelector = ({ setMediaSource, mediaSource, setUploadFile }: IProps) => {
   const [selectedSource, setSelectedSource] = useState({ name: MediaSourceType.UPLOAD, type: MediaSourceType.UPLOAD })
   const [pictures, setPictures] = useState([])
 
@@ -29,6 +30,7 @@ export const MediaSelector = ({ setMediaSource }: IProps) => {
     },
   ]
   sources = sources.concat(libraries)
+
   return (
     <div className={styles.root}>
       <div className={styles.container}>
@@ -38,14 +40,23 @@ export const MediaSelector = ({ setMediaSource }: IProps) => {
           selected={selectedSource.name}
           setPictures={setPictures}
         />
-        <Source selected={selectedSource} setMediaSource={setMediaSource} pictures={pictures} setPictures={setPictures} />
+        <Source
+          selected={selectedSource}
+          setMediaSource={setMediaSource}
+          mediaSource={mediaSource}
+          pictures={pictures}
+          setPictures={setPictures}
+          setUploadFile={setUploadFile}
+        />
       </div>
     </div>
   )
 }
 
 interface IProps {
-  setMediaSource: React.Dispatch<React.SetStateAction<string | null>>
+  setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage>>
+  mediaSource: BlockDataImage
+  setUploadFile: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default memo(MediaSelector)

@@ -52,8 +52,13 @@ export type BlockDataText = {
 }
 
 export type BlockDataImage = {
-  source: string | null
+  value: string | undefined
+  localValue: any
+  uploadFile: boolean
+  file: any
+  progress: number | null
   alt: string | null
+  type: string
   imageType: MediaSourceType
 }
 

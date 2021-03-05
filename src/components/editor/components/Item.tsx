@@ -30,6 +30,10 @@ const Item = ({
     onUpdate(index, value)
   }
 
+  const _onUpdate = (value: BlockDataImage) => {
+    onUpdate(index, value)
+  }
+
   const _onDelete = () => {
     onDelete(index)
   }
@@ -74,7 +78,7 @@ const Item = ({
     }
     case BlockType.IMAGE: {
       const content: BlockDataImage = payload as BlockDataImage
-      return <Image content={content} />
+      return <Image content={content} onUpdate={_onUpdate} />
     }
     case BlockType.DIVIDER:
       return <Divider />
@@ -116,7 +120,7 @@ interface IProps {
 export interface IItemHandlerProps {
   onTextChange: (index: number, value: string) => void
   onNew: (index: number) => void
-  onUpdate: (index: number, arg0: BlockData) => void
+  onUpdate: (index: number, arg0: BlockData, type?: BlockType) => void
   onDelete: (index: number) => void
   onFocus: (index: number) => void
   onBlur: (index: number) => void

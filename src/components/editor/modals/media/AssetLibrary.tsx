@@ -52,7 +52,7 @@ export const AssetLibrary = ({ source, setMediaSource, setPictures, pictures }: 
 }
 
 interface IProps {
-  setMediaSource: React.Dispatch<React.SetStateAction<string | null>>
+  setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage | null>>
   source: MediaSourceObject
   pictures: any[]
   setPictures: any
