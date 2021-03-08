@@ -137,7 +137,7 @@ export async function getServerSideProps({ params, locale }: GetServerSidePropsC
       notFound: true,
     }
   }
-
+  console.log('what gets assigned', article?.blocks)
   return {
     props: {
       initialApolloState: client.cache.extract(),
@@ -149,6 +149,7 @@ export async function getServerSideProps({ params, locale }: GetServerSidePropsC
       initialEditorContext: {
         projectSlug: project.slug,
         articleSlug: article.slug,
+        blocks: article.blocks,
       },
       ...(await serverSideTranslations(locale, ['common', 'editor'])),
     },

@@ -1,15 +1,25 @@
 import { useGenerateUploadAssetUrlMutation, useGenerateReadAssetUrlMutation } from 'generated/graphql'
-import { createContext, ReactNode, useContext } from 'react'
+import { createContext, ReactNode, useContext, useState } from 'react'
 import uploadFile from 'operations/assets/upload'
+
+import { BlockDataImageUpload } from 'components/editor/blocks/types'
 
 const initialState = {
   upload: () => new Promise<null>(() => null),
   getSecureUrl: () => new Promise<null>(() => null),
+  addPendingUpload: () => new Promise<null>(() => null),
+  removePendingUpload: () => new Promise<null>(() => null),
+  pendingUploads: {},
 }
 
-interface ContextActions {
+interface Context {
+  pendingUploads: { [key: number]: BlockDataImageUpload }
+}
+interface ContextActions extends Context {
   upload: (data: any, type: string, callback: (progress: number) => any) => Promise<{ key: string } | null>
   getSecureUrl: (data: any, type: string) => Promise<{ url: string } | null>
+  addPendingUpload: (pendingUpload: BlockDataImageUpload) => void
+  removePendingUpload: (id: number) => void
 }
 
 const Context = createContext<ContextActions>(initialState)
@@ -19,11 +29,9 @@ export const useAsset = () => useContext(Context)
 const Provider = ({ children }: IProps) => {
   const [generateAssetUrl] = useGenerateUploadAssetUrlMutation()
   const [readAssetUrl] = useGenerateReadAssetUrlMutation()
-
+  const [context, setContext] = useState<Context>(initialState)
   const upload = async (data: any, contentType: string, onUploadProgress: (progress: number) => any = (i) => null) => {
-    console.log('in the upload')
     const response = await generateAssetUrl({ variables: { contentType } })
-    console.log('apollo response', response)
     const url = response.data?.assets_generate_upload_url?.url
     const key = response.data?.assets_generate_upload_url?.key
     if (url && key) {
@@ -48,7 +56,23 @@ const Provider = ({ children }: IProps) => {
     }
   }
 
-  return <Context.Provider value={{ upload, getSecureUrl }}>{children}</Context.Provider>
+  const addPendingUpload = (pendingUpload: BlockDataImageUpload) => {
+    const { pendingUploads } = useAsset()
+    setContext({ ...context, pendingUploads: { ...pendingUploads, [pendingUpload.id]: pendingUpload } })
+  }
+
+  const removePendingUpload = (id: number) => {
+    const { pendingUploads } = useAsset()
+    const newObj = pendingUploads
+    delete newObj[id]
+    setContext({ ...context, pendingUploads: newObj })
+  }
+
+  return (
+    <Context.Provider value={{ ...context, upload, getSecureUrl, addPendingUpload, removePendingUpload }}>
+      {children}
+    </Context.Provider>
+  )
 }
 
 interface IProps {

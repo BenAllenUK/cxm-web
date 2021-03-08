@@ -14,6 +14,7 @@ function parseMenu(data: Article[]): MenuItem[] {
     children: [],
     parentId: item.parentId || null,
   }))
+
   const menuItemsTree = tree<MenuItem>(menuItemsList)
   return menuItemsTree as MenuItem[]
 }

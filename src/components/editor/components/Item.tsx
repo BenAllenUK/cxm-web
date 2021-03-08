@@ -16,6 +16,7 @@ const Item = ({
   onDelete,
   onFocus,
   onBlur,
+  id,
 }: IProps & IItemHandlerProps) => {
   const _onNew = () => {
     onNew(index)
@@ -78,7 +79,7 @@ const Item = ({
     }
     case BlockType.IMAGE: {
       const content: BlockDataImage = payload as BlockDataImage
-      return <Image content={content} onUpdate={_onUpdate} />
+      return <Image content={content} onUpdate={_onUpdate} id={id} />
     }
     case BlockType.DIVIDER:
       return <Divider />
@@ -115,6 +116,7 @@ interface IProps {
   type: BlockType
   payload: BlockData
   index: number
+  id: number
 }
 
 export interface IItemHandlerProps {

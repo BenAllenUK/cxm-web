@@ -7,9 +7,12 @@ import SourceTabBar from './SourceTabBar'
 import Source from './Source'
 import { MediaSourceType, MediaSourceObject } from './types'
 
-export const MediaSelector = ({ setMediaSource, mediaSource, setUploadFile }: IProps) => {
-  const [selectedSource, setSelectedSource] = useState({ name: MediaSourceType.UPLOAD, type: MediaSourceType.UPLOAD })
-  const [pictures, setPictures] = useState([])
+export const MediaSelector = ({ setMediaSource, mediaSource }: IProps) => {
+  const [selectedSource, setSelectedSource] = useState<MediaSourceObject>({
+    name: MediaSourceType.UPLOAD,
+    type: MediaSourceType.UPLOAD,
+  })
+  const [pictures, setPictures] = useState<[]>([])
 
   let sources: MediaSourceObject[] = [
     { name: MediaSourceType.UPLOAD, type: MediaSourceType.UPLOAD },
@@ -46,7 +49,6 @@ export const MediaSelector = ({ setMediaSource, mediaSource, setUploadFile }: IP
           mediaSource={mediaSource}
           pictures={pictures}
           setPictures={setPictures}
-          setUploadFile={setUploadFile}
         />
       </div>
     </div>
@@ -56,7 +58,6 @@ export const MediaSelector = ({ setMediaSource, mediaSource, setUploadFile }: IP
 interface IProps {
   setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage>>
   mediaSource: BlockDataImage
-  setUploadFile: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default memo(MediaSelector)

@@ -1,6 +1,6 @@
-import { useCallback, useState, memo, ReactNode } from 'react'
+import { useCallback, useState, memo, ReactNode, useEffect } from 'react'
 import useHover from 'utils/hooks/useHover'
-import { BlockData, BlockType } from 'components/editor/blocks/types'
+import { BlockData, BlockType, MediaSourceType } from 'components/editor/blocks/types'
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from '..'
 import { useAsset } from 'components/providers/assets'
 import styles from './Container.module.scss'
@@ -15,7 +15,19 @@ const Container = ({
   onAddClick,
   children,
   onUpdate,
+  id,
 }: IProps & IContainerHandlerProps) => {
+  const { addPendingUpload } = useAsset()
+  const [droppedFile, setDroppedFile] = useState<File | null>(null)
+  if (droppedFile) {
+    console.log('will see this')
+    addPendingUpload({
+      file: droppedFile,
+      id: id,
+    })
+    console.log('wont see this')
+    setDroppedFile(null)
+  }
   const _onDoubleClick = useCallback(
     (event: React.MouseEvent) => {
       onDoubleClick(index, { x: event.clientX, y: event.clientY })
@@ -30,32 +42,29 @@ const Container = ({
   const _onAddClick = useCallback(() => {
     onAddClick(index)
   }, [onAddClick, index])
+  let image: string | ArrayBuffer | null = ''
+  const _onDrop = async (event: any) => {
+    event.stopPropagation()
+    event.preventDefault()
+    let files = [...event.dataTransfer.files]
+    let fileReader = new FileReader()
 
-  const _onDrop = useCallback(
-    async (event: any) => {
-      event.stopPropagation()
-      event.preventDefault()
-      let files = [...event.dataTransfer.files]
-      let fileReader = new FileReader()
-      fileReader.onload = async function (e) {
-        var image = fileReader.result
-        onUpdate(
-          index,
-          {
-            localValue: image,
-            uploadFile: true,
-            file: files[0],
-            type: 'image/png',
-          },
-          BlockType.IMAGE,
-          true
-        )
-        setActiveDropzone(false)
-      }
-      await fileReader.readAsDataURL(files[0])
-    },
-    [onUpdate, index]
-  )
+    fileReader.onload = async function (e) {
+      image = fileReader.result
+      onUpdate(
+        index,
+        {
+          value: image,
+          type: MediaSourceType.LOCAL,
+        },
+        BlockType.IMAGE,
+        true
+      )
+      setActiveDropzone(false)
+    }
+    await fileReader.readAsDataURL(files[0])
+    setDroppedFile(files[0])
+  }
 
   const [hoverRef, isHovered] = useHover<HTMLDivElement>()
   const [activeDropzone, setActiveDropzone] = useState(false)
@@ -91,7 +100,7 @@ interface IProps {
   children: ReactNode
   index: number
   initialHeight: number
-
+  id: number
   enableHandle?: boolean
 }
 

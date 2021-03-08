@@ -53,19 +53,19 @@ export type BlockDataText = {
 
 export type BlockDataImage = {
   value: string | undefined
-  localValue: any
-  uploadFile: boolean
-  file: any
-  progress: number | null
-  alt: string | null
-  type: string
-  imageType: MediaSourceType
+  type: MediaSourceType
+}
+
+export type BlockDataImageUpload = {
+  file: File
+  id: number
 }
 
 export enum MediaSourceType {
   UPLOAD = 'Upload',
   EMBED_LINK = 'Embed link',
   LIBRARY = 'LIBRARY',
+  LOCAL = 'LOCAL',
 }
 
 export type BlockDataH1 = BlockDataText

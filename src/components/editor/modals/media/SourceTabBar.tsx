@@ -22,7 +22,7 @@ export const SourceTabBar = ({ sources, selectSource, selected, setPictures }: I
 }
 
 interface IProps {
-  selectSource: React.Dispatch<React.SetStateAction<{ name: MediaSourceType; type: MediaSourceType }>>
+  selectSource: React.Dispatch<React.SetStateAction<MediaSourceObject>>
   setPictures: React.Dispatch<React.SetStateAction<[]>>
   selected: string
   sources: MediaSourceObject[]

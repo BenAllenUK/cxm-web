@@ -22,13 +22,7 @@ export const useEditor = () => useContext(EditorContext)
 
 const KEY = 'editor'
 
-export default function EditorProvider({
-  initialContext,
-  children,
-}: {
-  initialContext: Context
-  children: any
-}) {
+export default function EditorProvider({ initialContext, children }: { initialContext: Context; children: any }) {
   const [context, setContext] = useState<Context>(initialContext)
 
   const setContextData = (data: Context) => {
@@ -47,9 +41,5 @@ export default function EditorProvider({
 
   const localState = context // Storage.getLocalItem(KEY)
 
-  return (
-    <EditorContext.Provider value={{ ...localState, setArticleSlug, setProjectSlug }}>
-      {children}
-    </EditorContext.Provider>
-  )
+  return <EditorContext.Provider value={{ ...localState, setArticleSlug, setProjectSlug }}>{children}</EditorContext.Provider>
 }

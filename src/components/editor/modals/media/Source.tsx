@@ -7,12 +7,8 @@ import Button from 'components/common/button/Button'
 import AssetLibrary from './AssetLibrary'
 import TextInput from 'components/common/text-input/TextInput'
 
-const uploadSource = (
-  setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage>>,
-  mediaSource: BlockDataImage,
-  setUploadFile: React.Dispatch<React.SetStateAction<boolean>>
-) => {
-  const hiddenFileInput = useRef(null)
+const uploadSource = (setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage>>, id: number) => {
+  const hiddenFileInput = useRef<HTMLInputElement>(null)
 
   const handleClick = () => {
     if (hiddenFileInput.current) {
@@ -25,8 +21,8 @@ const uploadSource = (
     let fileReader = new FileReader()
     fileReader.onload = async function (e) {
       var image = fileReader.result
-      setMediaSource({ ...mediaSource, localValue: image, file: fileUploaded, type: fileUploaded.type })
-      setUploadFile(true)
+
+      //setMediaSource({ ...mediaSource, value: image, file: fileUploaded })
     }
 
     await fileReader.readAsDataURL(fileUploaded)
@@ -45,14 +41,14 @@ const uploadSource = (
   )
 }
 
-const embedLink = (setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage>>) => {
+const embedLink = (setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage>>, mediaSource: BlockDataImage) => {
   let link = ''
   const handleClick = () => {
-    setMediaSource({ ...mediaSource, link })
+    // update block to have link
   }
 
-  const onChange = (e: string) => {
-    link = e
+  const onChange = (e: any) => {
+    link = e.target.value
   }
   return (
     <div className={styles.uploadSource}>
@@ -72,13 +68,13 @@ const embedLink = (setMediaSource: React.Dispatch<React.SetStateAction<BlockData
   )
 }
 
-export const Source = ({ selected, setMediaSource, mediaSource, pictures, setPictures, setUploadFile }: IProps) => {
+export const Source = ({ selected, setMediaSource, mediaSource, pictures, setPictures }: IProps) => {
   switch (selected.type) {
     case MediaSourceType.UPLOAD: {
-      return uploadSource(setMediaSource, mediaSource, setUploadFile)
+      return uploadSource(setMediaSource, 0)
     }
     case MediaSourceType.EMBED_LINK: {
-      return embedLink(setMediaSource)
+      return embedLink(setMediaSource, mediaSource)
     }
     default:
       return <AssetLibrary setMediaSource={setMediaSource} source={selected} pictures={pictures} setPictures={setPictures} />
@@ -91,7 +87,6 @@ interface IProps {
   setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage>>
   mediaSource: BlockDataImage
   setPictures: any
-  setUploadFile: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default memo(Source)

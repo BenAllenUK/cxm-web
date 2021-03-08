@@ -1,48 +1,49 @@
 import { memo, useState, useCallback, useEffect } from 'react'
-import { BlockDataImage } from '../types'
+import { BlockDataImage, MediaSourceType } from '../types'
 import styles from './Image.module.scss'
 import ImageIcon from 'images/icons/image.svg'
 import { useAsset } from 'components/providers/assets'
-import { BlockData, BlockType } from 'components/editor/blocks/types'
 import MediaSelector from 'components/editor/modals/media/MediaSelector'
 import { default as NextImage } from 'next/image'
 
-export const Image = ({ content, onUpdate }: IProps) => {
+export const Image = ({ content, onUpdate, id }: IProps) => {
   const [showSelector, setShowSelector] = useState(false)
   const [mediaSource, setMediaSource] = useState(content)
-  const [uploadFile, setUploadFile] = useState(content.uploadFile)
-  const { upload } = useAsset()
+  const [progress, setProgress] = useState(0)
+  const [uploadInProgress, setUploadInProgress] = useState(false)
+  const [deletePending, setDeletePending] = useState(false)
+  const { upload, pendingUploads, removePendingUpload } = useAsset()
 
   const _uploadFile = useCallback(async () => {
-    setUploadFile(false)
-    setMediaSource({ ...mediaSource, uploadFile: false })
-
-    if (!mediaSource.localValue) {
-      return
-    }
-
-    await upload(mediaSource.file, mediaSource.type, (progress) => {
+    setUploadInProgress(true)
+    await upload(pendingUploads[id].file, pendingUploads[id].file.type, (progress) => {
       console.log('progress', progress)
-      setMediaSource({
-        ...mediaSource,
-        progress,
-      })
+      setProgress(progress)
     }).then((response) => {
+      console.log('upload success')    
+      setProgress(0)
       if (!response) {
         console.log(`Error`)
-        return
       }
-      onUpdate({ ...mediaSource, value: response.key, localValue: undefined, progress: null, uploadFile: false })
+      onUpdate({ ...mediaSource, value: response?.key, type: MediaSourceType.UPLOAD })
+      setUploadInProgress(false)
+      setDeletePending(true)
     })
-  }, [mediaSource, uploadFile, setMediaSource, setUploadFile, upload])
+    
+  }, [mediaSource, setMediaSource, upload, pendingUploads, removePendingUpload, setUploadInProgress])
 
   useEffect(() => {
-    if (uploadFile) {
-      _uploadFile()
+    // check to see if blockid in pending uploads
+    if (pendingUploads[id] && !uploadInProgress) {
+      _uploadFile()   
     }
-  }, [_uploadFile])
+    if(deletePending) {
+      setDeletePending(false)
+      removePendingUpload(id)
+    }
+  }, [_uploadFile, pendingUploads, uploadInProgress, removePendingUpload])
 
-  if (!mediaSource.value && !mediaSource.localValue) {
+  if (!mediaSource.value) {
     return (
       <div>
         <div className={styles.container} onClick={() => setShowSelector(!showSelector)}>
@@ -51,16 +52,33 @@ export const Image = ({ content, onUpdate }: IProps) => {
           <div className={styles.text}>Add an image</div>
         </div>
         {showSelector && (
-          <MediaSelector setUploadFile={setUploadFile} setMediaSource={setMediaSource} mediaSource={mediaSource} />
+          <MediaSelector setMediaSource={setMediaSource} mediaSource={mediaSource} />
         )}
       </div>
     )
   }
-
+  let imgSrc
+  switch(mediaSource.type) {
+    case MediaSourceType.UPLOAD:
+      imgSrc = `${process.env.OMNEA_UPLOAD_URL}/${mediaSource.value}`
+      break
+    case MediaSourceType.LIBRARY:
+      imgSrc = mediaSource.value
+      break
+    default:
+      imgSrc = mediaSource.value
+  }
+  console.log('media source', mediaSource)
   return (
     <div className={styles.imageContainer}>
-      <img className={styles.image} src={mediaSource.localValue || `${process.env.OMNEA_UPLOAD_URL}/${mediaSource.value}`} />
-      {mediaSource.progress && <div className={styles.progress}>{mediaSource.progress}</div>}
+      <NextImage
+        layout="intrinsic"
+        width={600}
+        height={400}
+        objectFit={'contain'}
+        src={imgSrc}
+      />
+      <div className={styles.progress}>{progress}</div>}
     </div>
   )
 }
@@ -68,6 +86,7 @@ export const Image = ({ content, onUpdate }: IProps) => {
 interface IProps {
   content: BlockDataImage
   onUpdate: (value: BlockDataImage) => void
+  id: number
 }
 
 export default memo(Image)

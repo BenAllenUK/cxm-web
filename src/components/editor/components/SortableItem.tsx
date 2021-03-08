@@ -23,9 +23,11 @@ const SortableItem = (props: IProps) => {
   const _refCallback = (ref: HTMLDivElement) => {
     itemRefFunc(ref, item.position)
   }
+
   return (
     <SortableItemRoot index={item.position}>
       <Container
+        id={item.id}
         index={item.position}
         initialHeight={BlockTypeProperties[item.type].initialHeight}
         enableHandle={!modalBlockEnabled}
@@ -41,6 +43,7 @@ const SortableItem = (props: IProps) => {
             blockControlOpen={modalBlockEnabled}
             type={item.type}
             payload={item.payload}
+            id={item.id}
             {...itemHandlers}
           />
         </div>

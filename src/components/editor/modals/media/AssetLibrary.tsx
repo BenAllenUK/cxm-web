@@ -1,6 +1,7 @@
 import { memo, useRef, useState } from 'react'
 import styles from './MediaSelector.module.scss'
 import TextInput from 'components/common/text-input/TextInput'
+import { BlockDataImage } from '../../blocks/types'
 import { createApi } from 'unsplash-js'
 import { MediaSourceObject } from './types'
 import ImageGrid from './cloudinary/ImageGrid'
@@ -52,7 +53,7 @@ export const AssetLibrary = ({ source, setMediaSource, setPictures, pictures }: 
 }
 
 interface IProps {
-  setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage | null>>
+  setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage | null | string>>
   source: MediaSourceObject
   pictures: any[]
   setPictures: any
