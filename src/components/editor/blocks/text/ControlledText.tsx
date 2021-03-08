@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, memo, useCallback } from 'react'
+import { useEffect, useRef, useState, memo, useCallback, SyntheticEvent } from 'react'
 import Text from 'components/editor/blocks/text/Text'
 import { BlockType } from 'components/editor/blocks/types'
 import styles from './Text.module.scss'
@@ -64,4 +64,5 @@ interface IProps {
   onDelete: () => void
   onFocus: () => void
   onBlur: () => void
+  onSelect: (e: SyntheticEvent<HTMLDivElement>) => void
 }

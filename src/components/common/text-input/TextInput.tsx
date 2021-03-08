@@ -74,6 +74,11 @@ class TextInput extends React.Component<ITextInputProps, State> {
     document.execCommand('insertHTML', false, safeHtml)
   }
 
+  onSelect = async (e: React.SyntheticEvent<HTMLDivElement>) => {
+    const { onSelect } = this.props
+    onSelect && onSelect(e)
+  }
+
   componentDidMount() {}
 
   render() {
@@ -94,6 +99,7 @@ class TextInput extends React.Component<ITextInputProps, State> {
         onBlur={this.onBlur}
         onKeyUp={this.onKeyUp}
         onKeyDown={this.onKeyDown}
+        onSelect={this.onSelect}
         contentEditable={!disabled}
         dangerouslySetInnerHTML={{ __html: html }}
       />

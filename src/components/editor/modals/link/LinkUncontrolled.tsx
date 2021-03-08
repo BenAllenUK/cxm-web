@@ -1,7 +1,7 @@
 import OptionControls, { IOptionElements, IOptionSections, OptionType } from 'components/common/option-controls'
 import TextInput from 'components/common/text-input/TextInput'
 import { useTranslation } from 'next-i18next'
-import { CSSProperties, useEffect, useRef, useState } from 'react'
+import { CSSProperties, forwardRef, useEffect, useRef, useState } from 'react'
 import styles from './LinkUncontrolled.module.scss'
 
 const Header = ({ filterText, onValueChange }: IHeaderProps) => {
@@ -35,27 +35,21 @@ interface IHeaderProps {
   onValueChange: (value: string) => void
 }
 
-const LinkUncontrolled = ({ sections, filterText, style, onDismiss, onValueChange, onItemClick }: IProps) => {
-  const inputRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (inputRef?.current) {
-      inputRef.current.focus()
-      document.execCommand('selectAll', false)
-    }
-  }, [inputRef])
-
-  return (
-    <OptionControls
-      style={style}
-      className={styles.container}
-      sections={sections}
-      header={<Header filterText={filterText} onValueChange={onValueChange} />}
-      onItemClick={onItemClick}
-      onDismiss={onDismiss}
-    />
-  )
-}
+const LinkUncontrolled = forwardRef<HTMLDivElement, IProps>(
+  ({ sections, filterText, style, onDismiss, onValueChange, onItemClick }, forwardedRef) => {
+    return (
+      <OptionControls
+        ref={forwardedRef}
+        style={style}
+        className={styles.container}
+        sections={sections}
+        header={<Header filterText={filterText} onValueChange={onValueChange} />}
+        onItemClick={onItemClick}
+        onDismiss={onDismiss}
+      />
+    )
+  }
+)
 
 export default LinkUncontrolled
 
