@@ -9,8 +9,5 @@ export function getSelectionMidPosition() {
       y: oRect.y,
     }
   }
-  return {
-    x: 0,
-    y: 0,
-  }
+  return null
 }

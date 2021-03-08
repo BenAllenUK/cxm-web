@@ -86,6 +86,9 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
 
   const _onBlockSelect = (index: number, e: SyntheticEvent<HTMLDivElement>) => {
     const position = getSelectionMidPosition()
+    if (!position) {
+      return
+    }
     showTextControls(position)
   }
 

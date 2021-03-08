@@ -3,32 +3,26 @@ import { createContext, useState, useContext, useEffect, cloneElement } from 're
 
 interface Context {
   projectSlug: string | null
-  articleSlug: string | null
+  articlePath: string | null
 }
 
 interface ContextActions extends Context {
   setProjectSlug: (slug: string) => void
-  setArticleSlug: (slug: string) => void
+  setArticlePath: (path: string) => void
 }
 
 const EditorContext = createContext<ContextActions>({
   projectSlug: null,
-  articleSlug: null,
+  articlePath: null,
   setProjectSlug: () => {},
-  setArticleSlug: () => {},
+  setArticlePath: () => {},
 })
 
 export const useEditor = () => useContext(EditorContext)
 
 const KEY = 'editor'
 
-export default function EditorProvider({
-  initialContext,
-  children,
-}: {
-  initialContext: Context
-  children: any
-}) {
+export default function EditorProvider({ initialContext, children }: { initialContext: Context; children: any }) {
   const [context, setContext] = useState<Context>(initialContext)
 
   const setContextData = (data: Context) => {
@@ -37,8 +31,8 @@ export default function EditorProvider({
     Storage.setLocalItem(KEY, data)
   }
 
-  const setArticleSlug = (slug: string) => {
-    setContextData({ ...context, articleSlug: slug })
+  const setArticlePath = (path: string | null) => {
+    setContextData({ ...context, articlePath: path })
   }
 
   const setProjectSlug = (slug: string) => {
@@ -47,9 +41,5 @@ export default function EditorProvider({
 
   const localState = context // Storage.getLocalItem(KEY)
 
-  return (
-    <EditorContext.Provider value={{ ...localState, setArticleSlug, setProjectSlug }}>
-      {children}
-    </EditorContext.Provider>
-  )
+  return <EditorContext.Provider value={{ ...localState, setArticlePath, setProjectSlug }}>{children}</EditorContext.Provider>
 }

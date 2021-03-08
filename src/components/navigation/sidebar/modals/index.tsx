@@ -7,6 +7,8 @@ import PageControlsTargetContext from './page-controls/PageControlsTargetContext
 import { useSidebarPageControlsContext } from './page-controls/PageControlsTargetContext'
 import Search from './search'
 import createDuplicateArticle from 'utils/article/createDuplicateArticle'
+import { createSlug } from 'utils/article/createSlug'
+import updateChildPaths from 'utils/article/updateChildPaths'
 
 const ControlledModals = ({ currentViewingArticleId, articles, children, onUpsertArticles, onViewArticle }: IProps) => {
   const [renameValue, setRenameValue] = useState<string | null>(null)
@@ -49,7 +51,7 @@ const ControlledModals = ({ currentViewingArticleId, articles, children, onUpser
     setRenameValue(value)
   }
 
-  const _onArticleRenameSubmit = () => {
+  const _onArticleRenameSubmit = async () => {
     if (!renameValue) {
       return
     }
@@ -59,8 +61,18 @@ const ControlledModals = ({ currentViewingArticleId, articles, children, onUpser
       console.error(`Article not found: ${targetArticleId}`)
       return
     }
+    const basePathItems = article.path.split('/').slice(0, -1)
+    const newSlug = createSlug(renameValue)
+    const path = basePathItems.length > 0 ? [...basePathItems, newSlug].join('/') : newSlug
+    const oldPath = article.path
+    const newPath = path
 
-    onUpsertArticles([{ ...article, title: renameValue }])
+    // WARNING - Recursive loop for path editing
+    // const childBasePath = article.path ? `${article.path}/${slug}` : slug
+    const modifiedChildrenArticles = updateChildPaths(articles, oldPath, newPath, targetArticleId)
+    // const modifiedChildrenArticles: Article[] = []
+
+    return await onUpsertArticles([{ ...article, title: renameValue, path }, ...modifiedChildrenArticles])
   }
 
   const onArticleDuplicate = (id: number) => {
@@ -85,7 +97,7 @@ const ControlledModals = ({ currentViewingArticleId, articles, children, onUpser
 
     if (article.id === currentViewingArticleId) {
       const [alternativeArticle] = articles
-      onViewArticle(alternativeArticle.slug)
+      onViewArticle(alternativeArticle.path)
     }
   }
 
@@ -104,7 +116,7 @@ interface IProps {
   articles: Article[]
   children: ReactNode
   onUpsertArticles: (articles: Article[]) => Promise<Article[]>
-  onViewArticle: (slug: string) => void
+  onViewArticle: (path: string) => void
 }
 
 const Modals = (props: IProps) => {

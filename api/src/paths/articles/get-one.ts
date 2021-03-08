@@ -21,7 +21,7 @@ const main: APIGatewayProxyHandler = async (event) => {
     const { data } = await client.query({
       query: GET_ARTICLE_ONE,
       variables: {
-        slug: 'new-2021-02-23T17:01:20.019Z',
+        path: 'new-2021-02-23T17:01:20.019Z',
       },
     })
 

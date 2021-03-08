@@ -76,7 +76,8 @@ function Content() {
 
   const response = useGetArticleOneQuery({
     variables: {
-      slug: articleSlug,
+      slug: null,
+      path: articleSlug,
     },
   })
 
@@ -245,7 +246,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
       initialEditorContext: {
         projectSlug: project.slug,
-        articleSlug: article.slug,
+        articlePath: article.path,
       },
       namespacesRequired: ['common', 'editor'],
     },

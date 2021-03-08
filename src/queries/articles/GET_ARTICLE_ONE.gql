@@ -1,8 +1,8 @@
 #import "./ARTICLE_FRAGMENT.gql"
 #import "../blocks/BLOCK_FRAGMENT.gql"
 
-query GetArticleOne($slug: String!) {
-  articles(where: { slug: { _eq: $slug } }) {
+query GetArticleOne($path: String!) {
+  articles(where: { path: { _eq: $path } }) {
     ...Article
 
     blocks {

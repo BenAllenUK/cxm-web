@@ -52,9 +52,9 @@ export type Section = {
 export type MenuItem = {
   id: number
   label: string
-  slug: string
   children: MenuItem[]
   parentId: number | null
+  path: string
 }
 
 export function ControlledSidebar({ currentViewingArticleId, project, articles, onViewArticle, onUpsertArticles }: IProps) {
@@ -66,15 +66,15 @@ export function ControlledSidebar({ currentViewingArticleId, project, articles, 
   const [openState, setOpenState] = useState({})
 
   const onMenuItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
-    onViewArticle(item.slug)
+    onViewArticle(item.path)
   }
 
   const onMenuAddItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
-    const newArticle = createArticleEmpty(item.id, 999) //TODO: update position
+    const newArticle = createArticleEmpty(item.id, item.path, 999) //TODO: update position
     const [newArticleItem] = await onUpsertArticles([newArticle])
 
     if (newArticleItem) {
-      onViewArticle(newArticleItem.slug)
+      onViewArticle(item.path)
     }
 
     setOpenState(
@@ -107,11 +107,11 @@ export function ControlledSidebar({ currentViewingArticleId, project, articles, 
   const { locationRefs } = useMenuItemRefs()
 
   const _onSidebarAddItemClick = async () => {
-    const newArticle = createArticleEmpty(null, 9999)
+    const newArticle = createArticleEmpty(null, null, 9999)
     const [newArticleItem] = await onUpsertArticles([newArticle])
 
     if (newArticleItem) {
-      onViewArticle(newArticleItem.slug)
+      onViewArticle(newArticleItem.path)
     }
   }
 
@@ -179,7 +179,7 @@ interface IProps {
   }
   articles: Article[]
 
-  onViewArticle: (slug: string) => void
+  onViewArticle: (path: string) => void
   onUpsertArticles: (articles: Article[]) => Promise<Article[]>
 }
 

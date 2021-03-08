@@ -1,8 +1,8 @@
 const Routes = {
   admin: {
     editor: {
-      path: (slug1: string, slug2: string) => {
-        return `/admin/${slug1}/editor/${slug2}`
+      path: (slug1: string, path: string) => {
+        return `/${slug1}/editor/${path}`
       },
     },
   },

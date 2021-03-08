@@ -7,7 +7,7 @@ function createDuplicateArticle(article: Article): Article {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: `${article.title} Copy`,
-    slug: `${article.slug}-copy`,
+    path: `${article.path}-copy`,
   }
 }
 

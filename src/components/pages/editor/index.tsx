@@ -31,7 +31,7 @@ const EditorPage = ({
   onUpsertBlocksMutation,
   onDeleteBlockMutation,
 }: IProps) => {
-  const { setArticleSlug, setProjectSlug } = useEditor()
+  const { setArticlePath, setProjectSlug } = useEditor()
   const { showErrorMsg } = useErrorModal()
 
   const [project] = fromProjectFragments([projectRaw])
@@ -41,10 +41,10 @@ const EditorPage = ({
 
   useTitle(article?.title, loading)
 
-  const onViewArticle = (slug: string) => {
-    setArticleSlug(slug)
-    const path = Routes.admin.editor.path(project.slug, slug)
-    navigate(path)
+  const onViewArticle = (path: string) => {
+    setArticlePath(path)
+    const fullPath = Routes.admin.editor.path(project.slug, path)
+    navigate(fullPath)
   }
 
   const onUpsertArticles = async (updatedArticles: Article[]) => {

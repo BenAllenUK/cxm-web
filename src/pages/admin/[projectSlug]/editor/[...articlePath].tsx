@@ -38,7 +38,7 @@ export default function EditorRoot(props: any) {
 export function Content() {
   const { userId, organisationId, projects } = useUser()
 
-  const { projectSlug, articleSlug } = useEditor()
+  const { projectSlug, articlePath } = useEditor()
 
   const { data: projectsData } = useGetProjectOneQuery({
     variables: {
@@ -56,7 +56,7 @@ export function Content() {
 
   let { data: articleData, loading: articleQueryLoading } = useGetArticleOneQuery({
     variables: {
-      slug: articleSlug || '',
+      path: articlePath || '',
     },
   })
 
@@ -105,7 +105,9 @@ export async function getServerSideProps({ params, locale }: GetServerSidePropsC
   const client = initializeApollo()
 
   const projectSlug = params?.projectSlug
-  const articleSlug = params?.articleSlug
+  const articlePathRaw = params?.articlePath || []
+  const articlePath = Array.isArray(articlePathRaw) ? articlePathRaw.join('/') : articlePathRaw
+  console.log({ articlePath, articlePathRaw })
 
   const { data: projectsData } = await client.query({
     query: GET_PROJECT_ONE,
@@ -123,7 +125,7 @@ export async function getServerSideProps({ params, locale }: GetServerSidePropsC
 
   const { data: articleData } = await client.query({
     query: GET_ARTICLE_ONE,
-    variables: { slug: articleSlug },
+    variables: { path: articlePath || '' },
   })
 
   const [article] = articleData?.articles || []
@@ -138,7 +140,7 @@ export async function getServerSideProps({ params, locale }: GetServerSidePropsC
       },
       initialEditorContext: {
         projectSlug: project.slug,
-        articleSlug: article?.slug ?? null,
+        articlePath: articlePath,
       },
       ...(await serverSideTranslations(locale, ['common', 'editor'])),
     },
