@@ -21,16 +21,11 @@ const routerArray = modules.map((item) => {
 })
 
 const router = mapValues(keyBy(routerArray, 'key'), 'value')
-console.log(`==========`)
-routerArray.forEach((item) => {
-  console.log(`${item.key} navigates to ${item.value}`)
-})
-console.log(`==========`)
 
 //////////////////////////////////////////////////////////////////////////////////////
 // Map all /_next requests to main NextJS App. Ignores modules.
-//   i.e example.local/_next/{path...} -> localhost:3003/_next/{path...}
-//   i.e foo.example.local/fr/asdfasdf -> localhost:3003/_next/{path...}
+//   i.e omnea.local/_next/{path...} -> localhost:3001/_next/{path...}
+//   i.e admin.omnea.local/fr/asdfasdf -> localhost:3001/_next/{path...}
 //////////////////////////////////////////////////////////////////////////////////////
 server.use(
   createProxyMiddleware('/_next', {
@@ -43,7 +38,7 @@ server.use(
 
 //////////////////////////////////////////////////////////////////////////////////////
 // Map all / requests to each NextJS App. Exclude path since we are at root
-//   i.e foo.example.local/asdfasdf -> localhost:3003/foo/
+//   i.e admin.omnea.local/asdfasdf -> localhost:3001/admin/
 //////////////////////////////////////////////////////////////////////////////////////
 
 const rootFilter = function (pathname, req) {
@@ -62,8 +57,8 @@ server.use(
 //////////////////////////////////////////////////////////////////////////////////////
 // Map all /{path...} requests to each NextJS App. Include path since not at root
 // Also take into account language.
-//   i.e foo.example.local/fr/asdfasdf -> localhost:3003/fr/foo/asfasdfasd
-//   i.e bar.example.local/asdfasdf -> localhost:3003/bar/asfasdfasd
+//   i.e docs.omnea.local/fr/asdfasdf -> localhost:3001/fr/docs/asfasdfasd
+//   i.e admin.omnea.local/asdfasdf -> localhost:3001/admin/asfasdfasd
 //////////////////////////////////////////////////////////////////////////////////////
 
 const nonRootFilterModule = function (pathname, req) {
@@ -100,8 +95,8 @@ server.use(
 )
 
 //////////////////////////////////////////////////////////////////////////////////////
-// Map all api.example.local requests to the API.
-//   i.e api.example.local/item/1 -> localhost:3003/item/1
+// Map all api.omnea.local requests to the API.
+//   i.e api.omnea.local/item/1 -> localhost:3003/item/1
 //////////////////////////////////////////////////////////////////////////////////////
 
 const nonRootFilterAPI = function (pathname, req) {
@@ -121,8 +116,8 @@ server.use(
 )
 
 //////////////////////////////////////////////////////////////////////////////////////
-// Map all uncaught requests to root module
-//   i.e localhost:3000/bar -> localhost:3003/bar
+// Map all index request to root module
+//   i.e localhost:3000 -> localhost:3001
 //////////////////////////////////////////////////////////////////////////////////////
 
 const localHostRootFilter = function (pathname, req) {
@@ -142,7 +137,7 @@ server.use(
 
 //////////////////////////////////////////////////////////////////////////////////////
 // Map all uncaught requests to root module
-//   i.e localhost:3000/bar -> localhost:3003/bar
+//   i.e localhost:3000/bar -> localhost:3001/bar
 //////////////////////////////////////////////////////////////////////////////////////
 
 const localHostFilter = function (pathname, req) {
@@ -160,3 +155,23 @@ server.use(
 )
 
 server.listen(sourcePort)
+
+/// ----
+
+console.log(`==========`)
+console.log(`\nWEB:`)
+console.log(`-`)
+routerArray.forEach((item) => {
+  console.log(`[PROXY] http://${item.key} -> ${item.value}`)
+})
+console.log(`\n\nAPI:`)
+console.log(`-`)
+console.log(`[PROXY] http://${api.sourceHost}:${sourcePort} -> http://${api.targetHost}:${api.targetPort}/${api.targetPath}`)
+
+console.log(`\n\nlocalhost:`)
+console.log(`-`)
+console.log(`[PROXY] http://${sourceHost}:${sourcePort} -> ` + `http://${baseTargetHost}:${baseTargetPort}/_root_`)
+
+console.log(`\n==========\n`)
+
+console.log(`Ready. Visit http://omnea.local:3000/ to start.`)

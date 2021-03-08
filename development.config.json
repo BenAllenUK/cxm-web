@@ -10,7 +10,6 @@
   ],
   "api": {
     "sourceHost": "api.omnea.local",
-    "sourcePort": "3003",
     "targetHost": "localhost",
     "targetPort": "3003",
     "targetPath": "dev"
