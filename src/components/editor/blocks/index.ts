@@ -43,7 +43,7 @@ export function isBlockEmpty(block: Block) {
       return ((block.payload as BlockDataListBullet).items || []).length == 0
     case BlockType.IMAGE:
       return false
-      return !(block.payload as BlockDataImage).source
+    //return !(block.payload as BlockDataImage).source
     default:
       return true
   }
