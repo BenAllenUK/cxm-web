@@ -1,8 +1,8 @@
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useEffect } from 'react'
 import { SortEnd } from 'react-sortable-hoc'
 import { isBlockEmpty } from '../blocks'
-import { BlockData, BlockType, BlockDataText, BlockDataImage, Block } from '../blocks/types'
-
+import { BlockData, BlockType, BlockDataText, BlockDataImage, Block, BlockDataImageUpload } from '../blocks/types'
+import { useAsset } from 'components/providers/assets'
 import useWindowKeyUp from 'utils/hooks/useWindowKeyUp'
 import { calculateBlockControlsPosition, useBlockControlModal } from '../modals/block-controls'
 import { useTextControlModal } from '../modals/text-controls'
@@ -18,6 +18,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     showControls: showBlockControlsModal,
     hideControls: hideBlockControls,
   } = useBlockControlModal()
+  const { addPendingUpload } = useAsset()
   const { setBlockId: setBlockControlsId } = useBlockControlsContext()
 
   const { filterText: modalFilterText, setFilterText } = useBlockControlsContext()
@@ -99,8 +100,12 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     onBlocksUpsert([newBlock])
   }
 
-  const _onUpsertBlock = (index: number, payload: BlockData, type?: BlockType, createNew?: boolean) => {
-    const block = createNew ? createEmptyBlock(index) : blocks[index] || createEmptyBlock(index)
+  const _onUpsertBlock = (index: number, payload: BlockData, type?: BlockType, pendingUploadFile?: File) => {
+    const block = pendingUploadFile ? createEmptyBlock(index) : blocks[index] || createEmptyBlock(index)
+    if (pendingUploadFile) {
+      console.log('block id', block.id)
+      addPendingUpload({ file: pendingUploadFile, id: block.id })
+    }
     onBlocksUpsert([
       {
         ...block,

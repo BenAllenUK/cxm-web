@@ -11,7 +11,6 @@ export const Image = ({ content, onUpdate, id }: IProps) => {
   const [mediaSource, setMediaSource] = useState(content)
   const [progress, setProgress] = useState(0)
   const [uploadInProgress, setUploadInProgress] = useState(false)
-  const [deletePending, setDeletePending] = useState(false)
   const { upload, pendingUploads, removePendingUpload } = useAsset()
 
   const _uploadFile = useCallback(async () => {
@@ -20,28 +19,23 @@ export const Image = ({ content, onUpdate, id }: IProps) => {
       console.log('progress', progress)
       setProgress(progress)
     }).then((response) => {
-      console.log('upload success')    
+      console.log('upload success')
+      removePendingUpload(id)
+      setUploadInProgress(false)
       setProgress(0)
       if (!response) {
         console.log(`Error`)
       }
-      onUpdate({ ...mediaSource, value: response?.key, type: MediaSourceType.UPLOAD })
-      setUploadInProgress(false)
-      setDeletePending(true)
+      onUpdate({ value: response?.key, type: MediaSourceType.UPLOAD })
     })
     
   }, [mediaSource, setMediaSource, upload, pendingUploads, removePendingUpload, setUploadInProgress])
 
   useEffect(() => {
-    // check to see if blockid in pending uploads
     if (pendingUploads[id] && !uploadInProgress) {
       _uploadFile()   
     }
-    if(deletePending) {
-      setDeletePending(false)
-      removePendingUpload(id)
-    }
-  }, [_uploadFile, pendingUploads, uploadInProgress, removePendingUpload])
+  }, [_uploadFile, pendingUploads, uploadInProgress])
 
   if (!mediaSource.value) {
     return (
@@ -52,7 +46,7 @@ export const Image = ({ content, onUpdate, id }: IProps) => {
           <div className={styles.text}>Add an image</div>
         </div>
         {showSelector && (
-          <MediaSelector setMediaSource={setMediaSource} mediaSource={mediaSource} />
+          <MediaSelector onUpdate={onUpdate} />
         )}
       </div>
     )
@@ -68,7 +62,7 @@ export const Image = ({ content, onUpdate, id }: IProps) => {
     default:
       imgSrc = mediaSource.value
   }
-  console.log('media source', mediaSource)
+  // console.log('media source', mediaSource)
   return (
     <div className={styles.imageContainer}>
       <NextImage

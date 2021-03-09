@@ -7,8 +7,8 @@ import { BlockDataImageUpload } from 'components/editor/blocks/types'
 const initialState = {
   upload: () => new Promise<null>(() => null),
   getSecureUrl: () => new Promise<null>(() => null),
-  addPendingUpload: () => new Promise<null>(() => null),
-  removePendingUpload: () => new Promise<null>(() => null),
+  addPendingUpload: () => null,
+  removePendingUpload: () => null,
   pendingUploads: {},
 }
 
@@ -57,15 +57,18 @@ const Provider = ({ children }: IProps) => {
   }
 
   const addPendingUpload = (pendingUpload: BlockDataImageUpload) => {
-    const { pendingUploads } = useAsset()
-    setContext({ ...context, pendingUploads: { ...pendingUploads, [pendingUpload.id]: pendingUpload } })
+    setContext((prevContext) => ({
+      ...prevContext,
+      pendingUploads: { ...prevContext.pendingUploads, [pendingUpload.id]: pendingUpload },
+    }))
   }
 
   const removePendingUpload = (id: number) => {
-    const { pendingUploads } = useAsset()
-    const newObj = pendingUploads
-    delete newObj[id]
-    setContext({ ...context, pendingUploads: newObj })
+    setContext((prevContext) => {
+      const newPendingUploads = { ...prevContext.pendingUploads }
+      delete newPendingUploads[id]
+      return { ...prevContext, pendingUploads: newPendingUploads }
+    })
   }
 
   return (

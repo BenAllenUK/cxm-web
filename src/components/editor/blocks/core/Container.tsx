@@ -17,14 +17,14 @@ const Container = ({
   onUpdate,
   id,
 }: IProps & IContainerHandlerProps) => {
-  const { addPendingUpload } = useAsset()
+  // const { addPendingUpload } = useAsset()
   const [droppedFile, setDroppedFile] = useState<File | null>(null)
   if (droppedFile) {
     console.log('will see this')
-    addPendingUpload({
-      file: droppedFile,
-      id: id,
-    })
+    // addPendingUpload({
+    //   file: droppedFile,
+    //   id: id,
+    // })
     console.log('wont see this')
     setDroppedFile(null)
   }
@@ -58,7 +58,7 @@ const Container = ({
           type: MediaSourceType.LOCAL,
         },
         BlockType.IMAGE,
-        true
+        files[0]
       )
       setActiveDropzone(false)
     }

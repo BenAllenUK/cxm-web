@@ -7,7 +7,7 @@ import SourceTabBar from './SourceTabBar'
 import Source from './Source'
 import { MediaSourceType, MediaSourceObject } from './types'
 
-export const MediaSelector = ({ setMediaSource, mediaSource }: IProps) => {
+export const MediaSelector = ({ onUpdate }: IProps) => {
   const [selectedSource, setSelectedSource] = useState<MediaSourceObject>({
     name: MediaSourceType.UPLOAD,
     type: MediaSourceType.UPLOAD,
@@ -43,21 +43,14 @@ export const MediaSelector = ({ setMediaSource, mediaSource }: IProps) => {
           selected={selectedSource.name}
           setPictures={setPictures}
         />
-        <Source
-          selected={selectedSource}
-          setMediaSource={setMediaSource}
-          mediaSource={mediaSource}
-          pictures={pictures}
-          setPictures={setPictures}
-        />
+        <Source selected={selectedSource} onUpdate={onUpdate} pictures={pictures} setPictures={setPictures} />
       </div>
     </div>
   )
 }
 
 interface IProps {
-  setMediaSource: React.Dispatch<React.SetStateAction<BlockDataImage>>
-  mediaSource: BlockDataImage
+  onUpdate: (value: BlockDataImage) => void
 }
 
 export default memo(MediaSelector)

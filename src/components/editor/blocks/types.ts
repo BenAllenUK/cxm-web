@@ -52,7 +52,7 @@ export type BlockDataText = {
 }
 
 export type BlockDataImage = {
-  value: string | undefined
+  value: string | ArrayBuffer | null
   type: MediaSourceType
 }
 
