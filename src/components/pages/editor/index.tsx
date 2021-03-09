@@ -30,11 +30,14 @@ const EditorPage = ({
 }: IProps) => {
   const { setArticleSlug, setProjectSlug } = useEditor()
   const { showErrorMsg } = useErrorModal()
+
   const [project] = fromProjectFragments([projectRaw])
   const articles = project.articles || []
   const [article] = articleRaw ? fromArticleFragments([articleRaw]) : [null]
   const blocks = article?.blocks || []
+
   useTitle(article?.title)
+
   const onViewArticle = (slug: string) => {
     setArticleSlug(slug)
     const path = Routes.admin.editor.path(project.slug, slug)
