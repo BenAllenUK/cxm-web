@@ -18,6 +18,7 @@ import useUpsertBlocksMutationScoped from 'operations/blocks/upsert'
 import GET_ARTICLE_ONE from 'queries/articles/GET_ARTICLE_ONE.gql'
 import GET_PROJECT_ONE from 'queries/project/GET_PROJECT_ONE.gql'
 import AssetsProvider from 'components/providers/assets'
+import { getSession } from '@auth0/nextjs-auth0'
 
 export default function EditorRoot(props: any) {
   const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
@@ -101,7 +102,20 @@ export function Content() {
 /**
  * Block client data only
  */
-export async function getServerSideProps({ params, locale }: GetServerSidePropsContext) {
+export async function getServerSideProps({ params, locale, req, res }: GetServerSidePropsContext) {
+  const session = getSession(req, res)
+  console.log(session)
+
+  if (!session || !session.user) {
+    return {
+      props: {},
+      redirect: {
+        destination: '/api/login',
+        permanent: false,
+      },
+    }
+  }
+
   const client = initializeApollo()
 
   const projectSlug = params?.projectSlug
