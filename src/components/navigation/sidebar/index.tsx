@@ -22,6 +22,7 @@ import { BlockType } from 'components/editor/blocks/types'
 import createArticleEmpty from 'utils/article/createEmptyArticle'
 import { useSidebarPageControlsContext } from './modals/page-controls/PageControlsTargetContext'
 import { Article } from 'operations/articles/types'
+import createDefaultOpenState from 'utils/menu/createDefaultOpenState'
 
 export const SIDEBAR_INDENT = 20
 
@@ -57,13 +58,15 @@ export type MenuItem = {
   path: string
 }
 
-export function ControlledSidebar({ currentViewingArticleId, project, articles, onViewArticle, onUpsertArticles }: IProps) {
+export function ControlledSidebar({ path, currentViewingArticleId, project, articles, onViewArticle, onUpsertArticles }: IProps) {
   // TODO: Assumes ids have different numbers
 
   const { showControls } = usePageControlModals()
   const { showControls: showSearchModal } = useSearchModal()
 
-  const [openState, setOpenState] = useState({})
+  const defaultOpenState = createDefaultOpenState(path)
+
+  const [openState, setOpenState] = useState(defaultOpenState)
 
   const onMenuItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
     onViewArticle(item.path)
@@ -171,6 +174,7 @@ export function ControlledSidebar({ currentViewingArticleId, project, articles, 
 }
 
 interface IProps {
+  path: Article[]
   currentViewingArticleId?: number | null
 
   project: {

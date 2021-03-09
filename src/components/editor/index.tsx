@@ -8,13 +8,16 @@ import Header from './header'
 import { Article } from 'operations/articles/types'
 import List from './components/List'
 import EditorEmpty from './misc/EditorEmpty'
+import readPathRoute from 'utils/article/readPathRoute'
 
 function Editor({
   id,
   articles,
+  path,
   blocks: initialBlocks,
   onBlocksUpsert: onServerBlocksUpsert,
   onBlocksDelete: onServerBlocksDelete,
+  onViewArticle,
   loading,
 }: IProps) {
   const [focusIndex, setFocusIndex] = useState(initialBlocks.length <= 1 ? 0 : -1)
@@ -91,7 +94,7 @@ function Editor({
         <div className={styles.container}>
           {id && (
             <>
-              <Header loading={loading} />
+              <Header loading={loading} path={path} onViewArticle={onViewArticle} />
               <List
                 focusIndex={focusIndex}
                 blocks={blocks}
@@ -114,6 +117,8 @@ interface IProps {
   articles: Article[]
   blocks: Block[]
   loading?: boolean
+  path: Article[]
   onBlocksUpsert: (blocks: Block[]) => void
   onBlocksDelete: (ids: number[]) => void
+  onViewArticle: (path: string) => void
 }

@@ -68,9 +68,7 @@ const ControlledModals = ({ currentViewingArticleId, articles, children, onUpser
     const newPath = path
 
     // WARNING - Recursive loop for path editing
-    // const childBasePath = article.path ? `${article.path}/${slug}` : slug
     const modifiedChildrenArticles = updateChildPaths(articles, oldPath, newPath, targetArticleId)
-    // const modifiedChildrenArticles: Article[] = []
 
     return await onUpsertArticles([{ ...article, title: renameValue, path }, ...modifiedChildrenArticles])
   }

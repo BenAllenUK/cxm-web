@@ -39,17 +39,12 @@ const Component = (props: IProps) => {
 
   const _onShowMoreModal = () => {}
 
-  const ref = useRef<HTMLDivElement>(null)
-
-  useLayoutEffect(() => {
-    updateBoundedPosition(rootRef, ref, position)
-  }, [ref, rootRef, position])
-
   return (
     <>
       {enabled && position && (
         <TextControlUncontrolled
-          ref={ref}
+          position={position}
+          rootRef={rootRef}
           onDismiss={hideControls}
           onShowTextStyleModal={_onShowTextStyleModal}
           onShowLinkModal={_onShowLinkModal}

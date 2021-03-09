@@ -1,7 +1,9 @@
 import OptionControls, { IOptionElements, IOptionSections, OptionType } from 'components/common/option-controls'
 import TextInput from 'components/common/text-input/TextInput'
 import { useTranslation } from 'next-i18next'
-import { CSSProperties, forwardRef, useEffect, useRef, useState } from 'react'
+import { CSSProperties, forwardRef, RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { updateBoundedPosition } from 'utils/modals/updateBoundedPosition'
+import mergeRefs from 'utils/refs/mergeRefs'
 import styles from './LinkUncontrolled.module.scss'
 
 const Header = ({ filterText, onValueChange }: IHeaderProps) => {
@@ -36,11 +38,17 @@ interface IHeaderProps {
 }
 
 const LinkUncontrolled = forwardRef<HTMLDivElement, IProps>(
-  ({ sections, filterText, style, onDismiss, onValueChange, onItemClick }, forwardedRef) => {
+  ({ rootRef, position, sections, filterText, onDismiss, onValueChange, onItemClick }, forwardedRef) => {
+    const ref = useRef<HTMLDivElement>(null)
+
+    useLayoutEffect(() => {
+      updateBoundedPosition(rootRef, ref, position, 'below')
+    }, [ref, rootRef, position])
+
     return (
       <OptionControls
-        ref={forwardedRef}
-        style={style}
+        style={{ left: position.x, top: position.y }}
+        ref={mergeRefs(forwardedRef, ref)}
         className={styles.container}
         sections={sections}
         header={<Header filterText={filterText} onValueChange={onValueChange} />}
@@ -54,7 +62,8 @@ const LinkUncontrolled = forwardRef<HTMLDivElement, IProps>(
 export default LinkUncontrolled
 
 interface IProps {
-  style?: CSSProperties
+  rootRef: RefObject<HTMLDivElement> | undefined
+  position: { x: number; y: number }
   sections: IOptionSections[]
   filterText: string | null
   onDismiss: () => void

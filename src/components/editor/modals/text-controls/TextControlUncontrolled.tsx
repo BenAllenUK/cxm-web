@@ -1,4 +1,4 @@
-import { forwardRef, HTMLProps, useRef } from 'react'
+import { forwardRef, HTMLProps, RefObject, useLayoutEffect, useRef } from 'react'
 import useOnClickOnOutside from 'utils/hooks/useOnClickOnOutside'
 import LinkButton from './LinkButton'
 import Button from './Button'
@@ -11,10 +11,21 @@ import DotsIcon from 'images/icons/dots.svg'
 import { useTranslation } from 'next-i18next'
 import { insertSpanWithClassName } from 'components/editor/utils/html'
 import mergeRefs from 'utils/refs/mergeRefs'
+import { updateBoundedPosition } from 'utils/modals/updateBoundedPosition'
 
 const TextControlsUncontrolled = forwardRef<HTMLDivElement, IProps>(
   (
-    { onDismiss, onShowTextStyleModal, onShowLinkModal, onShowConversionModal, onShowCommentModal, onShowMoreModal, ...props },
+    {
+      rootRef,
+      position,
+      onDismiss,
+      onShowTextStyleModal,
+      onShowLinkModal,
+      onShowConversionModal,
+      onShowCommentModal,
+      onShowMoreModal,
+      ...props
+    },
     forwardedRef
   ) => {
     const ref = useRef<HTMLDivElement>(null)
@@ -28,8 +39,17 @@ const TextControlsUncontrolled = forwardRef<HTMLDivElement, IProps>(
       insertSpanWithClassName('code')
     }
 
+    useLayoutEffect(() => {
+      updateBoundedPosition(rootRef, ref, position)
+    }, [ref, rootRef, position])
+
     return (
-      <div {...props} ref={mergeRefs(ref, forwardedRef)} className={styles.container}>
+      <div
+        {...props}
+        ref={mergeRefs(ref, forwardedRef)}
+        className={styles.container}
+        style={{ left: position.x, top: position.y }}
+      >
         <Button onClick={onShowConversionModal} data-tip={t('textControls.buttonConversionTip')}>
           {t('textControls.buttonConversion')}
           <ChevronDownIcon className={styles.chevronDownIcon} />
@@ -73,6 +93,8 @@ const TextControlsUncontrolled = forwardRef<HTMLDivElement, IProps>(
 export default TextControlsUncontrolled
 
 interface IProps extends HTMLProps<HTMLDivElement> {
+  rootRef: RefObject<HTMLDivElement> | undefined
+  position: { x: number; y: number }
   onDismiss: () => void
   onShowTextStyleModal: () => void
   onShowLinkModal: () => void

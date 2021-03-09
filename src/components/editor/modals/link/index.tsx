@@ -87,17 +87,12 @@ const Component = ({ articles, ...otherProps }: IProps) => {
     }
   }
 
-  const ref = useRef<HTMLDivElement>(null)
-
-  useLayoutEffect(() => {
-    updateBoundedPosition(rootRef, ref, position, 'below')
-  }, [ref, rootRef, position])
-
   return (
     <>
       {enabled && position && (
         <LinkUncontrolled
-          ref={ref}
+          rootRef={rootRef}
+          position={position}
           sections={filterText ? sections : []}
           filterText={filterText}
           onDismiss={hideControls}

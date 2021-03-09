@@ -12,5 +12,13 @@
   "errors": {
     "DEFAULT": "There was an error",
     "INTERNET_ERROR": "There was a connection error"
+  },
+  "modals": {
+    "confirmation": {
+      "message": "Are you sure you want to {{action}}?",
+      "messageDelete": "Are you sure you want to delete this item?",
+      "accept": "ACCEPT",
+      "decline": "DECLINE"
+    }
   }
 }

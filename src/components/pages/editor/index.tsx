@@ -21,6 +21,7 @@ import { ProjectFragment } from 'generated/graphql'
 import { useErrorModal } from 'components/common/modals/error'
 import TitleBar from 'components/common/title-bar'
 import isElectron from 'is-electron'
+import readPathRoute from 'utils/article/readPathRoute'
 
 const EditorPage = ({
   article: articleRaw,
@@ -79,6 +80,7 @@ const EditorPage = ({
   }
 
   const onDebouncedBlockUpsert = debounce(onBlocksUpsert, 500)
+  const path = article?.id ? readPathRoute(articles, article.id) : []
 
   return (
     <div className={styles.root}>
@@ -87,6 +89,7 @@ const EditorPage = ({
         <Navbar />
 
         <Sidebar
+          path={path}
           currentViewingArticleId={article?.id}
           project={project}
           articles={articles}
@@ -96,6 +99,7 @@ const EditorPage = ({
 
         <div className={styles.editor}>
           <Editor
+            path={path}
             key={article?.id}
             id={article?.id}
             loading={loading}
@@ -103,6 +107,7 @@ const EditorPage = ({
             blocks={blocks}
             onBlocksDelete={onBlocksDelete}
             onBlocksUpsert={onDebouncedBlockUpsert}
+            onViewArticle={onViewArticle}
           />
         </div>
       </div>
