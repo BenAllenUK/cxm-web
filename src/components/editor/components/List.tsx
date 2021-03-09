@@ -100,8 +100,9 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     onBlocksUpsert([newBlock])
   }
 
-  const _onUpsertBlock = (index: number, payload: BlockData, type?: BlockType, pendingUploadFile?: File) => {
-    const block = pendingUploadFile ? createEmptyBlock(index) : blocks[index] || createEmptyBlock(index)
+  const _onUpsertBlock = (index: number, payload: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => {
+    const block = createNew ? createEmptyBlock(index) : blocks[index] || createEmptyBlock(index)
+    console.log('in upsert block', block)
     if (pendingUploadFile) {
       console.log('block id', block.id)
       addPendingUpload({ file: pendingUploadFile, id: block.id })

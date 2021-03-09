@@ -14,13 +14,16 @@
 }
 
 .progress {
-  align-self: flex-start;
-  background-color: black;
-  color: white;
+  position: 'absolute';
+  bottom: 3;
+  left: 300;
+  display: 'flex';
+  flex-direction: 'row';
+  background-color: 'black';
+  color: 'white';
 }
 
 .imageContainer {
-  background-color: black;
 }
 
 .icon {

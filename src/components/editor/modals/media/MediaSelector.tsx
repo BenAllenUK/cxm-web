@@ -2,10 +2,9 @@ import { memo, useState } from 'react'
 import styles from './MediaSelector.module.scss'
 import ImageIcon from 'images/icons/image.svg'
 import { default as NextImage } from 'next/image'
-import { BlockDataImage } from '../../blocks/types'
+import { BlockData, BlockType, MediaSourceType, MediaSourceObject } from '../../blocks/types'
 import SourceTabBar from './SourceTabBar'
 import Source from './Source'
-import { MediaSourceType, MediaSourceObject } from './types'
 
 export const MediaSelector = ({ onUpdate }: IProps) => {
   const [selectedSource, setSelectedSource] = useState<MediaSourceObject>({
@@ -50,7 +49,7 @@ export const MediaSelector = ({ onUpdate }: IProps) => {
 }
 
 interface IProps {
-  onUpdate: (value: BlockDataImage) => void
+  onUpdate: (value: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => void
 }
 
 export default memo(MediaSelector)

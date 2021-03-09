@@ -27,7 +27,6 @@ const SortableItem = (props: IProps) => {
   return (
     <SortableItemRoot index={item.position}>
       <Container
-        id={item.id}
         index={item.position}
         initialHeight={BlockTypeProperties[item.type].initialHeight}
         enableHandle={!modalBlockEnabled}

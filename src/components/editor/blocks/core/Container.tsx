@@ -1,8 +1,7 @@
-import { useCallback, useState, memo, ReactNode, useEffect } from 'react'
+import { useCallback, useState, memo, ReactNode } from 'react'
 import useHover from 'utils/hooks/useHover'
 import { BlockData, BlockType, MediaSourceType } from 'components/editor/blocks/types'
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from '..'
-import { useAsset } from 'components/providers/assets'
 import styles from './Container.module.scss'
 import Controls from './Controls'
 
@@ -15,19 +14,7 @@ const Container = ({
   onAddClick,
   children,
   onUpdate,
-  id,
 }: IProps & IContainerHandlerProps) => {
-  // const { addPendingUpload } = useAsset()
-  const [droppedFile, setDroppedFile] = useState<File | null>(null)
-  if (droppedFile) {
-    console.log('will see this')
-    // addPendingUpload({
-    //   file: droppedFile,
-    //   id: id,
-    // })
-    console.log('wont see this')
-    setDroppedFile(null)
-  }
   const _onDoubleClick = useCallback(
     (event: React.MouseEvent) => {
       onDoubleClick(index, { x: event.clientX, y: event.clientY })
@@ -58,12 +45,12 @@ const Container = ({
           type: MediaSourceType.LOCAL,
         },
         BlockType.IMAGE,
-        files[0]
+        files[0],
+        true
       )
       setActiveDropzone(false)
     }
     await fileReader.readAsDataURL(files[0])
-    setDroppedFile(files[0])
   }
 
   const [hoverRef, isHovered] = useHover<HTMLDivElement>()
@@ -100,7 +87,6 @@ interface IProps {
   children: ReactNode
   index: number
   initialHeight: number
-  id: number
   enableHandle?: boolean
 }
 
@@ -108,7 +94,7 @@ export interface IContainerHandlerProps {
   onClick: (index: number) => void
   onDoubleClick: (index: number, pos: { x: number; y: number }) => void
   onAddClick: (index: number) => void
-  onUpdate: (index: number, arg0: BlockData, type?: BlockType, createNew?: boolean) => void
+  onUpdate: (index: number, arg0: BlockData, type?: BlockType, file?: File, createNew?: boolean) => void
 }
 
 export default memo(Container)

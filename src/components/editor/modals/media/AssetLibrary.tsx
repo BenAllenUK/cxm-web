@@ -1,16 +1,16 @@
 import { memo, useRef, useState } from 'react'
 import styles from './MediaSelector.module.scss'
 import TextInput from 'components/common/text-input/TextInput'
-import { BlockDataImage, MediaSourceType } from '../../blocks/types'
+import { BlockDataImage, MediaSourceType, MediaSourceObject } from '../../blocks/types'
 import { createApi } from 'unsplash-js'
-import { MediaSourceObject } from './types'
 import ImageGrid from './cloudinary/ImageGrid'
 import { fetchPhotos } from './cloudinary/index'
 
 export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps) => {
   const [query, setQuery] = useState('')
   const handleClick = (url: string) => {
-    onUpdate({ value: url, type: MediaSourceType.LIBRARY })
+    console.log('in handle click', url)
+    onUpdate({ value: url, type: source.name === 'Cloudinary' ? MediaSourceType.CLOUDINARY : MediaSourceType.LIBRARY })
   }
   const unsplash = createApi({
     accessKey: source.accessKey,
@@ -41,10 +41,15 @@ export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps
       />
       <div className={styles.grid}>
         {source.name === 'Cloudinary' ? (
-          <ImageGrid pictures={pictures} />
+          <ImageGrid pictures={pictures} handleClick={handleClick} />
         ) : (
           pictures.map((picture) => (
-            <img src={picture.urls.small} className={styles.gridElement} onClick={() => handleClick(picture.urls.full)} />
+            <img
+              key={picture.urls.small}
+              src={picture.urls.small}
+              className={styles.gridElement}
+              onClick={() => handleClick(picture.urls.full)}
+            />
           ))
         )}
       </div>

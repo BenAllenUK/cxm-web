@@ -31,8 +31,8 @@ const Item = ({
     onUpdate(index, value)
   }
 
-  const _onUpdate = (value: BlockDataImage) => {
-    onUpdate(index, value)
+  const _onUpdate = (value: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => {
+    onUpdate(index, value, type, pendingUploadFile, createNew)
   }
 
   const _onDelete = () => {
@@ -122,7 +122,7 @@ interface IProps {
 export interface IItemHandlerProps {
   onTextChange: (index: number, value: string) => void
   onNew: (index: number) => void
-  onUpdate: (index: number, arg0: BlockData, type?: BlockType) => void
+  onUpdate: (index: number, payload: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => void
   onDelete: (index: number) => void
   onFocus: (index: number) => void
   onBlur: (index: number) => void

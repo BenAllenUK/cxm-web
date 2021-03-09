@@ -1,14 +1,12 @@
-import { memo, useRef, useState } from 'react'
-import { useAsset } from 'components/providers/assets'
+import { memo, useRef } from 'react'
 import styles from './MediaSelector.module.scss'
 import { MediaSourceObject, MediaSourceType } from 'components/editor/blocks/types'
-import { BlockDataImage } from '../../blocks/types'
+import { BlockDataImage, BlockData, BlockType } from '../../blocks/types'
 import Button from 'components/common/button/Button'
 import AssetLibrary from './AssetLibrary'
 import TextInput from 'components/common/text-input/TextInput'
 
-const uploadSource = (onUpdate: (value: BlockDataImage) => void, id: number) => {
-  const { addPendingUpload } = useAsset()
+const uploadSource = (onUpdate: (value: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => void) => {
   const hiddenFileInput = useRef<HTMLInputElement>(null)
 
   const handleClick = () => {
@@ -22,7 +20,7 @@ const uploadSource = (onUpdate: (value: BlockDataImage) => void, id: number) => 
     let fileReader = new FileReader()
     fileReader.onload = async function (e) {
       var image = fileReader.result
-      onUpdate({ value: image, type: MediaSourceType.LOCAL })
+      onUpdate({ value: image, type: MediaSourceType.LOCAL }, BlockType.IMAGE, fileUploaded)
     }
 
     await fileReader.readAsDataURL(fileUploaded)
@@ -71,7 +69,7 @@ const embedLink = (onUpdate: (value: BlockDataImage) => void) => {
 export const Source = ({ selected, onUpdate, pictures, setPictures }: IProps) => {
   switch (selected.type) {
     case MediaSourceType.UPLOAD: {
-      return uploadSource(onUpdate, 0)
+      return uploadSource(onUpdate)
     }
     case MediaSourceType.EMBED_LINK: {
       return embedLink(onUpdate)
@@ -84,7 +82,7 @@ export const Source = ({ selected, onUpdate, pictures, setPictures }: IProps) =>
 interface IProps {
   pictures: any[]
   selected: MediaSourceObject
-  onUpdate: (value: BlockDataImage) => void
+  onUpdate: (value: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => void
   setPictures: any
 }
 

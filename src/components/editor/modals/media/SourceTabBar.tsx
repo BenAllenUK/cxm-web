@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import styles from './MediaSelector.module.scss'
-import { MediaSourceType, MediaSourceObject } from './types'
+import { MediaSourceObject } from 'components/editor/blocks/types'
 
 export const SourceTabBar = ({ sources, selectSource, selected, setPictures }: IProps) => {
   return (

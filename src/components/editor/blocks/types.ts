@@ -52,7 +52,7 @@ export type BlockDataText = {
 }
 
 export type BlockDataImage = {
-  value: string | ArrayBuffer | null
+  value: string | null
   type: MediaSourceType
 }
 
@@ -65,7 +65,15 @@ export enum MediaSourceType {
   UPLOAD = 'Upload',
   EMBED_LINK = 'Embed link',
   LIBRARY = 'LIBRARY',
+  CLOUDINARY = 'CLOUDINARY',
   LOCAL = 'LOCAL',
+}
+
+export type MediaSourceObject = {
+  name: string
+  accessKey?: string
+  secretKey?: string
+  type: MediaSourceType
 }
 
 export type BlockDataH1 = BlockDataText
