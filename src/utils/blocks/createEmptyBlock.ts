@@ -1,7 +1,6 @@
 import { Block, BlockType } from '../../components/editor/blocks/types'
 
 function createEmptyBlock(newPosition: number): Block {
-  console.log('creating empty block')
   return {
     type: BlockType.TEXT,
     payload: {

@@ -1,19 +1,22 @@
 type KeyedItem = { [key: number]: number }
+
 type Node = {
   id: number | null
   parentId: number | null
   children: Node[]
 }
+
 // https://typeofnan.dev/an-easy-way-to-build-a-tree-with-object-references/
 function tree<T extends Node>(list: T[]) {
   let root: Node[] = []
   var tree = [...list]
-  console.log(list)
+
   const idMapping: KeyedItem = tree.reduce((prevValue, el, i) => {
     // @ts-ignore
     prevValue[el.id] = i
     return prevValue
   }, {})
+
   tree.forEach((el) => {
     // Handle the root element
     if (el.parentId === null || el.parentId === undefined) {
@@ -28,6 +31,7 @@ function tree<T extends Node>(list: T[]) {
       // console.log(`Orphaned child in data. Parent (${el.parentId}) does not exist on ${el.id}`)
       return
     }
+
     // Add our current el to its parent's `children` array
     parentEl.children = [...(parentEl.children || []), el]
   })

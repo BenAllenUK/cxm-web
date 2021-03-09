@@ -29,7 +29,7 @@ const Container = ({
   const _onAddClick = useCallback(() => {
     onAddClick(index)
   }, [onAddClick, index])
-  let image: string | ArrayBuffer | null = ''
+
   const _onDrop = async (event: any) => {
     event.stopPropagation()
     event.preventDefault()
@@ -37,11 +37,10 @@ const Container = ({
     let fileReader = new FileReader()
 
     fileReader.onload = async function (e) {
-      image = fileReader.result
       onUpdate(
         index,
         {
-          value: image,
+          value: fileReader.result,
           type: MediaSourceType.LOCAL,
         },
         BlockType.IMAGE,

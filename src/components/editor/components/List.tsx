@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect } from 'react'
+import { useRef, useCallback } from 'react'
 import { SortEnd } from 'react-sortable-hoc'
 import { isBlockEmpty } from '../blocks'
 import { BlockData, BlockType, BlockDataText, BlockDataImage, Block, BlockDataImageUpload } from '../blocks/types'
@@ -102,9 +102,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
 
   const _onUpsertBlock = (index: number, payload: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => {
     const block = createNew ? createEmptyBlock(index) : blocks[index] || createEmptyBlock(index)
-    console.log('in upsert block', block)
     if (pendingUploadFile) {
-      console.log('block id', block.id)
       addPendingUpload({ file: pendingUploadFile, id: block.id })
     }
     onBlocksUpsert([

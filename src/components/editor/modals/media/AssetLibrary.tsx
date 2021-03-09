@@ -9,7 +9,6 @@ import { fetchPhotos } from './cloudinary/index'
 export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps) => {
   const [query, setQuery] = useState('')
   const handleClick = (url: string) => {
-    console.log('in handle click', url)
     onUpdate({ value: url, type: source.name === 'Cloudinary' ? MediaSourceType.CLOUDINARY : MediaSourceType.LIBRARY })
   }
   const unsplash = createApi({
@@ -21,7 +20,6 @@ export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps
     if (source.name === 'Cloudinary') {
       fetchPhotos(e.target.value).then((result) => {
         setPictures(result)
-        console.log('cloudinary photos', result)
       })
     } else {
       unsplash.search.getPhotos({ query: e.target.value, orderBy: 'relevant', page: 1, perPage: 10 }).then((result) => {

@@ -137,7 +137,7 @@ export async function getServerSideProps({ params, locale }: GetServerSidePropsC
       notFound: true,
     }
   }
-  console.log('what gets assigned', article?.blocks)
+
   return {
     props: {
       initialApolloState: client.cache.extract(),
