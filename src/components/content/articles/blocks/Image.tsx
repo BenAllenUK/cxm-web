@@ -3,11 +3,11 @@ import styles from './Image.module.scss'
 import { default as NextImage } from 'next/image'
 
 export default function Image({ content }: IProps) {
-  const { source } = content
+  const { value } = content
 
   return (
     <div className={styles.container}>
-      {source && <NextImage layout="intrinsic" width={600} height={400} objectFit={'contain'} src={source} />}
+      {value && <NextImage layout="intrinsic" width={600} height={400} objectFit={'contain'} src={value} />}
     </div>
   )
 }
