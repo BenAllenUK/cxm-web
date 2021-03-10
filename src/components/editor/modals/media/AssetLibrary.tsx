@@ -1,4 +1,4 @@
-import { memo, useRef, useState } from 'react'
+import { memo, useState } from 'react'
 import styles from './MediaSelector.module.scss'
 import TextInput from 'components/common/text-input/TextInput'
 import { BlockDataImage, MediaSourceType, MediaSourceObject } from '../../blocks/types'
@@ -9,15 +9,19 @@ import { fetchPhotos } from './cloudinary/index'
 export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps) => {
   const [query, setQuery] = useState('')
   const handleClick = (url: string) => {
-    onUpdate({ value: url, type: source.name === 'Cloudinary' ? MediaSourceType.CLOUDINARY : MediaSourceType.LIBRARY })
+    onUpdate({ value: url, type: source.type })
   }
+
   const unsplash = createApi({
     accessKey: source.accessKey,
+  } as {
+    accessKey: string
+    apiUrl?: undefined
   })
 
   const onChange = (e: any) => {
     setQuery(e.target.value)
-    if (source.name === 'Cloudinary') {
+    if (source.type === MediaSourceType.CLOUDINARY) {
       fetchPhotos(e.target.value).then((result) => {
         setPictures(result)
       })
@@ -38,7 +42,7 @@ export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps
         className={styles.linkInput}
       />
       <div className={styles.grid}>
-        {source.name === 'Cloudinary' ? (
+        {source.type === MediaSourceType.CLOUDINARY ? (
           <ImageGrid pictures={pictures} handleClick={handleClick} />
         ) : (
           pictures.map((picture) => (
