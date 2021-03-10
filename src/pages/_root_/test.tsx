@@ -1,6 +1,6 @@
 import { initializeApollo } from 'config/graphql'
 import { GetServerSidePropsContext } from 'next'
-import GET_PROJECT_ONE from 'queries/project/GET_PROJECT_ONE.gql'
+import GET_PROJECT_ONE from 'queries/projects/GET_PROJECT_ONE.gql'
 import GET_ARTICLE_ONE from 'queries/articles/GET_ARTICLE_ONE.gql'
 import ARTICLE_FRAGMENT from 'queries/articles/ARTICLE_FRAGMENT.gql'
 import debounceMerged from 'utils/func/debounceMerged'
