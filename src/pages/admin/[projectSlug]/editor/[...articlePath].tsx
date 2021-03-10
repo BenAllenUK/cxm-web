@@ -19,6 +19,7 @@ import GET_ARTICLE_ONE from 'queries/articles/GET_ARTICLE_ONE.gql'
 import GET_PROJECT_ONE from 'queries/project/GET_PROJECT_ONE.gql'
 import AssetsProvider from 'components/providers/assets'
 import { getSession } from '@auth0/nextjs-auth0'
+import getUserSession from 'utils/user/getUserSession'
 
 export default function EditorRoot(props: any) {
   const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
@@ -99,29 +100,24 @@ export function Content() {
   )
 }
 
-/**
- * Block client data only
- */
 export async function getServerSideProps({ params, locale, req, res }: GetServerSidePropsContext) {
-  const session = getSession(req, res)
-  console.log(session)
-
-  if (!session || !session.user) {
+  const session = getUserSession(req, res)
+  if (!session) {
     return {
       props: {},
       redirect: {
-        destination: '/api/login',
+        destination: '/login',
         permanent: false,
       },
     }
   }
+  const { userId, idToken, user } = session
 
-  const client = initializeApollo()
+  const client = initializeApollo({}, idToken)
 
   const projectSlug = params?.projectSlug
   const articlePathRaw = params?.articlePath || []
   const articlePath = Array.isArray(articlePathRaw) ? articlePathRaw.join('/') : articlePathRaw
-  console.log({ articlePath, articlePathRaw })
 
   const { data: projectsData } = await client.query({
     query: GET_PROJECT_ONE,
@@ -148,9 +144,10 @@ export async function getServerSideProps({ params, locale, req, res }: GetServer
     props: {
       initialApolloState: client.cache.extract(),
       initialUserContext: {
-        userId: 1,
+        userId,
         organisationId: 1,
         projects: [],
+        idToken,
       },
       initialEditorContext: {
         projectSlug: project.slug,

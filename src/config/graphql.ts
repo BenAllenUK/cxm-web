@@ -8,8 +8,8 @@ import { ApolloProvider } from '@apollo/client'
 
 export let apolloClient: any
 
-export function initializeApollo(initialState: any = {}): ApolloClient<NormalizedCacheObject> {
-  const _apolloClient = apolloClient ?? createGraphQLClient()
+export function initializeApollo(initialState: any = {}, idToken?: string): ApolloClient<NormalizedCacheObject> {
+  const _apolloClient = apolloClient ?? createGraphQLClient(idToken)
 
   // If your page has Next.js data fetching methods that use Apollo Client,
   // the initial state gets hydrated here
@@ -30,23 +30,22 @@ export function initializeApollo(initialState: any = {}): ApolloClient<Normalize
   return _apolloClient
 }
 
-export function useApollo(initialState: any = {}) {
-  const store = useMemo(() => initializeApollo(initialState), [initialState])
+export function useApollo(initialState: any = {}, idToken?: string) {
+  const store = useMemo(() => initializeApollo(initialState, idToken), [initialState])
   return store
 }
 export const isLoggedInVar = makeVar<boolean>(false) // !!localStorage.getItem('token')
 
 const cache = new InMemoryCache()
 
-export function createGraphQLClient() {
+export function createGraphQLClient(idToken?: string) {
+  const headers = idToken ? { Authorization: `Bearer ${idToken}` } : {}
   if (typeof window === 'undefined') {
     return new ApolloClient({
       ssrMode: true,
       link: new HttpLink({
         uri: process.env.GRAPHQL_ENDPOINT || 'https://cxm.hasura.app/v1/graphql',
-        headers: {
-          'X-Hasura-admin-secret': 'BARBAR',
-        },
+        headers,
       }),
       cache: new InMemoryCache(),
     })
@@ -59,9 +58,7 @@ export function createGraphQLClient() {
       options: {
         reconnect: true,
         connectionParams: {
-          headers: {
-            'X-Hasura-admin-secret': 'BARBAR',
-          },
+          headers,
         },
       },
     }),
