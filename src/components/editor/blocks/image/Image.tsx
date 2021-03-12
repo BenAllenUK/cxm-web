@@ -14,20 +14,19 @@ export const Image = ({ content, onUpdate, onImageUpdate, id }: IProps) => {
   const [showSelector, setShowSelector] = useState(false)
   const [createComment, setCreateComment] = useState(false)
   const [caption, setCaption] = useState(content.caption || '')
-  const [uploadProgress, setUploadProgress] = useState<{ progress: number | null; uploading: boolean }>({
-    progress: null,
+  const [uploadProgress, setUploadProgress] = useState<{ progress: number; uploading: boolean }>({
+    progress: 0,
     uploading: false,
   })
   const [writeNewCaption, setWriteNewCaption] = useState(false)
   const { upload, pendingUploads, removePendingUpload } = useAsset()
 
   const _uploadFile = useCallback(async () => {
-    setUploadProgress({ ...uploadProgress, uploading: true })
     const response = await upload(pendingUploads[id].file, pendingUploads[id].file.type, (progress) => {
       setUploadProgress({ ...uploadProgress, progress: progress })
     })
     removePendingUpload(id)
-    setUploadProgress({ uploading: false, progress: null })
+    setUploadProgress({ uploading: false, progress: 0 })
     if (!response) {
       console.log(`Error Uploading Image`)
       return
@@ -37,9 +36,13 @@ export const Image = ({ content, onUpdate, onImageUpdate, id }: IProps) => {
 
   useEffect(() => {
     if (pendingUploads[id] && !uploadProgress.uploading) {
+      console.log('uploading...')
+      setUploadProgress({ ...uploadProgress, uploading: true })
+
+      console.log(uploadProgress)
       _uploadFile()
     }
-  }, [_uploadFile, pendingUploads, uploadProgress])
+  }, [_uploadFile, pendingUploads, uploadProgress, setUploadProgress])
 
   const _setShowSelector = () => {
     setShowSelector(!showSelector)
@@ -105,11 +108,11 @@ export const Image = ({ content, onUpdate, onImageUpdate, id }: IProps) => {
         <div className={styles.mediaControls}>
           <MediaControls.Component setWriteNewCaption={_writeNewCaption} setCreateComment={_setCreateComment} />
         </div>
-        {uploadProgress.progress && (
-          <div className={styles.progress}>
-            <div className={styles.ldsRing} /> {Math.round(uploadProgress.progress * 100)}%
-          </div>
-        )}
+        {/* {uploadProgress.progress && ( */}
+        <div className={styles.progress}>
+          <div className={styles.ldsRing} /> {Math.round(uploadProgress.progress * 100)}%
+        </div>
+        {/* )} */}
       </div>
       <div>
         {(writeNewCaption || caption) && (

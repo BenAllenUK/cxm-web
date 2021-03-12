@@ -3,7 +3,6 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { i18n } = require('./next-i18next.config')
 
 module.exports = {
-  
   i18n,
   webpack(config, { buildId, dev, isServer, defaultLoaders, webpack }) {
     config.module.rules.push({
@@ -55,7 +54,7 @@ module.exports = {
     return config
   },
   images: {
-    domains: ['localhost', 'api.omnea.co', 'omnea-upload.s3.amazonaws.com', 'images.unsplash.com', 'omnea-upload.s3.amazonaws.com'],
+    domains: ['localhost', 'api.omnea.co', 'omnea-upload.s3.amazonaws.com', 'images.unsplash.com'],
   },
 
   env: {

@@ -13,7 +13,7 @@ const Container = ({
   onClick,
   onAddClick,
   children,
-  onUpdate,
+  onImageUpdate,
 }: IProps & IContainerHandlerProps) => {
   const [hoverRef, isHovered] = useHover<HTMLDivElement>()
   const [activeDropzone, setActiveDropzone] = useState(false)
@@ -43,7 +43,7 @@ const Container = ({
       let fileReader = new FileReader()
 
       fileReader.onload = async (e) => {
-        onUpdate(
+        onImageUpdate(
           multipleFileIndex,
           {
             value: fileReader.result,
@@ -104,7 +104,8 @@ export interface IContainerHandlerProps {
   onClick: (index: number) => void
   onDoubleClick: (index: number, pos: { x: number; y: number }) => void
   onAddClick: (index: number) => void
-  onUpdate: (index: number, arg0: BlockData, type?: BlockType, file?: File, createNew?: boolean) => void
+  onUpdate: (index: number, arg0: BlockData) => void
+  onImageUpdate: (index: number, arg0: BlockData, type?: BlockType, file?: File, createNew?: boolean) => void
 }
 
 export default memo(Container)
