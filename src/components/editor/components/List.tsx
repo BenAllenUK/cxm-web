@@ -151,7 +151,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
 
     const lastItemIndex = blocks.length - 1
     const lastBlock = blocks[lastItemIndex]
-    if (lastBlock.type === BlockType.TEXT && (lastBlock.payload as BlockDataText).value === '') {
+    if (lastBlock && lastBlock.type === BlockType.TEXT && (lastBlock.payload as BlockDataText).value === '') {
       setFocusIndex(lastItemIndex)
       return
     }
