@@ -68,6 +68,8 @@ export const BlockTypeProperties = {
     isEditable: true,
     initialPayload: {
       value: '',
+      comments: [],
+      caption: '',
     },
   },
   [BlockType.TEXT]: {

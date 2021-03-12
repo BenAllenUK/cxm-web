@@ -149,7 +149,6 @@ export async function getServerSideProps({ params, locale }: GetServerSidePropsC
       initialEditorContext: {
         projectSlug: project.slug,
         articleSlug: article.slug,
-        blocks: article.blocks,
       },
       ...(await serverSideTranslations(locale, ['common', 'editor'])),
     },

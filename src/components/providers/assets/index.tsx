@@ -29,7 +29,7 @@ export const useAsset = () => useContext(Context)
 const Provider = ({ children }: IProps) => {
   const [generateAssetUrl] = useGenerateUploadAssetUrlMutation()
   const [readAssetUrl] = useGenerateReadAssetUrlMutation()
-  const [context, setContext] = useState<Context>(initialState)
+  const [pendingUploads, setPendingUploads] = useState<Context>(initialState)
   const upload = async (data: any, contentType: string, onUploadProgress: (progress: number) => any = (i) => null) => {
     const response = await generateAssetUrl({ variables: { contentType } })
     const url = response.data?.assets_generate_upload_url?.url
@@ -57,22 +57,22 @@ const Provider = ({ children }: IProps) => {
   }
 
   const addPendingUpload = (pendingUpload: BlockDataImageUpload) => {
-    setContext((prevContext) => ({
-      ...prevContext,
-      pendingUploads: { ...prevContext.pendingUploads, [pendingUpload.id]: pendingUpload },
+    setPendingUploads((prevUploads) => ({
+      ...prevUploads,
+      [pendingUpload.id]: pendingUpload,
     }))
   }
 
   const removePendingUpload = (id: number) => {
-    setContext((prevContext) => {
-      const newPendingUploads = { ...prevContext.pendingUploads }
+    setPendingUploads((prevUploads) => {
+      const newPendingUploads = { ...prevUploads.pendingUploads }
       delete newPendingUploads[id]
-      return { ...prevContext, pendingUploads: newPendingUploads }
+      return { ...prevUploads, pendingUploads: newPendingUploads }
     })
   }
 
   return (
-    <Context.Provider value={{ ...context, upload, getSecureUrl, addPendingUpload, removePendingUpload }}>
+    <Context.Provider value={{ ...pendingUploads, upload, getSecureUrl, addPendingUpload, removePendingUpload }}>
       {children}
     </Context.Provider>
   )

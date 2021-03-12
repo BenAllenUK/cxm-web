@@ -19,17 +19,22 @@ export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps
     apiUrl?: undefined
   })
 
-  const onChange = (e: any) => {
+  const onChange = async (e: any) => {
     setQuery(e.target.value)
     if (source.type === MediaSourceType.CLOUDINARY) {
-      fetchPhotos(e.target.value).then((result) => {
-        setPictures(result)
-      })
+      const result = await fetchPhotos(e.target.value)
+      setPictures(result)
     } else {
-      unsplash.search.getPhotos({ query: e.target.value, orderBy: 'relevant', page: 1, perPage: 10 }).then((result) => {
-        setPictures(result.response?.results)
-      })
+      const result = await unsplash.search.getPhotos({ query: e.target.value, orderBy: 'relevant', page: 1, perPage: 10 })
+      setPictures(result.response?.results)
     }
+  }
+
+  const LibraryPicture = ({ picture }: any) => {
+    const _handleClick = () => {
+      handleClick(picture.urls.full)
+    }
+    return <img key={picture.urls.small} src={picture.urls.small} className={styles.gridElement} onClick={_handleClick} />
   }
 
   return (
@@ -43,16 +48,11 @@ export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps
       />
       <div className={styles.grid}>
         {source.type === MediaSourceType.CLOUDINARY ? (
-          <ImageGrid pictures={pictures} handleClick={handleClick} />
+          <ImageGrid pictures={pictures || []} handleClick={handleClick} />
         ) : (
-          pictures.map((picture) => (
-            <img
-              key={picture.urls.small}
-              src={picture.urls.small}
-              className={styles.gridElement}
-              onClick={() => handleClick(picture.urls.full)}
-            />
-          ))
+          pictures.map((picture) => {
+            return <LibraryPicture picture={picture} />
+          })
         )}
       </div>
     </div>

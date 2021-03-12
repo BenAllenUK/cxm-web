@@ -15,6 +15,11 @@ const Container = ({
   children,
   onUpdate,
 }: IProps & IContainerHandlerProps) => {
+  const [hoverRef, isHovered] = useHover<HTMLDivElement>()
+  const [activeDropzone, setActiveDropzone] = useState(false)
+  const [multipleFileIndex, setMultipleFileIndex] = useState(index)
+  const isVisible = enableHandle && isHovered
+
   const _onDoubleClick = useCallback(
     (event: React.MouseEvent) => {
       onDoubleClick(index, { x: event.clientX, y: event.clientY })
@@ -34,38 +39,46 @@ const Container = ({
     event.stopPropagation()
     event.preventDefault()
     let files = [...event.dataTransfer.files]
-    let fileReader = new FileReader()
 
-    fileReader.onload = async function (e) {
-      onUpdate(
-        index,
-        {
-          value: fileReader.result,
-          type: MediaSourceType.LOCAL,
-        },
-        BlockType.IMAGE,
-        files[0],
-        true
-      )
-      setActiveDropzone(false)
-    }
-    await fileReader.readAsDataURL(files[0])
+    files.forEach(async (file) => {
+      let fileReader = new FileReader()
+
+      fileReader.onload = async (e) => {
+        onUpdate(
+          multipleFileIndex,
+          {
+            value: fileReader.result,
+            type: MediaSourceType.LOCAL,
+          },
+          BlockType.IMAGE,
+          files[0],
+          true
+        )
+        setActiveDropzone(false)
+        setMultipleFileIndex(multipleFileIndex + 1)
+      }
+      await fileReader.readAsDataURL(file)
+    })
+    setMultipleFileIndex(index)
   }
 
-  const [hoverRef, isHovered] = useHover<HTMLDivElement>()
-  const [activeDropzone, setActiveDropzone] = useState(false)
-  const isVisible = enableHandle && isHovered
+  const onDragOver = useCallback(
+    (event: any) => {
+      event.preventDefault()
+      setActiveDropzone(true)
+    },
+    [setActiveDropzone]
+  )
 
-  const onDragOver = (active: boolean, event: any) => {
-    event.preventDefault()
-    setActiveDropzone(active)
+  const _setActiveDropzoneFalse = () => {
+    setActiveDropzone(false)
   }
 
   return (
     <div ref={hoverRef}>
       <div
-        onDragOver={(e) => onDragOver(true, e)}
-        onDragLeaveCapture={() => setActiveDropzone(false)}
+        onDragOver={onDragOver}
+        onDragLeaveCapture={_setActiveDropzoneFalse}
         className={activeDropzone ? styles.dropzoneBlock : styles.block}
         style={{
           marginTop: BLOCK_CONTAINER_VERTICAL_PADDING,
@@ -73,7 +86,7 @@ const Container = ({
         }}
         onClick={_onClick}
         onDoubleClick={_onDoubleClick}
-        onDrop={(e) => _onDrop(e)}
+        onDrop={_onDrop}
       >
         <Controls initialHeight={initialHeight} visible={isVisible} onAddClick={_onAddClick} />
         {children}

@@ -13,6 +13,14 @@ export const MediaSelector = ({ onUpdate }: IProps) => {
   })
   const [pictures, setPictures] = useState<[]>([])
 
+  const _selectSource = (item: MediaSourceObject) => {
+    setSelectedSource(item)
+  }
+
+  const _setPictures = (item: any) => {
+    setPictures(item)
+  }
+
   let sources: MediaSourceObject[] = [
     { name: MediaSourceType.UPLOAD, type: MediaSourceType.UPLOAD },
     { name: MediaSourceType.EMBED_LINK, type: MediaSourceType.EMBED_LINK },
@@ -28,7 +36,7 @@ export const MediaSelector = ({ onUpdate }: IProps) => {
       name: 'Cloudinary',
       accessKey: '',
       secretKey: '',
-      type: MediaSourceType.LIBRARY,
+      type: MediaSourceType.CLOUDINARY,
     },
   ]
   sources = sources.concat(libraries)
@@ -36,12 +44,7 @@ export const MediaSelector = ({ onUpdate }: IProps) => {
   return (
     <div className={styles.root}>
       <div className={styles.container}>
-        <SourceTabBar
-          sources={sources}
-          selectSource={setSelectedSource}
-          selected={selectedSource.name}
-          setPictures={setPictures}
-        />
+        <SourceTabBar sources={sources} selectSource={_selectSource} selected={selectedSource.name} setPictures={_setPictures} />
         <Source selected={selectedSource} onUpdate={onUpdate} pictures={pictures} setPictures={setPictures} />
       </div>
     </div>

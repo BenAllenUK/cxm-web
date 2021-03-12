@@ -54,6 +54,14 @@ export type BlockDataText = {
 export type BlockDataImage = {
   value: string | null
   type: MediaSourceType
+  caption: string | null
+  comments: BlockDataImageComment[]
+}
+
+export type BlockDataImageComment = {
+  user: string
+  comment: string
+  time: string
 }
 
 export type BlockDataImageUpload = {
