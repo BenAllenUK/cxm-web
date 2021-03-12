@@ -19,19 +19,21 @@ const UploadExample = ({}: IProps) => {
     if (!file) {
       return
     }
-    const response = await upload(file, file.type, (progress) => {
+    await upload(file, file.type, (progress) => {
       console.log(progress)
       setProgress(progress)
+    }).then((response) => {
+      if (!response) {
+        console.log(`Error`)
+        return
+      }
+
+      const { key } = response
+      console.log(`Done!`)
+      setTimeout(() => {
+        setUploadedKey(key)
+      }, 3000)
     })
-
-    if (!response) {
-      console.log(`Error`)
-      return
-    }
-
-    const { key } = response
-    console.log(`Done!`)
-    setUploadedKey(key)
   }
 
   const HOST = process.env.OMNEA_UPLOAD_URL
