@@ -50,7 +50,7 @@ export function ArrowButton({
   )
 }
 
-export function AddButton(props: HTMLAttributes<HTMLDivElement> & { disable: boolean }) {
+export function AddButton(props: HTMLAttributes<HTMLDivElement> & { disable?: boolean }) {
   const { disable, ...otherProps } = props
 
   return (
@@ -66,7 +66,7 @@ export function AddButton(props: HTMLAttributes<HTMLDivElement> & { disable: boo
   )
 }
 
-export function MoreButton(props: HTMLAttributes<HTMLDivElement> & { disable: boolean }) {
+export function MoreButton(props: HTMLAttributes<HTMLDivElement> & { disable?: boolean }) {
   const { disable, ...otherProps } = props
   return (
     <div
@@ -82,12 +82,12 @@ export function MoreButton(props: HTMLAttributes<HTMLDivElement> & { disable: bo
 }
 
 interface IProps {
-  selected: boolean
-  disable: boolean
+  selected?: boolean
+  disable?: boolean
   children: ReactNode
   subList?: boolean
-  isOpen: boolean
-  innerStyle: CSSProperties
+  isOpen?: boolean
+  innerStyle?: CSSProperties
   onAddClick: (e: React.MouseEvent<HTMLDivElement>) => void
   onMoreClick: (e: React.MouseEvent<HTMLDivElement>) => void
   onArrowClick: (e: React.MouseEvent<HTMLDivElement>) => void

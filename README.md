@@ -1,42 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Setup
 
-## Getting Started
+1) Run `yarn install`
+2) Modify `sudo nano /etc/hosts` and add this line:
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
+```
+127.0.0.1       omnea.local admin.omnea.local docs.omnea.local api.omnea.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3) Run `yarn dev`
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+4) Open [http://omnea.local:3000](http://omnea.local:3000) with your browser to see the result.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Example hosts file
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
+```
+##
+# Host Database
+#
+# localhost is used to configure the loopback interface
+# when the system is booting.  Do not change this entry.
+##
+127.0.0.1       localhost omnea.local admin.omnea.local docs.omnea.local api.omnea.local
+255.255.255.255 broadcasthost
+::1             localhost
+# Added by Docker Desktop
+# To allow the same kube context to work on the host and the container:
+# End of section
+```
 ## Env vars
 
 Environment variables need to be added to multiple files:
 - `.envrc` (ignored via git)
-- `next.config.js`
+- `next.config.js` 
 - `serverless.yml`
 - All workflows under `.github/workflows`
+- AWS System manager (https://console.aws.amazon.com/systems-manager/parameters/?region=us-east-1&tab=Table)
+
+

@@ -10,9 +10,9 @@ function parseMenu(data: Article[]): MenuItem[] {
   const menuItemsList = data.map((item) => ({
     id: item.id,
     label: item.title,
-    slug: item.slug,
     children: [],
     parentId: item.parentId || null,
+    path: item.path,
   }))
   const menuItemsTree = tree<MenuItem>(menuItemsList)
   return menuItemsTree as MenuItem[]

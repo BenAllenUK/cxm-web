@@ -2,20 +2,24 @@ import * as Storage from 'config/storage'
 import { createContext, useState, useContext, useEffect, cloneElement } from 'react'
 
 interface Context {
+  organisationSlug: string | null
   projectSlug: string | null
-  articleSlug: string | null
+  articlePath: string | null
 }
 
 interface ContextActions extends Context {
-  setProjectSlug: (slug: string) => void
-  setArticleSlug: (slug: string) => void
+  setOrganisation: (organisationSlug: string, projectSlug: string, path: string | null) => void
+  setProject: (projectSlug: string, path: string | null) => void
+  setArticlePath: (path: string) => void
 }
 
 const EditorContext = createContext<ContextActions>({
+  organisationSlug: null,
   projectSlug: null,
-  articleSlug: null,
-  setProjectSlug: () => {},
-  setArticleSlug: () => {},
+  articlePath: null,
+  setOrganisation: () => {},
+  setProject: () => {},
+  setArticlePath: () => {},
 })
 
 export const useEditor = () => useContext(EditorContext)
@@ -31,15 +35,23 @@ export default function EditorProvider({ initialContext, children }: { initialCo
     Storage.setLocalItem(KEY, data)
   }
 
-  const setArticleSlug = (slug: string) => {
-    setContextData({ ...context, articleSlug: slug })
+  const setArticlePath = (path: string | null) => {
+    setContextData({ ...context, articlePath: path })
   }
 
-  const setProjectSlug = (slug: string) => {
-    setContextData({ ...context, projectSlug: slug })
+  const setProject = (projectSlug: string, articlePath: string | null) => {
+    setContextData({ ...context, projectSlug, articlePath })
+  }
+
+  const setOrganisation = (organisationSlug: string, projectSlug: string, articlePath: string | null) => {
+    setContextData({ ...context, organisationSlug, projectSlug, articlePath })
   }
 
   const localState = context // Storage.getLocalItem(KEY)
 
-  return <EditorContext.Provider value={{ ...localState, setArticleSlug, setProjectSlug }}>{children}</EditorContext.Provider>
+  return (
+    <EditorContext.Provider value={{ ...localState, setArticlePath, setProject, setOrganisation }}>
+      {children}
+    </EditorContext.Provider>
+  )
 }

@@ -1,0 +1,14 @@
+#import "./PROJECT_FRAGMENT.gql"
+#import "../articles/ARTICLE_FRAGMENT.gql"
+
+query GetProjectOne($slug: String!) {
+  projects(where: { slug: { _eq: $slug } }) {
+    ...Project
+    articles: articles(where: { archived: { _eq: false } }) {
+      ...Article
+    }
+    archivedArticles: articles(where: { archived: { _eq: true } }) {
+      ...Article
+    }
+  }
+}

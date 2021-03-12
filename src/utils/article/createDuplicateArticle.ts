@@ -1,4 +1,4 @@
-import { Article } from '../../operations/articles/types'
+import { Article } from 'operations/articles/types'
 
 function createDuplicateArticle(article: Article): Article {
   return {
@@ -7,7 +7,7 @@ function createDuplicateArticle(article: Article): Article {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: `${article.title} Copy`,
-    slug: `${article.slug}-copy`,
+    path: `${article.path}-copy`,
   }
 }
 

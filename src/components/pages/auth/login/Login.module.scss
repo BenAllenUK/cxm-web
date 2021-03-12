@@ -1,0 +1,36 @@
+@import 'styles/variables';
+
+.background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url('/grid.png');
+}
+
+.title {
+  font-family: 'Means';
+  color: $text1-color;
+  font-size: 50px;
+}
+
+.container {
+  width: 600px;
+  margin-bottom: 100px;
+}
+
+.loginButton {
+  border: $text1-color solid 1px;
+  color: $text1-color;
+  padding: 10px;
+  width: 200px;
+  margin-top: 20px;
+  border: 1px solid $text1-color;
+  cursor: pointer;
+  display: block;
+
+  &:hover {
+    background-color: $text1-color;
+    color: #fff;
+  }
+}

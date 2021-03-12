@@ -1,5 +1,8 @@
 import createPositionModal from 'components/common/modals/position'
-import { createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
+import { insertSpanWithClassName } from 'components/editor/utils/html'
+import { createContext, ReactNode, RefObject, useCallback, useContext, useLayoutEffect, useRef, useState } from 'react'
+import { getSelectionMidPosition } from 'utils/modals/getSelectionMidPosition'
+import { updateBoundedPosition } from 'utils/modals/updateBoundedPosition'
 import { useLinkModal } from '../link'
 import { useTextStyleModal } from '../text-style'
 import TextControlUncontrolled from './TextControlUncontrolled'
@@ -9,7 +12,7 @@ const { Provider, useModal } = createPositionModal()
 export const useTextControlModal = useModal
 
 const Component = (props: IProps) => {
-  const { enabled, position, hideControls } = useTextControlModal()
+  const { enabled, position, hideControls, rootRef } = useTextControlModal()
   const { showControls: showTextStyleModal } = useTextStyleModal()
   const { showControls: showLinkModal } = useLinkModal()
 
@@ -17,22 +20,15 @@ const Component = (props: IProps) => {
     if (!position) {
       return
     }
-
-    // const s = window.getSelection()
-    // const oRange = s.getRangeAt(0) //get the text range
-    // console.log(oRange)
-    // console.log(oRange.getClientRects())
-    // const oRect = oRange.getBoundingClientRect()
-
-    // console.log(oRect)
-
-    showTextStyleModal(position)
+    showTextStyleModal(position || { x: 0, y: 0 })
   }
 
   const _onShowLinkModal = () => {
     if (!position) {
       return
     }
+
+    insertSpanWithClassName('highlight')
 
     showLinkModal(position)
   }
@@ -47,11 +43,9 @@ const Component = (props: IProps) => {
     <>
       {enabled && position && (
         <TextControlUncontrolled
+          position={position}
+          rootRef={rootRef}
           onDismiss={hideControls}
-          style={{
-            left: position.x,
-            top: position.y,
-          }}
           onShowTextStyleModal={_onShowTextStyleModal}
           onShowLinkModal={_onShowLinkModal}
           onShowConversionModal={_onShowConversionModal}

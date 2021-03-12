@@ -1,7 +1,7 @@
 import { BlockType } from 'components/editor/blocks/types'
 import Content from 'components/content'
 import { createGraphQLClient } from 'config/graphql'
-import GET_PROJECTS from 'queries/project/GET_PROJECTS.gql'
+import GET_PROJECTS from 'queries/projects/GET_PROJECTS.gql'
 
 export default function ContentPage({ blocks }: any) {
   return <Content blocks={blocks} />

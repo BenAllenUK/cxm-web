@@ -1,6 +1,7 @@
-import { useState, useContext, MouseEvent, memo } from 'react'
+import { useState, useContext, MouseEvent, memo, useRef } from 'react'
 import MenuIcon from 'images/icons/menu.svg'
 import SearchIcon from 'images/icons/search.svg'
+import { Organisation } from 'operations/organisations/types'
 
 import Title from './Title'
 
@@ -22,6 +23,8 @@ import { BlockType } from 'components/editor/blocks/types'
 import createArticleEmpty from 'utils/article/createEmptyArticle'
 import { useSidebarPageControlsContext } from './modals/page-controls/PageControlsTargetContext'
 import { Article } from 'operations/articles/types'
+import createDefaultOpenState from 'utils/menu/createDefaultOpenState'
+import { useOrganisationProjectMenuModal } from './modals/organisation-project-menu'
 
 export const SIDEBAR_INDENT = 20
 
@@ -52,29 +55,32 @@ export type Section = {
 export type MenuItem = {
   id: number
   label: string
-  slug: string
   children: MenuItem[]
   parentId: number | null
+  path: string
 }
 
-export function ControlledSidebar({ currentViewingArticleId, project, articles, onViewArticle, onUpsertArticles }: IProps) {
+export function ControlledSidebar({ path, currentViewingArticleId, project, articles, onViewArticle, onUpsertArticles }: IProps) {
   // TODO: Assumes ids have different numbers
 
+  const { showControls: showOrganisationProjectMenuModal } = useOrganisationProjectMenuModal()
   const { showControls } = usePageControlModals()
   const { showControls: showSearchModal } = useSearchModal()
 
-  const [openState, setOpenState] = useState({})
+  const defaultOpenState = createDefaultOpenState(path)
+
+  const [openState, setOpenState] = useState(defaultOpenState)
 
   const onMenuItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
-    onViewArticle(item.slug)
+    onViewArticle(item.path)
   }
 
   const onMenuAddItemClick = async (e: MouseEvent<HTMLDivElement>, section: Section, item: MenuItem) => {
-    const newArticle = createArticleEmpty(item.id, 999) //TODO: update position
+    const newArticle = createArticleEmpty(item.id, item.path, 999) //TODO: update position
     const [newArticleItem] = await onUpsertArticles([newArticle])
 
     if (newArticleItem) {
-      onViewArticle(newArticleItem.slug)
+      onViewArticle(item.path)
     }
 
     setOpenState(
@@ -107,11 +113,11 @@ export function ControlledSidebar({ currentViewingArticleId, project, articles, 
   const { locationRefs } = useMenuItemRefs()
 
   const _onSidebarAddItemClick = async () => {
-    const newArticle = createArticleEmpty(null, 9999)
+    const newArticle = createArticleEmpty(null, null, 9999)
     const [newArticleItem] = await onUpsertArticles([newArticle])
 
     if (newArticleItem) {
-      onViewArticle(newArticleItem.slug)
+      onViewArticle(newArticleItem.path)
     }
   }
 
@@ -127,10 +133,22 @@ export function ControlledSidebar({ currentViewingArticleId, project, articles, 
     { id: 0, label: 'CONTENT', items: parseMenu(articles), suffix: <AddButton onClick={_onSidebarAddItemClick} /> },
   ]
 
+  const titleRef = useRef<HTMLDivElement>(null)
+
+  const _onTitleClick = () => {
+    const bounds = titleRef.current?.getBoundingClientRect()
+    if (!bounds) {
+      return
+    }
+    const { left, top, height } = bounds
+    showOrganisationProjectMenuModal({ x: left + 10, y: top + height })
+  }
+
   return (
     <>
       <div className={styles.container}>
-        <Title name={project.name} />
+        <div className={styles.dragable} />
+        <Title ref={titleRef} name={project.name} onClick={_onTitleClick} />
         <ul className={styles.projectMenu}>
           {appMenu.map((item, index) => (
             <li key={index} onClick={() => _onAppMenuClick(item.id)}>
@@ -170,6 +188,7 @@ export function ControlledSidebar({ currentViewingArticleId, project, articles, 
 }
 
 interface IProps {
+  path: Article[]
   currentViewingArticleId?: number | null
 
   project: {
@@ -178,7 +197,8 @@ interface IProps {
   }
   articles: Article[]
 
-  onViewArticle: (slug: string) => void
+  onViewProject: (orgSlug: string, projSlug: string) => void
+  onViewArticle: (path: string) => void
   onUpsertArticles: (articles: Article[]) => Promise<Article[]>
 }
 
@@ -189,6 +209,7 @@ const ControlledSidebarWithModals = (props: IProps) => {
       articles={props.articles}
       onUpsertArticles={props.onUpsertArticles}
       onViewArticle={props.onViewArticle}
+      onViewProject={props.onViewProject}
     >
       <ControlledSidebar {...props} articles={props.articles} />
     </Modals>

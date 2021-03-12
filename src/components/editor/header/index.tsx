@@ -1,15 +1,15 @@
-import MUIBreadcrumbs from '@material-ui/core/Breadcrumbs'
-import MUILink from '@material-ui/core/Link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faArrowRight, faEllipsisH } from '@fortawesome/free-solid-svg-icons'
-import Button from 'components/common/button/Button'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import MoreIcon from 'images/icons/more.svg'
 import styles from './Header.module.scss'
 import { usePageControlModal } from '../modals/page-controls'
 import { useRef } from 'react'
+import { Article } from 'operations/articles/types'
+import Breadcrumbs from 'components/common/breadcrumbs'
+import Button from 'components/common/button/Button'
 
-export const Header = ({ loading }: IProps) => {
+export const Header = ({ loading, path, onViewArticle }: IProps) => {
   const { showControls } = usePageControlModal()
 
   const ref = useRef<HTMLDivElement>(null)
@@ -23,6 +23,12 @@ export const Header = ({ loading }: IProps) => {
 
   const _onPublishClick = () => {}
 
+  const _onNavigateClick = () => {}
+
+  const _onBackClick = () => {}
+
+  const _onForwardClick = () => {}
+
   return (
     <div>
       {loading ? <LinearProgress /> : <div style={{ height: 4 }}></div>}
@@ -30,22 +36,16 @@ export const Header = ({ loading }: IProps) => {
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <div className={styles.historyControls}>
-            <Button className={styles.button}>
-              <FontAwesomeIcon icon={faArrowLeft} />
-            </Button>
-            <Button className={styles.button}>
-              <FontAwesomeIcon icon={faArrowRight} />
-            </Button>
+            <div className={styles.historyControlsContainer}>
+              <Button className={styles.button} onClick={_onBackClick}>
+                <FontAwesomeIcon icon={faArrowLeft} />
+              </Button>
+              <Button className={styles.button}>
+                <FontAwesomeIcon icon={faArrowRight} onClick={_onForwardClick} />
+              </Button>
+            </div>
           </div>
-          <div className={styles.historyBreadcrumbs}>
-            <MUIBreadcrumbs maxItems={4}>
-              <MUILink>Foo</MUILink>
-              <MUILink>Bar</MUILink>
-              <MUILink>Bar</MUILink>
-              <MUILink>Bar</MUILink>
-              <MUILink>Bar</MUILink>
-            </MUIBreadcrumbs>
-          </div>
+          {path && <Breadcrumbs path={path} onViewArticle={onViewArticle} />}
         </div>
         <div className={styles.headerRight}>
           <Button onClick={_onPublishClick} style={{ alignSelf: 'center' }} className={styles.button}>
@@ -62,7 +62,9 @@ export const Header = ({ loading }: IProps) => {
 }
 
 interface IProps {
-  loading: boolean
+  loading?: boolean
+  path: Article[]
+  onViewArticle: (path: string) => void
 }
 
 export default Header

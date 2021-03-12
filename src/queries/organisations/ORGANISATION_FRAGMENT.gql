@@ -1,0 +1,5 @@
+fragment Organisation on organisations {
+  id
+  name
+  slug
+}

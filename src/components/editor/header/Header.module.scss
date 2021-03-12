@@ -15,8 +15,16 @@
 
 .historyControls {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   margin: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.historyControlsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .historyControlsButton {
@@ -29,10 +37,6 @@
     background-color: $line-color;
     color: $text2-color;
   }
-}
-
-.historyBreadcrumbs {
-  margin: 5px;
 }
 
 .headerRight {

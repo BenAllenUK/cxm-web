@@ -1,12 +1,13 @@
 import { IOptionSections, OptionType } from 'components/common/option-controls'
 import { useTranslation } from 'next-i18next'
-import { createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
+import { createContext, ReactNode, RefObject, useCallback, useContext, useLayoutEffect, useRef, useState } from 'react'
 import LinkUncontrolled from './LinkUncontrolled'
 import ExternalLinkIcon from 'images/icons/external-link.svg'
 import LinkIcon from 'images/icons/link.svg'
 import { isURL } from 'components/editor/utils/links'
 import createPositionModal from 'components/common/modals/position'
 import { Article } from 'operations/articles/types'
+import { updateBoundedPosition } from 'utils/modals/updateBoundedPosition'
 
 enum LinkSections {
   Results = 0,
@@ -22,7 +23,7 @@ const { Provider, useModal } = createPositionModal()
 export const useLinkModal = useModal
 
 const Component = ({ articles, ...otherProps }: IProps) => {
-  const { enabled, position, hideControls } = useLinkModal()
+  const { enabled, position, hideControls, rootRef } = useLinkModal()
   const [filterText, setFilterText] = useState<string | null>(null)
 
   const { t } = useTranslation(['editor'])
@@ -90,8 +91,9 @@ const Component = ({ articles, ...otherProps }: IProps) => {
     <>
       {enabled && position && (
         <LinkUncontrolled
+          rootRef={rootRef}
+          position={position}
           sections={filterText ? sections : []}
-          style={{ left: position.x, top: position.y }}
           filterText={filterText}
           onDismiss={hideControls}
           onValueChange={_onValueChange}

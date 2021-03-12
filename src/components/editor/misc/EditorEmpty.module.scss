@@ -1,0 +1,16 @@
+@import 'styles/variables';
+
+.container {
+  width: 100%;
+  height: 100%;
+  padding-top: 200px;
+  text-align: center;
+}
+
+.title {
+  color: $text1-color;
+}
+
+.subtitle {
+  color: $text2-color;
+}

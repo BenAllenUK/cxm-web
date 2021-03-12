@@ -1,4 +1,4 @@
-import { Block, BlockType } from '../../components/editor/blocks/types'
+import { Block, BlockType } from 'components/editor/blocks/types'
 
 function createEmptyBlock(newPosition: number): Block {
   return {

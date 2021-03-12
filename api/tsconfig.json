@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["es2017","dom"],
+    "allowJs": true,
+    "baseUrl": "src",
+    "outDir": ".build",
+    "rootDir": "./",
+    "strict": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true
+  },
+  "exclude": [
+    "tools",
+    "lib",
+    "build",
+    "src/**/__tests__",
+    "src/**/__tests__util",
+    "tsconfig-paths-bootstrap.js" 
+  ]
+}

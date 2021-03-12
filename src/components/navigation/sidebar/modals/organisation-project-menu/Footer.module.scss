@@ -1,0 +1,21 @@
+@import 'styles/variables';
+@import 'components/common/button/Button.module.scss';
+
+.container {
+  // padding: 0 6px;
+  background-color: rgb(251, 250, 249);
+}
+
+.line {
+  padding: 0 6px;
+  border-top: 1px $border-color solid;
+}
+
+.button {
+  @extend .buttonBase;
+  padding: 10px 10px;
+  text-align: left;
+  font-size: 12px;
+  justify-content: flex-start;
+  border-radius: 0;
+}

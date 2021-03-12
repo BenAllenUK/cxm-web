@@ -1,5 +1,5 @@
-import { Article } from '../../operations/articles/types'
-import { ArticleBlocksFragment } from '../../types/types'
+import { Article } from 'operations/articles/types'
+import { ArticleBlocksFragment } from 'types/types'
 import { fromBlockFragments, toBlockFragments } from '../blocks/parse'
 
 export function fromArticleFragments(data: ArticleBlocksFragment[]): Article[] {

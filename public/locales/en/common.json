@@ -2,9 +2,31 @@
   "name": "Omnea",
   "welcome": "ENWelcome",
   "loading": "Loading...",
+
   "title": "{{title}} | Omnea ",
+  "notFound": {
+    "pageTitle": "Not found | Omnea",
+    "title": "Article not found",
+    "subtitle": "We couldn't find what you were looking for..."
+  },
   "errors": {
     "DEFAULT": "There was an error",
     "INTERNET_ERROR": "There was a connection error"
+  },
+  "modals": {
+    "confirmation": {
+      "message": "Are you sure you want to {{action}}?",
+      "messageDelete": "Are you sure you want to delete this item?",
+      "accept": "ACCEPT",
+      "decline": "DECLINE"
+    },
+    "projectSelection": {
+      "account": {
+        "add": "Add another account from email",
+        "logout": "Log out all"
+      },
+      "getDesktopApp": "Get desktop app",
+      "subtitle": "{{ organisationName }} - {{membersCount}} member(s)"
+    }
   }
 }

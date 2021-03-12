@@ -8,6 +8,7 @@ interface State {
 interface ContextActions extends State {
   showControls: (position: { x: number; y: number }) => void
   hideControls: () => void
+  rootRef: RefObject<HTMLDivElement> | undefined
 }
 
 const initialState = {
@@ -15,6 +16,7 @@ const initialState = {
   position: null,
   showControls: () => {},
   hideControls: () => {},
+  rootRef: undefined,
 }
 
 const createPositionModal = () => {
@@ -39,7 +41,7 @@ const createPositionModal = () => {
         setState(initialState)
       }, [])
 
-      return <Context.Provider value={{ ...state, showControls, hideControls }}>{children}</Context.Provider>
+      return <Context.Provider value={{ ...state, showControls, hideControls, rootRef: rootRef }}>{children}</Context.Provider>
     },
   }
 }

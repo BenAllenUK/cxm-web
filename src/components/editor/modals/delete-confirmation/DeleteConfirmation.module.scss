@@ -1,0 +1,64 @@
+@import 'styles/variables';
+@import 'components/common/button/Button.module.scss';
+.background {
+  background-color: rgba(0, 0, 0, 0.15);
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.container {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: $box-shadow;
+  left: 50%;
+  top: 200px;
+  transform: translateX(-50%);
+  position: absolute;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+}
+
+.message {
+  padding: 20px;
+  font-size: 14px;
+  color: $text1-color;
+  text-align: center;
+}
+
+.acceptButton {
+  @extend .buttonBase;
+  font-size: 14px;
+  padding: 10px 20px;
+  background-color: $accept-color;
+  width: 140px;
+  margin-left: 10px;
+  color: $accept-text-color;
+
+  &:hover {
+    background-color: $accept-hover-color;
+    color: $accept-hover-text-color;
+  }
+}
+
+.declineButton {
+  @extend .buttonBase;
+  font-size: 14px;
+  padding: 10px 20px;
+  margin-right: 10px;
+  width: 140px;
+  background-color: $decline-color;
+  color: $decline-text-color;
+
+  &:hover {
+    background-color: $decline-hover-color;
+    color: $decline-hover-text-color;
+  }
+}

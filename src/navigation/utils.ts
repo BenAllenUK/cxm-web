@@ -1,4 +1,11 @@
-export const navigate = (path: string) => {
+export enum Subdomain {
+  Root = 1,
+  Admin,
+  Docs,
+  Hosted,
+}
+
+export const navigate = (module: Subdomain, path: string) => {
   window.history.pushState({}, '', path)
 }
 

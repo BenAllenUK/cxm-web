@@ -1,4 +1,4 @@
-import { memo, RefObject, useCallback, useEffect } from 'react'
+import { memo, RefObject, SyntheticEvent, useCallback, useEffect } from 'react'
 
 import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import { BlockData, BlockDataText, BlockType, Block } from '../types'
@@ -7,7 +7,7 @@ import { BlockTypeProperties } from '..'
 import styles from './Text.module.scss'
 import useKeyDown from 'utils/hooks/useKeyDown'
 
-const Text = ({ value, type, filteringMode, tabIndex, innerRef, onFocus, onBlur, onNew, onUpdate, onDelete }: IProps) => {
+const Text = ({ value, type, filteringMode, tabIndex, innerRef, onFocus, onBlur, onNew, onUpdate, onDelete, onSelect }: IProps) => {
   const _onValueChange = useCallback(
     (event: TextInputEvent) => {
       const value = event.target.value.replace('&nbsp;', ' ')
@@ -73,6 +73,7 @@ const Text = ({ value, type, filteringMode, tabIndex, innerRef, onFocus, onBlur,
         onChange={_onValueChange}
         onFocus={onFocus}
         onBlur={onBlur}
+        onSelect={onSelect}
       />
     </div>
   )
@@ -143,6 +144,7 @@ interface IProps {
   onDelete: () => void
   onFocus: () => void
   onBlur: () => void
+  onSelect: (e: SyntheticEvent<HTMLDivElement>) => void
 }
 
 export default memo(Text)

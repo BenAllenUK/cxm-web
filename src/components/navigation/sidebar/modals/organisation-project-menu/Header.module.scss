@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+}
+
+.email {
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 500;
+  color: rgba(55, 53, 47, 0.6);
+}

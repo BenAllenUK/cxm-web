@@ -2,20 +2,33 @@ import PageControls, { PageControlOptions, usePageControlModals } from 'componen
 import RenameControls, { useRenameControlModals } from 'components/navigation/sidebar/modals/rename-controls'
 import { ReactNode, useState } from 'react'
 import { Article } from 'operations/articles/types'
+import { Organisation } from 'operations/organisations/types'
 import MenuItemRefs, { useMenuItemRefs } from './menu-item-refs'
 import PageControlsTargetContext from './page-controls/PageControlsTargetContext'
 import { useSidebarPageControlsContext } from './page-controls/PageControlsTargetContext'
 import Search from './search'
 import createDuplicateArticle from 'utils/article/createDuplicateArticle'
+import { createSlug } from 'utils/article/createSlug'
+import updateChildPaths from 'utils/article/updateChildPaths'
+import OrgProjectMenu from './organisation-project-menu'
+import { useUser } from 'components/root'
 
-const ControlledModals = ({ currentViewingArticleId, articles, children, onUpsertArticles, onViewArticle }: IProps) => {
+const ControlledModals = ({
+  currentViewingArticleId,
+  articles,
+  children,
+  onUpsertArticles,
+  onViewArticle,
+  onViewProject,
+}: IProps) => {
+  const { email, user } = useUser()
   const [renameValue, setRenameValue] = useState<string | null>(null)
   const { articleId: targetArticleId, sectionId: targetSectionId } = useSidebarPageControlsContext()
   const { showControls: showRenameControls } = useRenameControlModals()
 
   const { locationRefs } = useMenuItemRefs()
 
-  const _onClick = (_: number, optionId: PageControlOptions) => {
+  const _onPageControlClick = (_: number, optionId: PageControlOptions) => {
     if (!locationRefs?.current) {
       return
     }
@@ -49,7 +62,7 @@ const ControlledModals = ({ currentViewingArticleId, articles, children, onUpser
     setRenameValue(value)
   }
 
-  const _onArticleRenameSubmit = () => {
+  const _onArticleRenameSubmit = async () => {
     if (!renameValue) {
       return
     }
@@ -59,8 +72,16 @@ const ControlledModals = ({ currentViewingArticleId, articles, children, onUpser
       console.error(`Article not found: ${targetArticleId}`)
       return
     }
+    const basePathItems = article.path.split('/').slice(0, -1)
+    const newSlug = createSlug(renameValue)
+    const path = basePathItems.length > 0 ? [...basePathItems, newSlug].join('/') : newSlug
+    const oldPath = article.path
+    const newPath = path
 
-    onUpsertArticles([{ ...article, title: renameValue }])
+    // WARNING - Recursive loop for path editing
+    const modifiedChildrenArticles = updateChildPaths(articles, oldPath, newPath, targetArticleId)
+
+    return await onUpsertArticles([{ ...article, title: renameValue, path }, ...modifiedChildrenArticles])
   }
 
   const onArticleDuplicate = (id: number) => {
@@ -85,13 +106,20 @@ const ControlledModals = ({ currentViewingArticleId, articles, children, onUpser
 
     if (article.id === currentViewingArticleId) {
       const [alternativeArticle] = articles
-      onViewArticle(alternativeArticle.slug)
+      onViewArticle(alternativeArticle.path)
     }
   }
 
+  const _onProjectClick = (orgSlug: string, projSlug: string) => {
+    onViewProject(orgSlug, projSlug)
+  }
+
+  const organisations = user?.userOrganisations.map((item) => item.organisation) || []
+
   return (
     <>
-      <PageControls.Component onClick={_onClick} />
+      <OrgProjectMenu.Component organisations={organisations} email={email} onClick={_onProjectClick} />
+      <PageControls.Component onClick={_onPageControlClick} />
       <RenameControls.Component value={renameValue} onTextChange={onArticleRenameTextChange} onSubmit={_onArticleRenameSubmit} />
       <Search.Component articles={articles} onItemClick={onViewArticle} />
       {children}
@@ -104,23 +132,26 @@ interface IProps {
   articles: Article[]
   children: ReactNode
   onUpsertArticles: (articles: Article[]) => Promise<Article[]>
-  onViewArticle: (slug: string) => void
+  onViewArticle: (path: string) => void
+  onViewProject: (orgSlug: string, projSlug: string) => void
 }
 
 const Modals = (props: IProps) => {
   return (
     <div>
-      <Search.Provider>
-        <MenuItemRefs.Provider>
-          <PageControlsTargetContext.Provider>
-            <RenameControls.Provider>
-              <PageControls.Provider>
-                <ControlledModals {...props} />
-              </PageControls.Provider>
-            </RenameControls.Provider>
-          </PageControlsTargetContext.Provider>
-        </MenuItemRefs.Provider>
-      </Search.Provider>
+      <OrgProjectMenu.Provider>
+        <Search.Provider>
+          <MenuItemRefs.Provider>
+            <PageControlsTargetContext.Provider>
+              <RenameControls.Provider>
+                <PageControls.Provider>
+                  <ControlledModals {...props} />
+                </PageControls.Provider>
+              </RenameControls.Provider>
+            </PageControlsTargetContext.Provider>
+          </MenuItemRefs.Provider>
+        </Search.Provider>
+      </OrgProjectMenu.Provider>
     </div>
   )
 }

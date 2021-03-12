@@ -1,15 +1,17 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.js
-
+api/.build
+/pages/
 # testing
 /coverage
+serverless.yml
 
 # next.js
-/.next/
+.next/
 /out/
 
 # production
@@ -34,9 +36,11 @@ yarn-error.log*
 .vercel
 
 .envrc
-
+.serverless.yml
 # src/generated/*.*
 graphql.schema.json
+
+
 
 .serverless
 .serverless_nextjs
@@ -45,3 +49,5 @@ translate-account-key.json
 public/locales/*
 !public/locales/en/*
 src/generated/graphql.tsx
+
+

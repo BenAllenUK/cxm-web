@@ -1,0 +1,6 @@
+fragment Project on projects {
+  id
+  name
+  image
+  slug
+}

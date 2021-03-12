@@ -1,3 +1,4 @@
+import { SyntheticEvent } from 'react'
 import Divider from 'components/editor/blocks/divider/Divider'
 import Image from 'components/editor/blocks/image/Image'
 import { BlockData, BlockDataImage, BlockDataListBullet, BlockDataText, BlockType } from 'components/editor/blocks/types'
@@ -17,6 +18,7 @@ const Item = ({
   onDelete,
   onFocus,
   onBlur,
+  onSelect,
   id,
 }: IProps & IItemHandlerProps) => {
   const _onNew = () => {
@@ -56,6 +58,10 @@ const Item = ({
     onTextChange(index, value)
   }
 
+  const _onSelect = (e: SyntheticEvent<HTMLDivElement>) => {
+    onSelect(index, e)
+  }
+
   switch (type) {
     case BlockType.TEXT:
     case BlockType.H1:
@@ -79,6 +85,7 @@ const Item = ({
           onDelete={_onDelete}
           onFocus={_onFocus}
           onBlur={_onBlur}
+          onSelect={_onSelect}
         />
       )
     }
@@ -132,4 +139,5 @@ export interface IItemHandlerProps {
   onDelete: (index: number) => void
   onFocus: (index: number) => void
   onBlur: (index: number) => void
+  onSelect: (index: number, e: SyntheticEvent<HTMLDivElement>) => void
 }

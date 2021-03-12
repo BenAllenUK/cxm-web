@@ -40,7 +40,7 @@
 .imageContainer {
   width: 600px;
   height: 400px;
-  object-fit: 'contain';
+  margin: 0 auto;
 
   &:hover > .mediaControls {
     display: block;

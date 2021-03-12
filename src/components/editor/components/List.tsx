@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, SyntheticEvent } from 'react'
 import { SortEnd } from 'react-sortable-hoc'
 import { isBlockEmpty } from '../blocks'
 import { BlockData, BlockType, BlockDataText, BlockDataImage, Block, BlockDataImageUpload } from '../blocks/types'
@@ -9,6 +9,7 @@ import { useTextControlModal } from '../modals/text-controls'
 import { useBlockControlsContext } from '../modals/block-controls/BlockControlsContext'
 import createEmptyBlock from 'utils/blocks/createEmptyBlock'
 import SortableList from './SortableList'
+import { getSelectionMidPosition } from 'utils/modals/getSelectionMidPosition'
 
 const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusIndex }: IProps) => {
   const blockRefs = useRef<HTMLDivElement[]>([])
@@ -82,8 +83,14 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
 
   const _onBlockClick = (index: number) => {}
 
-  const _onBlockDoubleClick = (index: number, pos: { x: number; y: number }) => {
-    showTextControls(pos)
+  const _onBlockDoubleClick = (index: number, pos: { x: number; y: number }) => {}
+
+  const _onBlockSelect = (index: number, e: SyntheticEvent<HTMLDivElement>) => {
+    const position = getSelectionMidPosition()
+    if (!position) {
+      return
+    }
+    showTextControls(position)
   }
 
   const _onCreateBlock = async (sourceIndex: number) => {
@@ -181,7 +188,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
 
     const lastItemIndex = blocks.length - 1
     const lastBlock = blocks[lastItemIndex]
-    if (lastBlock.type === BlockType.TEXT && (lastBlock.payload as BlockDataText).value === '') {
+    if (lastBlock && lastBlock.type === BlockType.TEXT && (lastBlock.payload as BlockDataText).value === '') {
       setFocusIndex(lastItemIndex)
       return
     }
@@ -217,6 +224,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
       onDelete={_onDeleteBlock}
       onFocus={_onBlockFocus}
       onBlur={_onBlockBlur}
+      onSelect={_onBlockSelect}
     />
   )
 }
