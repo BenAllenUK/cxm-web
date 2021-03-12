@@ -1,10 +1,18 @@
+export enum Subdomain {
+  Root = 1,
+  Admin,
+  Docs,
+  Hosted,
+  Api,
+}
+
 const Routes = {
+  root: {
+    getApp: `/app`,
+    logout: `/logout`,
+  },
   admin: {
-    editor: {
-      path: (slug1: string, path: string) => {
-        return `/${slug1}/editor/${path}`
-      },
-    },
+    editor: `/{projectSlug}/editor/{path}`,
   },
 }
 

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently -k \"yarn dev:web\" \"yarn dev:proxy\" \"yarn dev:api\" \"yarn dev:app\"",
-    "dev:web": "next dev --port=3001",
+    "dev:web": "NODE_OPTIONS='--inspect' next dev --port=3001",
     "dev:proxy": "node _scripts/development/proxy.js",
     "dev:app": "cd app && yarn dev",
     "dev:api": "cd api && yarn dev",

@@ -1,4 +1,4 @@
-import { Article } from '../../operations/articles/types'
+import { Article } from 'operations/articles/types'
 import createEmptyBlock from '../blocks/createEmptyBlock'
 
 function createArticleEmpty(parentId: number | null, basePath: string | null, position: number): Article {

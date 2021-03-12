@@ -3,7 +3,8 @@ import Button from 'components/common/button/Button'
 const Home = ({}: IProps) => {
   return (
     <div>
-      <Button>Fpp</Button>
+      <h1>Omnea</h1>
+      <div></div>
     </div>
   )
 }

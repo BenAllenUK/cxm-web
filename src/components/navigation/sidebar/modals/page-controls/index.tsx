@@ -18,26 +18,26 @@ const sections: IOptionSections[] = [
     items: [
       {
         id: PageControlOptions.Delete,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faTrashAlt} />,
+        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1, width: 16 }} icon={faTrashAlt} />,
         type: OptionType.Button,
         title: 'Delete',
       },
       {
         id: PageControlOptions.Duplicate,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faClone} />,
+        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1, width: 16 }} icon={faClone} />,
         type: OptionType.Button,
         title: 'Duplicate',
         hint: '⌘ + D',
       },
       {
         id: PageControlOptions.Copy,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faLink} />,
+        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1, width: 16 }} icon={faLink} />,
         type: OptionType.Button,
         title: 'Copy Link',
       },
       {
         id: PageControlOptions.Rename,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faEdit} />,
+        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1, width: 16 }} icon={faEdit} />,
         type: OptionType.Button,
         title: 'Rename',
         hint: '⌘ + Shift + R',
@@ -50,7 +50,7 @@ const sections: IOptionSections[] = [
     items: [
       {
         id: 5,
-        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1 }} icon={faLevelUpAlt} />,
+        icon: <FontAwesomeIcon style={{ fontSize: 14, marginBottom: 1, width: 16 }} icon={faLevelUpAlt} />,
         type: OptionType.Button,
         title: 'Move to',
         hint: '⌘ + Shift + P',

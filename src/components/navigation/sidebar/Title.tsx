@@ -1,20 +1,21 @@
 import Colors from 'config/colors'
+import { forwardRef } from 'react'
+import ProjectIcon from 'components/common/project-icon/ProjectIcon'
 import styles from './Sidebar.module.scss'
 
-export default function Title({ name, image }: IProps) {
+const Title = forwardRef<HTMLDivElement, IProps>(({ name, image, onClick }, forwardedRef) => {
   return (
-    <div className={styles.title}>
-      {image ? (
-        <img width={16} height={16} src={image} style={{ marginRight: 20, borderRadius: 5 }} />
-      ) : (
-        <div className={styles.titleEmptyLogo}>{name.substring(0, 1)}</div>
-      )}
-      <span style={{ color: Colors.text1 }}>{name}</span>
+    <div ref={forwardedRef} className={styles.title} onClick={onClick}>
+      <ProjectIcon image={image} name={name} />
+      <span style={{ marginLeft: 12, color: Colors.text1 }}>{name}</span>
     </div>
   )
-}
+})
+
+export default Title
 
 interface IProps {
   name: string
   image?: string | null
+  onClick: () => void
 }

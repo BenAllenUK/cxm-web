@@ -9,6 +9,8 @@ import {
   useGetProjectOneQuery,
   useUpsertArticlesMutation,
   useUpsertBlocksMutation,
+  useGetOrganisationOneQuery,
+  useGetUserOneQuery,
 } from 'generated/graphql'
 import { GetServerSidePropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -16,10 +18,11 @@ import useUpsertArticlesMutationScoped from 'operations/articles/upsert'
 import useDeleteBlocksMutationScoped from 'operations/blocks/delete'
 import useUpsertBlocksMutationScoped from 'operations/blocks/upsert'
 import GET_ARTICLE_ONE from 'queries/articles/GET_ARTICLE_ONE.gql'
-import GET_PROJECT_ONE from 'queries/projects/GET_PROJECT_ONE.gql'
+import GET_ORGANISATION_ONE from 'queries/organisations/GET_ORGANISATION_ONE.gql'
+import GET_USER_ONE from 'queries/users/GET_USER_ONE.gql'
 import AssetsProvider from 'components/providers/assets'
-import { getSession } from '@auth0/nextjs-auth0'
 import getUserSession from 'utils/user/getUserSession'
+import redirect from 'utils/server/redirect'
 
 export default function EditorRoot(props: any) {
   const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
@@ -38,27 +41,43 @@ export default function EditorRoot(props: any) {
 }
 
 export function Content() {
-  const { userId, organisationId, projects } = useUser()
+  const { userId } = useUser()
+  const { projectSlug, articlePath, organisationSlug } = useEditor()
 
-  const { projectSlug, articlePath } = useEditor()
+  // FETCH USER
 
-  const { data: projectsData } = useGetProjectOneQuery({
+  const foo = useGetUserOneQuery({
     variables: {
-      slug: projectSlug || '', // TODO: avoid default to none
+      id: userId ?? -1,
     },
   })
 
-  const [project] = projectsData?.projects || []
-  if (!project) {
-    console.error(`Project not found: ${projectSlug}`)
+  const user = foo.data?.users_by_pk
+  if (!user) {
+    console.error(`User not found: ${userId}`)
   }
 
-  // Check to see if article Id is in article data
-  // article id might not be part of this project
+  // FETCH ORGANISATION
 
+  const { data: organisationsData, ...other } = useGetOrganisationOneQuery({
+    variables: {
+      slug: organisationSlug ?? '',
+      projectSlug: projectSlug ?? '',
+    },
+  })
+
+  const [organisation] = organisationsData?.organisations || []
+
+  // FETCH PROJECT
+
+  const [project] = organisation?.projects || []
+
+  // FETCH ARTICLE
+  const defaultPath = project?.articles.length > 0 ? project?.articles[0].path : ''
+  const selectedArticlePath = articlePath ?? defaultPath
   let { data: articleData, loading: articleQueryLoading } = useGetArticleOneQuery({
     variables: {
-      path: articlePath || '',
+      path: selectedArticlePath,
     },
   })
 
@@ -84,14 +103,14 @@ export function Content() {
   const [deleteBlocksMutation] = useDeleteBlocksMutation()
   const deleteBlocksMutationScoped = useDeleteBlocksMutationScoped(article?.id, deleteBlocksMutation)
 
-  if (!project) {
+  if (!organisation) {
     return <div />
   }
 
   return (
     <EditorPage
+      organisation={organisation}
       loading={articleQueryLoading || articleUpsertLoading}
-      project={project}
       article={article}
       onUpsertArticlesMutation={upsertArticlesMutationScoped}
       onUpsertBlocksMutation={upsertBlocksMutationScoped}
@@ -103,55 +122,83 @@ export function Content() {
 export async function getServerSideProps({ params, locale, req, res }: GetServerSidePropsContext) {
   const session = getUserSession(req, res)
   if (!session) {
-    return {
-      props: {},
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    }
+    return redirect()
   }
-  const { userId, idToken, user } = session
+  const {
+    userId,
+    idToken,
+    user: { email },
+  } = session
 
   const client = initializeApollo({}, idToken)
 
+  const organisationSlug = process.env.ORGANISATION
+
   const projectSlug = params?.projectSlug
   const articlePathRaw = params?.articlePath || []
-  const articlePath = Array.isArray(articlePathRaw) ? articlePathRaw.join('/') : articlePathRaw
 
-  const { data: projectsData } = await client.query({
-    query: GET_PROJECT_ONE,
-    variables: { slug: projectSlug },
+  if (!organisationSlug || !projectSlug || !userId) {
+    return redirect()
+  }
+
+  // FETCH USER
+
+  const { data: usersData } = await client.query({
+    query: GET_USER_ONE,
+    variables: { id: userId },
   })
 
-  const [project] = projectsData?.projects || []
+  const user = usersData?.users_by_pk
+  if (!user) {
+    console.error(`User not found: ${userId}`)
+    return redirect()
+  }
 
+  // FETCH ORGANISATION
+
+  const { data: organisationsData } = await client.query({
+    query: GET_ORGANISATION_ONE,
+    variables: { slug: organisationSlug, projectSlug },
+  })
+
+  const [organisation] = organisationsData?.organisations || []
+  if (!organisation) {
+    console.error(`Organisation not found: ${organisationSlug}`)
+    return redirect()
+  }
+
+  // FETCH PROJECT
+  console.log(organisation)
+
+  const [project] = organisation.projects || []
   if (!project) {
     console.error(`Project not found: ${projectSlug}`)
-    return {
-      notFound: true,
-    }
+    return redirect()
   }
+
+  // FETCH ARTICLES
+
+  const articlePath = Array.isArray(articlePathRaw) ? articlePathRaw.join('/') : articlePathRaw
+  const selectedArticlePath = articlePath || project.articles[0].path
 
   const { data: articleData } = await client.query({
     query: GET_ARTICLE_ONE,
-    variables: { path: articlePath || '' },
+    variables: { path: selectedArticlePath },
   })
-
-  const [article] = articleData?.articles || []
 
   return {
     props: {
       initialApolloState: client.cache.extract(),
       initialUserContext: {
         userId,
-        organisationId: 1,
-        projects: [],
         idToken,
+        email,
+        user,
       },
       initialEditorContext: {
-        projectSlug: project.slug,
-        articlePath: articlePath,
+        projectSlug,
+        articlePath: selectedArticlePath,
+        organisationSlug,
       },
       ...(await serverSideTranslations(locale, ['common', 'editor'])),
     },

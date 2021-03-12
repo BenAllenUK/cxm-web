@@ -1,0 +1,22 @@
+#import "../projects/PROJECT_FRAGMENT.gql"
+#import "../organisations/ORGANISATION_FRAGMENT.gql"
+
+query GetUserOne($id: Int!) {
+  users_by_pk(id: $id) {
+    id
+    name
+    userOrganisations {
+      organisation {
+        ...Organisation
+        projects {
+          ...Project
+        }
+        stats: userOrganisations_aggregate {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+  }
+}

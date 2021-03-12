@@ -58,5 +58,15 @@ module.exports = {
   },
   env: {
     OMNEA_UPLOAD_URL: process.env.OMNEA_UPLOAD_URL,
+
+    API_HOST: process.env.API_HOST,
+    ROOT_HOST: process.env.ROOT_HOST,
+    ADMIN_HOST: process.env.ADMIN_HOST,
+    HOSTED_HOST: process.env.HOSTED_HOST,
+    DOCS_HOST: process.env.DOCS_HOST,
+    PROTOCOL: process.env.PROTOCOL,
+
+    // Dev Only
+    ORGANISATION: process.env.ORGANISATION,
   },
 }

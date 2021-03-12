@@ -1,4 +1,4 @@
-import { Article } from '../../operations/articles/types'
+import { Article } from 'operations/articles/types'
 
 function createDuplicateArticle(article: Article): Article {
   return {

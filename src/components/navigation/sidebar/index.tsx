@@ -1,6 +1,7 @@
-import { useState, useContext, MouseEvent, memo } from 'react'
+import { useState, useContext, MouseEvent, memo, useRef } from 'react'
 import MenuIcon from 'images/icons/menu.svg'
 import SearchIcon from 'images/icons/search.svg'
+import { Organisation } from 'operations/organisations/types'
 
 import Title from './Title'
 
@@ -23,6 +24,7 @@ import createArticleEmpty from 'utils/article/createEmptyArticle'
 import { useSidebarPageControlsContext } from './modals/page-controls/PageControlsTargetContext'
 import { Article } from 'operations/articles/types'
 import createDefaultOpenState from 'utils/menu/createDefaultOpenState'
+import { useOrganisationProjectMenuModal } from './modals/organisation-project-menu'
 
 export const SIDEBAR_INDENT = 20
 
@@ -61,6 +63,7 @@ export type MenuItem = {
 export function ControlledSidebar({ path, currentViewingArticleId, project, articles, onViewArticle, onUpsertArticles }: IProps) {
   // TODO: Assumes ids have different numbers
 
+  const { showControls: showOrganisationProjectMenuModal } = useOrganisationProjectMenuModal()
   const { showControls } = usePageControlModals()
   const { showControls: showSearchModal } = useSearchModal()
 
@@ -130,11 +133,22 @@ export function ControlledSidebar({ path, currentViewingArticleId, project, arti
     { id: 0, label: 'CONTENT', items: parseMenu(articles), suffix: <AddButton onClick={_onSidebarAddItemClick} /> },
   ]
 
+  const titleRef = useRef<HTMLDivElement>(null)
+
+  const _onTitleClick = () => {
+    const bounds = titleRef.current?.getBoundingClientRect()
+    if (!bounds) {
+      return
+    }
+    const { left, top, height } = bounds
+    showOrganisationProjectMenuModal({ x: left + 10, y: top + height })
+  }
+
   return (
     <>
       <div className={styles.container}>
         <div className={styles.dragable} />
-        <Title name={project.name} />
+        <Title ref={titleRef} name={project.name} onClick={_onTitleClick} />
         <ul className={styles.projectMenu}>
           {appMenu.map((item, index) => (
             <li key={index} onClick={() => _onAppMenuClick(item.id)}>
@@ -183,6 +197,7 @@ interface IProps {
   }
   articles: Article[]
 
+  onViewProject: (orgSlug: string, projSlug: string) => void
   onViewArticle: (path: string) => void
   onUpsertArticles: (articles: Article[]) => Promise<Article[]>
 }
@@ -194,6 +209,7 @@ const ControlledSidebarWithModals = (props: IProps) => {
       articles={props.articles}
       onUpsertArticles={props.onUpsertArticles}
       onViewArticle={props.onViewArticle}
+      onViewProject={props.onViewProject}
     >
       <ControlledSidebar {...props} articles={props.articles} />
     </Modals>

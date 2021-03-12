@@ -12,6 +12,9 @@ async function f(user, context, callback) {
       permissions {
         projectId
       }
+      userOrganisations {
+        organisationId
+      }
     }
   }
 
@@ -25,6 +28,9 @@ async function f(user, context, callback) {
         permissions {
           projectId
           type
+        }
+        userOrganisations {
+          organisationId
         }
       }
     }
@@ -66,9 +72,13 @@ async function f(user, context, callback) {
     let userId = data ? data.id : null;
     let organisationId = data ? data.organisationId : null;
     var projectIds = [];
+    var organisationIds = [];
     if (data) {
       projectIds = data.permissions.map((item) => {
         return item.projectId;
+      });
+      organisationIds = data.userOrganisations.map((item) => {
+        return item.organisationId;
       });
     }
 
@@ -82,9 +92,13 @@ async function f(user, context, callback) {
       const data2 = response2.data.data.users[0];
       userId = data2 ? data2.id : null;
       organisationId = data2 ? data2.organisationId : null;
+      console.log(data2);
       if (data2) {
         projectIds = data2.permissions.map((item) => {
           return item.projectId;
+        });
+        organisationIds = data2.userOrganisations.map((item) => {
+          return Number(item.organisationId);
         });
       }
     }
@@ -97,6 +111,7 @@ async function f(user, context, callback) {
       'x-hasura-allowed-roles': [role],
       'x-hasura-user-id': `${userId}`,
       'x-hasura-org-id': `${organisationId}`,
+      'x-hasura-org-ids': `{${organisationIds.join(',')}}`,
     };
     callback(null, user, context);
   } catch (e) {

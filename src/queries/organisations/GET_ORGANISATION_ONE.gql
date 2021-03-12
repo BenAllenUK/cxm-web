@@ -1,0 +1,19 @@
+#import "../organisations/ORGANISATION_FRAGMENT.gql"
+#import "../projects/PROJECT_FRAGMENT.gql"
+#import "../articles/ARTICLE_FRAGMENT.gql"
+
+query GetOrganisationOne($slug: String!, $projectSlug: String!) {
+  organisations(where: { slug: { _eq: $slug } }) {
+    ...Organisation
+
+    projects(where: { slug: { _eq: $projectSlug } }) {
+      ...Project
+      articles: articles(where: { archived: { _eq: false } }) {
+        ...Article
+      }
+      archivedArticles: articles(where: { archived: { _eq: true } }) {
+        ...Article
+      }
+    }
+  }
+}
