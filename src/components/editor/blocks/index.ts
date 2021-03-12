@@ -43,7 +43,6 @@ export function isBlockEmpty(block: Block) {
       return ((block.payload as BlockDataListBullet).items || []).length == 0
     case BlockType.IMAGE:
       return false
-      return !(block.payload as BlockDataImage).source
     default:
       return true
   }
@@ -60,6 +59,19 @@ export function getBlockOptions(filterText?: string | null) {
 }
 
 export const BlockTypeProperties = {
+  [BlockType.IMAGE]: {
+    id: BlockType.IMAGE,
+    title: 'Text',
+    subtitle: 'Start writing with plain text.',
+    image: '/preview/text.png',
+    initialHeight: 20,
+    isEditable: true,
+    initialPayload: {
+      value: '',
+      comments: [],
+      caption: '',
+    },
+  },
   [BlockType.TEXT]: {
     id: BlockType.TEXT,
     title: 'Text',

@@ -33,6 +33,7 @@ const SortableItem = (props: IProps) => {
         onClick={onBlockClick}
         onAddClick={onBlockAddClick}
         onDoubleClick={onBlockDoubleClick}
+        onUpdate={itemHandlers.onImageUpdate}
       >
         <div ref={_refCallback}>
           <Item
@@ -41,6 +42,7 @@ const SortableItem = (props: IProps) => {
             blockControlOpen={modalBlockEnabled}
             type={item.type}
             payload={item.payload}
+            id={item.id}
             {...itemHandlers}
           />
         </div>

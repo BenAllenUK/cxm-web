@@ -52,14 +52,36 @@ export type BlockDataText = {
 }
 
 export type BlockDataImage = {
-  source: string | null
-  alt: string | null
-  imageType: BlockDataImageType
+  value: string | null
+  type: MediaSourceType
+  caption?: string | null
+  comments?: BlockDataImageComment[]
 }
 
-export enum BlockDataImageType {
-  CUSTOM = 'CUSTOM',
-  UNSPLASH = 'UNSPLASH',
+export type BlockDataImageComment = {
+  user: string
+  comment: string
+  time: string
+}
+
+export type BlockDataImageUpload = {
+  file: File
+  id: number
+}
+
+export enum MediaSourceType {
+  UPLOAD = 'Upload',
+  EMBED_LINK = 'Embed link',
+  LIBRARY = 'LIBRARY',
+  CLOUDINARY = 'CLOUDINARY',
+  LOCAL = 'LOCAL',
+}
+
+export type MediaSourceObject = {
+  name: string
+  accessKey?: string
+  secretKey?: string
+  type: MediaSourceType
 }
 
 export type BlockDataH1 = BlockDataText

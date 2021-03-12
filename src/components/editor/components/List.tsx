@@ -1,8 +1,8 @@
 import { useRef, useCallback, SyntheticEvent } from 'react'
 import { SortEnd } from 'react-sortable-hoc'
 import { isBlockEmpty } from '../blocks'
-import { BlockData, BlockType, BlockDataText, BlockDataImage, Block } from '../blocks/types'
-
+import { BlockData, BlockType, BlockDataText, BlockDataImage, Block, BlockDataImageUpload } from '../blocks/types'
+import { useAsset } from 'components/providers/assets'
 import useWindowKeyUp from 'utils/hooks/useWindowKeyUp'
 import { calculateBlockControlsPosition, useBlockControlModal } from '../modals/block-controls'
 import { useTextControlModal } from '../modals/text-controls'
@@ -19,6 +19,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     showControls: showBlockControlsModal,
     hideControls: hideBlockControls,
   } = useBlockControlModal()
+  const { addPendingUpload } = useAsset()
   const { setBlockId: setBlockControlsId } = useBlockControlsContext()
 
   const { filterText: modalFilterText, setFilterText } = useBlockControlsContext()
@@ -106,12 +107,48 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     onBlocksUpsert([newBlock])
   }
 
-  const _onUpdateBlock = (index: number, payload: BlockData) => {
-    const block = blocks[index]
+  const _onInsertBlock = (index: number, payload: BlockData, type?: BlockType) => {
+    const block = createEmptyBlock(index)
+
+    return onBlocksUpsert([
+      {
+        ...block,
+        payload,
+        type: type ?? block.type,
+        position: index,
+      },
+    ])
+  }
+
+  const _onUpsertBlock = (index: number, payload: BlockData, type?: BlockType) => {
+    const block = blocks[index] || createEmptyBlock(index)
+
     onBlocksUpsert([
       {
         ...block,
         payload,
+        type: type ?? block.type,
+        position: index,
+      },
+    ])
+  }
+
+  const _onUpsertImageBlock = (
+    index: number,
+    payload: BlockData,
+    type?: BlockType,
+    pendingUploadFile?: File,
+    createNew?: boolean
+  ) => {
+    const block = createNew ? createEmptyBlock(index) : blocks[index] || createEmptyBlock(index)
+    if (pendingUploadFile) {
+      addPendingUpload({ file: pendingUploadFile, id: block.id })
+    }
+    onBlocksUpsert([
+      {
+        ...block,
+        payload,
+        type: type ?? block.type,
         position: index,
       },
     ])
@@ -182,7 +219,8 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
       onBlockDoubleClick={_onBlockDoubleClick}
       onTextChange={_onTextChange}
       onNew={_onCreateBlock}
-      onUpdate={_onUpdateBlock}
+      onUpdate={_onUpsertBlock}
+      onImageUpdate={_onUpsertImageBlock}
       onDelete={_onDeleteBlock}
       onFocus={_onBlockFocus}
       onBlur={_onBlockBlur}
