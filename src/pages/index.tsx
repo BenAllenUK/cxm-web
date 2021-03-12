@@ -1,3 +1,5 @@
+import { GetServerSidePropsContext } from 'next'
+
 const Empty = ({}: IProps) => {
   return (
     <div style={{ padding: 50 }}>
@@ -35,6 +37,16 @@ const Empty = ({}: IProps) => {
       </>
     </div>
   )
+}
+
+export async function getServerSideProps({ params, locale, req, res }: GetServerSidePropsContext) {
+  return {
+    props: {},
+    redirect: {
+      destination: '/_root_',
+      permanent: false,
+    },
+  }
 }
 
 export default Empty

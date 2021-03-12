@@ -1,11 +1,11 @@
-import Button from 'components/common/button/Button'
+import { UserProvider } from '@auth0/nextjs-auth0'
+import LoginPage from 'components/pages/auth/login'
 
 const Home = ({}: IProps) => {
   return (
-    <div>
-      <h1>Omnea</h1>
-      <div></div>
-    </div>
+    <UserProvider>
+      <LoginPage />
+    </UserProvider>
   )
 }
 
