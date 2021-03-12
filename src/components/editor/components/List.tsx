@@ -100,7 +100,39 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     onBlocksUpsert([newBlock])
   }
 
-  const _onUpsertBlock = (index: number, payload: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => {
+  const _onInsertBlock = (index: number, payload: BlockData, type?: BlockType) => {
+    const block = createEmptyBlock(index)
+
+    return onBlocksUpsert([
+      {
+        ...block,
+        payload,
+        type: type ?? block.type,
+        position: index,
+      },
+    ])
+  }
+
+  const _onUpsertBlock = (index: number, payload: BlockData, type?: BlockType) => {
+    const block = blocks[index] || createEmptyBlock(index)
+
+    onBlocksUpsert([
+      {
+        ...block,
+        payload,
+        type: type ?? block.type,
+        position: index,
+      },
+    ])
+  }
+
+  const _onUpsertImageBlock = (
+    index: number,
+    payload: BlockData,
+    type?: BlockType,
+    pendingUploadFile?: File,
+    createNew?: boolean
+  ) => {
     const block = createNew ? createEmptyBlock(index) : blocks[index] || createEmptyBlock(index)
     if (pendingUploadFile) {
       addPendingUpload({ file: pendingUploadFile, id: block.id })
@@ -181,6 +213,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
       onTextChange={_onTextChange}
       onNew={_onCreateBlock}
       onUpdate={_onUpsertBlock}
+      onImageUpdate={_onUpsertImageBlock}
       onDelete={_onDeleteBlock}
       onFocus={_onBlockFocus}
       onBlur={_onBlockBlur}

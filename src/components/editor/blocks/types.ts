@@ -54,8 +54,8 @@ export type BlockDataText = {
 export type BlockDataImage = {
   value: string | null
   type: MediaSourceType
-  caption: string | null
-  comments: BlockDataImageComment[]
+  caption?: string | null
+  comments?: BlockDataImageComment[]
 }
 
 export type BlockDataImageComment = {

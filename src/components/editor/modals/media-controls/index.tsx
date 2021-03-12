@@ -6,11 +6,11 @@ const { Provider, useModal } = createPositionModal()
 
 export const useMediaControlModal = useModal
 
-const Component = ({ hoverRef, setWriteNewCaption, setCreateComment }: IProps) => {
+const Component = ({ setWriteNewCaption, setCreateComment }: IProps) => {
   const { enabled, position, hideControls } = useMediaControlModal()
   const Option = ({ name, onClick }: IOptionProps) => {
     return (
-      <div ref={hoverRef} className={styles.option} onClick={onClick}>
+      <div className={styles.option} onClick={onClick}>
         {name}
       </div>
     )
@@ -36,5 +36,4 @@ interface IOptionProps {
 interface IProps {
   setWriteNewCaption: () => void
   setCreateComment: () => void
-  hoverRef: RefObject<HTMLDivElement>
 }

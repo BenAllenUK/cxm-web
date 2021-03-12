@@ -33,7 +33,7 @@ const SortableItem = (props: IProps) => {
         onClick={onBlockClick}
         onAddClick={onBlockAddClick}
         onDoubleClick={onBlockDoubleClick}
-        onUpdate={itemHandlers.onUpdate}
+        onUpdate={itemHandlers.onImageUpdate}
       >
         <div ref={_refCallback}>
           <Item

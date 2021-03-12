@@ -41,6 +41,14 @@
   width: 600px;
   height: 400px;
   object-fit: 'contain';
+
+  &:hover > .mediaControls {
+    display: block;
+  }
+}
+
+.mediaControls {
+  display: none;
 }
 
 .box {

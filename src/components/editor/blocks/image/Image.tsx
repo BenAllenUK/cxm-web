@@ -1,7 +1,6 @@
 import { memo, useState, useCallback, useEffect } from 'react'
 import { BlockDataImage, BlockData, BlockType, MediaSourceType } from '../types'
 import styles from './Image.module.scss'
-import useHover from 'utils/hooks/useHover'
 import ImageIcon from 'images/icons/image.svg'
 import { useAsset } from 'components/providers/assets'
 import MediaSelector from 'components/editor/modals/media/MediaSelector'
@@ -11,38 +10,36 @@ import { default as NextImage } from 'next/image'
 import { Image as CloundinaryImage, CloudinaryContext } from 'cloudinary-react'
 import TextInput from 'components/common/text-input/TextInput'
 
-export const Image = ({ content, onUpdate, id }: IProps) => {
+export const Image = ({ content, onUpdate, onImageUpdate, id }: IProps) => {
   const [showSelector, setShowSelector] = useState(false)
   const [createComment, setCreateComment] = useState(false)
   const [caption, setCaption] = useState(content.caption || '')
-  const [progress, setProgress] = useState<null | number>(null)
-  const [uploadInProgress, setUploadInProgress] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState<{ progress: number | null; uploading: boolean }>({
+    progress: null,
+    uploading: false,
+  })
   const [writeNewCaption, setWriteNewCaption] = useState(false)
-  const [hoverRef, isHovered] = useHover<HTMLDivElement>()
-  const [absoluteHoverRef, isAbsoluteHovered] = useHover<HTMLDivElement>()
-  const [displayControls, setDisplayControls] = useState(false)
   const { upload, pendingUploads, removePendingUpload } = useAsset()
 
   const _uploadFile = useCallback(async () => {
-    setUploadInProgress(true)
+    setUploadProgress({ ...uploadProgress, uploading: true })
     const response = await upload(pendingUploads[id].file, pendingUploads[id].file.type, (progress) => {
-      setProgress(progress)
+      setUploadProgress({ ...uploadProgress, progress: progress })
     })
     removePendingUpload(id)
-    setUploadInProgress(false)
-    setProgress(null)
+    setUploadProgress({ uploading: false, progress: null })
     if (!response) {
       console.log(`Error Uploading Image`)
       return
     }
     onUpdate({ value: response?.key, type: MediaSourceType.UPLOAD })
-  }, [upload, pendingUploads, removePendingUpload, setUploadInProgress, setProgress])
+  }, [upload, pendingUploads, removePendingUpload, setUploadProgress])
 
   useEffect(() => {
-    if (pendingUploads[id] && !uploadInProgress) {
+    if (pendingUploads[id] && !uploadProgress.uploading) {
       _uploadFile()
     }
-  }, [_uploadFile, pendingUploads, uploadInProgress])
+  }, [_uploadFile, pendingUploads, uploadProgress])
 
   const _setShowSelector = () => {
     setShowSelector(!showSelector)
@@ -63,7 +60,7 @@ export const Image = ({ content, onUpdate, id }: IProps) => {
           <ImageIcon className={styles.icon} width={25} height={25} />
           <div className={styles.text}>Add an image</div>
         </div>
-        {showSelector && <MediaSelector onUpdate={onUpdate} />}
+        {showSelector && <MediaSelector onUpdate={onImageUpdate} />}
       </div>
     )
   }
@@ -93,7 +90,7 @@ export const Image = ({ content, onUpdate, id }: IProps) => {
       user: 'G',
       time: Date.now().toString(),
     }
-    onUpdate({ ...content, comments: content.comments.push(commentObj) })
+    // onUpdate({ ...content, comments: content.comments.push(commentObj) })
   }
 
   const onCaptionChange = (e: any) => {
@@ -101,28 +98,16 @@ export const Image = ({ content, onUpdate, id }: IProps) => {
     onUpdate({ ...content, caption: e.target.value }, BlockType.IMAGE)
   }
 
-  if ((isHovered || isAbsoluteHovered) && !displayControls) {
-    setDisplayControls(true)
-  } else if (!isHovered && !isAbsoluteHovered && displayControls) {
-    setTimeout(() => {
-      setDisplayControls(false)
-    }, 100)
-  }
-
   return (
     <div className={styles.box}>
-      <div className={styles.imageContainer} ref={hoverRef}>
+      <div className={styles.imageContainer}>
         <NextImage layout="intrinsic" width={600} height={400} objectFit={'contain'} src={imgSrc} />
-        {displayControls && (
-          <MediaControls.Component
-            hoverRef={absoluteHoverRef}
-            setWriteNewCaption={_writeNewCaption}
-            setCreateComment={_setCreateComment}
-          />
-        )}
-        {progress && (
+        <div className={styles.mediaControls}>
+          <MediaControls.Component setWriteNewCaption={_writeNewCaption} setCreateComment={_setCreateComment} />
+        </div>
+        {uploadProgress.progress && (
           <div className={styles.progress}>
-            <div className={styles.ldsRing} /> {Math.round(progress * 100)}%
+            <div className={styles.ldsRing} /> {Math.round(uploadProgress.progress * 100)}%
           </div>
         )}
       </div>
@@ -144,7 +129,8 @@ export const Image = ({ content, onUpdate, id }: IProps) => {
 
 interface IProps {
   content: BlockDataImage
-  onUpdate: (value: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => void
+  onUpdate: (value: BlockData, type?: BlockType) => void
+  onImageUpdate: (value: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => void
   id: number
 }
 

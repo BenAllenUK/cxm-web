@@ -17,7 +17,6 @@ const Container = ({
 }: IProps & IContainerHandlerProps) => {
   const [hoverRef, isHovered] = useHover<HTMLDivElement>()
   const [activeDropzone, setActiveDropzone] = useState(false)
-  const [multipleFileIndex, setMultipleFileIndex] = useState(index)
   const isVisible = enableHandle && isHovered
 
   const _onDoubleClick = useCallback(
@@ -39,7 +38,7 @@ const Container = ({
     event.stopPropagation()
     event.preventDefault()
     let files = [...event.dataTransfer.files]
-
+    let multipleFileIndex = index
     files.forEach(async (file) => {
       let fileReader = new FileReader()
 
@@ -55,11 +54,10 @@ const Container = ({
           true
         )
         setActiveDropzone(false)
-        setMultipleFileIndex(multipleFileIndex + 1)
+        multipleFileIndex = multipleFileIndex + 1
       }
       await fileReader.readAsDataURL(file)
     })
-    setMultipleFileIndex(index)
   }
 
   const onDragOver = useCallback(
