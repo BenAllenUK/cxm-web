@@ -12,6 +12,11 @@ const options = {
 const app = express()
 const localhostServer = https.createServer(options, app)
 
+const tapi = createProxyMiddleware('/api', {
+  target: 'http://localhost:3001',
+  changeOrigin: true,
+})
+
 const nextProxy = createProxyMiddleware('/_next', {
   target: 'http://localhost:3001',
   changeOrigin: true,
@@ -31,6 +36,7 @@ const [apiIndexProxy, apiPathProxy] = createModuleProxy(`api.omnea.local`, 'http
 
 // ---------
 
+app.use('/api', tapi)
 app.use('/assets', assetProxy)
 app.use('/_next', nextProxy)
 
@@ -70,7 +76,3 @@ function createModuleProxy(match, target) {
 
   return [indexProxy, pathProxy]
 }
-
-console.log(`\n==========\n`)
-
-console.log(`Ready. Visit http://omnea.local:3000/ to start.`)
