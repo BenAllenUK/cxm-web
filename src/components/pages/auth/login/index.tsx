@@ -9,7 +9,7 @@ const Content = () => {
   return (
     <div className={styles.background}>
       <div className={styles.container}>
-        <Image width={50} height={50} className={styles.logo} src={'/logo.png'} />
+        <Image width={50} height={50} className={styles.logo} src={'/assets/logo.png'} />
         <div className={styles.title}>
           Marketing smarts for
           <br />
