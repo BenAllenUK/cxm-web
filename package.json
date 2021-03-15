@@ -1,0 +1,41 @@
+{
+  "name": "omnea",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "setup": "yarn setup:certs; yarn setup:install",
+    "setup:certs": "./dev/certs/run.sh",
+    "setup:install": "./dev/install/run.sh",
+    "start": "concurrently -k \"yarn start:web\" \"yarn start:proxy\" \"yarn start:app\" \"yarn start:api\" ",
+    "start:app": "yarn --cwd clients/app start",
+    "start:proxy": "yarn --cwd clients/proxy start",
+    "start:web": "yarn --cwd clients/web start",
+    "start:api": "yarn --cwd services/api start",
+    "start:web:web": "yarn --cwd clients/web start:web",
+    "start:web:codegen": "yarn --cwd clients/web start:codegen",
+    "build:translate": "./_scripts/translate/run.sh",
+    "deploy:root": "./_scripts/deploy/run.sh _root_",
+    "deploy:admin": "./_scripts/deploy/run.sh admin",
+    "deploy:api": "cd api && yarn deploy",
+    "deploy:docs": "./_scripts/deploy/run.sh docs",
+    "deploy:uploads": "./_scripts/deploy/run.sh uploads",
+    "build:root": "./_scripts/build/run.sh _root_",
+    "build:admin": "./_scripts/build/run.sh admin",
+    "build:api": "./_scripts/build/run.sh api",
+    "build:docs": "./_scripts/build/run.sh docs",
+    "build:uploads": "./_scripts/build/run.sh uploads"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BenAllenUK/cxm-web.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BenAllenUK/cxm-web/issues"
+  },
+  "homepage": "https://github.com/BenAllenUK/cxm-web#readme",
+  "dependencies": {
+    "concurrently": "^6.0.0"
+  }
+}
