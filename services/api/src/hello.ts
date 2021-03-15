@@ -2,7 +2,7 @@ import { APIGatewayProxyHandler } from 'aws-lambda'
 
 const main: APIGatewayProxyHandler = async (event) => {
   // async/await also works out of the box
-  await new Promise((resolve, reject) => setTimeout(resolve, 500))
+  await new Promise((resolve) => setTimeout(resolve, 500))
 
   return {
     statusCode: 200,

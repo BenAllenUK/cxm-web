@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk'
+import * as AWS from 'aws-sdk'
 import { APIGatewayProxyHandler } from 'aws-lambda'
 import error from 'utils/error'
 
@@ -44,7 +44,7 @@ const main: APIGatewayProxyHandler = async (event) => {
 
     const randomId = Number(Math.random() * 10000000)
 
-    const [fileType, fileExtension] = type.split('/')
+    const [fileExtension] = type.split('/')
     const key = `${randomId}.${fileExtension}`
 
     const s3Params = {

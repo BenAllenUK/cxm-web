@@ -36,6 +36,11 @@
   },
   "homepage": "https://github.com/BenAllenUK/cxm-web#readme",
   "dependencies": {
-    "concurrently": "^6.0.0"
+    "concurrently": "^6.0.0",
+    "eslint-config-prettier": "^8.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.22.0",
+    "serverless-bundle": "^4.2.2"
   }
 }

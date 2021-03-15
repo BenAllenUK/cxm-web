@@ -2,7 +2,7 @@ import compat from '@sls-next/next-aws-lambda'
 import { APIGatewayProxyEvent, Context } from 'aws-lambda'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-const extend = (item: Function, args: any) => (req: NextApiRequest, res: NextApiResponse) => {
+const extend = (item: (...args: any) => any, args: any) => (req: NextApiRequest, res: NextApiResponse) => {
   const json = (contents: any) => {
     const value = JSON.stringify(contents)
     res.write(value)

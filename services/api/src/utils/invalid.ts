@@ -1,9 +1,9 @@
-const invalid = (e?: Error) => {
+const invalid = (e?: Error | string) => {
   console.error(e)
   return {
     statusCode: 400,
     body: JSON.stringify({
-      name: 'INVALID',
+      name: typeof e === 'object' ? e.message : e,
     }),
   }
 }

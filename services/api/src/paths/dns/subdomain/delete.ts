@@ -1,10 +1,10 @@
-import AWS from 'aws-sdk'
+import * as AWS from 'aws-sdk'
 import { APIGatewayProxyHandler } from 'aws-lambda'
 import error from 'utils/error'
 import invalid from 'utils/invalid'
 
 AWS.config.update({ region: process.env.AWS_REGION })
-var route53 = new AWS.Route53()
+const route53 = new AWS.Route53()
 
 /**
  * @openapi

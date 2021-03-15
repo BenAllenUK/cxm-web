@@ -8,7 +8,6 @@ api/.build
 /pages/
 # testing
 /coverage
-serverless.yml
 
 # next.js
 .next/
@@ -17,6 +16,7 @@ serverless.yml
 # production
 /build
 .build
+.webpack
 
 # misc
 .DS_Store

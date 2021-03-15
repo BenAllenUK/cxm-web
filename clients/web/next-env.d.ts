@@ -2,8 +2,6 @@
 /// <reference types="next/types/global" />
 /// <reference types="next-images" />
 
-declare module 'react-redux'
-
 declare module '*.svg' {
   const content: any
   export default content
@@ -15,8 +13,6 @@ declare module '*.gql' {
   const value: any
   export = value
 }
-
-declare module 'updeep/dist/updateIn'
 
 declare module 'cloudinary-react'
 

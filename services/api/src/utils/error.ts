@@ -1,10 +1,10 @@
-const error = (e?: Error) => {
+const error = (e?: Error | string) => {
   console.error(e)
   return {
     statusCode: 500,
     body: JSON.stringify({
-      name: e?.name ?? 'UNKNOWN',
-      error: e?.message ?? 'Unknown Error',
+      name: typeof e === 'object' ? e?.name ?? 'UNKNOWN' : e,
+      error: typeof e === 'object' ? e?.message ?? 'Unknown Error' : e,
     }),
   }
 }

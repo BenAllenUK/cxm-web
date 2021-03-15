@@ -1,6 +1,8 @@
 import { APIGatewayProxyHandler } from 'aws-lambda'
 import error from 'utils/error'
-const AWS = require('aws-sdk')
+import * as AWS from 'aws-sdk'
+import invalid from 'utils/invalid'
+import notfound from 'utils/notfound'
 AWS.config.update({ region: process.env.AWS_REGION })
 const s3 = new AWS.S3()
 
@@ -23,13 +25,24 @@ const main: APIGatewayProxyHandler = async (event) => {
     const key = event.pathParameters?.key
 
     const bucket = process.env.AWS_UPLOAD_BUCKET_ID
+    if (!key) {
+      return invalid('Missing key')
+    }
+
+    if (!bucket) {
+      return error('Missing bucket')
+    }
 
     const defaultFallbackImage = await s3.getObject({ Bucket: bucket, Key: key }).promise()
+
+    if (!defaultFallbackImage?.Body || !defaultFallbackImage?.ContentType || !defaultFallbackImage?.LastModified) {
+      return notfound()
+    }
 
     return {
       headers: {
         'Content-Type': defaultFallbackImage.ContentType,
-        'Last-Modified': defaultFallbackImage.LastModified,
+        'Last-Modified': defaultFallbackImage.LastModified.toISOString(),
         'Cache-Control': 'max-age=31536000,public',
       },
       isBase64Encoded: true,

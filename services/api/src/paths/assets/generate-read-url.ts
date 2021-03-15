@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk'
+import * as AWS from 'aws-sdk'
 import { APIGatewayProxyHandler } from 'aws-lambda'
 import error from 'utils/error'
 
