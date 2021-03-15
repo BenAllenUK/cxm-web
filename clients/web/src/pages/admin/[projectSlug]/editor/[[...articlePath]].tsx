@@ -13,7 +13,6 @@ import {
   useGetUserOneQuery,
 } from 'generated/graphql'
 import { GetServerSidePropsContext } from 'next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import useUpsertArticlesMutationScoped from 'operations/articles/upsert'
 import useDeleteBlocksMutationScoped from 'operations/blocks/delete'
 import useUpsertBlocksMutationScoped from 'operations/blocks/upsert'
@@ -23,6 +22,7 @@ import GET_USER_ONE from 'queries/users/GET_USER_ONE.gql'
 import AssetsProvider from 'components/providers/assets'
 import getUserSession from 'utils/user/getUserSession'
 import redirect from 'utils/server/redirect'
+import serverSideTranslations from 'utils/translations/serverSideTranslations'
 
 export default function EditorRoot(props: any) {
   const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props

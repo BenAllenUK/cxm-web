@@ -2,5 +2,6 @@
   "rules": {
     "@typescript-eslint/no-explicit-any": "off"
   },
+  "parser": "babel-eslint",
   "extends": ["prettier"]
 }
