@@ -2,7 +2,6 @@ import * as AWS from 'aws-sdk'
 import { APIGatewayProxyHandler } from 'aws-lambda'
 import error from 'utils/error'
 
-AWS.config.update({ region: process.env.AWS_REGION })
 const s3 = new AWS.S3()
 
 const URL_EXPIRATION_SECONDS = 86400

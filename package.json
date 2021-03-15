@@ -16,7 +16,7 @@
     "build:translate": "./_scripts/translate/run.sh",
     "deploy:root": "./_scripts/deploy/run.sh _root_",
     "deploy:admin": "./_scripts/deploy/run.sh admin",
-    "deploy:api": "cd api && yarn deploy",
+    "deploy:api": "yarn --cwd services/api deploy",
     "deploy:docs": "./_scripts/deploy/run.sh docs",
     "deploy:uploads": "./_scripts/deploy/run.sh uploads",
     "build:root": "./_scripts/build/run.sh _root_",

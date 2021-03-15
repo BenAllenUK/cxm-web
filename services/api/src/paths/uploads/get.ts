@@ -3,7 +3,7 @@ import error from 'utils/error'
 import * as AWS from 'aws-sdk'
 import invalid from 'utils/invalid'
 import notfound from 'utils/notfound'
-AWS.config.update({ region: process.env.AWS_REGION })
+
 const s3 = new AWS.S3()
 
 /**

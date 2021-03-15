@@ -41,3 +41,32 @@ Environment variables need to be added to multiple files:
 - AWS System manager (https://console.aws.amazon.com/systems-manager/parameters/?region=us-east-1&tab=Table)
 
 
+## Env vars
+
+
+## System Manager
+
+[AWS System manager](https://console.aws.amazon.com/systems-manager/parameters/?region=us-east-1&tab=Table) is used to manage remote environment variables. NOT secrets manager. 
+
+You can add a secret like so:
+```
+aws ssm put-parameter --name=/prod/NAME --value=VALUE --type=String --overwrite
+```
+
+The naming convention for secrets is `/[ENVIRONMENT]/[NAME]`.
+
+For example:
+```
+/production/AUTH0_SECRET
+```
+
+View more about [interacting here](https://docs.aws.amazon.com/cli/latest/reference/secretsmanager/create-secret.html)
+
+### Services - API
+
+If adding env var to the API (`services/api`):
+1. Add to `.envrc`
+2. Add to beta and production values to 
+3. Add additional config to `services/api/serverless.yml` under `environment` property. i.e: `NEW_ENV: ${ssm:/prod/NEW_ENV}`
+
+
