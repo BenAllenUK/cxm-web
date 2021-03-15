@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@auth0/nextjs-auth0": "^1.2.0",
+    "@sls-next/next-aws-lambda": "^2.6.3",
     "aws-sdk": "^2.855.0"
   },
   "devDependencies": {

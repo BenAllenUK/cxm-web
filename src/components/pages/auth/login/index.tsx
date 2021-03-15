@@ -21,7 +21,7 @@ const Content = () => {
           style={{ visibility: isLoading ? 'hidden' : 'visible' }}
           className={styles.loginButton}
           id="qsLoginBtn"
-          href="/api/auth/login"
+          href={process.env.NEXT_PUBLIC_AUTH0_LOGIN}
         >
           LOGIN
         </a>

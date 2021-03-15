@@ -35,6 +35,34 @@ functions:
           path: hello
           method: get
           cors: true
+  auth-me:
+    handler: src/paths/auth/me.main
+    events:
+      - http:
+          path: auth/me
+          method: get
+          cors: true
+  auth-login:
+    handler: src/paths/auth/login.main
+    events:
+      - http:
+          path: auth/login
+          method: get
+          cors: true
+  auth-logout:
+    handler: src/paths/auth/logout.main
+    events:
+      - http:
+          path: auth/logout
+          method: get
+          cors: true
+  auth-callback:
+    handler: src/paths/auth/callback.main
+    events:
+      - http:
+          path: auth/callback
+          method: get
+          cors: true
   dns-subdomain-new:
     handler: src/paths/dns/subdomain/new.main
     events:
@@ -54,13 +82,6 @@ functions:
     events:
       - http:
           path: /uploads/{key}
-          method: get
-          cors: true
-  articles-get-one:
-    handler: src/paths/articles/get-one.main
-    events:
-      - http:
-          path: articles/{id}
           method: get
           cors: true
   generate-read-url:
