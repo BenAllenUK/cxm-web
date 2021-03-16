@@ -1,6 +1,6 @@
 import { useCallback, useState, memo, ReactNode } from 'react'
 import useHover from 'utils/hooks/useHover'
-import { BlockData, BlockType, MediaSourceType } from 'components/editor/blocks/types'
+import { BlockData, BlockDataImageUpload, MediaSourceType } from 'components/editor/blocks/types'
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from '..'
 import styles from './Container.module.scss'
 import Controls from './Controls'
@@ -14,6 +14,7 @@ const Container = ({
   onAddClick,
   children,
   onImageUpdate,
+  id,
 }: IProps & IContainerHandlerProps) => {
   const [hoverRef, isHovered] = useHover<HTMLDivElement>()
   const [activeDropzone, setActiveDropzone] = useState(false)
@@ -49,8 +50,10 @@ const Container = ({
             value: fileReader.result,
             type: MediaSourceType.LOCAL,
           },
-          BlockType.IMAGE,
-          files[0],
+          {
+            file: files[0],
+            id: 0,
+          },
           true
         )
         setActiveDropzone(false)
@@ -98,6 +101,7 @@ interface IProps {
   index: number
   initialHeight: number
   enableHandle?: boolean
+  id: number
 }
 
 export interface IContainerHandlerProps {
@@ -105,7 +109,7 @@ export interface IContainerHandlerProps {
   onDoubleClick: (index: number, pos: { x: number; y: number }) => void
   onAddClick: (index: number) => void
   onUpdate: (index: number, arg0: BlockData) => void
-  onImageUpdate: (index: number, arg0: BlockData, type?: BlockType, file?: File, createNew?: boolean) => void
+  onImageUpdate: (index: number, arg0: BlockData, file: BlockDataImageUpload, createNew?: boolean) => void
 }
 
 export default memo(Container)

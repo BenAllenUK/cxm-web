@@ -67,6 +67,7 @@ export type BlockDataImageComment = {
 export type BlockDataImageUpload = {
   file: File
   id: number
+  progress?: number | null
 }
 
 export enum MediaSourceType {

@@ -1,9 +1,17 @@
 import { SyntheticEvent } from 'react'
 import Divider from 'components/editor/blocks/divider/Divider'
 import Image from 'components/editor/blocks/image/Image'
-import { BlockData, BlockDataImage, BlockDataListBullet, BlockDataText, BlockType } from 'components/editor/blocks/types'
+import {
+  BlockData,
+  BlockDataImage,
+  BlockDataListBullet,
+  BlockDataText,
+  BlockType,
+  BlockDataImageUpload,
+} from 'components/editor/blocks/types'
 import ControlledList from '../blocks/list/ControlledList'
 import ControlledText from '../blocks/text/ControlledText'
+import { FileKey } from 'aws-sdk/clients/kinesisanalyticsv2'
 
 const Item = ({
   blockControlOpen,
@@ -38,8 +46,8 @@ const Item = ({
     onUpdate(index, value, type)
   }
 
-  const _onImageUpdate = (value: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => {
-    onImageUpdate(index, value, type, pendingUploadFile, createNew)
+  const _onImageUpdate = (value: BlockData, pendingUploadFile: File, createNew?: boolean) => {
+    onImageUpdate(index, value, { file: pendingUploadFile, id: id }, createNew)
   }
 
   const _onDelete = () => {
@@ -135,7 +143,7 @@ export interface IItemHandlerProps {
   onTextChange: (index: number, value: string) => void
   onNew: (index: number) => void
   onUpdate: (index: number, payload: BlockData, type?: BlockType) => void
-  onImageUpdate: (index: number, payload: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => void
+  onImageUpdate: (index: number, payload: BlockData, pendingUploadFile: BlockDataImageUpload, createNew?: boolean) => void
   onDelete: (index: number) => void
   onFocus: (index: number) => void
   onBlur: (index: number) => void

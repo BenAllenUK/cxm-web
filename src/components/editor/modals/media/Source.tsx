@@ -1,12 +1,12 @@
 import { memo, useRef, useState } from 'react'
 import styles from './MediaSelector.module.scss'
 import { MediaSourceObject, MediaSourceType } from 'components/editor/blocks/types'
-import { BlockDataImage, BlockData, BlockType } from '../../blocks/types'
+import { BlockDataImage, BlockData, BlockType, BlockDataImageUpload } from '../../blocks/types'
 import Button from 'components/common/button/Button'
 import AssetLibrary from './AssetLibrary'
 import TextInput from 'components/common/text-input/TextInput'
 
-export const Source = ({ selected, onUpdate, pictures, setPictures }: IProps) => {
+export const Source = ({ selected, onImageUpdate, onUpdate, pictures, setPictures, id }: IProps) => {
   const EmbedLink = () => {
     const [link, setLink] = useState('')
     const handleClick = () => {
@@ -48,7 +48,7 @@ export const Source = ({ selected, onUpdate, pictures, setPictures }: IProps) =>
       let fileReader = new FileReader()
       fileReader.onload = async function (e) {
         var image = fileReader.result
-        onUpdate({ value: image, type: MediaSourceType.LOCAL }, BlockType.IMAGE, fileUploaded)
+        onImageUpdate({ value: image, type: MediaSourceType.LOCAL }, fileUploaded)
       }
 
       await fileReader.readAsDataURL(fileUploaded)
@@ -82,8 +82,10 @@ export const Source = ({ selected, onUpdate, pictures, setPictures }: IProps) =>
 interface IProps {
   pictures: any[]
   selected: MediaSourceObject
-  onUpdate: (value: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => void
+  onImageUpdate: (value: BlockData, pendingUploadFile: File, createNew?: boolean) => void
+  onUpdate: (value: BlockData, type?: BlockType) => void
   setPictures: any
+  id: number
 }
 
 export default memo(Source)

@@ -1,7 +1,7 @@
 import { memo, useState } from 'react'
 import styles from './MediaSelector.module.scss'
 import TextInput from 'components/common/text-input/TextInput'
-import { BlockDataImage, MediaSourceType, MediaSourceObject } from '../../blocks/types'
+import { BlockData, BlockType, MediaSourceType, MediaSourceObject } from '../../blocks/types'
 import { createApi } from 'unsplash-js'
 import ImageGrid from './cloudinary/ImageGrid'
 import { fetchPhotos } from './cloudinary/index'
@@ -60,7 +60,7 @@ export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps
 }
 
 interface IProps {
-  onUpdate: (value: BlockDataImage) => void
+  onUpdate: (value: BlockData, type?: BlockType) => void
   source: MediaSourceObject
   pictures: any[]
   setPictures: any

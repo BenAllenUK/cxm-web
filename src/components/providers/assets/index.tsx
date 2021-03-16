@@ -2,23 +2,29 @@ import { useGenerateUploadAssetUrlMutation, useGenerateReadAssetUrlMutation } fr
 import { createContext, ReactNode, useContext, useState } from 'react'
 import uploadFile from 'operations/assets/upload'
 
-import { BlockDataImageUpload } from 'components/editor/blocks/types'
+import { BlockDataImageUpload, BlockDataImage } from 'components/editor/blocks/types'
 
 const initialState = {
   upload: () => new Promise<null>(() => null),
   getSecureUrl: () => new Promise<null>(() => null),
   addPendingUpload: () => null,
   removePendingUpload: () => null,
+  addLocalImage: () => null,
+  removeLocalImage: () => null,
   pendingUploads: {},
+  localImages: {},
 }
 
 interface Context {
   pendingUploads: { [key: number]: BlockDataImageUpload }
+  localImages: { [key: number]: string }
 }
 interface ContextActions extends Context {
   upload: (data: any, type: string, callback: (progress: number) => any) => Promise<{ key: string } | null>
   getSecureUrl: (data: any, type: string) => Promise<{ url: string } | null>
   addPendingUpload: (pendingUpload: BlockDataImageUpload) => void
+  addLocalImage: (image: string, id: number) => void
+  removeLocalImage: (id: number) => void
   removePendingUpload: (id: number) => void
 }
 
@@ -30,7 +36,9 @@ const Provider = ({ children }: IProps) => {
   const [generateAssetUrl] = useGenerateUploadAssetUrlMutation()
   const [readAssetUrl] = useGenerateReadAssetUrlMutation()
   const [pendingUploads, setPendingUploads] = useState<{ [key: number]: BlockDataImageUpload }>(initialState)
+  const [localImages, setLocalImages] = useState<{ [key: number]: string }>(initialState)
   const upload = async (data: any, contentType: string, onUploadProgress: (progress: number) => any = (i) => null) => {
+    console.log('in the upload provider')
     const response = await generateAssetUrl({ variables: { contentType } })
     const url = response.data?.assets_generate_upload_url?.url
     const key = response.data?.assets_generate_upload_url?.key
@@ -56,11 +64,24 @@ const Provider = ({ children }: IProps) => {
     }
   }
 
-  const addPendingUpload = (pendingUpload: BlockDataImageUpload) => {
+  const addPendingUpload = async (pendingUpload: BlockDataImageUpload) => {
     setPendingUploads((prevUploads) => ({
       ...prevUploads,
       [pendingUpload.id]: pendingUpload,
     }))
+    console.log('in add penidng upload')
+    const response = await upload(pendingUpload.file, pendingUpload.file.type, (progress) => {
+      setPendingUploads((prevUploads) => ({
+        ...prevUploads,
+        [pendingUpload.id]: { ...pendingUpload, progress: progress },
+      }))
+    })
+    removePendingUpload(pendingUpload.id)
+    if (!response) {
+      console.log(`Error Uploading Image`)
+      return
+    }
+    return response.key
   }
 
   const removePendingUpload = (id: number) => {
@@ -71,8 +92,34 @@ const Provider = ({ children }: IProps) => {
     })
   }
 
+  const addLocalImage = (image: string, id: number) => {
+    setLocalImages((prevImages) => ({
+      ...prevImages,
+      [id]: image,
+    }))
+  }
+
+  const removeLocalImage = (id: number) => {
+    setLocalImages((prevImages) => {
+      const newLocalImages = { ...prevImages }
+      delete newLocalImages[id]
+      return {}
+    })
+  }
+
   return (
-    <Context.Provider value={{ pendingUploads, upload, getSecureUrl, addPendingUpload, removePendingUpload }}>
+    <Context.Provider
+      value={{
+        localImages,
+        pendingUploads,
+        upload,
+        getSecureUrl,
+        addPendingUpload,
+        removePendingUpload,
+        addLocalImage,
+        removeLocalImage,
+      }}
+    >
       {children}
     </Context.Provider>
   )

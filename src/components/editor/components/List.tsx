@@ -1,7 +1,15 @@
 import { useRef, useCallback, SyntheticEvent } from 'react'
 import { SortEnd } from 'react-sortable-hoc'
 import { isBlockEmpty } from '../blocks'
-import { BlockData, BlockType, BlockDataText, BlockDataImage, Block, BlockDataImageUpload } from '../blocks/types'
+import {
+  BlockData,
+  BlockType,
+  BlockDataText,
+  BlockDataImage,
+  Block,
+  BlockDataImageUpload,
+  MediaSourceType,
+} from '../blocks/types'
 import { useAsset } from 'components/providers/assets'
 import useWindowKeyUp from 'utils/hooks/useWindowKeyUp'
 import { calculateBlockControlsPosition, useBlockControlModal } from '../modals/block-controls'
@@ -19,7 +27,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     showControls: showBlockControlsModal,
     hideControls: hideBlockControls,
   } = useBlockControlModal()
-  const { addPendingUpload } = useAsset()
+  const { addPendingUpload, addLocalImage } = useAsset()
   const { setBlockId: setBlockControlsId } = useBlockControlsContext()
 
   const { filterText: modalFilterText, setFilterText } = useBlockControlsContext()
@@ -133,25 +141,40 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     ])
   }
 
-  const _onUpsertImageBlock = (
+  const _onUpsertImageBlock = async (
     index: number,
-    payload: BlockData,
-    type?: BlockType,
-    pendingUploadFile?: File,
+    payload: BlockDataImage,
+    pendingUploadFile: BlockDataImageUpload,
     createNew?: boolean
   ) => {
+    console.log('the upload file object', pendingUploadFile)
     const block = createNew ? createEmptyBlock(index) : blocks[index] || createEmptyBlock(index)
-    if (pendingUploadFile) {
-      addPendingUpload({ file: pendingUploadFile, id: block.id })
-    }
     onBlocksUpsert([
       {
         ...block,
         payload,
-        type: type ?? block.type,
+        type: BlockType.IMAGE,
         position: index,
       },
     ])
+    if (pendingUploadFile) {
+      let uploadFile = pendingUploadFile
+      if (createNew) {
+        uploadFile = { ...pendingUploadFile, id: blocks[index].id }
+      }
+      const key = await addPendingUpload(uploadFile)
+      addLocalImage(payload.value || '', blocks[index].id)
+      console.log('upload success key', key)
+
+      onBlocksUpsert([
+        {
+          ...block,
+          payload: { ...payload, value: key, type: MediaSourceType.UPLOAD },
+          type: BlockType.IMAGE,
+          position: index,
+        },
+      ])
+    }
   }
 
   const _onDeleteBlock = (index: number) => {

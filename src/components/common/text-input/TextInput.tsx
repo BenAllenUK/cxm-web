@@ -4,7 +4,7 @@ import styles from './TextInput.module.scss'
 import mergeRefs from 'utils/refs/mergeRefs'
 
 function normalizeHtml(str: string): string {
-  return str && str.replace(/&nbsp;|\u202F|\u00A0/g, ' ')
+  return str && str?.replace(/&nbsp;|\u202F|\u00A0/g, ' ')
 }
 
 function replaceCaret(el: HTMLElement) {
