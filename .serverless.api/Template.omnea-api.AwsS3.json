@@ -1,6 +1,0 @@
-{
-  "name": "api-omnea",
-  "region": "us-east-1",
-  "accelerated": true,
-  "url": "https://api-omnea.s3.amazonaws.com"
-}

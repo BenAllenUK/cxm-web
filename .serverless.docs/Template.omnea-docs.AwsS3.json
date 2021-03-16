@@ -1,6 +1,0 @@
-{
-  "name": "docs-omnea",
-  "region": "us-east-1",
-  "accelerated": true,
-  "url": "https://docs-omnea.s3.amazonaws.com"
-}
