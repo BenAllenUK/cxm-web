@@ -12,29 +12,6 @@ omnea:
       www.omnea.co: https://omnea.co
     bucketName: omnea
     build:
-      postBuildCommands: ['node dev/post-build/post-build.js']
+      postBuildCommands: ['node _scripts/post-build/post-build.js']
       env:
-        # OMNEA_UPLOAD_URL: ${ssm://prod.OMNEA_UPLOAD_URL}
-
-        # PROTOCOL: 'https'
-        # ROOT_HOST: ${ssm://prod.ROOT_HOST}
-        # API_HOST: ${ssm://prod.API_HOST}
-        # ADMIN_HOST: ${ssm://prod.ADMIN_HOST}
-        # HOSTED_HOST: ${ssm://prod.HOSTED_HOST}
-        # DOCS_HOST: ${ssm://prod.DOCS_HOST}
-        # ORGANISATION: 'gimme'
-
-        # AWS_UPLOAD_BUCKET_ID: ${ssm://prod.AWS_UPLOAD_BUCKET_ID}
-
-        # AUTH0_BASE_URL: ${ssm://prod.AUTH0_BASE_URL}
-        # AUTH0_CALLBACK: ${ssm://prod.AUTH0_CALLBACK}
-        # AUTH0_CLIENT_ID: ${ssm://prod.AUTH0_CLIENT_ID}
-        # AUTH0_CLIENT_SECRET: ${ssm://prod.AUTH0_CLIENT_SECRET~true}
-        # AUTH0_COOKIE_DOMAIN: ${ssm://prod.AUTH0_COOKIE_DOMAIN}
-        # AUTH0_ISSUER_BASE_URL: ${ssm://prod.AUTH0_ISSUER_BASE_URL}
-        # AUTH0_POST_LOGOUT_REDIRECT: ${ssm://prod.AUTH0_POST_LOGOUT_REDIRECT}
-        # AUTH0_SECRET: ${ssm://prod.AUTH0_SECRET~true}
-        # NEXT_PUBLIC_AUTH0_LOGIN: ${ssm://prod.NEXT_PUBLIC_AUTH0_LOGIN}
-        # NEXT_PUBLIC_AUTH0_PROFILE: ${ssm://prod.NEXT_PUBLIC_AUTH0_PROFILE}
-        # NEXT_PUBLIC_AUTH_POST_LOGIN: ${ssm://prod.NEXT_PUBLIC_AUTH_POST_LOGIN}
-        # ${file(.env.yml):}
+        OMNEA_UPLOAD_URL: ${env.OMNEA_UPLOAD_URL}
