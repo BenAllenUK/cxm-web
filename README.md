@@ -70,3 +70,12 @@ If adding env var to the API (`services/api`):
 3. Add additional config to `services/api/serverless.yml` under `environment` property. i.e: `NEW_ENV: ${ssm:/prod/NEW_ENV}`
 
 
+# Deployment (Local)
+
+Deployment is handled by build servers. You should use the build servers to deploy this project.
+
+- `brew install go`
+- `go get -u github.com/remind101/ssm-env`
+- Add .envrc
+- Run `ssm-env env > .env `
+- `yarn deploy:root`

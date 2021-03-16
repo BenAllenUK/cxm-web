@@ -7,9 +7,10 @@ export type Organisation = {
   projects?: Project[]
 
   // Read only
+  // TODO: Make cleaner format
   stats?: {
-    aggregate: {
-      count: number
-    }
+    aggregate?: {
+      count?: number | null
+    } | null
   }
 }

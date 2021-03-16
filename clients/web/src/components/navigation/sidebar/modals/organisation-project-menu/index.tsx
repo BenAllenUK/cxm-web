@@ -61,7 +61,7 @@ const Component = ({ organisations = [], email, onClick }: IComponentProps) => {
       title: project.name,
       subtitle: t('modals.projectSelection.subtitle', {
         organisationName: organisation.name,
-        membersCount: organisation.stats?.aggregate.count,
+        membersCount: organisation.stats?.aggregate?.count,
       }),
     })),
   }))
