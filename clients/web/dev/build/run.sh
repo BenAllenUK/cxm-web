@@ -4,7 +4,15 @@ then
   exit 1
 fi
 
+CONFIG_PATH="$DEPLOYMENT_CONFIG_BUCKET/clients/web"
 
-_scripts/copy/run.sh $1
-yarn run next build
-_scripts/clean/run.sh $1
+# CLEAN
+rm -r pages 2>/dev/null
+
+# COPY
+cp -r src/pages/$1/ pages/ 2>/dev/null
+cp -r src/pages/_app.js pages/_app.js 2>/dev/null
+
+
+# DEPLOY
+./node_modules/.bin/next build
