@@ -55,4 +55,4 @@ src/generated/graphql.tsx
 
 !.envrc.template
 
-clients/web/pages/*
+clients/web/pages

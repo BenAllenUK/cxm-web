@@ -1,5 +1,5 @@
 import { IOptionSections, OptionType } from 'components/common/option-controls'
-import { useTranslation } from 'next-i18next'
+import useTranslation from 'utils/translations/useTranslation'
 import { createContext, ReactNode, RefObject, useCallback, useContext, useLayoutEffect, useRef, useState } from 'react'
 import LinkUncontrolled from './LinkUncontrolled'
 import ExternalLinkIcon from 'images/icons/external-link.svg'

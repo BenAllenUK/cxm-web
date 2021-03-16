@@ -1,4 +1,4 @@
-import { useTranslation } from 'next-i18next'
+import useTranslation from 'utils/translations/useTranslation'
 import Button from 'components/common/button/Button'
 import styles from './Footer.module.scss'
 

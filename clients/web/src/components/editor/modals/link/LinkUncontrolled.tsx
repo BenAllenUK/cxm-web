@@ -1,6 +1,6 @@
 import OptionControls, { IOptionElements, IOptionSections, OptionType } from 'components/common/option-controls'
 import TextInput from 'components/common/text-input/TextInput'
-import { useTranslation } from 'next-i18next'
+import useTranslation from 'utils/translations/useTranslation'
 import { CSSProperties, forwardRef, RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { updateBoundedPosition } from 'utils/modals/updateBoundedPosition'
 import mergeRefs from 'utils/refs/mergeRefs'
