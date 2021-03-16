@@ -8,7 +8,6 @@ api/.build
 /pages/
 # testing
 /coverage
-serverless.yml
 
 # next.js
 .next/
@@ -16,10 +15,13 @@ serverless.yml
 
 # production
 /build
+.build
+.webpack
 
 # misc
 .DS_Store
 *.pem
+/.env*
 
 # debug
 npm-debug.log*
@@ -34,9 +36,9 @@ yarn-error.log*
 
 # vercel
 .vercel
-
+.env*
 .envrc
-.serverless.yml
+clients/web/serverless.yml
 # src/generated/*.*
 graphql.schema.json
 

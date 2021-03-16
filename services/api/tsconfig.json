@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "src",
+    "target": "es6",
+    "sourceMap": false,
+    "moduleResolution": "node"
+  },
+  "include": ["types.d.ts", "src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["src/**/__tests__", "src/**/__tests__util"]
+}

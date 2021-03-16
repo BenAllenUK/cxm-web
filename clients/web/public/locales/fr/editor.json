@@ -1,0 +1,52 @@
+{
+  "link": {
+    "header": "Lien vers le contenu ...",
+    "newUrl": "Lien vers l'URL",
+    "newPagePrefix": "Nouveau",
+    "newPageSuffix": " page en ...",
+    "placeholder": "Coller le lien ou rechercher des pages"
+  },
+  "textControls": {
+    "buttonConversion": "Texte",
+    "buttonConversionTip": "Changer en",
+    "buttonLink": "Lien",
+    "buttonLinkTip": "Lien",
+    "buttonComment": "Commenter",
+    "buttonCommentTip": "Commentaire sur le texte sélectionné",
+    "buttonBoldTip": "Gras",
+    "buttonItalicTip": "Italique",
+    "buttonUnderlineTip": "Souligner",
+    "buttonStrikeThroughTip": "Frapper à travers",
+    "buttonCodeTip": "Code",
+    "buttonTextStyleTip": "Changer le style du texte",
+    "buttonMoreTip": "Suite"
+  },
+  "textStyles": {
+    "colorTitle": "COULEUR",
+    "backgroundTitle": "CONTEXTE",
+    "colors": {
+      "default": "Défaut",
+      "gray": "grise",
+      "brown": "marron",
+      "orange": "Orange",
+      "yellow": "Jaune",
+      "green": "Vert",
+      "blue": "Bleu",
+      "purple": "Violet",
+      "pink": "Rose",
+      "red": "rouge"
+    },
+    "backgrounds": {
+      "default": "Arrière-plan par défaut",
+      "gray": "Fond gris",
+      "brown": "Fond marron",
+      "orange": "Fond orange",
+      "yellow": "Fond jaune",
+      "green": "Fond vert",
+      "blue": "Fond bleu",
+      "purple": "Fond violet",
+      "pink": "Fond rose",
+      "red": "Fond rouge"
+    }
+  }
+}

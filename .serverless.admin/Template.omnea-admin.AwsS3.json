@@ -1,6 +1,0 @@
-{
-  "name": "admin-omnea",
-  "region": "us-east-1",
-  "accelerated": true,
-  "url": "https://admin-omnea.s3.amazonaws.com"
-}
