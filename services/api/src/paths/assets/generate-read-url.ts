@@ -25,7 +25,7 @@ const URL_EXPIRATION_SECONDS = 86400
  *                 url:
  *                   type: string
  */
-const main: APIGatewayProxyHandler = async (event) => {
+export const main: APIGatewayProxyHandler = async (event) => {
   try {
     const body = event.body ? JSON.parse(event.body) : {}
     const key = body.input?.key
@@ -59,5 +59,3 @@ const main: APIGatewayProxyHandler = async (event) => {
     return error(e)
   }
 }
-
-module.exports = { main }
