@@ -23,6 +23,7 @@ import AssetsProvider from 'components/providers/assets'
 import getUserSession from 'utils/user/getUserSession'
 import redirect from 'utils/server/redirect'
 import serverSideTranslations from 'utils/translations/serverSideTranslations'
+import { gql } from '@apollo/client'
 
 export default function EditorRoot(props: any) {
   const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
@@ -122,6 +123,7 @@ export function Content() {
 export async function getServerSideProps({ params, locale, req, res }: GetServerSidePropsContext) {
   const session = getUserSession(req, res)
   if (!session) {
+    console.log(`Redirect. session`, session)
     return redirect()
   }
   const {
@@ -131,20 +133,46 @@ export async function getServerSideProps({ params, locale, req, res }: GetServer
   } = session
 
   const client = initializeApollo({}, idToken)
-
-  const organisationSlug = process.env.ORGANISATION
+  // https://admin.omnea.co/gimme/editor
+  const organisationSlug = process.env.ORGANISATION || 'gimme'
 
   const projectSlug = params?.projectSlug
   const articlePathRaw = params?.articlePath || []
 
   if (!organisationSlug || !projectSlug || !userId) {
+    console.log(`Redirect. organisationSlug: ${organisationSlug} projectSlug: ${projectSlug} userId: ${userId}`)
     return redirect()
   }
 
   // FETCH USER
 
   const { data: usersData } = await client.query({
-    query: GET_USER_ONE,
+    query: gql`
+      query GetUserOne1($id: Int!) {
+        users_by_pk(id: $id) {
+          id
+          name
+          userOrganisations {
+            organisation {
+              id
+              name
+              slug
+              projects {
+                id
+                name
+                image
+                slug
+              }
+              stats: userOrganisations_aggregate {
+                aggregate {
+                  count
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
     variables: { id: userId },
   })
 
@@ -154,10 +182,49 @@ export async function getServerSideProps({ params, locale, req, res }: GetServer
     return redirect()
   }
 
-  // FETCH ORGANISATION
+  // // FETCH ORGANISATION
 
   const { data: organisationsData } = await client.query({
-    query: GET_ORGANISATION_ONE,
+    query: gql`
+      query GetOrganisationOne1($slug: String!, $projectSlug: String!) {
+        organisations(where: { slug: { _eq: $slug } }) {
+          id
+          name
+          slug
+
+          projects(where: { slug: { _eq: $projectSlug } }) {
+            id
+            name
+            image
+            slug
+            articles: articles(where: { archived: { _eq: false } }) {
+              id
+              parentId
+              projectId
+              title
+              updatedAt
+              createdAt
+              archived
+              archivedAt
+              position
+              path
+            }
+            archivedArticles: articles(where: { archived: { _eq: true } }) {
+              id
+              parentId
+              projectId
+              title
+              updatedAt
+              createdAt
+              archived
+              archivedAt
+              position
+              path
+            }
+          }
+        }
+      }
+    `,
     variables: { slug: organisationSlug, projectSlug },
   })
 
@@ -176,15 +243,15 @@ export async function getServerSideProps({ params, locale, req, res }: GetServer
     return redirect()
   }
 
-  // FETCH ARTICLES
+  // // FETCH ARTICLES
 
   const articlePath = Array.isArray(articlePathRaw) ? articlePathRaw.join('/') : articlePathRaw
   const selectedArticlePath = articlePath || project.articles[0].path
 
-  const { data: articleData } = await client.query({
-    query: GET_ARTICLE_ONE,
-    variables: { path: selectedArticlePath },
-  })
+  // const { data: articleData } = await client.query({
+  //   query: GET_ARTICLE_ONE,
+  //   variables: { path: selectedArticlePath },
+  // })
 
   return {
     props: {

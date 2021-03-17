@@ -7163,6 +7163,61 @@ export type UsersVarianceOrderBy = {
 };
 
 
+export type GetUserOne1QueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetUserOne1Query = (
+  { __typename?: 'query_root' }
+  & { users_by_pk?: Maybe<(
+    { __typename?: 'users' }
+    & Pick<Users, 'id' | 'name'>
+    & { userOrganisations: Array<(
+      { __typename?: 'user_organisation' }
+      & { organisation: (
+        { __typename?: 'organisations' }
+        & Pick<Organisations, 'id' | 'name' | 'slug'>
+        & { projects: Array<(
+          { __typename?: 'projects' }
+          & Pick<Projects, 'id' | 'name' | 'image' | 'slug'>
+        )>, stats: (
+          { __typename?: 'user_organisation_aggregate' }
+          & { aggregate?: Maybe<(
+            { __typename?: 'user_organisation_aggregate_fields' }
+            & Pick<UserOrganisationAggregateFields, 'count'>
+          )> }
+        ) }
+      ) }
+    )> }
+  )> }
+);
+
+export type GetOrganisationOne1QueryVariables = Exact<{
+  slug: Scalars['String'];
+  projectSlug: Scalars['String'];
+}>;
+
+
+export type GetOrganisationOne1Query = (
+  { __typename?: 'query_root' }
+  & { organisations: Array<(
+    { __typename?: 'organisations' }
+    & Pick<Organisations, 'id' | 'name' | 'slug'>
+    & { projects: Array<(
+      { __typename?: 'projects' }
+      & Pick<Projects, 'id' | 'name' | 'image' | 'slug'>
+      & { articles: Array<(
+        { __typename?: 'articles' }
+        & Pick<Articles, 'id' | 'parentId' | 'projectId' | 'title' | 'updatedAt' | 'createdAt' | 'archived' | 'archivedAt' | 'position' | 'path'>
+      )>, archivedArticles: Array<(
+        { __typename?: 'articles' }
+        & Pick<Articles, 'id' | 'parentId' | 'projectId' | 'title' | 'updatedAt' | 'createdAt' | 'archived' | 'archivedAt' | 'position' | 'path'>
+      )> }
+    )> }
+  )> }
+);
+
 export type ArticleFragment = (
   { __typename?: 'articles' }
   & Pick<Articles, 'id' | 'parentId' | 'projectId' | 'title' | 'updatedAt' | 'createdAt' | 'archived' | 'archivedAt' | 'position' | 'path'>
@@ -7536,6 +7591,124 @@ export const ProjectFragmentDoc = gql`
   slug
 }
     `;
+export const GetUserOne1Document = gql`
+    query GetUserOne1($id: Int!) {
+  users_by_pk(id: $id) {
+    id
+    name
+    userOrganisations {
+      organisation {
+        id
+        name
+        slug
+        projects {
+          id
+          name
+          image
+          slug
+        }
+        stats: userOrganisations_aggregate {
+          aggregate {
+            count
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserOne1Query__
+ *
+ * To run a query within a React component, call `useGetUserOne1Query` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserOne1Query` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserOne1Query({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetUserOne1Query(baseOptions: Apollo.QueryHookOptions<GetUserOne1Query, GetUserOne1QueryVariables>) {
+        return Apollo.useQuery<GetUserOne1Query, GetUserOne1QueryVariables>(GetUserOne1Document, baseOptions);
+      }
+export function useGetUserOne1LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserOne1Query, GetUserOne1QueryVariables>) {
+          return Apollo.useLazyQuery<GetUserOne1Query, GetUserOne1QueryVariables>(GetUserOne1Document, baseOptions);
+        }
+export type GetUserOne1QueryHookResult = ReturnType<typeof useGetUserOne1Query>;
+export type GetUserOne1LazyQueryHookResult = ReturnType<typeof useGetUserOne1LazyQuery>;
+export type GetUserOne1QueryResult = Apollo.QueryResult<GetUserOne1Query, GetUserOne1QueryVariables>;
+export const GetOrganisationOne1Document = gql`
+    query GetOrganisationOne1($slug: String!, $projectSlug: String!) {
+  organisations(where: {slug: {_eq: $slug}}) {
+    id
+    name
+    slug
+    projects(where: {slug: {_eq: $projectSlug}}) {
+      id
+      name
+      image
+      slug
+      articles: articles(where: {archived: {_eq: false}}) {
+        id
+        parentId
+        projectId
+        title
+        updatedAt
+        createdAt
+        archived
+        archivedAt
+        position
+        path
+      }
+      archivedArticles: articles(where: {archived: {_eq: true}}) {
+        id
+        parentId
+        projectId
+        title
+        updatedAt
+        createdAt
+        archived
+        archivedAt
+        position
+        path
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetOrganisationOne1Query__
+ *
+ * To run a query within a React component, call `useGetOrganisationOne1Query` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrganisationOne1Query` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrganisationOne1Query({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *      projectSlug: // value for 'projectSlug'
+ *   },
+ * });
+ */
+export function useGetOrganisationOne1Query(baseOptions: Apollo.QueryHookOptions<GetOrganisationOne1Query, GetOrganisationOne1QueryVariables>) {
+        return Apollo.useQuery<GetOrganisationOne1Query, GetOrganisationOne1QueryVariables>(GetOrganisationOne1Document, baseOptions);
+      }
+export function useGetOrganisationOne1LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrganisationOne1Query, GetOrganisationOne1QueryVariables>) {
+          return Apollo.useLazyQuery<GetOrganisationOne1Query, GetOrganisationOne1QueryVariables>(GetOrganisationOne1Document, baseOptions);
+        }
+export type GetOrganisationOne1QueryHookResult = ReturnType<typeof useGetOrganisationOne1Query>;
+export type GetOrganisationOne1LazyQueryHookResult = ReturnType<typeof useGetOrganisationOne1LazyQuery>;
+export type GetOrganisationOne1QueryResult = Apollo.QueryResult<GetOrganisationOne1Query, GetOrganisationOne1QueryVariables>;
 export const CreateArticleDocument = gql`
     mutation CreateArticle($object: articles_insert_input!) {
   insert_articles_one(object: $object) {
