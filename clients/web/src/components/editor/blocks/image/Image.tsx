@@ -1,5 +1,6 @@
 import { memo, useState, useCallback } from 'react'
-import { BlockDataImage, BlockData, BlockType } from '../types'
+import { BlockDataImage, BlockData, BlockType, MediaSourceType } from '../types'
+import { useAsset } from 'components/providers/assets'
 import styles from './Image.module.scss'
 import ImageIcon from 'images/icons/image.svg'
 import MediaSelector from 'components/editor/modals/media/MediaSelector'
@@ -9,11 +10,12 @@ import TextInput from 'components/common/text-input/TextInput'
 import Progress from './Progress'
 import ImageComponent from './ImageComponent'
 
-export const Image = ({ content, onUpdate, onImageUpdate, id }: IProps) => {
+export const Image = ({ content, onUpdate, onImageUpdate, id, deleteBlock }: IProps) => {
   const [showSelector, setShowSelector] = useState(false)
   const [createComment, setCreateComment] = useState(false)
   const [caption, setCaption] = useState(content.caption || '')
   const [writeNewCaption, setWriteNewCaption] = useState(false)
+  const { localImages } = useAsset()
 
   const _setShowSelector = useCallback(() => {
     setShowSelector(!showSelector)
@@ -27,7 +29,15 @@ export const Image = ({ content, onUpdate, onImageUpdate, id }: IProps) => {
     setCreateComment(true)
   }, [setCreateComment])
 
-  if (!content.value) {
+  const onCaptionChange = useCallback(
+    (e: any) => {
+      setCaption(e.target.value)
+      onUpdate({ ...content, caption: e.target.value }, BlockType.IMAGE)
+    },
+    [setCaption, onUpdate, content]
+  )
+
+  if (!content.value && !localImages[id]) {
     return (
       <div>
         <div className={styles.container} onClick={_setShowSelector}>
@@ -48,21 +58,16 @@ export const Image = ({ content, onUpdate, onImageUpdate, id }: IProps) => {
   //   // onUpdate({ ...content, comments: content.comments.push(commentObj) })
   // }
 
-  const onCaptionChange = useCallback(
-    (e: any) => {
-      setCaption(e.target.value)
-      onUpdate({ ...content, caption: e.target.value }, BlockType.IMAGE)
-    },
-    [setCaption, onUpdate, content]
-  )
-
-  console.log('content', content)
   return (
     <div className={styles.box}>
       <div className={styles.imageContainer}>
-        <ImageComponent content={content} id={id} />
+        <ImageComponent content={content.value ? content : { value: localImages[id], type: MediaSourceType.LOCAL }} id={id} />
         <div className={styles.mediaControls}>
-          <MediaControls.Component setWriteNewCaption={_writeNewCaption} setCreateComment={_setCreateComment} />
+          <MediaControls.Component
+            deleteBlock={deleteBlock}
+            setWriteNewCaption={_writeNewCaption}
+            setCreateComment={_setCreateComment}
+          />
         </div>
         <Progress id={id} />
       </div>
@@ -85,7 +90,8 @@ export const Image = ({ content, onUpdate, onImageUpdate, id }: IProps) => {
 interface IProps {
   content: BlockDataImage
   onUpdate: (value: BlockData, type?: BlockType) => void
-  onImageUpdate: (value: BlockData, pendingUploadFile: File, createNew?: boolean) => void
+  onImageUpdate: (value: BlockDataImage, pendingUploadFile: File, createNew?: boolean) => void
+  deleteBlock: () => void
   id: number
 }
 

@@ -38,7 +38,6 @@ const Provider = ({ children }: IProps) => {
   const [pendingUploads, setPendingUploads] = useState<{ [key: number]: BlockDataImageUpload }>(initialState)
   const [localImages, setLocalImages] = useState<{ [key: number]: string }>(initialState)
   const upload = async (data: any, contentType: string, onUploadProgress: (progress: number) => any = (i) => null) => {
-    console.log('in the upload provider')
     const response = await generateAssetUrl({ variables: { contentType } })
     const url = response.data?.assets_generate_upload_url?.url
     const key = response.data?.assets_generate_upload_url?.key
@@ -69,7 +68,6 @@ const Provider = ({ children }: IProps) => {
       ...prevUploads,
       [pendingUpload.id]: pendingUpload,
     }))
-    console.log('in add penidng upload')
     const response = await upload(pendingUpload.file, pendingUpload.file.type, (progress) => {
       setPendingUploads((prevUploads) => ({
         ...prevUploads,

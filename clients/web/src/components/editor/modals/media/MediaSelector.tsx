@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import styles from './MediaSelector.module.scss'
 import ImageIcon from 'images/icons/image.svg'
 import { default as NextImage } from 'next/image'
-import { BlockData, BlockType, MediaSourceType, MediaSourceObject, BlockDataImageUpload } from '../../blocks/types'
+import { BlockData, BlockType, MediaSourceType, MediaSourceObject, BlockDataImage } from '../../blocks/types'
 import SourceTabBar from './SourceTabBar'
 import Source from './Source'
 
@@ -59,7 +59,7 @@ export const MediaSelector = ({ onImageUpdate, onUpdate, id }: IProps) => {
 }
 
 interface IProps {
-  onImageUpdate: (value: BlockData, pendingUploadFile: File, createNew?: boolean) => void
+  onImageUpdate: (value: BlockDataImage, pendingUploadFile: File, createNew?: boolean) => void
   onUpdate: (value: BlockData, type?: BlockType) => void
   id: number
 }

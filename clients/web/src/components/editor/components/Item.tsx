@@ -46,7 +46,7 @@ const Item = ({
     onUpdate(index, value, type)
   }
 
-  const _onImageUpdate = (value: BlockData, pendingUploadFile: File, createNew?: boolean) => {
+  const _onImageUpdate = (value: BlockDataImage, pendingUploadFile: File, createNew?: boolean) => {
     onImageUpdate(index, value, { file: pendingUploadFile, id: id }, createNew)
   }
 
@@ -99,7 +99,7 @@ const Item = ({
     }
     case BlockType.IMAGE: {
       const content: BlockDataImage = payload as BlockDataImage
-      return <Image content={content} onUpdate={_onUpdate} onImageUpdate={_onImageUpdate} id={id} />
+      return <Image deleteBlock={_onDelete} content={content} onUpdate={_onUpdate} onImageUpdate={_onImageUpdate} id={id} />
     }
     case BlockType.DIVIDER:
       return <Divider />
@@ -143,7 +143,7 @@ export interface IItemHandlerProps {
   onTextChange: (index: number, value: string) => void
   onNew: (index: number) => void
   onUpdate: (index: number, payload: BlockData, type?: BlockType) => void
-  onImageUpdate: (index: number, payload: BlockData, pendingUploadFile: BlockDataImageUpload, createNew?: boolean) => void
+  onImageUpdate: (index: number, payload: BlockDataImage, pendingUploadFile: BlockDataImageUpload, createNew?: boolean) => void
   onDelete: (index: number) => void
   onFocus: (index: number) => void
   onBlur: (index: number) => void

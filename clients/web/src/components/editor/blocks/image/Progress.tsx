@@ -5,9 +5,7 @@ import styles from './Image.module.scss'
 export const Progress = ({ id }: IProps) => {
   const { pendingUploads } = useAsset()
   const progress = pendingUploads[id]?.progress
-  console.log('id', id)
-  console.log('pending uplaods', pendingUploads)
-  console.log('progress', progress)
+
   return (
     <div>
       {progress && (

@@ -41,6 +41,7 @@
   width: 600px;
   height: 400px;
   margin: 0 auto;
+  background-color: green;
 
   &:hover > .mediaControls {
     display: block;
@@ -49,6 +50,9 @@
 
 .mediaControls {
   display: none;
+  &:hover > {
+    display: flex;
+  }
 }
 
 .box {

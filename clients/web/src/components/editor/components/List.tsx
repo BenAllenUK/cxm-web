@@ -10,6 +10,7 @@ import {
   BlockDataImageUpload,
   MediaSourceType,
 } from '../blocks/types'
+import { BlockTypeProperties } from 'components/editor/blocks'
 import { useAsset } from 'components/providers/assets'
 import useWindowKeyUp from 'utils/hooks/useWindowKeyUp'
 import { calculateBlockControlsPosition, useBlockControlModal } from '../modals/block-controls'
@@ -147,29 +148,38 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     pendingUploadFile: BlockDataImageUpload,
     createNew?: boolean
   ) => {
-    console.log('the upload file object', pendingUploadFile)
     const block = createNew ? createEmptyBlock(index) : blocks[index] || createEmptyBlock(index)
-    onBlocksUpsert([
-      {
-        ...block,
-        payload,
-        type: BlockType.IMAGE,
-        position: index,
-      },
-    ])
+
     if (pendingUploadFile) {
+      onBlocksUpsert([
+        {
+          ...block,
+          payload: BlockTypeProperties[BlockType.IMAGE],
+          type: BlockType.IMAGE,
+          position: index,
+        },
+      ])
       let uploadFile = pendingUploadFile
       if (createNew) {
         uploadFile = { ...pendingUploadFile, id: blocks[index].id }
       }
-      const key = await addPendingUpload(uploadFile)
       addLocalImage(payload.value || '', blocks[index].id)
+      const key = await addPendingUpload(uploadFile)
       console.log('upload success key', key)
 
       onBlocksUpsert([
         {
           ...block,
           payload: { ...payload, value: key, type: MediaSourceType.UPLOAD },
+          type: BlockType.IMAGE,
+          position: index,
+        },
+      ])
+    } else {
+      onBlocksUpsert([
+        {
+          ...block,
+          payload: BlockTypeProperties[BlockType.IMAGE],
           type: BlockType.IMAGE,
           position: index,
         },
