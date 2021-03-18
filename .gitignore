@@ -57,5 +57,5 @@ src/generated/graphql.tsx
 
 clients/web/pages
 libs/@omnea-core/next/dist
-libs/@omnea-digital/queries/dist
+libs/@omnea-digital/queries/graphql
 libs/@omnea-digital/queries/src/graphql.tsx

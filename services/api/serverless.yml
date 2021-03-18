@@ -1,6 +1,5 @@
 service: api-omnea
 
-
 provider:
   name: aws
   runtime: nodejs12.x
@@ -49,11 +48,18 @@ functions:
           path: hello
           method: get
           cors: true
-  articles-get:
-    handler: src/paths/articles/get.main
+  projects-articles-get-one:
+    handler: src/paths/projects/articles/get-one.main
     events:
       - http:
-          path: articles/{id}
+          path: /{projectId}/articles/{articleId}
+          method: get
+          cors: true
+  projects-articles-get:
+    handler: src/paths/projects/articles/get.main
+    events:
+      - http:
+          path: /{projectId}/articles
           method: get
           cors: true
   auth-me:
