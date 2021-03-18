@@ -11,8 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "@auth0/nextjs-auth0": "^1.2.0",
+    "@omnea-digital/queries": "link:../../libs/@omnea-digital/queries",
     "@sls-next/next-aws-lambda": "^2.6.3",
-    "aws-sdk": "^2.855.0"
+    "aws-sdk": "^2.855.0",
+    "@apollo/client": "3.3.6"
   },
   "devDependencies": {
     "@types/atob": "^2.1.2",
@@ -26,6 +28,8 @@
     "serverless-offline": "^6.8.0",
     "serverless-plugin-typescript": "^1.1.9",
     "ts-node": "^9.1.1",
-    "typescript": "^4.2.2"
+    "typescript": "^4.2.2",
+    "next": "^10.0.9",
+    "react": "^17.0.1"
   }
 }

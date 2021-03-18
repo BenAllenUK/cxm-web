@@ -49,6 +49,13 @@ functions:
           path: hello
           method: get
           cors: true
+  articles-get:
+    handler: src/paths/articles/get.main
+    events:
+      - http:
+          path: articles/{id}
+          method: get
+          cors: true
   auth-me:
     handler: src/paths/auth/me.main
     events:

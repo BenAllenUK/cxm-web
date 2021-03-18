@@ -56,3 +56,6 @@ src/generated/graphql.tsx
 !.envrc.template
 
 clients/web/pages
+libs/@omnea-core/next/dist
+libs/@omnea-digital/queries/dist
+libs/@omnea-digital/queries/src/graphql.tsx
