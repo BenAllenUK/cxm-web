@@ -1,11 +1,11 @@
-// import type {
-//   GetStaticPaths,
-//   GetStaticPathsContext,
-//   GetStaticProps,
-//   GetStaticPropsContext
-// } from 'next'
+import type {
+  GetStaticPaths,
+  GetStaticPathsContext,
+  GetStaticProps,
+  GetStaticPropsContext
+} from 'next'
 
-// import type { AppProps as NextJsAppProps } from 'next/app'
+import type { AppProps as NextJsAppProps } from 'next/app'
 
 export interface ArticleRaw {
   blocks: BlockRaw[]
@@ -22,13 +22,7 @@ export interface Article {
   blocks: Block[]
 }
 
-type GetStaticPaths = any
-type GetStaticPathsContext = any
-type GetStaticProps = any
-type GetStaticPropsContext = any
-type NextJsAppProps = any
-
-export type AppProps = NextJsAppProps & ComponentProps
+export type AppPropsWithOmnea = NextJsAppProps & ComponentProps
 
 export type WithOmneaStaticProps = (
   handler: GetStaticProps
@@ -39,13 +33,25 @@ export type WithOmneaStaticPaths = (
 ) => (context: GetStaticPathsContext) => {}
 
 export type WithOmneaPage = (
-  WrappedComponent: React.ComponentType<AppProps> | any
-) => {}
+  WrappedComponent:
+    | React.ComponentType<NextJsAppProps>
+    | React.ElementType<NextJsAppProps>
+) => React.ComponentType<NextJsAppProps> | React.ElementType<NextJsAppProps>
+
+export type WithOmneaCustomPage = (
+  WrappedComponent:
+    | React.ComponentType<AppPropsWithOmnea>
+    | React.ElementType<AppPropsWithOmnea>
+) =>
+  | React.ComponentType<AppPropsWithOmnea>
+  | React.ElementType<AppPropsWithOmnea>
 
 export interface Client {
   withOmneaPage: WithOmneaPage
   withOmneaStaticPaths: WithOmneaStaticPaths
   withOmneaStaticProps: WithOmneaStaticProps
+  withOmneaCustomPage: WithOmneaCustomPage
+  useArticle: () => { article: Article | null }
 }
 
 export interface ComponentProps {

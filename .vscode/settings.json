@@ -16,6 +16,8 @@
     "clients/web/.next/*": true,
     "clients/web/.serverless/*": true,
     "clients/web/.serverless_nextjs/*": true,
-    "clients/web/pages": true
+    "clients/web/pages": true,
+    "libs/@omnea-digital/nextjs/dist": true,
+    "libs/@omnea-digital/nextjs/example/.next": true
   }
 }

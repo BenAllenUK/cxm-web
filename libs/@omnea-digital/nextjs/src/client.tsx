@@ -1,6 +1,13 @@
 import hoistNonReactStatics from 'hoist-non-react-statics'
-import { Article, Config, ArticleRaw, AppProps } from './types'
+import {
+  Article,
+  Config,
+  ArticleRaw,
+  AppPropsWithOmnea,
+  WithOmneaCustomPage
+} from './types'
 import Content from './components/Content'
+import Loading from './components/Loading'
 import fetch from 'node-fetch'
 import {
   WithOmneaStaticProps,
@@ -8,12 +15,19 @@ import {
   WithOmneaPage,
   Client
 } from './types'
+import { createContext, useContext } from 'react'
 
 export default function init(config?: Config): Client {
   let client: Client | null = null
   var _cachedArticles: Article[] | null = null
   var _isInitialized: boolean = false
   var _config: Config | null = null
+
+  const ArticleContext = createContext<{ article: Article | null }>({
+    article: null
+  })
+
+  const useArticle = () => useContext(ArticleContext)
 
   function getConfig() {
     return _config
@@ -87,16 +101,28 @@ export default function init(config?: Config): Client {
     _config = newConfig
   }
 
-  const withOmneaPage: WithOmneaPage = (WrappedComponent) => {
-    const AppWithStaticPages = (props: AppProps) => {
-      // @ts-ignore
+  const withOmneaPage: WithOmneaPage = (FallbackPage?) => {
+    const AppWithStaticPages = (props: AppPropsWithOmnea) => {
       const article = props.article
 
       if (!article) {
-        return <WrappedComponent {...props} />
+        return FallbackPage ? <FallbackPage {...props} /> : <Loading />
       }
 
       return <Content article={article} />
+    }
+
+    return hoistNonReactStatics(AppWithStaticPages, FallbackPage)
+  }
+
+  const withOmneaCustomPage: WithOmneaCustomPage = (WrappedComponent) => {
+    const AppWithStaticPages = (props: AppPropsWithOmnea) => {
+      const article = props.article
+      return (
+        <ArticleContext.Provider value={{ article: article || null }}>
+          <WrappedComponent {...props} />
+        </ArticleContext.Provider>
+      )
     }
 
     return hoistNonReactStatics(AppWithStaticPages, WrappedComponent)
@@ -126,6 +152,7 @@ export default function init(config?: Config): Client {
   const withOmneaStaticProps: WithOmneaStaticProps = (handler) => async (
     context
   ) => {
+    console.log(`Preview mode ${context.preview || false}`)
     const articles = await fetchArticles()
 
     const original = await handler(context)
@@ -137,7 +164,6 @@ export default function init(config?: Config): Client {
 
     const fullPath = Array.isArray(path) ? path.join('/') : path
     const [article] = articles.filter((item) => item.path === fullPath)
-    console.log(article)
 
     if (!article) {
       return original
@@ -153,6 +179,12 @@ export default function init(config?: Config): Client {
   }
 
   initOmnea(config)
-  client = { withOmneaStaticPaths, withOmneaPage, withOmneaStaticProps }
+  client = {
+    withOmneaStaticPaths,
+    withOmneaPage,
+    withOmneaCustomPage,
+    withOmneaStaticProps,
+    useArticle
+  }
   return client
 }

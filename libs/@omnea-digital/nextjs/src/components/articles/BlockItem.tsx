@@ -10,7 +10,7 @@ interface IBlockProps {
   index: number
 }
 
-const Block = ({ item, index }: IBlockProps) => {
+const BlockItem = ({ item, index }: IBlockProps) => {
   switch (item.type) {
     case BlockType.TEXT:
     case BlockType.H1:
@@ -29,4 +29,4 @@ const Block = ({ item, index }: IBlockProps) => {
   }
 }
 
-export default Block
+export default BlockItem

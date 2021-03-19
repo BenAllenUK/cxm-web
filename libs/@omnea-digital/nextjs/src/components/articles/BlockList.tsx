@@ -2,7 +2,7 @@ import { Block } from '../../types'
 
 import './BlockList.scss'
 
-import BlockItem from './Block'
+import BlockItem from './BlockItem'
 
 const BlockList = ({ blocks }: IProps) => {
   return (

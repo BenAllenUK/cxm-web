@@ -43,7 +43,7 @@ export const main: APIGatewayProxyHandler = async (event) => {
 
     const randomId = Number(Math.random() * 10000000)
 
-    const [fileExtension] = type.split('/')
+    const [fileType, fileExtension] = type.split('/')
     const key = `${randomId}.${fileExtension}`
 
     const s3Params = {

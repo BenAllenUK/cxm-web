@@ -1,28 +1,61 @@
 import {
-  withOmneaPage,
+  withOmneaCustomPage,
   withOmneaStaticPaths,
-  withOmneaStaticProps
+  withOmneaStaticProps,
+  BlockType,
+  Text,
+  Divider,
+  Image,
+  BlockDataText,
+  BlockDataImage,
+  useArticle
 } from '@omnea-digital/nextjs'
 
-const DefaultPage = () => (
-  <div>
-    <h1>Default page</h1>
-  </div>
-)
+const CustomPage = () => {
+  const { article } = useArticle()
+  return (
+    <div>
+      {article && (
+        <>
+          <h1>{article.title}</h1>
+          {article.blocks.map((item) => {
+            switch (item.type) {
+              case BlockType.TEXT:
+              case BlockType.H1:
+              case BlockType.H2:
+              case BlockType.H3:
+              case BlockType.CALLOUT:
+              case BlockType.CODE:
+              case BlockType.QUOTE:
+                return (
+                  <Text
+                    type={item.type}
+                    content={item.payload as BlockDataText}
+                  />
+                )
+              case BlockType.DIVIDER:
+                return <Divider />
+              case BlockType.IMAGE:
+                return <Image content={item.payload as BlockDataImage} />
+              default:
+                return <div />
+            }
+          })}
+        </>
+      )}
+    </div>
+  )
+}
 
-export default withOmneaPage(DefaultPage)
+export default withOmneaCustomPage(CustomPage)
 
 export const getStaticPaths = withOmneaStaticPaths(async () => {
   return {
-    paths: [
-      { params: { path: ['asdf', 'bar'] } },
-      { params: { path: ['s', 'd'] } }
-    ],
+    paths: [{ params: { path: ['other'] } }],
     fallback: true
   }
 })
 
-// This also gets called at build time
 export const getStaticProps = withOmneaStaticProps(async () => {
   return { props: {} }
 })
