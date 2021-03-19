@@ -1,3 +1,12 @@
+// import type {
+//   GetStaticPaths,
+//   GetStaticPathsContext,
+//   GetStaticProps,
+//   GetStaticPropsContext
+// } from 'next'
+
+// import type { AppProps as NextJsAppProps } from 'next/app'
+
 export interface ArticleRaw {
   blocks: BlockRaw[]
 }
@@ -11,6 +20,32 @@ export interface Article {
   path: string
   id: number
   blocks: Block[]
+}
+
+type GetStaticPaths = any
+type GetStaticPathsContext = any
+type GetStaticProps = any
+type GetStaticPropsContext = any
+type NextJsAppProps = any
+
+export type AppProps = NextJsAppProps & ComponentProps
+
+export type WithOmneaStaticProps = (
+  handler: GetStaticProps
+) => (context: GetStaticPropsContext) => {}
+
+export type WithOmneaStaticPaths = (
+  handler: GetStaticPaths
+) => (context: GetStaticPathsContext) => {}
+
+export type WithOmneaPage = (
+  WrappedComponent: React.ComponentType<AppProps> | any
+) => {}
+
+export interface Client {
+  withOmneaPage: WithOmneaPage
+  withOmneaStaticPaths: WithOmneaStaticPaths
+  withOmneaStaticProps: WithOmneaStaticProps
 }
 
 export interface ComponentProps {

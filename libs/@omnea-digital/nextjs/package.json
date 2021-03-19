@@ -12,9 +12,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "microbundle-crl -jsxImportSource react --no-compress --format modern,cjs",
-    "start": "microbundle-crl watch --no-compress --format modern,cjs",
-    "prepare": "run-s build",
+    "build": "microbundle-crl -jsxImportSource react --no-compress --format modern,cjs --css-modules false --css-modules \"Omnea-Content-[name]\"",
+    "start": "microbundle-crl watch --no-compress --format modern,cjs --css-modules false",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
     "test:lint": "eslint .",
@@ -34,6 +33,7 @@
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/jest": "^25.1.4",
     "@types/node": "^12.12.38",
+    "@types/node-fetch": "^2.5.8",
     "@types/react": "^16.9.27",
     "@types/react-dom": "^16.9.7",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
@@ -63,8 +63,7 @@
     "dist"
   ],
   "dependencies": {
-    "@omnea-digital/queries": "*",
-    "axios": "^0.21.1",
-    "hoist-non-react-statics": "^3.3.2"
+    "hoist-non-react-statics": "^3.3.2",
+    "node-fetch": "^2.6.1"
   }
 }

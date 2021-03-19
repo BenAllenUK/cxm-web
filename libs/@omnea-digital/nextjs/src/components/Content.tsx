@@ -1,10 +1,10 @@
 import { Article } from '../types'
-import styles from './Content.module.scss'
+import './Content.scss'
 import BlockList from './articles/BlockList'
 
 const Content = ({ article }: IProps) => {
   return (
-    <div className={styles.body}>
+    <div className={'omnea-content'}>
       <BlockList blocks={article.blocks} />
     </div>
   )

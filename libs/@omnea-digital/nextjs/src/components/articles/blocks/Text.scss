@@ -1,23 +1,23 @@
-p.text {
+p.omnea-content-text {
   font-size: 14px;
 }
 
-h1.text {
+h1.omnea-content-text {
   font-size: 2em;
   font-weight: bold;
 }
 
-h2.text {
+h2.omnea-content-text {
   font-size: 1.5em;
   font-weight: bold;
 }
 
-h3.text {
+h3.omnea-content-text {
   font-size: 1.17em;
   font-weight: bold;
 }
 
-.quote {
+.omnea-content-quote {
   font-size: 1.2em;
   color: inherit;
   fill: inherit;
@@ -36,7 +36,7 @@ h3.text {
   }
 }
 
-.callout {
+.omnea-content-callout {
   display: flex;
   width: 100%;
   border-radius: 3px;
@@ -56,7 +56,7 @@ h3.text {
   }
 }
 
-.code {
+.omnea-content-code {
   flex-grow: 1;
   border-radius: 3px;
   text-align: left;
@@ -69,7 +69,8 @@ h3.text {
     flex-grow: 1;
     flex-shrink: 1;
     text-align: left;
-    font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier,
+      monospace;
     font-size: 85%;
     tab-size: 2;
     padding: 34px 32px 32px 32px;

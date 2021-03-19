@@ -1,20 +1,14 @@
 import { Block } from '../../types'
 
-import styles from './BlockList.module.scss'
+import './BlockList.scss'
 
 import BlockItem from './Block'
 
 const BlockList = ({ blocks }: IProps) => {
   return (
-    <div className={styles.container}>
+    <div className={'omnea-content-block-list'}>
       {blocks.map((item, i) => (
-        <div
-          key={i}
-          style={{
-            marginTop: 10,
-            marginBottom: 10
-          }}
-        >
+        <div key={i} className={'omnea-content-block-item'}>
           <BlockItem item={item} index={i} />
         </div>
       ))}

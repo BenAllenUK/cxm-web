@@ -11,7 +11,6 @@ interface IBlockProps {
 }
 
 const Block = ({ item, index }: IBlockProps) => {
-  console.log({ payload: item.payload })
   switch (item.type) {
     case BlockType.TEXT:
     case BlockType.H1:

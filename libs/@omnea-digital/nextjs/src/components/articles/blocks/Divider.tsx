@@ -1,9 +1,9 @@
-import styles from './Divider.module.scss'
+import './Divider.scss'
 
 export default function Divider() {
   return (
-    <div className={styles.container}>
-      <div className={styles.divide}></div>
+    <div className={'omnea-content-divider'}>
+      <div className={'omnea-content-divider-line'}></div>
     </div>
   )
 }

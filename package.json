@@ -3,24 +3,27 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "setup": "yarn setup:certs; yarn setup:install",
+    "setup": "run-p setup:*",
     "setup:certs": "./dev/certs/run.sh",
     "setup:install": "./dev/install/run.sh",
-    "setup:uninstall": "./dev/uninstall/run.sh",
-    "start": "concurrently -k \"yarn start:web\" \"yarn start:proxy\" \"yarn start:app\" \"yarn start:api\" ",
+    "clean:*": "run-p clean:",
+    "clean:uninstall": "./dev/uninstall/run.sh",
+    "start": "run-p start:*",
     "start:app": "yarn --cwd clients/app start",
     "start:proxy": "yarn --cwd clients/proxy start",
     "start:web": "yarn --cwd clients/web start",
     "start:api": "yarn --cwd services/api start",
-    "start:web:web": "yarn --cwd clients/web start:web",
-    "start:web:codegen": "yarn --cwd clients/web start:codegen",
+    "start-web:web": "yarn --cwd clients/web start:web",
+    "start-web:codegen": "yarn --cwd clients/web start:codegen",
+    "build": "run-s build:*",
+    "build:web:root": "yarn --cwd clients/web build:root",
+    "build:web:admin": "yarn --cwd clients/web build:admin",
     "build:translate": "./_scripts/translate/run.sh",
+    "deploy": "run-s deploy:*",
     "deploy:root": "yarn --cwd clients/web deploy:root",
     "deploy:admin": "yarn --cwd clients/web deploy:admin",
     "deploy:api": "yarn --cwd services/api deploy",
-    "deploy:docs": "yarn --cwd clients/web deploy:docs",
-    "build:web:root": "yarn --cwd clients/web build:root",
-    "build:web:admin": "yarn --cwd clients/web build:admin"
+    "deploy:docs": "yarn --cwd clients/web deploy:docs"
   },
   "repository": {
     "type": "git",
@@ -38,6 +41,7 @@
   },
   "devDependencies": {
     "eslint": "^7.22.0",
+    "npm-run-all": "^4.1.5",
     "serverless-bundle": "^4.2.2"
   }
 }
