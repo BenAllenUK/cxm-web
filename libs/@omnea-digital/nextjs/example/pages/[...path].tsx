@@ -8,11 +8,10 @@ import {
   Image,
   BlockDataText,
   BlockDataImage,
-  useArticle
+  AppPropsWithOmnea
 } from '@omnea-digital/nextjs'
 
-const CustomPage = () => {
-  const { article } = useArticle()
+const CustomPage = ({ article }: AppPropsWithOmnea) => {
   return (
     <div>
       {article && (

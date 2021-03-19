@@ -4,9 +4,7 @@ import {
   withOmneaStaticProps
 } from '@omnea-digital/nextjs'
 
-import type { AppProps } from 'next/app'
-
-const FallbackPage = (props: AppProps) => {
+const FallbackPage = () => {
   return (
     <div>
       <h1>Loading...</h1>

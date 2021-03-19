@@ -3,11 +3,11 @@
 
 
 ## Setup
-
-1) Run `brew install mkcert`
-2) Run `mkcert -install`
-3) Run `yarn setup`
-4) Modify `sudo nano /etc/hosts` and add this line:
+1) Run `yarn global add npm-run-all`
+2) Run `brew install mkcert`
+3) Run `mkcert -install`
+4) Run `yarn setup`
+5) Modify `sudo nano /etc/hosts` and add this line:
 
 ```
 127.0.0.1       omnea.local admin.omnea.local docs.omnea.local api.omnea.local

@@ -6,7 +6,6 @@ export const withOmneaStaticPaths = defaultClient.withOmneaStaticPaths
 export const withOmneaStaticProps = defaultClient.withOmneaStaticProps
 export const withOmneaPage = defaultClient.withOmneaPage
 export const withOmneaCustomPage = defaultClient.withOmneaCustomPage
-export const useArticle = defaultClient.useArticle
 export const withClient = withInternalClient
 
 import Content from './components/Content'

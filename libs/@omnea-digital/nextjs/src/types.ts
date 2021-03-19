@@ -51,7 +51,6 @@ export interface Client {
   withOmneaStaticPaths: WithOmneaStaticPaths
   withOmneaStaticProps: WithOmneaStaticProps
   withOmneaCustomPage: WithOmneaCustomPage
-  useArticle: () => { article: Article | null }
 }
 
 export interface ComponentProps {
