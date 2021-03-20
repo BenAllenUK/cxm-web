@@ -8,9 +8,13 @@
     "node": ">=10"
   },
   "scripts": {
-    "setup": "yarn install",
-    "start": "run-p start:*",
+    "setup": "yarn install; yarn link",
     "build": "run-s build:*",
+    "start": "run-p start:*",
+    "deploy": "echo \"No script yet\"",
+    "lint": "echo \"No script yet\"",
+    "test": "echo \"No script yet\"",
+    "clean": "rm yarn.lock; rm -rf node_modules",
     "build:codegen": "graphql-codegen --config codegen.js",
     "build:bundle": "microbundle --format modern,cjs --no-compress;",
     "start:codegen": "graphql-codegen --config codegen.js --watch",

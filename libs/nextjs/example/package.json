@@ -2,8 +2,12 @@
   "name": "@omnea-digital/nextjs-example",
   "version": "1.0.0",
   "scripts": {
+    "setup": "yarn install",
     "build": "next build",
     "start": "next dev",
+    "deploy": "echo \"No script yet\"",
+    "lint": "echo \"No script yet\"",
+    "test": "echo \"No script yet\"",
     "clean": "rm yarn.lock; rm -rf node_modules"
   },
   "dependencies": {
