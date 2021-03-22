@@ -6,7 +6,7 @@
     "setup": "run-s setup:*:*",
     "build": "DEPLOY_ENVIRONMENT=/prod/ yarn envars; . ./dev/env/.envars; run-s build:*:*",
     "start": "run-p start:*:*",
-    "deploy": "DEPLOY_ENVIRONMENT=/prod/ yarn envars; . ./dev/env/.envars; run-s deploy:*:*",
+    "deploy": "DEPLOY_ENVIRONMENT=/prod/ yarn envars; . ./dev/env/.envars; run-s build:libs:*; run-s deploy:*:*",
     "lint": "run-s lint:*:*",
     "test": "run-s test:*:*",
     "clean": "run-s clean:*:*",
