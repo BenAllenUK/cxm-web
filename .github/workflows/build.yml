@@ -29,19 +29,14 @@ jobs:
         uses: actions/setup-node@v2.1.5
         with:
           node-version: 12.14.1
-      - name: Install node modules
-        run: yarn install
-      - uses: deptno/action-aws-ssm-to-dotenv@v1.3.1
-        env:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-2
-        with:
-          ssm-path: /prod.AUTH0_SECRET
-          format: shell
-          output: .env.development
-          prefix: SSM_
-          decryption: true
+          aws-region: us-east-2
+      - name: Install node modules
+        run: yarn install
       - name: Setup
         run: yarn setup
       - name: Build
