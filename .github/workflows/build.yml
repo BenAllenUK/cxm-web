@@ -44,4 +44,4 @@ jobs:
       - name: Setup
         run: yarn setup
       - name: Build
-        run: yarn deploy
+        run: yarn build
