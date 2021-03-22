@@ -37,7 +37,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-2
         with:
-          ssm-path: /opensource/action-aws-ssm-to-dotenv # required
+          ssm-path: /prod.AUTH0_SECRET
           format: shell
           output: .env.development
           prefix: SSM_
