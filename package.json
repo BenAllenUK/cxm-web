@@ -11,6 +11,7 @@
     "test": "run-s test:*:*",
     "clean": "run-s clean:*:*",
     "envars": "yarn --cwd dev/env start;",
+    "setup:dev:env": "yarn --cwd dev/env setup",
     "setup:libs:queries": "yarn --cwd libs/queries setup",
     "setup:libs:nextjs": "yarn --cwd libs/nextjs setup",
     "setup:clients:proxy": "yarn --cwd clients/proxy setup",

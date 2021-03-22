@@ -43,6 +43,5 @@ jobs:
         run: yarn global add npm-run-all
       - name: Setup
         run: yarn setup
-
       - name: Build
         run: yarn build
