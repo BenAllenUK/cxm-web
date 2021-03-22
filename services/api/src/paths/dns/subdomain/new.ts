@@ -14,7 +14,7 @@ const route53 = new AWS.Route53()
  *     produces:
  *       - application/json
  */
-const main: APIGatewayProxyHandler = async (event) => {
+export const main: APIGatewayProxyHandler = async (event) => {
   try {
     const body = event.body ? JSON.parse(event.body) : {}
 
@@ -80,5 +80,3 @@ const main: APIGatewayProxyHandler = async (event) => {
     return error(e)
   }
 }
-
-module.exports = { main }

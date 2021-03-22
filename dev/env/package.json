@@ -1,0 +1,16 @@
+{
+  "name": "@omnea-digital/ssm-to-env",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "setup": "yarn install",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.868.0",
+    "lodash": "^4.17.21"
+  }
+}

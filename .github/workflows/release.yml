@@ -34,12 +34,9 @@ jobs:
           aws-region: us-east-2
       - name: Install node modules
         run: yarn install
-      - name: Generate graphQL types
-        run: yarn codegen:build
-        env:
-          ADMIN_SECRET: ${{ secrets.ADMIN_SECRET }}
+      - name: Install run all
+        run: yarn global add npm-run-all
+      - name: Setup
+        run: yarn setup
       - name: Deploy
         run: yarn deploy
-        env:
-          CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
-          OMNEA_UPLOAD_URL: ${{ secrets.OMNEA_UPLOAD_URL }}

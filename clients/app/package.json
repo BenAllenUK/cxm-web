@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "setup": "yarn install",
+    "build": "echo \"No script yet\"",
+    "start": "electron .",
+    "deploy": "echo \"No script yet\"",
+    "lint": "echo \"No script yet\"",
+    "test": "echo \"No script yet\"",
+    "clean": "rm yarn.lock; rm -rf node_modules"
   },
   "author": "",
   "license": "ISC",

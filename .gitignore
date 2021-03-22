@@ -53,3 +53,11 @@ public/locales/*
 src/generated/graphql.tsx
 
 
+!.envrc.template
+
+clients/web/pages
+libs/next/dist
+libs/queries/graphql
+libs/queries/src/graphql.tsx
+
+.envars

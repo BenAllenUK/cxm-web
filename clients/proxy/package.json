@@ -4,8 +4,13 @@
   "description": "",
   "main": "proxy.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node proxy.js"
+    "setup": "yarn install; ./dev/certs/run.sh",
+    "build": "echo \"No script yet\"",
+    "start": "node proxy.js",
+    "deploy": "echo \"No script yet\"",
+    "lint": "echo \"No script yet\"",
+    "test": "echo \"No script yet\"",
+    "clean": "rm yarn.lock; rm -rf node_modules"
   },
   "author": "",
   "license": "ISC",

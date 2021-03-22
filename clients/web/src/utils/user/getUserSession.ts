@@ -1,15 +1,15 @@
-import { getSession } from '@auth0/nextjs-auth0'
-import { GetServerSideProps } from 'next'
+import auth0 from 'utils/auth0'
 import { IncomingMessage, ServerResponse } from 'http'
-import { NextApiRequestCookies } from 'next/dist/next-server/server/api-utils'
 
 function getUserSession(
   req: IncomingMessage & {
-    cookies: NextApiRequestCookies
+    cookies: {
+      [key: string]: string
+    }
   },
   res: ServerResponse
 ) {
-  const session = getSession(req, res)
+  const session = auth0.getSession(req, res)
 
   const idToken = session?.idToken
   const user = session?.user

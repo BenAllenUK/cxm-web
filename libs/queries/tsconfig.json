@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "outDir": "./graphql/",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "jsx": "preserve"
+  }
+}

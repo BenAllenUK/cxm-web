@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styles from './Login.module.scss'
-import { UserProvider, useUser } from '@auth0/nextjs-auth0'
 import Image from 'next/image'
+import { useUser } from '@auth0/nextjs-auth0'
 
 const Content = () => {
   const { user, error, isLoading } = useUser()

@@ -1,8 +1,11 @@
-## Setup
+# Omnea
 
-1) Run `brew install mkcert`
-2) Run `mkcert -install`
-3) Run `yarn install`
+
+
+## Setup
+1) Run `yarn global add npm-run-all`
+2) Run `brew install mkcert`
+3) Run `mkcert -install`
 4) Run `yarn setup`
 5) Modify `sudo nano /etc/hosts` and add this line:
 
@@ -10,9 +13,8 @@
 127.0.0.1       omnea.local admin.omnea.local docs.omnea.local api.omnea.local
 ```
 
-3) Run `yarn dev`
-
-4) Open [http://omnea.local:3000](http://omnea.local:3000) with your browser to see the result.
+5) Run `yarn start`
+6) Open [http://omnea.local:3000](http://omnea.local:3000) with your browser to see the result.
 
 
 ### Example hosts file
@@ -33,18 +35,24 @@
 ```
 ## Env vars
 
-Environment variables need to be added to multiple files:
-- `.envrc` (ignored via git)
-- `next.config.js` 
-- `serverless.yml`
-- All workflows under `.github/workflows`
-- AWS System manager (https://console.aws.amazon.com/systems-manager/parameters/?region=us-east-1&tab=Table)
+
+### Services - API
 
 
-## Env vars
+If adding env var to the API (`services/api`):
 
+1. Add to `.envrc`
+2. Add to beta and production values to AWS system manager
+3. Add additional config to `services/api/serverless.yml` under `environment` property. i.e: `NEW_ENV: ${ssm:/prod/NEW_ENV}`
 
-## System Manager
+### Clients - Web
+
+If adding env var to the API (`services/api`):
+
+1. Add to `.envrc`
+2. Add to beta and production values to AWS system manager
+
+### System Manager
 
 [AWS System manager](https://console.aws.amazon.com/systems-manager/parameters/?region=us-east-1&tab=Table) is used to manage remote environment variables. NOT secrets manager. 
 
@@ -62,15 +70,7 @@ For example:
 
 View more about [interacting here](https://docs.aws.amazon.com/cli/latest/reference/secretsmanager/create-secret.html)
 
-### Services - API
-
-If adding env var to the API (`services/api`):
-1. Add to `.envrc`
-2. Add to beta and production values to 
-3. Add additional config to `services/api/serverless.yml` under `environment` property. i.e: `NEW_ENV: ${ssm:/prod/NEW_ENV}`
-
-
-# Deployment (Local)
+# Legacy: Deployment (Local)
 
 Deployment is handled by build servers. You should use the build servers to deploy this project.
 
@@ -79,3 +79,5 @@ Deployment is handled by build servers. You should use the build servers to depl
 - Add .envrc
 - Run `ssm-env env > .env `
 - `yarn deploy:root`
+
+
