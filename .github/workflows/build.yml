@@ -21,7 +21,6 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -32,12 +31,18 @@ jobs:
           node-version: 12.14.1
       - name: Install node modules
         run: yarn install
-      - name: Generate graphQL types
-        run: yarn codegen:build
+      - uses: deptno/action-aws-ssm-to-dotenv@v1.3.1
         env:
-          ADMIN_SECRET: ${{ secrets.ADMIN_SECRET }}
-      - name: Deploy
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-2
+        with:
+          ssm-path: /opensource/action-aws-ssm-to-dotenv # required
+          format: shell
+          output: .env.development
+          prefix: SSM_
+          decryption: true
+      - name: Setup
+        run: yarn setup
+      - name: Build
         run: yarn build
-        env:
-          CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
-          OMNEA_UPLOAD_URL: ${{ secrets.OMNEA_UPLOAD_URL }}

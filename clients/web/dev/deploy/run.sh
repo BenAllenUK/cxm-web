@@ -25,3 +25,7 @@ cp -r src/pages/_app.js pages/_app.js 2>/dev/null
 
 # SYNC
 aws s3 sync ".serverless" "$CONFIG_PATH/$1/.serverless" 
+
+# CLEAN
+rm -r pages 2>/dev/null
+rm -r .serverless 2>/dev/null

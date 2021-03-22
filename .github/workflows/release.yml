@@ -32,14 +32,20 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
+      - uses: deptno/action-aws-ssm-to-dotenv@v1.3.1
+        env:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-2
+        with:
+          ssm-path: /
+          format: shell
+          output: .env.development
+          prefix: SSM_
+          decryption: true
       - name: Install node modules
         run: yarn install
-      - name: Generate graphQL types
-        run: yarn codegen:build
-        env:
-          ADMIN_SECRET: ${{ secrets.ADMIN_SECRET }}
-      - name: Deploy
-        run: yarn deploy
-        env:
-          CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
-          OMNEA_UPLOAD_URL: ${{ secrets.OMNEA_UPLOAD_URL }}
+      - name: Setup
+        run: yarn setup
+      - name: Build
+        run: yarn build

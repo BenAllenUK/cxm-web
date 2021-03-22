@@ -14,5 +14,6 @@ cp -r src/pages/$1/ pages/ 2>/dev/null
 cp -r src/pages/_app.js pages/_app.js 2>/dev/null
 
 
-# DEPLOY
+# BUILD
 ./node_modules/.bin/next build
+rm -r pages 2>/dev/null
