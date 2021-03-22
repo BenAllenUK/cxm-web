@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "setup": "yarn install; yarn link \"@omnea-digital/queries\"",
-    "build": "echo \"No script yet\"",
+    "build": "sls package",
     "start": "sls offline --httpPort 3003",
     "deploy": "./dev/deploy.sh",
     "lint": "echo \"No script yet\"",

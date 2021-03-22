@@ -134,6 +134,7 @@ plugins:
 custom:
   bundle:
     caching: false
+    linting: false
   apigwBinary:
     types:
       - 'image/avif'
