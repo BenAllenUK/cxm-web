@@ -64,6 +64,7 @@
     "next": "^10.0.9",
     "prettier": "^2.0.4",
     "react-scripts": "^3.4.1",
+    "sass": "^1.32.8",
     "typescript": "^3.7.5"
   },
   "files": [
