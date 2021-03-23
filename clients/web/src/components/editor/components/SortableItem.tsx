@@ -28,13 +28,13 @@ const SortableItem = (props: IProps) => {
     <SortableItemRoot index={item.position}>
       <Container
         index={item.position}
-        initialHeight={BlockTypeProperties[item.type].initialHeight}
+        initialHeight={BlockTypeProperties[item.type]?.initialHeight}
         enableHandle={!modalBlockEnabled}
         onClick={onBlockClick}
         onAddClick={onBlockAddClick}
         onDoubleClick={onBlockDoubleClick}
         onUpdate={itemHandlers.onUpdate}
-        onImageUpdate={itemHandlers.onImageUpdate}
+        onMediaUpdate={itemHandlers.onMediaUpdate}
         id={item.id}
       >
         <div ref={_refCallback}>

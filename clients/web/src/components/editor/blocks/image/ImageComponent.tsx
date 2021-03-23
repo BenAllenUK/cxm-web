@@ -1,15 +1,14 @@
 import { memo } from 'react'
-import { BlockDataImage, MediaSourceType } from '../types'
+import { BlockDataMedia, MediaSourceType } from '../types'
 import styles from './Image.module.scss'
 import { default as NextImage } from 'next/image'
 import { Image as CloudinaryImage, CloudinaryContext } from 'cloudinary-react'
 
 export const ImageComponent = ({ content, id }: IProps) => {
   let imgSrc
-  switch (content.type) {
+  switch (content.sourceType) {
     case MediaSourceType.UPLOAD:
       imgSrc = `${process.env.OMNEA_UPLOAD_URL}/${content.value}`
-
       break
     case MediaSourceType.LIBRARY:
       imgSrc = content.value || ''
@@ -23,7 +22,7 @@ export const ImageComponent = ({ content, id }: IProps) => {
         </div>
       )
     default:
-      imgSrc = content.value || ''
+      imgSrc = `${process.env.OMNEA_UPLOAD_URL}/${content.value}`
   }
 
   return (
@@ -34,10 +33,10 @@ export const ImageComponent = ({ content, id }: IProps) => {
 }
 
 interface IProps {
-  content: BlockDataImage
+  content: BlockDataMedia
   id: number
 }
 function areEqual(prevProps: IProps, nextProps: IProps) {
-  return prevProps.content.type === MediaSourceType.LOCAL && nextProps.content.type === MediaSourceType.UPLOAD
+  return prevProps.content.sourceType === MediaSourceType.LOCAL && nextProps.content.sourceType === MediaSourceType.UPLOAD
 }
 export default memo(ImageComponent, areEqual)

@@ -1,9 +1,12 @@
 @import 'styles/variables';
+@import 'components/common/option-controls/OptionControls.module.scss';
+
+.container {
+  @extend .defaultContainer;
+  max-height: 80vh;
+}
 
 .bar {
-  position: absolute;
-  top: 0px;
-  right: 100px;
   border-radius: 3px;
   color: white;
   fill: white;
@@ -17,10 +20,18 @@
   transition: opacity 300ms ease-in 0s;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, 'Apple Color Emoji', Arial, sans-serif, 'Segoe UI Emoji',
     'Segoe UI Symbol';
-  z-index: 2;
+  z-index: 20;
 }
 
 .option {
   padding: 5px 5px 5px 5px;
   border-right: 0.5px solid grey;
+}
+
+.more {
+  padding: 5px 5px 5px 5px;
+  border-right: 0.5px solid grey;
+  color: white;
+  background: rgba(0, 0, 0, 0.6);
+  width: 20px;
 }

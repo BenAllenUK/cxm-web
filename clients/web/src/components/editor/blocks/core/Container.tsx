@@ -1,6 +1,7 @@
 import { useCallback, useState, memo, ReactNode } from 'react'
 import useHover from 'utils/hooks/useHover'
-import { BlockData, BlockDataImageUpload, MediaSourceType } from 'components/editor/blocks/types'
+import { fileTypeToBlockType } from '../../utils/fileType'
+import { BlockData, BlockDataMediaUpload, MediaSourceType, BlockDataMedia, BlockType } from 'components/editor/blocks/types'
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from '..'
 import styles from './Container.module.scss'
 import Controls from './Controls'
@@ -13,7 +14,7 @@ const Container = ({
   onClick,
   onAddClick,
   children,
-  onImageUpdate,
+  onMediaUpdate,
   id,
 }: IProps & IContainerHandlerProps) => {
   const [hoverRef, isHovered] = useHover<HTMLDivElement>()
@@ -44,20 +45,36 @@ const Container = ({
       let fileReader = new FileReader()
 
       fileReader.onload = async (e) => {
-        onImageUpdate(
+        onMediaUpdate(
           multipleFileIndex,
           {
-            value: fileReader.result,
-            type: MediaSourceType.LOCAL,
+            value: fileReader.result?.toString() || null,
+            sourceType: MediaSourceType.LOCAL,
+            fileName: file.name,
+            fileSize: file.size,
           },
-          {
-            file: files[0],
-            id: 0,
-          },
+          { file: files[0], blockType: BlockType.IMAGE, id: id },
+          BlockType.IMAGE,
           true
         )
         setActiveDropzone(false)
         multipleFileIndex = multipleFileIndex + 1
+      }
+
+      const blockType = fileTypeToBlockType(file.type)
+      if (blockType === BlockType.IMAGE) {
+        console.log('surely not', blockType, BlockType.IMAGE)
+        await fileReader.readAsDataURL(file)
+      } else {
+        console.log('block type', blockType)
+
+        onMediaUpdate(
+          multipleFileIndex,
+          { value: '', sourceType: MediaSourceType.UPLOAD, fileName: file.name, fileSize: file.size },
+          { file: file, blockType: blockType, id: id },
+          blockType,
+          true
+        )
       }
       await fileReader.readAsDataURL(file)
     })
@@ -109,7 +126,13 @@ export interface IContainerHandlerProps {
   onDoubleClick: (index: number, pos: { x: number; y: number }) => void
   onAddClick: (index: number) => void
   onUpdate: (index: number, arg0: BlockData) => void
-  onImageUpdate: (index: number, arg0: BlockData, file: BlockDataImageUpload, createNew?: boolean) => void
+  onMediaUpdate: (
+    index: number,
+    arg0: BlockDataMedia,
+    file: BlockDataMediaUpload,
+    blockType: BlockType,
+    createNew?: boolean
+  ) => void
 }
 
 export default memo(Container)

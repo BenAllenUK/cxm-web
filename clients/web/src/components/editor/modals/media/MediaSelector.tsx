@@ -1,12 +1,10 @@
 import { memo, useState } from 'react'
 import styles from './MediaSelector.module.scss'
-import ImageIcon from 'images/icons/image.svg'
-import { default as NextImage } from 'next/image'
-import { BlockData, BlockType, MediaSourceType, MediaSourceObject, BlockDataImage } from '../../blocks/types'
+import { BlockData, BlockType, MediaSourceType, MediaSourceObject, BlockDataMedia } from '../../blocks/types'
 import SourceTabBar from './SourceTabBar'
 import Source from './Source'
 
-export const MediaSelector = ({ onImageUpdate, onUpdate, id }: IProps) => {
+export const MediaSelector = ({ onMediaUpdate, onUpdate, id, libraries, fileFilter }: IProps) => {
   const [selectedSource, setSelectedSource] = useState<MediaSourceObject>({
     name: MediaSourceType.UPLOAD,
     type: MediaSourceType.UPLOAD,
@@ -25,21 +23,9 @@ export const MediaSelector = ({ onImageUpdate, onUpdate, id }: IProps) => {
     { name: MediaSourceType.UPLOAD, type: MediaSourceType.UPLOAD },
     { name: MediaSourceType.EMBED_LINK, type: MediaSourceType.EMBED_LINK },
   ]
-  const libraries = [
-    {
-      name: 'Unsplash',
-      accessKey: 'QI73_yAqSaRCT6cz2cpM7HQ-ZXoQNV5eYmrbY7E4vD0',
-      secretKey: 'aLYW8hiVPn1UGubp3NrHLIgu91LhGfxysWvLKgrIppo',
-      type: MediaSourceType.LIBRARY,
-    },
-    {
-      name: 'Cloudinary',
-      accessKey: '',
-      secretKey: '',
-      type: MediaSourceType.CLOUDINARY,
-    },
-  ]
-  sources = sources.concat(libraries)
+  if (libraries) {
+    sources = sources.concat(libraries)
+  }
 
   return (
     <div className={styles.root}>
@@ -48,10 +34,11 @@ export const MediaSelector = ({ onImageUpdate, onUpdate, id }: IProps) => {
         <Source
           selected={selectedSource}
           onUpdate={onUpdate}
-          onImageUpdate={onImageUpdate}
+          onMediaUpdate={onMediaUpdate}
           pictures={pictures}
           setPictures={setPictures}
           id={id}
+          fileFilter={fileFilter}
         />
       </div>
     </div>
@@ -59,9 +46,11 @@ export const MediaSelector = ({ onImageUpdate, onUpdate, id }: IProps) => {
 }
 
 interface IProps {
-  onImageUpdate: (value: BlockDataImage, pendingUploadFile: File, createNew?: boolean) => void
+  onMediaUpdate: (value: BlockDataMedia, pendingUploadFile: File, blockType: BlockType, createNew?: boolean) => void
   onUpdate: (value: BlockData, type?: BlockType) => void
   id: number
+  fileFilter?: string
+  libraries?: MediaSourceObject[]
 }
 
 export default memo(MediaSelector)

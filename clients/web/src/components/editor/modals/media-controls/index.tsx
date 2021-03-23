@@ -1,27 +1,28 @@
 import createPositionModal from 'components/common/modals/position'
-import styles from './MediaControls.module.scss'
 import { createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
+import MediaControlUncontrolled from './MediaControlUncontrolled'
 
 const { Provider, useModal } = createPositionModal()
 
 export const useMediaControlModal = useModal
 
-const Component = ({ setWriteNewCaption, setCreateComment, deleteBlock }: IProps) => {
+const Component = ({ onClick, ...props }: IProps) => {
   const { enabled, position, hideControls } = useMediaControlModal()
-  const Option = ({ name, onClick }: IOptionProps) => {
-    return (
-      <div className={styles.option} onClick={onClick}>
-        {name}
-      </div>
-    )
-  }
 
+  const _onClick = useCallback(() => {
+    onClick()
+  }, [onClick])
   return (
-    <div className={styles.bar}>
-      <Option onClick={setWriteNewCaption} name={'caption'} />
-      <Option onClick={setCreateComment} name={'comment'} />
-      <Option onClick={deleteBlock} name={'delete'} />
-    </div>
+    <>
+      {enabled && position && (
+        <MediaControlUncontrolled
+          style={{ left: position.x, top: position.y }}
+          onDismiss={hideControls}
+          onClick={_onClick}
+          {...props}
+        />
+      )}
+    </>
   )
 }
 
@@ -29,13 +30,6 @@ const MediaControl = { Provider, Component }
 
 export default MediaControl
 
-interface IOptionProps {
-  name: string
-  onClick?: any
-}
-
 interface IProps {
-  setWriteNewCaption: () => void
-  setCreateComment: () => void
-  deleteBlock: () => void
+  onClick: () => void
 }

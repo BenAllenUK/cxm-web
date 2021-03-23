@@ -1,16 +1,15 @@
 import { memo } from 'react'
 import { useAsset } from 'components/providers/assets'
-import styles from './Image.module.scss'
+import styles from './Progress.module.scss'
 
-export const Progress = ({ id }: IProps) => {
+export const Progress = ({ id, alwaysDisplay }: IProps) => {
   const { pendingUploads } = useAsset()
   const progress = pendingUploads[id]?.progress
-
   return (
     <div>
-      {progress && (
+      {(progress || alwaysDisplay) && (
         <div className={styles.progress}>
-          <div className={styles.ldsRing} /> {Math.round(progress * 100)}%
+          <div className={styles.ldsRing} /> {Math.round((progress || 0) * 100)}%
         </div>
       )}
     </div>
@@ -19,6 +18,7 @@ export const Progress = ({ id }: IProps) => {
 
 interface IProps {
   id: number
+  alwaysDisplay?: boolean
 }
 
 export default memo(Progress)

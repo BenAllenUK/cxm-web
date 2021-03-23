@@ -1,4 +1,4 @@
-import { BlockDataText, BlockType, BlockDataListBullet, BlockDataImage, Block } from './types'
+import { BlockDataText, BlockType, BlockDataListBullet, Block } from './types'
 
 export const BLOCK_CONTAINER_VERTICAL_PADDING = 2
 
@@ -199,5 +199,27 @@ export const BlockTypeProperties = {
     initialHeight: 20,
     isEditable: false,
     initialPayload: {},
+  },
+  [BlockType.FILE]: {
+    id: BlockType.FILE,
+    title: 'File',
+    subtitle: 'Upload or embed with a link.',
+    image: '/preview/file.png',
+    initialHeight: 20,
+    isEditable: true,
+    initialPayload: {
+      value: '',
+    },
+  },
+  [BlockType.VIDEO]: {
+    id: BlockType.VIDEO,
+    title: 'Video',
+    subtitle: 'Upload or embed with a link.',
+    image: '/preview/file.png',
+    initialHeight: 20,
+    isEditable: true,
+    initialPayload: {
+      value: '',
+    },
   },
 }

@@ -2,7 +2,7 @@ import { useGenerateUploadAssetUrlMutation, useGenerateReadAssetUrlMutation } fr
 import { createContext, ReactNode, useContext, useState } from 'react'
 import uploadFile from 'operations/assets/upload'
 
-import { BlockDataImageUpload, BlockDataImage } from 'components/editor/blocks/types'
+import { BlockDataMediaUpload, BlockDataMedia } from 'components/editor/blocks/types'
 
 const initialState = {
   upload: () => new Promise<null>(() => null),
@@ -16,13 +16,13 @@ const initialState = {
 }
 
 interface Context {
-  pendingUploads: { [key: number]: BlockDataImageUpload }
+  pendingUploads: { [key: number]: BlockDataMediaUpload }
   localImages: { [key: number]: string }
 }
 interface ContextActions extends Context {
   upload: (data: any, type: string, callback: (progress: number) => any) => Promise<{ key: string } | null>
   getSecureUrl: (data: any, type: string) => Promise<{ url: string } | null>
-  addPendingUpload: (pendingUpload: BlockDataImageUpload) => void
+  addPendingUpload: (pendingUpload: BlockDataMediaUpload) => void
   addLocalImage: (image: string, id: number) => void
   removeLocalImage: (id: number) => void
   removePendingUpload: (id: number) => void
@@ -35,7 +35,7 @@ export const useAsset = () => useContext(Context)
 const Provider = ({ children }: IProps) => {
   const [generateAssetUrl] = useGenerateUploadAssetUrlMutation()
   const [readAssetUrl] = useGenerateReadAssetUrlMutation()
-  const [pendingUploads, setPendingUploads] = useState<{ [key: number]: BlockDataImageUpload }>(initialState)
+  const [pendingUploads, setPendingUploads] = useState<{ [key: number]: BlockDataMediaUpload }>(initialState)
   const [localImages, setLocalImages] = useState<{ [key: number]: string }>(initialState)
   const upload = async (data: any, contentType: string, onUploadProgress: (progress: number) => any = (i) => null) => {
     const response = await generateAssetUrl({ variables: { contentType } })
@@ -63,12 +63,14 @@ const Provider = ({ children }: IProps) => {
     }
   }
 
-  const addPendingUpload = async (pendingUpload: BlockDataImageUpload) => {
+  const addPendingUpload = async (pendingUpload: BlockDataMediaUpload) => {
+    console.log('in add pending upload, should just see this once', pendingUpload)
     setPendingUploads((prevUploads) => ({
       ...prevUploads,
       [pendingUpload.id]: pendingUpload,
     }))
     const response = await upload(pendingUpload.file, pendingUpload.file.type, (progress) => {
+      console.log('progress', progress)
       setPendingUploads((prevUploads) => ({
         ...prevUploads,
         [pendingUpload.id]: { ...pendingUpload, progress: progress },

@@ -5,9 +5,9 @@ import {
   BlockData,
   BlockType,
   BlockDataText,
-  BlockDataImage,
+  BlockDataMedia,
   Block,
-  BlockDataImageUpload,
+  BlockDataMediaUpload,
   MediaSourceType,
 } from '../blocks/types'
 import { BlockTypeProperties } from 'components/editor/blocks'
@@ -142,45 +142,40 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     ])
   }
 
-  const _onUpsertImageBlock = async (
+  const _onUpsertMediaBlock = async (
     index: number,
-    payload: BlockDataImage,
-    pendingUploadFile: BlockDataImageUpload,
+    payload: BlockDataMedia,
+    pendingUploadFile: BlockDataMediaUpload,
+    blockType: BlockType,
     createNew?: boolean
   ) => {
     const block = createNew ? createEmptyBlock(index) : blocks[index] || createEmptyBlock(index)
-
+    console.log('on upsetmedia block', pendingUploadFile)
     if (pendingUploadFile) {
       onBlocksUpsert([
         {
           ...block,
-          payload: BlockTypeProperties[BlockType.IMAGE],
-          type: BlockType.IMAGE,
+          payload: payload,
+          type: blockType,
           position: index,
         },
       ])
       let uploadFile = pendingUploadFile
       if (createNew) {
-        uploadFile = { ...pendingUploadFile, id: blocks[index].id }
+        uploadFile = { ...pendingUploadFile, id: block.id }
       }
-      addLocalImage(payload.value || '', blocks[index].id)
+      if (blockType === BlockType.IMAGE) {
+        addLocalImage(payload.value || '', block.id)
+      }
+      console.log('about to upload')
       const key = await addPendingUpload(uploadFile)
       console.log('upload success key', key)
 
       onBlocksUpsert([
         {
           ...block,
-          payload: { ...payload, value: key, type: MediaSourceType.UPLOAD },
-          type: BlockType.IMAGE,
-          position: index,
-        },
-      ])
-    } else {
-      onBlocksUpsert([
-        {
-          ...block,
-          payload: BlockTypeProperties[BlockType.IMAGE],
-          type: BlockType.IMAGE,
+          payload: { ...payload, value: key, sourceType: MediaSourceType.UPLOAD },
+          type: blockType,
           position: index,
         },
       ])
@@ -253,7 +248,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
       onTextChange={_onTextChange}
       onNew={_onCreateBlock}
       onUpdate={_onUpsertBlock}
-      onImageUpdate={_onUpsertImageBlock}
+      onMediaUpdate={_onUpsertMediaBlock}
       onDelete={_onDeleteBlock}
       onFocus={_onBlockFocus}
       onBlur={_onBlockBlur}
