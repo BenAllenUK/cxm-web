@@ -2,7 +2,6 @@ import { ApolloProvider, QueryResult } from '@apollo/client'
 import { useApollo } from 'config/graphql'
 import { createContext, useContext } from 'react'
 import { GetUserOneQuery } from 'generated/graphql'
-import NavigationProvider from 'components/navigation/provider'
 
 type UserResult = QueryResult<GetUserOneQuery>
 
@@ -26,9 +25,7 @@ export default function Root({ initialApolloState, initialReduxState, initialUse
   const apolloClient = useApollo(initialApolloState, initialUserContext.idToken)
   return (
     <ApolloProvider client={apolloClient}>
-      <NavigationProvider>
-        <UserContext.Provider value={initialUserContext}>{children}</UserContext.Provider>
-      </NavigationProvider>
+      <UserContext.Provider value={initialUserContext}>{children}</UserContext.Provider>
     </ApolloProvider>
   )
 }

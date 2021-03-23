@@ -1,6 +1,6 @@
 import Editor from 'components/editor'
 import { Block } from 'components/editor/blocks/types'
-import { useEditor } from 'components/editor/components/Provider'
+import { useAdmin } from 'components/editor/components/Provider'
 import Navbar from 'components/navigation/navbar'
 import Sidebar from 'components/navigation/sidebar'
 import debounce from 'lodash/debounce'
@@ -35,7 +35,7 @@ const EditorPage = ({
   onUpsertBlocksMutation,
   onDeleteBlockMutation,
 }: IProps) => {
-  const { setArticlePath, setProject, setOrganisation } = useEditor()
+  const { setArticlePath, setProject, setOrganisation } = useAdmin()
   const { showErrorMsg } = useErrorModal()
 
   const [organisation] = fromOrganisationFragments([organisationRaw])
@@ -52,18 +52,18 @@ const EditorPage = ({
 
   const onViewArticle = (path: string) => {
     setArticlePath(path)
-    push(path, Routes.admin.editor, { projectSlug: project.slug, path })
+    push(Routes.admin.editor, { path })
   }
 
   const onViewProject = (orgSlug: string, projSlug: string) => {
     if (orgSlug !== organisation.slug) {
       setOrganisation(orgSlug, projSlug, null)
-      navigateOrganisation(orgSlug, Subdomain.Admin, Routes.admin.editor, { projectSlug: projSlug, path })
+      navigateOrganisation(orgSlug, Subdomain.Admin, Routes.admin.editor, { projectSlug: projSlug, path: null })
       return
     }
 
     setProject(projSlug, null)
-    push('', Routes.admin.editor, { projectSlug: projSlug, path })
+    push(Routes.admin.editor, { projectSlug: projSlug, path: null })
   }
 
   const onUpsertArticles = async (updatedArticles: Article[]) => {

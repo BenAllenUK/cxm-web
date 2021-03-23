@@ -1,5 +1,5 @@
 import ErrorModal from 'components/common/modals/error'
-import EditorProvider, { useEditor } from 'components/editor/components/Provider'
+import AdminProvider, { useAdmin } from 'components/editor/components/Provider'
 import EditorPage from 'components/pages/editor'
 import Root, { useUser } from 'components/root'
 import { initializeApollo } from 'config/graphql'
@@ -24,17 +24,20 @@ import getUserSession from 'utils/user/getUserSession'
 import redirect from 'utils/server/redirect'
 import serverSideTranslations from 'utils/translations/serverSideTranslations'
 import { gql } from '@apollo/client'
+import NavigationProvider from 'components/navigation/provider'
 
 export default function EditorRoot(props: any) {
-  const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
+  const { articleSlug, projectSlug, initialAdminContext, ...otherProps } = props
   return (
     <Root {...otherProps}>
       <AssetsProvider>
         <ErrorModal.Provider>
-          <EditorProvider initialContext={initialEditorContext}>
-            <Content />
-            <ErrorModal.Component />
-          </EditorProvider>
+          <AdminProvider initialContext={initialAdminContext}>
+            <NavigationProvider>
+              <Content />
+              <ErrorModal.Component />
+            </NavigationProvider>
+          </AdminProvider>
         </ErrorModal.Provider>
       </AssetsProvider>
     </Root>
@@ -43,7 +46,7 @@ export default function EditorRoot(props: any) {
 
 export function Content() {
   const { userId } = useUser()
-  const { projectSlug, articlePath, organisationSlug } = useEditor()
+  const { projectSlug, articlePath, organisationSlug } = useAdmin()
 
   // FETCH USER
 
@@ -262,7 +265,7 @@ export async function getServerSideProps({ params, locale, req, res }: GetServer
         email,
         user,
       },
-      initialEditorContext: {
+      initialAdminContext: {
         projectSlug,
         articlePath: selectedArticlePath,
         organisationSlug,
