@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { createContext, ReactNode, useContext } from 'react'
 import { Subdomain } from 'navigation/routes'
 import isLocalhost from 'utils/client/isLocalhost'
-import { useAdmin } from 'components/editor/components/Provider'
+import { useAdmin } from 'components/editor/providers/AdminProvider'
 const PROTOCOL = process.env.PROTOCOL
 const ROOT_HOST = process.env.ROOT_HOST
 const API_HOST = process.env.API_HOST

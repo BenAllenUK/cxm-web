@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef, useState } from 'react'
+import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { Block, BlockDataText, BlockType } from 'components/editor/blocks/types'
 import { BlockTypeProperties, DEFAULT_BLOCK_START } from './blocks'
 
@@ -8,22 +8,22 @@ import Header from './header'
 import { Article } from 'operations/articles/types'
 import List from './components/List'
 import EditorEmpty from './misc/EditorEmpty'
-import readPathRoute from 'utils/article/readPathRoute'
-
+import useWindowKeyDown from 'utils/hooks/useWindowKeyDown'
+import LocalBlocksProvider, { useLocalBlocksProvider } from './providers/LocalBlocksProvider'
+// Omit<IProps, 'blocks'>
 function Editor({
   id,
   articles,
   path,
-  blocks: initialBlocks,
   onUpsertArticles: onServerUpsertArticles,
   onBlocksUpsert: onServerBlocksUpsert,
   onBlocksDelete: onServerBlocksDelete,
   onViewArticle,
   loading,
+  blocks: initialBlocks,
 }: IProps) {
-  const [focusIndex, setFocusIndex] = useState(initialBlocks.length <= 1 ? 0 : -1)
-
-  const [blocks, setBlocks] = useState<Block[]>(initialBlocks)
+  const { blocks, setBlocks } = useLocalBlocksProvider()
+  const [focusIndex, setFocusIndex] = useState(blocks.length <= 1 ? 0 : -1)
 
   const _onModifyBlockType = (id: number, key: BlockType) => {
     const [block] = blocks.filter((item) => item.id === id)
@@ -118,7 +118,13 @@ function Editor({
   )
 }
 
-export default memo(Editor)
+const ConnectedEditor = ({ blocks, ...otherProps }: IProps) => (
+  <LocalBlocksProvider initialBlocks={blocks}>
+    <Editor blocks={blocks} {...otherProps} />
+  </LocalBlocksProvider>
+)
+
+export default memo(ConnectedEditor)
 interface IProps {
   id?: number | null
   articles: Article[]

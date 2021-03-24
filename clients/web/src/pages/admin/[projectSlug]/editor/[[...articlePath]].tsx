@@ -1,5 +1,5 @@
 import ErrorModal from 'components/common/modals/error'
-import AdminProvider, { useAdmin } from 'components/editor/components/Provider'
+import AdminProvider, { useAdmin } from 'components/editor/providers/AdminProvider'
 import EditorPage from 'components/pages/editor'
 import Root, { useUser } from 'components/root'
 import { initializeApollo } from 'config/graphql'
@@ -25,6 +25,7 @@ import redirect from 'utils/server/redirect'
 import serverSideTranslations from 'utils/translations/serverSideTranslations'
 import { gql } from '@apollo/client'
 import NavigationProvider from 'components/navigation/provider'
+import LocalBlocksProvider from 'components/editor/providers/LocalBlocksProvider'
 
 export default function EditorRoot(props: any) {
   const { articleSlug, projectSlug, initialAdminContext, ...otherProps } = props

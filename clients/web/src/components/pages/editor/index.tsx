@@ -1,6 +1,6 @@
 import Editor from 'components/editor'
 import { Block } from 'components/editor/blocks/types'
-import { useAdmin } from 'components/editor/components/Provider'
+import { useAdmin } from 'components/editor/providers/AdminProvider'
 import Navbar from 'components/navigation/navbar'
 import Sidebar from 'components/navigation/sidebar'
 import debounce from 'lodash/debounce'
@@ -12,7 +12,7 @@ import { fromBlockFragments, toBlockFragments } from 'utils/blocks/parse'
 import useTitle from 'utils/hooks/useTitle'
 import { fromProjectFragments } from 'utils/project/parse'
 import styles from './Editor.module.scss'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { ArticleBlocksFragment, OrganisationProjectFragment } from 'types/types'
 import { UpsertArticlesMutationScopedFunc } from 'operations/articles/upsert'
 import { UpsertBlocksMutationScopedFunc } from 'operations/blocks/upsert'
@@ -25,6 +25,7 @@ import readPathRoute from 'utils/article/readPathRoute'
 import { fromOrganisationFragments } from 'utils/organisation/parse'
 import { useRouter } from 'next/router'
 import { useNavigation } from 'components/navigation/provider'
+import LocalBlocksProvider from 'components/editor/providers/LocalBlocksProvider'
 
 const EditorPage = ({
   article: articleRaw,
@@ -82,22 +83,25 @@ const EditorPage = ({
     return onDeleteBlockMutation(ids)
   }
 
-  const onBlocksUpsert = async (blocks: Block[]) => {
-    if (!article?.id) {
-      return
-    }
+  const onBlocksUpsert = useCallback(
+    async (blocks: Block[]) => {
+      if (!article?.id) {
+        return
+      }
 
-    const blockFragments = toBlockFragments(article.id, blocks)
-    const blockFragmentsResponse = await onUpsertBlocksMutation(blockFragments)
-    if (!blockFragmentsResponse) {
-      showErrorMsg(`Error updating blocks`)
-      return []
-    }
+      const blockFragments = toBlockFragments(article.id, blocks)
+      const blockFragmentsResponse = await onUpsertBlocksMutation(blockFragments)
+      if (!blockFragmentsResponse) {
+        showErrorMsg(`Error updating blocks`)
+        return []
+      }
 
-    return fromBlockFragments(blockFragmentsResponse)
-  }
+      return fromBlockFragments(blockFragmentsResponse)
+    },
+    [onUpsertBlocksMutation]
+  )
 
-  const onDebouncedBlockUpsert = debounce(onBlocksUpsert, 500)
+  const onDebouncedBlockUpsert = useCallback(debounce(onBlocksUpsert, 500), [onBlocksUpsert])
   const path = article?.id ? readPathRoute(articles, article.id) : []
 
   return (

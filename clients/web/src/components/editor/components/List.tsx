@@ -108,9 +108,9 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
       setFocusIndex(newPosition)
       return
     }
-
     setFocusIndex(newPosition)
     const newBlock = createEmptyBlock(newPosition)
+
     onBlocksUpsert([newBlock])
   }
 
