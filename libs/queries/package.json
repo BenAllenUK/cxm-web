@@ -1,0 +1,42 @@
+{
+  "name": "@omnea-digital/queries",
+  "version": "0.0.1",
+  "description": "",
+  "source": "src/index.ts",
+  "main": "graphql/index.js",
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "setup": "yarn install; yarn link",
+    "build": "run-s build:*",
+    "start": "run-p start:*",
+    "deploy": "echo \"No script yet\"",
+    "lint": "echo \"No script yet\"",
+    "test": "echo \"No script yet\"",
+    "clean": "rm yarn.lock; rm -rf node_modules",
+    "build:codegen": "graphql-codegen --config codegen.js",
+    "build:bundle": "microbundle --format modern,cjs --no-compress;",
+    "start:codegen": "graphql-codegen --config codegen.js --watch",
+    "start:bundle": "microbundle watch --no-compress --format modern,cjs"
+  },
+  "peerDependencies": {},
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.21.3",
+    "@graphql-codegen/introspection": "^1.18.1",
+    "@graphql-codegen/typescript": "^1.21.1",
+    "@graphql-codegen/typescript-operations": "^1.17.15",
+    "babel-plugin-graphql-tag": "^3.2.0",
+    "graphql": "^15.5.0",
+    "graphql-tag": "^2.11.0",
+    "microbundle": "^0.13.0",
+    "npm-run-all": "^4.1.5",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "ts-loader": "^8.0.18",
+    "typescript": "^4.2.3",
+    "webpack": "^5.26.3"
+  }
+}

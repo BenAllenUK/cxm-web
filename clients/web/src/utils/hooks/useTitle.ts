@@ -1,4 +1,4 @@
-import { useTranslation } from 'next-i18next'
+import useTranslation from 'utils/translations/useTranslation'
 import { DependencyList, useEffect } from 'react'
 
 const useTitle = (title?: string | null, loading?: boolean, deps?: DependencyList) => {

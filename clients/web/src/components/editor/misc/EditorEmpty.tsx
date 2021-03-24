@@ -1,5 +1,5 @@
 import styles from './EditorEmpty.module.scss'
-import { useTranslation } from 'next-i18next'
+import useTranslation from 'utils/translations/useTranslation'
 
 const EditorEmpty = ({}: IProps) => {
   const { t } = useTranslation(['common'])

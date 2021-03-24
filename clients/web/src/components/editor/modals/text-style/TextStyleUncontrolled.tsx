@@ -1,6 +1,6 @@
 import OptionControls, { IOptionSections, OptionType } from 'components/common/option-controls'
 import { CSSProperties } from 'react'
-import { useTranslation } from 'next-i18next'
+import useTranslation from 'utils/translations/useTranslation'
 import styles from './TextStyle.module.scss'
 
 export enum StyleSections {

@@ -15,6 +15,9 @@
     "clients/web/serverless.yml": true,
     "clients/web/.next/*": true,
     "clients/web/.serverless/*": true,
-    "clients/web/.serverless_nextjs/*": true
+    "clients/web/.serverless_nextjs/*": true,
+    "clients/web/pages": true,
+    "libs/nextjs/dist": true,
+    "libs/nextjs/example/.next": true
   }
 }

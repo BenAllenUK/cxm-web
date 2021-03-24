@@ -20,7 +20,7 @@ const s3 = new AWS.S3()
  *         type: string
 
  */
-const main: APIGatewayProxyHandler = async (event) => {
+export const main: APIGatewayProxyHandler = async (event) => {
   try {
     const key = event.pathParameters?.key
 
@@ -54,5 +54,3 @@ const main: APIGatewayProxyHandler = async (event) => {
     return error(e)
   }
 }
-
-module.exports = { main }

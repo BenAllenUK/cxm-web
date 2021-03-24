@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    [
+      "auto-import",
+      {
+        "declarations": [{ "default": "React", "path": "react" }]
+      }
+    ]
+  ]
+}

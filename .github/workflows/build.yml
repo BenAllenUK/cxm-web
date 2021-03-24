@@ -21,7 +21,8 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    env:
+      CI: true
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -30,14 +31,17 @@ jobs:
         uses: actions/setup-node@v2.1.5
         with:
           node-version: 12.14.1
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
       - name: Install node modules
         run: yarn install
-      - name: Generate graphQL types
-        run: yarn codegen:build
-        env:
-          ADMIN_SECRET: ${{ secrets.ADMIN_SECRET }}
-      - name: Deploy
+      - name: Install run all
+        run: yarn global add npm-run-all
+      - name: Setup
+        run: yarn setup
+      - name: Build
         run: yarn build
-        env:
-          CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
-          OMNEA_UPLOAD_URL: ${{ secrets.OMNEA_UPLOAD_URL }}

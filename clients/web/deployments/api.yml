@@ -9,6 +9,5 @@ omnea-api:
     domain: ['api', 'omnea.co']
     bucketName: api-omnea
     build:
-      postBuildCommands: ['node _scripts/post-build/post-build.js']
+      postBuildCommands: ['node dev/post-build/post-build.js']
       env:
-        OMNEA_UPLOAD_URL: ${env.OMNEA_UPLOAD_URL}

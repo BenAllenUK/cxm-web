@@ -1,7 +1,7 @@
 import styles from './Sidebar.module.scss'
 import MenuItem from './MenuItem'
 import { MenuItem as MenuItemType, SIDEBAR_INDENT } from '.'
-import { useTranslation } from 'next-i18next'
+import useTranslation from 'utils/translations/useTranslation'
 
 export function MenuList(props: IProps) {
   const {
@@ -15,7 +15,7 @@ export function MenuList(props: IProps) {
     onItemAddClick,
     onItemMoreClick,
   } = props
-  const { t } = useTranslation('common')
+  const { t } = useTranslation(['common'])
 
   return (
     <ul className={styles.menu}>

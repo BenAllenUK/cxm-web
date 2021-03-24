@@ -1,8 +1,8 @@
-import { useTranslation } from 'next-i18next'
+import useTranslation from 'utils/translations/useTranslation'
 import styles from './TitleBar.module.scss'
 
 const TitleBar = ({ title }: IProps) => {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation(['common'])
 
   return (
     <div className={styles.container}>

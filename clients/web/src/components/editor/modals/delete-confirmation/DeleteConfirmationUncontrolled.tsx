@@ -1,5 +1,5 @@
 import Button from 'components/common/button/Button'
-import { useTranslation } from 'next-i18next'
+import useTranslation from 'utils/translations/useTranslation'
 import styles from './DeleteConfirmation.module.scss'
 
 const DeleteConfirmationUncontrolled = ({ onAccept, onDecline }: IProps) => {
