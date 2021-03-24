@@ -74,8 +74,8 @@ export type BlockDataMediaUpload = {
 }
 
 export enum MediaSourceType {
-  UPLOAD = 'Upload',
-  EMBED_LINK = 'EMBED LINK',
+  UPLOAD = 'UPLOAD',
+  EMBED_LINK = 'EMBED_LINK',
   LIBRARY = 'LIBRARY',
   CLOUDINARY = 'CLOUDINARY',
   LOCAL = 'LOCAL',

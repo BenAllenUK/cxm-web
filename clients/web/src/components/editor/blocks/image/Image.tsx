@@ -33,7 +33,6 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, deleteBlock }: IPr
   ]
 
   const _setShowSelector = useCallback(() => {
-    console.log('calling show selector')
     setShowSelector(!showSelector)
   }, [setShowSelector, showSelector])
 

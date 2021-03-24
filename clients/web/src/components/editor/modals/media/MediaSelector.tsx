@@ -6,7 +6,7 @@ import Source from './Source'
 
 export const MediaSelector = ({ onMediaUpdate, onUpdate, id, libraries, fileFilter }: IProps) => {
   const [selectedSource, setSelectedSource] = useState<MediaSourceObject>({
-    name: MediaSourceType.UPLOAD,
+    name: 'Upload',
     type: MediaSourceType.UPLOAD,
   })
   const [pictures, setPictures] = useState<[]>([])
@@ -20,8 +20,8 @@ export const MediaSelector = ({ onMediaUpdate, onUpdate, id, libraries, fileFilt
   }
 
   let sources: MediaSourceObject[] = [
-    { name: MediaSourceType.UPLOAD, type: MediaSourceType.UPLOAD },
-    { name: MediaSourceType.EMBED_LINK, type: MediaSourceType.EMBED_LINK },
+    { name: 'Upload', type: MediaSourceType.UPLOAD },
+    { name: 'Embed Link', type: MediaSourceType.EMBED_LINK },
   ]
   if (libraries) {
     sources = sources.concat(libraries)
