@@ -1,6 +1,5 @@
 import { memo, useState, useCallback, useRef } from 'react'
 import MediaSelector from 'components/editor/modals/media/MediaSelector'
-import ImageIcon from 'images/icons/image.svg'
 import { BlockDataMedia, BlockData, BlockType, MediaSourceType } from '../types'
 import AttachmentIcon from 'images/icons/paperclip.svg'
 import MoreIcon from 'images/icons/more.svg'
@@ -27,7 +26,7 @@ const File = ({ content, onUpdate, id, onMediaUpdate }: IProps) => {
   const [showSelector, setShowSelector] = useState(false)
   const _setShowSelector = useCallback(() => {
     setShowSelector(!showSelector)
-  }, [setShowSelector])
+  }, [setShowSelector, showSelector])
 
   console.log('IN FILE', content)
 
@@ -35,7 +34,7 @@ const File = ({ content, onUpdate, id, onMediaUpdate }: IProps) => {
     return (
       <div>
         <div className={styles.container} onClick={_setShowSelector}>
-          <ImageIcon className={styles.icon} width={25} height={25} />
+          <AttachmentIcon className={styles.icon} width={25} height={25} />
           <div className={styles.text}>Upload or embed a file</div>
         </div>
         {showSelector && <MediaSelector onMediaUpdate={onMediaUpdate} onUpdate={onUpdate} id={id} />}
@@ -49,7 +48,7 @@ const File = ({ content, onUpdate, id, onMediaUpdate }: IProps) => {
 
   return (
     <div className={styles.attachmentContainer} onClick={() => open(`${process.env.OMNEA_UPLOAD_URL}/${content.value}`)}>
-      <AttachmentIcon width={20} height={20} />
+      <AttachmentIcon className={styles.icon} width={20} height={20} />
       <div style={{ marginLeft: 10 }}>{content.fileName}</div>
       <div className={styles.fileSize}>{readableBytes(content.fileSize)}</div>
       <div ref={ref} className={styles.more} onClick={_onPageControlsClick}>

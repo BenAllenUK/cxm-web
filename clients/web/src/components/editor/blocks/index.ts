@@ -1,4 +1,4 @@
-import { BlockDataText, BlockType, BlockDataListBullet, Block } from './types'
+import { BlockDataText, BlockType, BlockDataListBullet, Block, BlockDataMedia } from './types'
 
 export const BLOCK_CONTAINER_VERTICAL_PADDING = 2
 
@@ -42,7 +42,9 @@ export function isBlockEmpty(block: Block) {
     case BlockType.LIST_BULLET:
       return ((block.payload as BlockDataListBullet).items || []).length == 0
     case BlockType.IMAGE:
-      return false
+    case BlockType.VIDEO:
+    case BlockType.FILE:
+      return !(block.payload as BlockDataMedia).value
     default:
       return true
   }

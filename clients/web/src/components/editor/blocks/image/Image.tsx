@@ -33,8 +33,9 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, deleteBlock }: IPr
   ]
 
   const _setShowSelector = useCallback(() => {
+    console.log('calling show selector')
     setShowSelector(!showSelector)
-  }, [setShowSelector])
+  }, [setShowSelector, showSelector])
 
   const _writeNewCaption = useCallback(() => {
     setWriteNewCaption(true)
@@ -80,11 +81,15 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, deleteBlock }: IPr
       <div className={styles.imageContainer}>
         <ImageComponent
           content={
-            content.value ? content : { value: localImages[id], sourceType: MediaSourceType.LOCAL, fileName: '', fileSize: 0 }
+            content.sourceType === MediaSourceType.UPLOAD
+              ? content
+              : { value: localImages[id], sourceType: MediaSourceType.LOCAL, fileName: '', fileSize: 0 }
           }
           id={id}
         />
-        <div className={styles.mediaControls}></div>
+        <div className={styles.mediaControls}>
+          <TopBar deleteBlock={deleteBlock} setWriteNewCaption={_writeNewCaption} setCreateComment={() => null} />
+        </div>
         <Progress id={id} />
       </div>
       <div>

@@ -64,13 +64,11 @@ const Provider = ({ children }: IProps) => {
   }
 
   const addPendingUpload = async (pendingUpload: BlockDataMediaUpload) => {
-    console.log('in add pending upload, should just see this once', pendingUpload)
     setPendingUploads((prevUploads) => ({
       ...prevUploads,
       [pendingUpload.id]: pendingUpload,
     }))
     const response = await upload(pendingUpload.file, pendingUpload.file.type, (progress) => {
-      console.log('progress', progress)
       setPendingUploads((prevUploads) => ({
         ...prevUploads,
         [pendingUpload.id]: { ...pendingUpload, progress: progress },

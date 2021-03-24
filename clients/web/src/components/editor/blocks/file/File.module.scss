@@ -15,7 +15,6 @@
 }
 .fileSize {
   font-size: 12px;
-  line-height: 16px;
   color: rgba(55, 53, 47, 0.6);
   white-space: nowrap;
   overflow: hidden;
@@ -23,19 +22,35 @@
   margin-left: 6px;
 }
 
+.text {
+  font-size: 14px;
+  color: $text2-color;
+}
+
+.icon {
+  margin-right: 12px;
+  fill: $text2-color;
+}
+
 .attachmentContainer {
-  padding: 12px 36px 12px 12px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
+  padding: 6px 6px 6px 2px;
+
   cursor: pointer;
 
   &:hover {
     background-color: $primary;
   }
+  &:hover > .more {
+    display: block;
+  }
 }
 
 .more {
+  display: none;
   position: absolute;
   right: 10px;
   z-index: 10;

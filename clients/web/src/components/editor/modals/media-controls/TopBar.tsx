@@ -32,7 +32,7 @@ const TopBar = ({ setWriteNewCaption, setCreateComment, deleteBlock }: IProps) =
       <Option onClick={setCreateComment} name={'comment'} />
       <Option onClick={deleteBlock} name={'delete'} />
       <div className={styles.more} onClick={onClick}>
-        <MoreIcon width={10} height={10} />
+        <MoreIcon className={styles.moreIcon} width={14} height={14} fill={'#FFFFFF'} />
       </div>
     </div>
   )

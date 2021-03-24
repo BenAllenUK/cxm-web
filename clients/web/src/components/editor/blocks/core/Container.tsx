@@ -43,34 +43,32 @@ const Container = ({
     let multipleFileIndex = index
     files.forEach(async (file) => {
       let fileReader = new FileReader()
-
+      const blockType = fileTypeToBlockType(file.type)
       fileReader.onload = async (e) => {
-        onMediaUpdate(
-          multipleFileIndex,
-          {
-            value: fileReader.result?.toString() || null,
-            sourceType: MediaSourceType.LOCAL,
-            fileName: file.name,
-            fileSize: file.size,
-          },
-          { file: files[0], blockType: BlockType.IMAGE, id: id },
-          BlockType.IMAGE,
-          true
-        )
-        setActiveDropzone(false)
-        multipleFileIndex = multipleFileIndex + 1
+        if (blockType === BlockType.IMAGE) {
+          onMediaUpdate(
+            multipleFileIndex,
+            {
+              value: fileReader.result || null,
+              sourceType: MediaSourceType.LOCAL,
+              fileName: file.name,
+              fileSize: file.size,
+            },
+            { file: files[0], blockType: BlockType.IMAGE, id: id },
+            BlockType.IMAGE,
+            true
+          )
+          multipleFileIndex = multipleFileIndex + 1
+          setActiveDropzone(false)
+        }
       }
 
-      const blockType = fileTypeToBlockType(file.type)
       if (blockType === BlockType.IMAGE) {
-        console.log('surely not', blockType, BlockType.IMAGE)
         await fileReader.readAsDataURL(file)
       } else {
-        console.log('block type', blockType)
-
         onMediaUpdate(
-          multipleFileIndex,
-          { value: '', sourceType: MediaSourceType.UPLOAD, fileName: file.name, fileSize: file.size },
+          index,
+          { value: file.name, sourceType: MediaSourceType.LOCAL, fileName: file.name, fileSize: file.size },
           { file: file, blockType: blockType, id: id },
           blockType,
           true

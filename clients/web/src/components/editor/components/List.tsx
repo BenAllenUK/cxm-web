@@ -150,7 +150,6 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     createNew?: boolean
   ) => {
     const block = createNew ? createEmptyBlock(index) : blocks[index] || createEmptyBlock(index)
-    console.log('on upsetmedia block', pendingUploadFile)
     if (pendingUploadFile) {
       onBlocksUpsert([
         {
@@ -162,14 +161,12 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
       ])
       let uploadFile = pendingUploadFile
       if (createNew) {
-        uploadFile = { ...pendingUploadFile, id: block.id }
+        uploadFile = { ...pendingUploadFile, id: block.id, blockType: blockType }
       }
       if (blockType === BlockType.IMAGE) {
         addLocalImage(payload.value || '', block.id)
       }
-      console.log('about to upload')
       const key = await addPendingUpload(uploadFile)
-      console.log('upload success key', key)
 
       onBlocksUpsert([
         {

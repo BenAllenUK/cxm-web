@@ -30,8 +30,13 @@
 
 .more {
   padding: 5px 5px 5px 5px;
-  border-right: 0.5px solid grey;
-  color: white;
   background: rgba(0, 0, 0, 0.6);
+  border-right: 0.5px solid grey;
   width: 20px;
+}
+
+.moreIcon {
+  fill: rgba(255, 255, 255, 0.9);
+
+  z-index: 5;
 }

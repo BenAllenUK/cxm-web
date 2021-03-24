@@ -55,6 +55,16 @@
   cursor: pointer;
 }
 
+.text {
+  font-size: 14px;
+  color: $text2-color;
+}
+
+.icon {
+  margin-right: 12px;
+  fill: $text2-color;
+}
+
 .innerContainer {
   width: 708px;
   max-width: 1020px;

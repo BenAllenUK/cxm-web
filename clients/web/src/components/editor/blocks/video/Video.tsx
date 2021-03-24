@@ -11,13 +11,13 @@ const Video = ({ content, onMediaUpdate, onUpdate, id, deleteBlock }: IProps) =>
   const [showSelector, setShowSelector] = useState(false)
   const _setShowSelector = useCallback(() => {
     setShowSelector(!showSelector)
-  }, [setShowSelector])
+  }, [setShowSelector, showSelector])
   console.log('video content', content)
   if (!content.value) {
     return (
       <div>
         <div className={styles.container} onClick={_setShowSelector}>
-          <ImageIcon className={styles.icon} width={25} height={25} />
+          <VideoIcon className={styles.icon} width={25} height={25} />
           <div className={styles.text}>Upload or embed a file</div>
         </div>
         {showSelector && <MediaSelector onMediaUpdate={onMediaUpdate} onUpdate={onUpdate} id={id} fileFilter={'video/*'} />}

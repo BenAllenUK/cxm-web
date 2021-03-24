@@ -10,6 +10,9 @@ export const ImageComponent = ({ content, id }: IProps) => {
     case MediaSourceType.UPLOAD:
       imgSrc = `${process.env.OMNEA_UPLOAD_URL}/${content.value}`
       break
+    case MediaSourceType.LOCAL:
+      imgSrc = content.value
+      break
     case MediaSourceType.LIBRARY:
       imgSrc = content.value || ''
       break
