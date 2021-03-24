@@ -10,6 +10,7 @@ import { useBlockControlsContext } from '../modals/block-controls/BlockControlsC
 import createEmptyBlock from 'utils/blocks/createEmptyBlock'
 import SortableList from './SortableList'
 import { getSelectionMidPosition } from 'utils/modals/getSelectionMidPosition'
+import { useFocusedBlock } from '../modals/text-style'
 
 const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusIndex }: IProps) => {
   const blockRefs = useRef<HTMLDivElement[]>([])
@@ -25,6 +26,8 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
   const { filterText: modalFilterText, setFilterText } = useBlockControlsContext()
 
   const { showControls: showTextControls } = useTextControlModal()
+
+  const { blockId, setPlaceholderBlockId } = useFocusedBlock()
 
   const _showBlockControls = useCallback(
     (index: number) => {
@@ -90,6 +93,10 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     if (!position) {
       return
     }
+
+    const block = blocks[index]
+    setPlaceholderBlockId(block.id)
+
     showTextControls(position)
   }
 
@@ -204,6 +211,14 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     onBlocksUpsert([{ ...block, position: newIndex }])
   }
 
+  const _onFocusOutStart = (index: number) => {
+    setFocusIndex(index - 1)
+  }
+
+  const _onFocusOutEnd = (index: number) => {
+    setFocusIndex(index + 1)
+  }
+
   return (
     <SortableList
       itemRefFunc={(_ref: HTMLDivElement, position: number) => {
@@ -225,6 +240,8 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
       onFocus={_onBlockFocus}
       onBlur={_onBlockBlur}
       onSelect={_onBlockSelect}
+      onFocusOutStart={_onFocusOutStart}
+      onFocusOutEnd={_onFocusOutEnd}
     />
   )
 }

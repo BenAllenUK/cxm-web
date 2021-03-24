@@ -1,6 +1,6 @@
 import Colors from 'config/colors'
 import Image from 'next/image'
-import { ReactNode, useCallback } from 'react'
+import { ReactNode, RefObject, useCallback } from 'react'
 import styles from './OptionControls.module.scss'
 
 export const Button = ({
@@ -11,7 +11,7 @@ export const Button = ({
   hint,
   selected,
   iconClassName,
-  innerRef,
+  onInnerRefCallback,
   onClick,
   onMouseEnter,
   ...otherProps
@@ -28,13 +28,21 @@ export const Button = ({
     onMouseEnter(id)
   }, [onMouseEnter, id])
 
+  const _innerRef = useCallback(
+    (ref: HTMLDivElement | undefined | null) => {
+      if (!ref) return
+      onInnerRefCallback(ref, id)
+    },
+    [onInnerRefCallback, id]
+  )
+
   return (
     <div
       className={styles.item}
-      onClick={_onClick}
+      onMouseDown={_onClick}
       onMouseEnter={_onMouseEnter}
       style={selected ? { backgroundColor: Colors.line } : {}}
-      ref={innerRef}
+      ref={_innerRef}
       {...otherProps}
     >
       {icon && <div className={iconClassName || styles.icon}>{icon}</div>}
@@ -52,7 +60,6 @@ export default Button
 
 interface IProps {
   id: number
-  innerRef: any
   title: string
   selected?: boolean
   icon?: ReactNode
@@ -60,6 +67,7 @@ interface IProps {
   hint?: string
   iconClassName?: string
 
+  onInnerRefCallback: (ref: HTMLDivElement, id: number) => void
   onClick: (id: number) => void
   onMouseEnter: (id: number) => void
 }

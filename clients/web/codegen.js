@@ -8,7 +8,7 @@ module.exports = {
       },
     },
   ],
-  documents: ['./src/**/*.tsx', './src/**/*.ts', './src/**/*.gql', './src/**/*.graphql'],
+  documents: ['./src/pages/**/*.tsx', './src/pages/**/*.ts', './src/**/*.gql', './src/**/*.graphql'],
   overwrite: true,
   generates: {
     './src/generated/graphql.tsx': {

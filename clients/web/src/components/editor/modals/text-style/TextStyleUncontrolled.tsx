@@ -1,5 +1,6 @@
 import OptionControls, { IOptionSections, OptionType } from 'components/common/option-controls'
-import { CSSProperties } from 'react'
+import { CSSProperties, forwardRef, RefObject, useLayoutEffect, useRef } from 'react'
+import { updateBoundedPosition } from 'utils/modals/updateBoundedPosition'
 import useTranslation from 'utils/translations/useTranslation'
 import styles from './TextStyle.module.scss'
 
@@ -47,7 +48,9 @@ interface IColorIconProps {
   isHighlight: boolean
 }
 
-const TextStyleUncontrolled = ({ style, onDismiss, onClick }: IProps) => {
+const TextStyleUncontrolled = forwardRef<HTMLDivElement, IProps>(({ rootRef, position, onDismiss, onClick }, forwardedRef) => {
+  const ref = useRef<HTMLDivElement>(null)
+
   const { t } = useTranslation(['editor'])
   const sections: IOptionSections[] = [
     {
@@ -76,15 +79,18 @@ const TextStyleUncontrolled = ({ style, onDismiss, onClick }: IProps) => {
     onClick(sectionId, id)
   }
 
-  return (
-    <OptionControls sections={sections} style={style} iconClassName={styles.icon} onItemClick={_onClick} onDismiss={onDismiss} />
-  )
-}
+  useLayoutEffect(() => {
+    updateBoundedPosition(rootRef, ref, position, 'below')
+  }, [ref, rootRef, position])
+
+  return <OptionControls ref={ref} sections={sections} iconClassName={styles.icon} onItemClick={_onClick} onDismiss={onDismiss} />
+})
 
 export default TextStyleUncontrolled
 
 interface IProps {
-  style: CSSProperties
+  rootRef: RefObject<HTMLDivElement> | undefined
+  position: { x: number; y: number }
   onDismiss: () => void
   onClick: (sectionId: number, id: number) => void
 }

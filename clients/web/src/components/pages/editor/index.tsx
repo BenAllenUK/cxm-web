@@ -124,6 +124,7 @@ const EditorPage = ({
             loading={loading}
             articles={articles}
             blocks={blocks}
+            onUpsertArticles={onUpsertArticles}
             onBlocksDelete={onBlocksDelete}
             onBlocksUpsert={onDebouncedBlockUpsert}
             onViewArticle={onViewArticle}

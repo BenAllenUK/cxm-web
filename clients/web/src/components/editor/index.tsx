@@ -15,6 +15,7 @@ function Editor({
   articles,
   path,
   blocks: initialBlocks,
+  onUpsertArticles: onServerUpsertArticles,
   onBlocksUpsert: onServerBlocksUpsert,
   onBlocksDelete: onServerBlocksDelete,
   onViewArticle,
@@ -90,7 +91,13 @@ function Editor({
 
   return (
     <>
-      <Modals articles={articles} onModifyBlockType={_onModifyBlockType}>
+      <Modals
+        onUpsertArticles={onServerUpsertArticles}
+        articles={articles}
+        blocks={blocks}
+        onModifyBlockType={_onModifyBlockType}
+        onBlocksUpsert={onBlocksUpsert}
+      >
         <div className={styles.container}>
           {id && (
             <>
@@ -118,6 +125,7 @@ interface IProps {
   blocks: Block[]
   loading?: boolean
   path: Article[]
+  onUpsertArticles: (articles: Article[]) => Promise<Article[]>
   onBlocksUpsert: (blocks: Block[]) => void
   onBlocksDelete: (ids: number[]) => void
   onViewArticle: (path: string) => void

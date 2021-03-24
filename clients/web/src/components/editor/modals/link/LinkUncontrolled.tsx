@@ -47,7 +47,6 @@ const LinkUncontrolled = forwardRef<HTMLDivElement, IProps>(
 
     return (
       <OptionControls
-        style={{ left: position.x, top: position.y }}
         ref={mergeRefs(forwardedRef, ref)}
         className={styles.container}
         sections={sections}
