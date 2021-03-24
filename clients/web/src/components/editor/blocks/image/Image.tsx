@@ -81,9 +81,9 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, deleteBlock }: IPr
       <div className={styles.imageContainer}>
         <ImageComponent
           content={
-            content.sourceType === MediaSourceType.UPLOAD
-              ? content
-              : { value: localImages[id], sourceType: MediaSourceType.LOCAL, fileName: '', fileSize: 0 }
+            content.sourceType === MediaSourceType.LOCAL
+              ? { value: localImages[id], sourceType: MediaSourceType.LOCAL, fileName: '', fileSize: 0 }
+              : content
           }
           id={id}
         />
