@@ -11,7 +11,6 @@ const TopBar = ({ setWriteNewCaption, setCreateComment, deleteBlock }: IProps) =
 
   const onClick = (e: any) => {
     const { top: blockTop, left: blockLeft } = ref.current.getBoundingClientRect()
-    console.log('in the on click')
     showControls({
       x: blockLeft,
       y: blockTop + 30,

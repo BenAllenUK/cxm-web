@@ -12,7 +12,7 @@ const Video = ({ content, onMediaUpdate, onUpdate, id, deleteBlock }: IProps) =>
   const _setShowSelector = useCallback(() => {
     setShowSelector(!showSelector)
   }, [setShowSelector, showSelector])
-  console.log('video content', content)
+
   if (!content.value) {
     return (
       <div>
@@ -28,7 +28,7 @@ const Video = ({ content, onMediaUpdate, onUpdate, id, deleteBlock }: IProps) =>
   if (content.sourceType === MediaSourceType.LOCAL) {
     return <Uploading id={id} content={content.value} alwaysDisplay={true} Icon={VideoIcon} />
   }
-  console.log(`${process.env.OMNEA_UPLOAD_URL}/${content.value}`)
+
   return (
     <div className={styles.outerContainer}>
       <div className={styles.videoContainer}>

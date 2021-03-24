@@ -49,7 +49,6 @@ export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPicture
       let fileReader = new FileReader()
       fileReader.onload = async function (e) {
         var file = fileReader.result
-        console.log('THE UPLOAD', fileUploaded)
         if (onMediaUpdate) {
           onMediaUpdate(
             {

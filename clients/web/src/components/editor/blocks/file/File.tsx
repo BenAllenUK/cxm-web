@@ -16,7 +16,6 @@ const File = ({ content, onUpdate, id, onMediaUpdate }: IProps) => {
 
   const _onPageControlsClick = (e: any) => {
     const { top: blockTop, left: blockLeft } = ref.current.getBoundingClientRect()
-    console.log('hahhaha', blockTop, blockLeft)
     showControls({
       x: blockLeft,
       y: blockTop + 30,
@@ -27,8 +26,6 @@ const File = ({ content, onUpdate, id, onMediaUpdate }: IProps) => {
   const _setShowSelector = useCallback(() => {
     setShowSelector(!showSelector)
   }, [setShowSelector, showSelector])
-
-  console.log('IN FILE', content)
 
   if (!content.value) {
     return (

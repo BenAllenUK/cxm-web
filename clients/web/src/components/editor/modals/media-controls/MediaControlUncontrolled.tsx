@@ -61,7 +61,6 @@ const sections: IOptionSections[] = [
 ]
 
 const MediaControlUncontrolled = ({ style, onClick, onDismiss }: IProps) => {
-  console.log('should be rendering the options')
   return (
     <OptionControls className={styles.container} sections={sections} style={style} onItemClick={onClick} onDismiss={onDismiss} />
   )
