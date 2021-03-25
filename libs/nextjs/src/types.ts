@@ -59,7 +59,7 @@ export interface ComponentProps {
 
 export interface Config {
   rootUrl: string
-  projectId: string
+  projectSlug: string
   secretKey: string
 }
 

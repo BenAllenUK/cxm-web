@@ -2,7 +2,6 @@ import PageControls, { PageControlOptions, usePageControlModals } from 'componen
 import RenameControls, { useRenameControlModals } from 'components/navigation/sidebar/modals/rename-controls'
 import { ReactNode, useState } from 'react'
 import { Article } from 'operations/articles/types'
-import { Organisation } from 'operations/organisations/types'
 import MenuItemRefs, { useMenuItemRefs } from './menu-item-refs'
 import PageControlsTargetContext from './page-controls/PageControlsTargetContext'
 import { useSidebarPageControlsContext } from './page-controls/PageControlsTargetContext'
@@ -11,7 +10,7 @@ import createDuplicateArticle from 'utils/article/createDuplicateArticle'
 import { createSlug } from 'utils/article/createSlug'
 import updateChildPaths from 'utils/article/updateChildPaths'
 import OrgProjectMenu from './organisation-project-menu'
-import { useUser } from 'components/root'
+import { useUser } from 'components/root/UserProvider'
 
 const ControlledModals = ({
   currentViewingArticleId,

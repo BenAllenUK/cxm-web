@@ -12,24 +12,30 @@ const client = new GraphQLClient('https://cxm.hasura.app/v1/graphql', {
 
 export const main: APIGatewayProxyHandler = async (event) => {
   try {
-    const { projectId } = event.pathParameters
+    const { projectSlug } = event.pathParameters
 
     // TODO: Filter
-    if (!projectId) {
-      notfound()
-      return
+    if (!projectSlug) {
+      return notfound()
     }
 
-    const response = await client.request(Articles.GetArticlesWithBlocks, { projectId })
-    const out = response?.projects_by_pk
-    if (!out) {
-      notfound()
-      return
+    const response = await client.request(Articles.GetArticlesWithBlocks, { projectSlug })
+    const [project] = response?.projects
+    if (!project) {
+      return notfound()
     }
+
+    const unwrappedArticles = project.articles.map((item) => ({
+      ...item,
+      blocks: item.blocks.map((blockItem) => ({
+        ...blockItem,
+        payload: blockItem.payload ? JSON.parse(blockItem.payload) : null,
+      })),
+    }))
 
     return {
       statusCode: 200,
-      body: JSON.stringify(out),
+      body: JSON.stringify(unwrappedArticles),
     }
   } catch (e) {
     return error(e)
