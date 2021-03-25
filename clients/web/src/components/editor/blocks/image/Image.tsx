@@ -81,7 +81,7 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, deleteBlock }: IPr
         <ImageComponent
           content={
             content.sourceType === MediaSourceType.LOCAL
-              ? { value: localImages[id], sourceType: MediaSourceType.LOCAL, fileName: '', fileSize: 0 }
+              ? { value: localImages[id], sourceType: MediaSourceType.LOCAL, fileName: null, fileSize: null }
               : content
           }
           id={id}

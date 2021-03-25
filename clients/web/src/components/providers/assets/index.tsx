@@ -86,7 +86,7 @@ const Provider = ({ children }: IProps) => {
     setPendingUploads((prevUploads) => {
       const newPendingUploads = { ...pendingUploads }
       delete newPendingUploads[id]
-      return {}
+      return newPendingUploads
     })
   }
 

@@ -20,7 +20,7 @@ const Uploading = ({ content, id, alwaysDisplay, Icon }: IProps) => {
 export default Uploading
 
 interface IProps {
-  content: string
+  content: string | null
   id: number
   alwaysDisplay?: boolean
   Icon: any

@@ -12,15 +12,17 @@ import { useMediaControlModal } from 'components/editor/modals/media-controls'
 const File = ({ content, onUpdate, id, onMediaUpdate }: IProps) => {
   const { showControls } = useMediaControlModal()
 
-  const ref = useRef<HTMLDivElement>(HTMLDivElement.prototype)
+  const ref = useRef<HTMLDivElement>(null)
 
   const _onPageControlsClick = (e: any) => {
-    const { top: blockTop, left: blockLeft } = ref.current.getBoundingClientRect()
-    showControls({
-      x: blockLeft,
-      y: blockTop + 30,
-    })
-    e.stopPropagation()
+    if (ref.current) {
+      const { top: blockTop, left: blockLeft } = ref.current.getBoundingClientRect()
+      showControls({
+        x: blockLeft,
+        y: blockTop + 30,
+      })
+      e.stopPropagation()
+    }
   }
   const [showSelector, setShowSelector] = useState(false)
   const _setShowSelector = useCallback(() => {
@@ -47,7 +49,7 @@ const File = ({ content, onUpdate, id, onMediaUpdate }: IProps) => {
     <div className={styles.attachmentContainer} onClick={() => open(`${process.env.OMNEA_UPLOAD_URL}/${content.value}`)}>
       <AttachmentIcon className={styles.icon} width={20} height={20} />
       <div style={{ marginLeft: 10 }}>{content.fileName}</div>
-      <div className={styles.fileSize}>{readableBytes(content.fileSize)}</div>
+      <div className={styles.fileSize}>{content.fileSize && readableBytes(content.fileSize)}</div>
       <div ref={ref} className={styles.more} onClick={_onPageControlsClick}>
         <MoreIcon width={20} height={20} />
       </div>

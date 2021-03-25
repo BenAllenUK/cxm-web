@@ -1,6 +1,6 @@
 import { useCallback, useState, memo, ReactNode } from 'react'
 import useHover from 'utils/hooks/useHover'
-import { fileTypeToBlockType } from '../../utils/fileType'
+import fileTypeToBlockType from '../../utils/fileTypeToBlockType'
 import { BlockData, BlockDataMediaUpload, MediaSourceType, BlockDataMedia, BlockType } from 'components/editor/blocks/types'
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from '..'
 import styles from './Container.module.scss'
@@ -54,7 +54,7 @@ const Container = ({
               fileName: file.name,
               fileSize: file.size,
             },
-            { file: files[0], blockType: BlockType.IMAGE, id: id },
+            { file: file, blockType: BlockType.IMAGE, id: id },
             BlockType.IMAGE,
             true
           )

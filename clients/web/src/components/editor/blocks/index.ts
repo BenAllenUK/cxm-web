@@ -69,9 +69,9 @@ export const BlockTypeProperties = {
     initialHeight: 20,
     isEditable: true,
     initialPayload: {
-      value: '',
+      value: null,
       comments: [],
-      caption: '',
+      caption: null,
     },
   },
   [BlockType.TEXT]: {
@@ -210,7 +210,7 @@ export const BlockTypeProperties = {
     initialHeight: 20,
     isEditable: true,
     initialPayload: {
-      value: '',
+      value: null,
     },
   },
   [BlockType.VIDEO]: {
@@ -221,7 +221,7 @@ export const BlockTypeProperties = {
     initialHeight: 20,
     isEditable: true,
     initialPayload: {
-      value: '',
+      value: null,
     },
   },
 }

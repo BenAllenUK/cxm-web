@@ -53,17 +53,10 @@ export type BlockDataText = {
 
 export type BlockDataMedia = {
   value: any
-  fileName: string
-  fileSize: number
+  fileName: string | null
+  fileSize: number | null
   sourceType: MediaSourceType
   caption?: string | null
-  comments?: BlockDataMediaComment[]
-}
-
-export type BlockDataMediaComment = {
-  user: string
-  comment: string
-  time: string
 }
 
 export type BlockDataMediaUpload = {
