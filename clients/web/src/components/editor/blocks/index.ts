@@ -1,4 +1,4 @@
-import { BlockDataText, BlockType, BlockDataListBullet, BlockDataImage, Block } from './types'
+import { BlockDataText, BlockType, BlockDataListBullet, Block, BlockDataMedia } from './types'
 
 export const BLOCK_CONTAINER_VERTICAL_PADDING = 2
 
@@ -42,7 +42,9 @@ export function isBlockEmpty(block: Block) {
     case BlockType.LIST_BULLET:
       return ((block.payload as BlockDataListBullet).items || []).length == 0
     case BlockType.IMAGE:
-      return false
+    case BlockType.VIDEO:
+    case BlockType.FILE:
+      return !(block.payload as BlockDataMedia).value
     default:
       return true
   }
@@ -67,9 +69,9 @@ export const BlockTypeProperties = {
     initialHeight: 20,
     isEditable: true,
     initialPayload: {
-      value: '',
+      value: null,
       comments: [],
-      caption: '',
+      caption: null,
     },
   },
   [BlockType.TEXT]: {
@@ -199,5 +201,27 @@ export const BlockTypeProperties = {
     initialHeight: 20,
     isEditable: false,
     initialPayload: {},
+  },
+  [BlockType.FILE]: {
+    id: BlockType.FILE,
+    title: 'File',
+    subtitle: 'Upload or embed with a link.',
+    image: '/preview/file.png',
+    initialHeight: 20,
+    isEditable: true,
+    initialPayload: {
+      value: null,
+    },
+  },
+  [BlockType.VIDEO]: {
+    id: BlockType.VIDEO,
+    title: 'Video',
+    subtitle: 'Upload or embed with a link.',
+    image: '/preview/file.png',
+    initialHeight: 20,
+    isEditable: true,
+    initialPayload: {
+      value: null,
+    },
   },
 }

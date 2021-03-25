@@ -22,7 +22,7 @@ export const fetchPhotos = async (query: string) => {
 
   const urlPath = url(query, options)
 
-  return fetch(`http://res.cloudinary.com/dbiqces70/image/list/sample.json`)
+  return fetch(`https://res.cloudinary.com/dbiqces70/image/list/sample.json`)
     .then((res) => res.text())
     .then((text) => (text ? JSON.parse(text).resources : []))
 }

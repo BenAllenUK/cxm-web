@@ -45,7 +45,6 @@ function Editor({
 
   const onBlocksUpsert = (newBlocks: Block[]) => {
     const newBlockIds = newBlocks.map((item) => item.id)
-
     setBlocks((prevBlocks) => {
       var prevBlocksFiltered = prevBlocks
         .filter((item) => newBlockIds.indexOf(item.id) === -1)

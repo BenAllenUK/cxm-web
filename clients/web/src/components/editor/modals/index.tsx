@@ -4,6 +4,7 @@ import { useState, useContext, memo, useCallback, createContext, ReactNode, RefO
 import BlockControls from './block-controls'
 import TextControls from './text-controls'
 import PageControls from './page-controls'
+import MediaControls from './media-controls'
 import TextStyle from './text-style'
 import Link from './link'
 import BlockControlsContext, { useBlockControlsContext } from './block-controls/BlockControlsContext'
@@ -22,6 +23,7 @@ const ControlledModals = ({ articles, children, onModifyBlockType }: IProps) => 
     <>
       <BlockControls.Component filterText={filterText} id={id} onBlockItemClick={_onModifyBlockType} />
       <PageControls.Component onClick={() => {}} />
+      <MediaControls.Component onClick={() => {}} />
       <TextControls.Component />
       <TextStyle.Component />
       <DeleteConfirmation.Component onAccept={() => {}} />
@@ -44,7 +46,9 @@ const Modals = (props: IProps) => {
                 <BlockControlsContext.Provider>
                   <TextStyle.Provider rootRef={bodyRef}>
                     <Link.Provider rootRef={bodyRef}>
-                      <ControlledModals {...props} />
+                      <MediaControls.Provider rootRef={bodyRef}>
+                        <ControlledModals {...props} />
+                      </MediaControls.Provider>
                     </Link.Provider>
                   </TextStyle.Provider>
                 </BlockControlsContext.Provider>
