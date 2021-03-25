@@ -6,7 +6,7 @@ const GetArticles = gql`
     ${ArticleFragment}
     projects(where: {slug: {_eq: $projectSlug}}) {
       id
-      articles {
+      articles(where: { archived: { _eq: false }, published: { _eq: true } }) {
         ...ArticleFragment
       }
     }

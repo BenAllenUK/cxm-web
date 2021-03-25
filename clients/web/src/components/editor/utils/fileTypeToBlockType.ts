@@ -1,6 +1,6 @@
 import { BlockType } from '../blocks/types'
 
-export default (fileType: string) => {
+const fileTypeToBlockType = (fileType: string) => {
   if (fileType.includes('image')) {
     return BlockType.IMAGE
   }
@@ -9,3 +9,5 @@ export default (fileType: string) => {
   }
   return BlockType.FILE
 }
+
+export default fileTypeToBlockType

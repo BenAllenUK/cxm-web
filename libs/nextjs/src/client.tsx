@@ -145,7 +145,8 @@ export default function init(config?: Config): Client {
       return original
     }
 
-    const fullPath = Array.isArray(path) ? path.join('/') : path
+    const fullPath = (Array.isArray(path) ? path.join('/') : path) || ''
+
     const [article] = articles.filter((item) => item.path === fullPath)
 
     if (!article) {

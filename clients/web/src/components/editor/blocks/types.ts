@@ -36,7 +36,6 @@ export type BlockData =
   | BlockDataQuote
   | BlockDataDivider
   | BlockDataCallout
-  | BlockDataVideo
   | BlockDataCode
   | BlockDataTweet
   | BlockDataGoogleMaps
@@ -118,17 +117,6 @@ export type BlockDataQuote = BlockDataText
 export type BlockDataDivider = {}
 
 export type BlockDataCallout = BlockDataText
-
-export type BlockDataVideo = {
-  url: string
-  alt: string
-  type: string
-}
-
-export enum BlockDataVideoType {
-  CUSTOM = 'CUSTOM',
-  YOUTUBE = 'YOUTUBE',
-}
 
 export type BlockDataCode = BlockDataText
 

@@ -3,17 +3,28 @@ p.omnea-content-text {
 }
 
 h1.omnea-content-text {
-  font-size: 2em;
+  font-size: 3em;
   font-weight: bold;
 }
 
 h2.omnea-content-text {
-  font-size: 1.5em;
+  font-size: 2em;
   font-weight: bold;
 }
 
 h3.omnea-content-text {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+h4.omnea-content-text {
   font-size: 1.17em;
+  font-weight: bold;
+}
+
+h5.omnea-content-text {
+  opacity: 0.7;
+  font-size: 20px;
   font-weight: bold;
 }
 

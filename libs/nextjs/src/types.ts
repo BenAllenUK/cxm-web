@@ -69,6 +69,7 @@ export enum BlockType {
   H1,
   H2,
   H3,
+
   LIST_BULLET,
   // TABLE_INLINE = 'TABLE-INLINE',
   LIST_CHECK,
@@ -76,16 +77,18 @@ export enum BlockType {
   QUOTE,
   DIVIDER,
   CALLOUT,
-  // VIDEO = 'VIDEO',
-  CODE
-
+  CODE,
+  FILE,
+  VIDEO,
   // TWEET = 'TWEET',
   // GOOGLE_MAPS = 'GOOGLE-MAPS',
+  H4,
+  H5
 }
 
 export type BlockData =
   | BlockDataText
-  | BlockDataImage
+  | BlockDataMedia
   | BlockDataH1
   | BlockDataH2
   | BlockDataH3
@@ -96,10 +99,26 @@ export type BlockData =
   | BlockDataQuote
   | BlockDataDivider
   | BlockDataCallout
-  | BlockDataVideo
   | BlockDataCode
   | BlockDataTweet
   | BlockDataGoogleMaps
+
+export type BlockDataMedia = {
+  value: any
+  fileName: string | null
+  fileSize: number | null
+  sourceType: MediaSourceType
+  caption?: string | null
+}
+
+export enum MediaSourceType {
+  UPLOAD = 'UPLOAD',
+  EMBED_LINK = 'EMBED_LINK',
+  LIBRARY = 'LIBRARY',
+  CLOUDINARY = 'CLOUDINARY',
+  LOCAL = 'LOCAL',
+  VIDEO = 'VIDEO'
+}
 
 export type Block = {
   id: number
@@ -114,32 +133,6 @@ export type Block = {
 
 export type BlockDataText = {
   value: string
-}
-
-export type BlockDataImage = {
-  value: string | null
-  type: MediaSourceType
-  caption?: string | null
-  comments?: BlockDataImageComment[]
-}
-
-export type BlockDataImageComment = {
-  user: string
-  comment: string
-  time: string
-}
-
-export type BlockDataImageUpload = {
-  file: File
-  id: number
-}
-
-export enum MediaSourceType {
-  UPLOAD = 'Upload',
-  EMBED_LINK = 'Embed link',
-  LIBRARY = 'LIBRARY',
-  CLOUDINARY = 'CLOUDINARY',
-  LOCAL = 'LOCAL'
 }
 
 export type MediaSourceObject = {
@@ -176,17 +169,6 @@ export type BlockDataQuote = BlockDataText
 export type BlockDataDivider = {}
 
 export type BlockDataCallout = BlockDataText
-
-export type BlockDataVideo = {
-  url: string
-  alt: string
-  type: string
-}
-
-export enum BlockDataVideoType {
-  CUSTOM = 'CUSTOM',
-  YOUTUBE = 'YOUTUBE'
-}
 
 export type BlockDataCode = BlockDataText
 

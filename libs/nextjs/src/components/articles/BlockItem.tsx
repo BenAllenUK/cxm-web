@@ -1,9 +1,10 @@
 import Text from './blocks/Text'
 import Image from './blocks/Image'
+import Video from './blocks/Video'
 
 import Divider from './blocks/Divider'
 
-import { Block, BlockType, BlockDataText, BlockDataImage } from '../../types'
+import { Block, BlockType, BlockDataText, BlockDataMedia } from '../../types'
 
 interface IBlockProps {
   item: Block
@@ -23,7 +24,9 @@ const BlockItem = ({ item, index }: IBlockProps) => {
     case BlockType.DIVIDER:
       return <Divider />
     case BlockType.IMAGE:
-      return <Image content={item.payload as BlockDataImage} />
+      return <Image content={item.payload as BlockDataMedia} />
+    case BlockType.VIDEO:
+      return <Video id={item.id} content={item.payload as BlockDataMedia} />
     default:
       return <div />
   }
