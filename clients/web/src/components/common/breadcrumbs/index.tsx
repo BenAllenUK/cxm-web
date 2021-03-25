@@ -1,10 +1,12 @@
 import MUIBreadcrumbs from '@material-ui/core/Breadcrumbs'
 import styles from './Breadcrumbs.module.scss'
 import { Article } from 'operations/articles/types'
+import { BreadcrumbItem } from './types'
 import BreadcrumbButton from './BreadcrumbButton'
 
 const Breadcrumbs = ({ path, onViewArticle }: IProps) => {
   const _onNavigateClick = (position: number) => {
+    console.log('breadcrumb path', path)
     onViewArticle(path[position].path)
   }
 
@@ -23,5 +25,6 @@ export default Breadcrumbs
 
 interface IProps {
   path: Article[]
+  breadcrumb: BreadcrumbItem[]
   onViewArticle: (path: string) => void
 }
