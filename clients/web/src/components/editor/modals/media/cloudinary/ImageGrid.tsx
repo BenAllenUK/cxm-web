@@ -7,7 +7,7 @@ const ImageGrid = ({ pictures, handleClick }: IProps) => {
       handleClick(picture.public_id)
     }
     return (
-      <div>
+      <div key={picture.public_id}>
         <Image onClick={_handleClick} className={styles.gridElement} publicId={picture.public_id} key={picture.public_id} />
       </div>
     )

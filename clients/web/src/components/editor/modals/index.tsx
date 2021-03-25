@@ -5,6 +5,7 @@ import BlockControls from './block-controls'
 import TextControls from './text-controls'
 import PageControls from './page-controls'
 import TextStyle, { useFocusedBlock } from './text-style'
+import MediaControls from './media-controls'
 import Link from './link'
 import BlockControlsContext, { useBlockControlsContext } from './block-controls/BlockControlsContext'
 import PageControlsTargetContext from 'components/navigation/sidebar/modals/page-controls/PageControlsTargetContext'
@@ -72,6 +73,7 @@ const ControlledModals = ({ blocks, articles, children, onUpsertArticles, onBloc
     <>
       <BlockControls.Component filterText={filterText} id={id} onBlockItemClick={_onModifyBlockType} />
       <PageControls.Component onClick={() => {}} />
+      <MediaControls.Component onClick={() => {}} />
       <TextControls.Component />
       <TextStyle.Component />
       <DeleteConfirmation.Component onAccept={() => {}} />
@@ -99,7 +101,9 @@ const Modals = (props: IProps) => {
                 <BlockControlsContext.Provider>
                   <TextStyle.Provider rootRef={bodyRef}>
                     <Link.Provider rootRef={bodyRef}>
-                      <ControlledModals {...props} />
+                      <MediaControls.Provider rootRef={bodyRef}>
+                        <ControlledModals {...props} />
+                      </MediaControls.Provider>
                     </Link.Provider>
                   </TextStyle.Provider>
                 </BlockControlsContext.Provider>
