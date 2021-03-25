@@ -52,7 +52,7 @@ functions:
     handler: src/paths/projects/articles/get-one.main
     events:
       - http:
-          path: /{projectId}/articles/{articleId}
+          path: /{projectId}/articles/{articlePath+}
           method: get
           cors: true
   projects-articles-get:
