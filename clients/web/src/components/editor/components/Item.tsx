@@ -77,6 +77,8 @@ const Item = ({
     case BlockType.H1:
     case BlockType.H2:
     case BlockType.H3:
+    case BlockType.H4:
+    case BlockType.H5:
     case BlockType.CALLOUT:
     case BlockType.CODE:
     case BlockType.QUOTE: {

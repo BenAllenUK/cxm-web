@@ -4,6 +4,7 @@ export enum BlockType {
   H1,
   H2,
   H3,
+
   LIST_BULLET,
   // TABLE_INLINE = 'TABLE-INLINE',
   LIST_CHECK,
@@ -16,6 +17,8 @@ export enum BlockType {
 
   // TWEET = 'TWEET',
   // GOOGLE_MAPS = 'GOOGLE-MAPS',
+  H4,
+  H5,
 }
 
 export type BlockData =
@@ -24,6 +27,8 @@ export type BlockData =
   | BlockDataH1
   | BlockDataH2
   | BlockDataH3
+  | BlockDataH4
+  | BlockDataH5
   | BlockDataTableInline
   | BlockDataCheckBullet
   | BlockDataListBullet
@@ -89,6 +94,10 @@ export type BlockDataH1 = BlockDataText
 export type BlockDataH2 = BlockDataText
 
 export type BlockDataH3 = BlockDataText
+
+export type BlockDataH4 = BlockDataText
+
+export type BlockDataH5 = BlockDataText
 
 export type BlockDataTableInline = {
   title: string

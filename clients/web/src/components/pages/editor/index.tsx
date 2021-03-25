@@ -122,6 +122,7 @@ const EditorPage = ({
 
         <div className={styles.editor}>
           <Editor
+            coverImage={article?.coverImage}
             path={path}
             key={article?.id}
             id={article?.id}

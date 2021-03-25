@@ -23,13 +23,17 @@ const BlockControlUncontrolled = ({ filterText, style, onClick, onDismiss }: IPr
   }
 
   return (
-    <OptionControls
-      sections={[{ id: -1, items: items, title: 'Basic Blocks' }]}
-      style={style}
-      iconClassName={styles.icon}
-      onItemClick={_onClick}
-      onDismiss={onDismiss}
-    />
+    <>
+      {items.length > 0 && (
+        <OptionControls
+          sections={[{ id: -1, items: items, title: 'Basic Blocks' }]}
+          style={style}
+          iconClassName={styles.icon}
+          onItemClick={_onClick}
+          onDismiss={onDismiss}
+        />
+      )}
+    </>
   )
 }
 

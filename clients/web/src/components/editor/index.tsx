@@ -1,27 +1,25 @@
-import { memo, useCallback, useMemo, useRef, useState } from 'react'
-import { Block, BlockDataText, BlockType } from 'components/editor/blocks/types'
-import { BlockTypeProperties, DEFAULT_BLOCK_START } from './blocks'
-
-import styles from './Editor.module.scss'
-import Modals from './modals'
-import Header from './header'
+import { Block, BlockType } from 'components/editor/blocks/types'
 import { Article } from 'operations/articles/types'
-import List from './components/List'
+import { memo, useState } from 'react'
+import { BlockTypeProperties } from './blocks'
+import EditorArticle from './components/EditorArticle'
+import styles from './Editor.module.scss'
+import Header from './header'
 import EditorEmpty from './misc/EditorEmpty'
-import useWindowKeyDown from 'utils/hooks/useWindowKeyDown'
+import Modals from './modals'
 import LocalBlocksProvider, { useLocalBlocksProvider } from './providers/LocalBlocksProvider'
-// Omit<IProps, 'blocks'>
+
 function Editor({
   id,
   articles,
   path,
+  coverImage,
   onUpsertArticles: onServerUpsertArticles,
   onBlocksUpsert: onServerBlocksUpsert,
   onBlocksDelete: onServerBlocksDelete,
   onViewArticle,
   loading,
-  blocks: initialBlocks,
-}: IProps) {
+}: Omit<IProps, 'blocks'>) {
   const { blocks, setBlocks } = useLocalBlocksProvider()
   const [focusIndex, setFocusIndex] = useState(blocks.length <= 1 ? 0 : -1)
 
@@ -89,6 +87,15 @@ function Editor({
 
   // ______ TEMP END ________
 
+  const _onCoverImageChange = (image: string | null) => {
+    const [article] = articles.filter((item) => item.id === id)
+    if (!article) {
+      return
+    }
+
+    onServerUpsertArticles([{ ...article, coverImage: image }])
+  }
+
   return (
     <>
       <Modals
@@ -102,9 +109,11 @@ function Editor({
           {id && (
             <>
               <Header loading={loading} path={path} onViewArticle={onViewArticle} />
-              <List
+              <EditorArticle
+                coverImage={coverImage}
                 focusIndex={focusIndex}
                 blocks={blocks}
+                onCoverImageChange={_onCoverImageChange}
                 onBlocksUpsert={onBlocksUpsert}
                 onBlocksDelete={onBlocksDelete}
                 setFocusIndex={setFocusIndex}
@@ -120,13 +129,14 @@ function Editor({
 
 const ConnectedEditor = ({ blocks, ...otherProps }: IProps) => (
   <LocalBlocksProvider initialBlocks={blocks}>
-    <Editor blocks={blocks} {...otherProps} />
+    <Editor {...otherProps} />
   </LocalBlocksProvider>
 )
 
 export default memo(ConnectedEditor)
 interface IProps {
   id?: number | null
+  coverImage?: string | null
   articles: Article[]
   blocks: Block[]
   loading?: boolean

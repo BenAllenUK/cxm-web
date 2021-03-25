@@ -212,6 +212,7 @@ export async function getServerSideProps({ params, locale, req, res }: GetServer
               archivedAt
               position
               path
+              coverImage
             }
             archivedArticles: articles(where: { archived: { _eq: true } }) {
               id
@@ -224,6 +225,7 @@ export async function getServerSideProps({ params, locale, req, res }: GetServer
               archivedAt
               position
               path
+              coverImage
             }
           }
         }

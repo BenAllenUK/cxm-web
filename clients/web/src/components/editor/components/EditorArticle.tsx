@@ -1,4 +1,4 @@
-import { useRef, useCallback, SyntheticEvent } from 'react'
+import { useRef, useCallback, SyntheticEvent, MouseEvent } from 'react'
 import { SortEnd } from 'react-sortable-hoc'
 import { isBlockEmpty } from '../blocks'
 import { BlockData, BlockType, BlockDataText, BlockDataImage, Block, BlockDataImageUpload } from '../blocks/types'
@@ -11,8 +11,17 @@ import createEmptyBlock from 'utils/blocks/createEmptyBlock'
 import SortableList from './SortableList'
 import { getSelectionMidPosition } from 'utils/modals/getSelectionMidPosition'
 import { useFocusedBlock } from '../modals/text-style'
+import Cover from '../cover'
 
-const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusIndex }: IProps) => {
+const EditorArticle = ({
+  blocks,
+  coverImage,
+  focusIndex,
+  onBlocksUpsert,
+  onBlocksDelete,
+  setFocusIndex,
+  onCoverImageChange,
+}: IProps) => {
   const blockRefs = useRef<HTMLDivElement[]>([])
 
   const {
@@ -184,7 +193,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     }
   }
 
-  const _onBodyClick = () => {
+  const _onBodyClick = (e: MouseEvent) => {
     if (blocks.length === 1) {
       const [block] = blocks
       if (block.type === BlockType.TEXT && isBlockEmpty(block)) {
@@ -200,6 +209,13 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
       return
     }
     _onCreateBlock(lastItemIndex)
+  }
+
+  const _onCoverClick = (e: MouseEvent) => {
+    if (blocks.length > 0) {
+      setFocusIndex(0)
+      return
+    }
   }
 
   const _onTextChange = (_: number, value: string) => {
@@ -220,38 +236,43 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
   }
 
   return (
-    <SortableList
-      itemRefFunc={(_ref: HTMLDivElement, position: number) => {
-        blockRefs.current[position] = _ref
-      }}
-      modalBlockEnabled={modalBlockEnabled}
-      focusIndex={focusIndex}
-      blocks={blocks}
-      onBodyClick={_onBodyClick}
-      onSortEnd={_onSortEnd}
-      onBlockClick={_onBlockClick}
-      onBlockAddClick={_onBlockAddClick}
-      onBlockDoubleClick={_onBlockDoubleClick}
-      onTextChange={_onTextChange}
-      onNew={_onCreateBlock}
-      onUpdate={_onUpsertBlock}
-      onImageUpdate={_onUpsertImageBlock}
-      onDelete={_onDeleteBlock}
-      onFocus={_onBlockFocus}
-      onBlur={_onBlockBlur}
-      onSelect={_onBlockSelect}
-      onFocusOutStart={_onFocusOutStart}
-      onFocusOutEnd={_onFocusOutEnd}
-    />
+    <>
+      <Cover image={coverImage} onClick={_onCoverClick} onCoverImageChange={onCoverImageChange} />
+      <SortableList
+        itemRefFunc={(_ref: HTMLDivElement, position: number) => {
+          blockRefs.current[position] = _ref
+        }}
+        modalBlockEnabled={modalBlockEnabled}
+        focusIndex={focusIndex}
+        blocks={blocks}
+        onBodyClick={_onBodyClick}
+        onSortEnd={_onSortEnd}
+        onBlockClick={_onBlockClick}
+        onBlockAddClick={_onBlockAddClick}
+        onBlockDoubleClick={_onBlockDoubleClick}
+        onTextChange={_onTextChange}
+        onNew={_onCreateBlock}
+        onUpdate={_onUpsertBlock}
+        onImageUpdate={_onUpsertImageBlock}
+        onDelete={_onDeleteBlock}
+        onFocus={_onBlockFocus}
+        onBlur={_onBlockBlur}
+        onSelect={_onBlockSelect}
+        onFocusOutStart={_onFocusOutStart}
+        onFocusOutEnd={_onFocusOutEnd}
+      />
+    </>
   )
 }
 
 interface IProps {
+  coverImage?: string | null
   focusIndex: number
   blocks: Block[]
+  onCoverImageChange: (image: string | null) => void
   onBlocksUpsert: (blocks: Block[]) => void
   onBlocksDelete: (ids: number[]) => void
   setFocusIndex: (n: number) => void
 }
 
-export default List
+export default EditorArticle

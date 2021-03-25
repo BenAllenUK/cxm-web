@@ -111,6 +111,10 @@ const getClassName = (type: BlockType) => {
       return styles.header2
     case BlockType.H3:
       return styles.header3
+    case BlockType.H4:
+      return styles.header4
+    case BlockType.H5:
+      return styles.header5
     case BlockType.QUOTE:
       return styles.quote
     case BlockType.CODE:
@@ -130,6 +134,10 @@ const getFocusedPlaceholder = (type: BlockType, filteringMode: boolean = false) 
       return `Heading 2`
     case BlockType.H3:
       return `Heading 3`
+    case BlockType.H4:
+      return `Heading 4`
+    case BlockType.H5:
+      return `Heading 5`
     case BlockType.QUOTE:
       return `Empty quote`
     case BlockType.CALLOUT:
@@ -147,6 +155,10 @@ const getBlurredPlaceholder = (type: BlockType) => {
       return `Heading 2`
     case BlockType.H3:
       return `Heading 3`
+    case BlockType.H4:
+      return `Heading 4`
+    case BlockType.H5:
+      return `Heading 5`
     case BlockType.QUOTE:
       return `Empty quote`
     case BlockType.CALLOUT:

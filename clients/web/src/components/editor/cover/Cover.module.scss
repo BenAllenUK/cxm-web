@@ -1,0 +1,34 @@
+.coverEmpty {
+  height: 100px;
+  position: relative;
+}
+
+.coverFilled {
+  height: 200px;
+  position: relative;
+}
+
+.bottomBar {
+}
+
+.background {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.controlsContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+
+  @media only screen and (max-width: 1300px) {
+    margin: 0 50px;
+  }
+}
+
+.controls {
+  color: white;
+  padding: 5px 0px;
+  display: flex;
+}
