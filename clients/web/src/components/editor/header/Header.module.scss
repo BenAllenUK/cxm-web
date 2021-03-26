@@ -13,6 +13,10 @@
   margin: 5px;
 }
 
+.separator {
+  color: $text2-color;
+}
+
 .historyControls {
   display: flex;
   flex-direction: column;

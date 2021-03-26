@@ -1,3 +1,10 @@
+@import 'styles/variables';
+
 .historyBreadcrumbs {
   margin: 5px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
 }

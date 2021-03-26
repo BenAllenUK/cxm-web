@@ -7,9 +7,10 @@ import { usePageControlModal } from '../modals/page-controls'
 import { useRef } from 'react'
 import { Article } from 'operations/articles/types'
 import Breadcrumbs from 'components/common/breadcrumbs'
+import { BreadcrumbItem } from 'components/common/breadcrumbs/types'
 import Button from 'components/common/button/Button'
 
-export const Header = ({ loading, path, onViewArticle }: IProps) => {
+export const Header = ({ loading, breadcrumbs, onViewArticle }: IProps) => {
   const { showControls } = usePageControlModal()
 
   const ref = useRef<HTMLDivElement>(null)
@@ -45,7 +46,14 @@ export const Header = ({ loading, path, onViewArticle }: IProps) => {
               </Button>
             </div>
           </div>
-          {path && <Breadcrumbs path={path} onViewArticle={onViewArticle} />}
+          {breadcrumbs && (
+            <Breadcrumbs
+              breadcrumbs={breadcrumbs}
+              onViewArticle={onViewArticle}
+              separator={<div className={styles.separator}>/</div>}
+              maxItems={2}
+            />
+          )}
         </div>
         <div className={styles.headerRight}>
           <Button onClick={_onPublishClick} style={{ alignSelf: 'center' }} className={styles.button}>
@@ -63,7 +71,7 @@ export const Header = ({ loading, path, onViewArticle }: IProps) => {
 
 interface IProps {
   loading?: boolean
-  path: Article[]
+  breadcrumbs: BreadcrumbItem[]
   onViewArticle: (path: string) => void
 }
 

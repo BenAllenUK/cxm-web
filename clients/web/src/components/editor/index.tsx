@@ -8,12 +8,12 @@ import Header from './header'
 import { Article } from 'operations/articles/types'
 import List from './components/List'
 import EditorEmpty from './misc/EditorEmpty'
-import readPathRoute from 'utils/article/readPathRoute'
+import { BreadcrumbItem } from 'components/common/breadcrumbs/types'
 
 function Editor({
   id,
   articles,
-  path,
+  breadcrumbs,
   blocks: initialBlocks,
   onBlocksUpsert: onServerBlocksUpsert,
   onBlocksDelete: onServerBlocksDelete,
@@ -94,7 +94,7 @@ function Editor({
         <div className={styles.container}>
           {id && (
             <>
-              <Header loading={loading} path={path} onViewArticle={onViewArticle} />
+              <Header loading={loading} breadcrumbs={breadcrumbs} onViewArticle={onViewArticle} />
               <List
                 focusIndex={focusIndex}
                 blocks={blocks}
@@ -117,7 +117,7 @@ interface IProps {
   articles: Article[]
   blocks: Block[]
   loading?: boolean
-  path: Article[]
+  breadcrumbs: BreadcrumbItem[]
   onBlocksUpsert: (blocks: Block[]) => void
   onBlocksDelete: (ids: number[]) => void
   onViewArticle: (path: string) => void
