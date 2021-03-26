@@ -14,7 +14,6 @@ const makeBreadcrumb = (articles: Article[], id: number): BreadcrumbItem[] => {
   }
   const parentArticle = makeBreadcrumb(articles, article.parentId)
   const breadcrumbs = flatten([...parentArticle, breadcrumb])
-  console.log('BREADCRUMBS <<<<', breadcrumbs)
   return breadcrumbs
 }
 
