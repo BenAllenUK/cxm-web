@@ -49,7 +49,7 @@ const Container = ({
           onMediaUpdate(
             multipleFileIndex,
             {
-              value: fileReader.result || null,
+              value: fileReader.result?.toString() || null,
               sourceType: MediaSourceType.LOCAL,
               fileName: file.name,
               fileSize: file.size,

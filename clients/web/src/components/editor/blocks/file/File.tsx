@@ -64,5 +64,5 @@ interface IProps {
   content: BlockDataMedia
   onUpdate: (value: BlockData, type?: BlockType) => void
   onMediaUpdate: (value: BlockDataMedia, pendingUploadFile: File, type: BlockType, createNew?: boolean) => void
-  deleteBlock: () => void
+  onDeleteBlock: () => void
 }

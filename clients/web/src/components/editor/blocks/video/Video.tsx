@@ -7,7 +7,7 @@ import Uploading from '../common/Uploading'
 import TopBar from 'components/editor/modals/media-controls/TopBar'
 import { BlockDataMedia, BlockData, BlockType, MediaSourceType } from '../types'
 
-const Video = ({ content, onMediaUpdate, onUpdate, id, deleteBlock }: IProps) => {
+const Video = ({ content, onMediaUpdate, onUpdate, id, onDeleteBlock }: IProps) => {
   const [showSelector, setShowSelector] = useState(false)
   const _setShowSelector = useCallback(() => {
     setShowSelector(!showSelector)
@@ -20,7 +20,9 @@ const Video = ({ content, onMediaUpdate, onUpdate, id, deleteBlock }: IProps) =>
           <VideoIcon className={styles.icon} width={25} height={25} />
           <div className={styles.text}>Upload or embed a file</div>
         </div>
-        {showSelector && <MediaSelector onMediaUpdate={onMediaUpdate} onUpdate={onUpdate} id={id} fileFilter={'video/*'} />}
+        {showSelector && (
+          <MediaSelector isVideo={true} onMediaUpdate={onMediaUpdate} onUpdate={onUpdate} id={id} fileFilter={'video/*'} />
+        )}
       </div>
     )
   }
@@ -33,7 +35,7 @@ const Video = ({ content, onMediaUpdate, onUpdate, id, deleteBlock }: IProps) =>
     <div className={styles.outerContainer}>
       <div className={styles.videoContainer}>
         <div className={styles.mediaControls}>
-          <TopBar deleteBlock={deleteBlock} setWriteNewCaption={() => null} setCreateComment={() => null} />
+          <TopBar onDeleteBlock={onDeleteBlock} setWriteNewCaption={() => null} setCreateComment={() => null} />
         </div>
         <video width="320" height="240" controls>
           <source src={`${process.env.OMNEA_UPLOAD_URL}/${content.value}`} type="video/mp4"></source>
@@ -50,5 +52,5 @@ interface IProps {
   content: BlockDataMedia
   onUpdate: (value: BlockData, type?: BlockType) => void
   onMediaUpdate: (value: BlockDataMedia, pendingUploadFile: File, type: BlockType, createNew?: boolean) => void
-  deleteBlock: () => void
+  onDeleteBlock: () => void
 }

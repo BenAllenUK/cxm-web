@@ -1,10 +1,10 @@
 import createPositionModal from 'components/common/modals/position'
 import styles from './MediaControls.module.scss'
 import MoreIcon from 'images/icons/more.svg'
-import { createContext, ReactNode, RefObject, useCallback, useContext, useRef } from 'react'
+import { useRef, ReactNode } from 'react'
 import { useMediaControlModal } from 'components/editor/modals/media-controls'
 
-const TopBar = ({ setWriteNewCaption, setCreateComment, deleteBlock }: IProps) => {
+const TopBar = ({ setWriteNewCaption, setCreateComment, onDeleteBlock }: IProps) => {
   const { showControls } = useMediaControlModal()
 
   const ref = useRef<HTMLDivElement>(HTMLDivElement.prototype)
@@ -17,22 +17,21 @@ const TopBar = ({ setWriteNewCaption, setCreateComment, deleteBlock }: IProps) =
     })
     e.stopPropagation()
   }
-  const Option = ({ name, onClick }: IOptionProps) => {
+  const Option = ({ option, icon, onClick }: IOptionProps) => {
+    const node = option ? option : icon
     return (
-      <div className={styles.option} onClick={onClick}>
-        {name}
+      <div className={option ? styles.option : styles.icon} onClick={onClick}>
+        {node}
       </div>
     )
   }
 
   return (
     <div className={styles.bar} ref={ref}>
-      <Option onClick={setWriteNewCaption} name={'caption'} />
-      <Option onClick={setCreateComment} name={'comment'} />
-      <Option onClick={deleteBlock} name={'delete'} />
-      <div className={styles.more} onClick={onClick}>
-        <MoreIcon className={styles.moreIcon} width={14} height={14} fill={'#FFFFFF'} />
-      </div>
+      <Option onClick={setWriteNewCaption} option={'caption'} />
+      <Option onClick={setCreateComment} option={'comment'} />
+      <Option onClick={onDeleteBlock} option={'delete'} />
+      <Option onClick={onClick} icon={<MoreIcon className={styles.moreIcon} width={14} height={14} fill={'#FFFFFF'} />} />
     </div>
   )
 }
@@ -40,12 +39,13 @@ const TopBar = ({ setWriteNewCaption, setCreateComment, deleteBlock }: IProps) =
 export default TopBar
 
 interface IOptionProps {
-  name: string
+  icon?: ReactNode
+  option?: string
   onClick?: any
 }
 
 interface IProps {
   setWriteNewCaption: () => void
   setCreateComment: () => void
-  deleteBlock: () => void
+  onDeleteBlock: () => void
 }

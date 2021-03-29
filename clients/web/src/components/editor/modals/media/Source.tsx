@@ -7,7 +7,8 @@ import Button from 'components/common/button/Button'
 import AssetLibrary from './AssetLibrary'
 import TextInput from 'components/common/text-input/TextInput'
 
-export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPictures, id, fileFilter }: IProps) => {
+export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPictures, id, fileFilter, isVideo }: IProps) => {
+  const mediaString = isVideo ? 'video' : 'image'
   const EmbedLink = () => {
     const [link, setLink] = useState('')
     const handleClick = () => {
@@ -15,19 +16,19 @@ export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPicture
     }
 
     const onChange = (e: any) => {
-      setLink(e.target.value)
+      setLink(e.target.value.replace(/[\n\r]/g, ''))
     }
     return (
       <div className={styles.uploadSource}>
         <TextInput
-          focusedPlaceholder={'Paste the image link...'}
-          blurredPlaceholder={'Paste the image link...'}
+          focusedPlaceholder={`Paste the ${mediaString} link...`}
+          blurredPlaceholder={`Paste the ${mediaString} link...`}
           html={link}
           onChange={onChange}
           className={styles.linkInput}
         />
         <Button onClick={handleClick} className={styles.button}>
-          Embed image
+          {`Embed ${mediaString}`}
         </Button>
 
         <div className={styles.text}>Works with any image from the web</div>
@@ -87,7 +88,7 @@ export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPicture
       <div className={styles.uploadSource}>
         <>
           <Button onClick={handleClick} className={styles.button}>
-            Choose an image
+            {`Choose ${isVideo ? 'a' : 'an'} ${mediaString}`}
           </Button>
           <input ref={hiddenFileInput} style={{ display: 'none' }} type="file" onChange={handleChange} accept={fileFilter} />
         </>
@@ -115,6 +116,7 @@ interface IProps {
   onUpdate: (value: BlockData, type?: BlockType) => void
   setPictures: any
   id: number
+  isVideo: boolean
   fileFilter?: string
 }
 

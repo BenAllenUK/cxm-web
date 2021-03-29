@@ -4,7 +4,7 @@ import { BlockData, BlockType, MediaSourceType, MediaSourceObject, BlockDataMedi
 import SourceTabBar from './SourceTabBar'
 import Source from './Source'
 
-export const MediaSelector = ({ onMediaUpdate, onUpdate, id, libraries, fileFilter }: IProps) => {
+export const MediaSelector = ({ onMediaUpdate, onUpdate, id, libraries, fileFilter, isVideo }: IProps) => {
   const [selectedSource, setSelectedSource] = useState<MediaSourceObject>({
     name: 'Upload',
     type: MediaSourceType.UPLOAD,
@@ -39,6 +39,7 @@ export const MediaSelector = ({ onMediaUpdate, onUpdate, id, libraries, fileFilt
           setPictures={setPictures}
           id={id}
           fileFilter={fileFilter}
+          isVideo={isVideo || false}
         />
       </div>
     </div>
@@ -51,6 +52,7 @@ interface IProps {
   id: number
   fileFilter?: string
   libraries?: MediaSourceObject[]
+  isVideo?: boolean
 }
 
 export default memo(MediaSelector)

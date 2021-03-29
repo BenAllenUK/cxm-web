@@ -52,7 +52,7 @@ export type BlockDataText = {
 }
 
 export type BlockDataMedia = {
-  value: any
+  value: string | null
   fileName: string | null
   fileSize: number | null
   sourceType: MediaSourceType

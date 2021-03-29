@@ -106,6 +106,7 @@ export type Articles = {
   blocks_aggregate: BlocksAggregate;
   /** An object relationship */
   children?: Maybe<Articles>;
+  coverImage?: Maybe<Scalars['String']>;
   createdAt: Scalars['timestamptz'];
   id: Scalars['Int'];
   parentId?: Maybe<Scalars['Int']>;
@@ -265,6 +266,7 @@ export type ArticlesBoolExp = {
   articles_user_activities?: Maybe<ArticlesUserActivityBoolExp>;
   blocks?: Maybe<BlocksBoolExp>;
   children?: Maybe<ArticlesBoolExp>;
+  coverImage?: Maybe<StringComparisonExp>;
   createdAt?: Maybe<TimestamptzComparisonExp>;
   id?: Maybe<IntComparisonExp>;
   parentId?: Maybe<IntComparisonExp>;
@@ -305,6 +307,7 @@ export type ArticlesInsertInput = {
   articles_user_activities?: Maybe<ArticlesUserActivityArrRelInsertInput>;
   blocks?: Maybe<BlocksArrRelInsertInput>;
   children?: Maybe<ArticlesObjRelInsertInput>;
+  coverImage?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
@@ -325,6 +328,7 @@ export type ArticlesMaxFields = {
   __typename?: 'articles_max_fields';
   archivedAt?: Maybe<Scalars['timestamptz']>;
   archivedBy?: Maybe<Scalars['Int']>;
+  coverImage?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
@@ -342,6 +346,7 @@ export type ArticlesMaxFields = {
 export type ArticlesMaxOrderBy = {
   archivedAt?: Maybe<OrderBy>;
   archivedBy?: Maybe<OrderBy>;
+  coverImage?: Maybe<OrderBy>;
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
@@ -360,6 +365,7 @@ export type ArticlesMinFields = {
   __typename?: 'articles_min_fields';
   archivedAt?: Maybe<Scalars['timestamptz']>;
   archivedBy?: Maybe<Scalars['Int']>;
+  coverImage?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
@@ -377,6 +383,7 @@ export type ArticlesMinFields = {
 export type ArticlesMinOrderBy = {
   archivedAt?: Maybe<OrderBy>;
   archivedBy?: Maybe<OrderBy>;
+  coverImage?: Maybe<OrderBy>;
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
@@ -422,6 +429,7 @@ export type ArticlesOrderBy = {
   articles_user_activities_aggregate?: Maybe<ArticlesUserActivityAggregateOrderBy>;
   blocks_aggregate?: Maybe<BlocksAggregateOrderBy>;
   children?: Maybe<ArticlesOrderBy>;
+  coverImage?: Maybe<OrderBy>;
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
@@ -450,6 +458,8 @@ export enum ArticlesSelectColumn {
   ArchivedAt = 'archivedAt',
   /** column name */
   ArchivedBy = 'archivedBy',
+  /** column name */
+  CoverImage = 'coverImage',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
@@ -481,6 +491,7 @@ export type ArticlesSetInput = {
   archived?: Maybe<Scalars['Boolean']>;
   archivedAt?: Maybe<Scalars['timestamptz']>;
   archivedBy?: Maybe<Scalars['Int']>;
+  coverImage?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
@@ -579,6 +590,8 @@ export enum ArticlesUpdateColumn {
   ArchivedAt = 'archivedAt',
   /** column name */
   ArchivedBy = 'archivedBy',
+  /** column name */
+  CoverImage = 'coverImage',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */

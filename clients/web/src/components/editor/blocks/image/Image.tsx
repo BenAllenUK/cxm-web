@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react'
+import { memo, useState, useCallback, useRef } from 'react'
 import { BlockDataMedia, BlockData, BlockType, MediaSourceType } from '../types'
 import { useAsset } from 'components/providers/assets'
 import styles from './Image.module.scss'
@@ -10,7 +10,7 @@ import TextInput from 'components/common/text-input/TextInput'
 import Progress from '../progress/Progress'
 import ImageComponent from './ImageComponent'
 
-export const Image = ({ content, onUpdate, onMediaUpdate, id, deleteBlock }: IProps) => {
+export const Image = ({ content, onUpdate, onMediaUpdate, id, onDeleteBlock }: IProps) => {
   const [showSelector, setShowSelector] = useState(false)
   const [createComment, setCreateComment] = useState(false)
   const [caption, setCaption] = useState(content.caption || '')
@@ -87,7 +87,7 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, deleteBlock }: IPr
           id={id}
         />
         <div className={styles.mediaControls}>
-          <TopBar deleteBlock={deleteBlock} setWriteNewCaption={_writeNewCaption} setCreateComment={() => null} />
+          <TopBar onDeleteBlock={onDeleteBlock} setWriteNewCaption={_writeNewCaption} setCreateComment={() => null} />
         </div>
         <Progress id={id} />
       </div>
@@ -111,7 +111,7 @@ interface IProps {
   content: BlockDataMedia
   onUpdate: (value: BlockData, type?: BlockType) => void
   onMediaUpdate: (value: BlockDataMedia, pendingUploadFile: File, blockType: BlockType, createNew?: boolean) => void
-  deleteBlock: () => void
+  onDeleteBlock: () => void
   id: number
 }
 
