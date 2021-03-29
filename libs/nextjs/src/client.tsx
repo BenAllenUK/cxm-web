@@ -53,18 +53,11 @@ export default function init(config?: Config): Client {
     }
 
     // @ts-ignore
-    let articles = response.articles || []
-    const articlesFormatted = articles.map((item: ArticleRaw) => ({
-      ...item,
-      blocks: item.blocks.map((blockItem) => ({
-        ...blockItem,
-        payload: blockItem.payload ? JSON.parse(blockItem.payload) : null
-      }))
-    }))
+    let articles = response || []
 
-    _cachedArticles = articlesFormatted
+    _cachedArticles = articles
 
-    return articlesFormatted
+    return articles
   }
 
   function initOmnea(config?: Config) {

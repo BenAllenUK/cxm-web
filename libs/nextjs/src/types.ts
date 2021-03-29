@@ -1,68 +1,3 @@
-import type {
-  GetStaticPaths,
-  GetStaticPathsContext,
-  GetStaticProps,
-  GetStaticPropsContext
-} from 'next'
-
-import type { AppProps as NextJsAppProps } from 'next/app'
-
-export interface ArticleRaw {
-  blocks: BlockRaw[]
-}
-
-export interface BlockRaw {
-  payload: string
-}
-
-export interface Article {
-  title: string
-  path: string
-  id: number
-  blocks: Block[]
-}
-
-export type AppPropsWithOmnea = NextJsAppProps & ComponentProps
-
-export type WithOmneaStaticProps = (
-  handler: GetStaticProps
-) => (context: GetStaticPropsContext) => {}
-
-export type WithOmneaStaticPaths = (
-  handler: GetStaticPaths
-) => (context: GetStaticPathsContext) => {}
-
-export type WithOmneaPage = (
-  WrappedComponent:
-    | React.ComponentType<NextJsAppProps>
-    | React.ElementType<NextJsAppProps>
-) => React.ComponentType<NextJsAppProps> | React.ElementType<NextJsAppProps>
-
-export type WithOmneaCustomPage = (
-  WrappedComponent:
-    | React.ComponentType<AppPropsWithOmnea>
-    | React.ElementType<AppPropsWithOmnea>
-) =>
-  | React.ComponentType<AppPropsWithOmnea>
-  | React.ElementType<AppPropsWithOmnea>
-
-export interface Client {
-  withOmneaPage: WithOmneaPage
-  withOmneaStaticPaths: WithOmneaStaticPaths
-  withOmneaStaticProps: WithOmneaStaticProps
-  withOmneaCustomPage: WithOmneaCustomPage
-}
-
-export interface ComponentProps {
-  article?: Article | null
-}
-
-export interface Config {
-  rootUrl: string
-  projectId: string
-  secretKey: string
-}
-
 export enum BlockType {
   IMAGE = 0,
   TEXT,
@@ -76,16 +11,16 @@ export enum BlockType {
   QUOTE,
   DIVIDER,
   CALLOUT,
-  // VIDEO = 'VIDEO',
-  CODE
-
+  CODE,
+  FILE,
+  VIDEO
   // TWEET = 'TWEET',
   // GOOGLE_MAPS = 'GOOGLE-MAPS',
 }
 
 export type BlockData =
   | BlockDataText
-  | BlockDataImage
+  | BlockDataMedia
   | BlockDataH1
   | BlockDataH2
   | BlockDataH3
@@ -116,30 +51,28 @@ export type BlockDataText = {
   value: string
 }
 
-export type BlockDataImage = {
+export type BlockDataMedia = {
   value: string | null
-  type: MediaSourceType
+  fileName: string | null
+  fileSize: number | null
+  sourceType: MediaSourceType
   caption?: string | null
-  comments?: BlockDataImageComment[]
 }
 
-export type BlockDataImageComment = {
-  user: string
-  comment: string
-  time: string
-}
-
-export type BlockDataImageUpload = {
+export type BlockDataMediaUpload = {
   file: File
   id: number
+  progress?: number | null
+  blockType: BlockType
 }
 
 export enum MediaSourceType {
-  UPLOAD = 'Upload',
-  EMBED_LINK = 'Embed link',
+  UPLOAD = 'UPLOAD',
+  EMBED_LINK = 'EMBED_LINK',
   LIBRARY = 'LIBRARY',
   CLOUDINARY = 'CLOUDINARY',
-  LOCAL = 'LOCAL'
+  LOCAL = 'LOCAL',
+  VIDEO = 'VIDEO'
 }
 
 export type MediaSourceObject = {
