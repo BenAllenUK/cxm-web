@@ -37,7 +37,7 @@ export default function init(config?: Config): Client {
       return null
     }
 
-    const response = await fetch(`${config.rootUrl}/${config.projectId}${url}`)
+    const response = await fetch(`${config.rootUrl}/gimme${url}`)
     const data = response.json()
     return data
   }
@@ -72,10 +72,10 @@ export default function init(config?: Config): Client {
       return
     }
 
-    if (!newConfig.projectId) {
-      console.error(`[Omnea Error] Missing OMNEA_PROJECT_ID env var`)
-      return
-    }
+    // if (!newConfig.projectId) {
+    //   console.error(`[Omnea Error] Missing OMNEA_PROJECT_ID env var`)
+    //   return
+    // }
 
     if (!newConfig.secretKey) {
       console.error(`[Omnea Error] Missing OMNEA_SECRET_KEY env var`)
@@ -93,7 +93,7 @@ export default function init(config?: Config): Client {
         return FallbackPage ? <FallbackPage {...props} /> : <Loading />
       }
 
-      return <Content article={article} />
+      return <Content article={article} articles={props.articles || []} />
     }
 
     return hoistNonReactStatics(AppWithStaticPages, FallbackPage)
@@ -152,7 +152,8 @@ export default function init(config?: Config): Client {
       ...original,
       props: {
         ...original['props'],
-        article
+        article,
+        articles
       }
     }
   }

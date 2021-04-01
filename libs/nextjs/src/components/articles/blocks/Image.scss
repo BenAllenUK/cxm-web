@@ -4,3 +4,15 @@
   align-items: center;
   justify-content: center;
 }
+
+.omnea-image-container {
+  width: 600px;
+  height: 400px;
+  margin: 0 auto;
+}
+
+.omnea-image-fit {
+  width: 400px;
+  height: 400px;
+  object-fit: contain;
+}

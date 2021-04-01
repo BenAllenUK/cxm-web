@@ -1,0 +1,18 @@
+.buttonBase {
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 5px;
+  align-self: flex-start;
+  color: grey;
+  user-select: none;
+  line-height: 14px;
+
+  &:hover {
+    background-color: grey;
+    color: grey;
+  }
+}

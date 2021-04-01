@@ -15,11 +15,17 @@ export interface BlockRaw {
   payload: string
 }
 
-export interface Article {
-  title: string
-  path: string
+export type Article = {
   id: number
-  blocks: Block[]
+  parentId?: number | null
+  title: string
+  updatedAt: string
+  createdAt: string
+  archived: boolean
+  archivedAt?: string
+  position: number
+  blocks?: Block[]
+  path: string
 }
 
 export type AppPropsWithOmnea = NextJsAppProps & ComponentProps
@@ -55,6 +61,7 @@ export interface Client {
 
 export interface ComponentProps {
   article?: Article | null
+  articles?: Article[]
 }
 
 export interface Config {

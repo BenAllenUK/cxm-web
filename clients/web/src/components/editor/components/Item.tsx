@@ -1,9 +1,17 @@
 import { SyntheticEvent } from 'react'
 import Divider from 'components/editor/blocks/divider/Divider'
 import Image from 'components/editor/blocks/image/Image'
-import { BlockData, BlockDataImage, BlockDataListBullet, BlockDataText, BlockType } from 'components/editor/blocks/types'
+import {
+  BlockData,
+  BlockDataImage,
+  BlockDataListBullet,
+  BlockDataText,
+  BlockType,
+  BlockDataButton,
+} from 'components/editor/blocks/types'
 import ControlledList from '../blocks/list/ControlledList'
 import ControlledText from '../blocks/text/ControlledText'
+import ButtonBlock from '../blocks/button/ButtonBlock'
 
 const Item = ({
   blockControlOpen,
@@ -92,6 +100,10 @@ const Item = ({
     case BlockType.IMAGE: {
       const content: BlockDataImage = payload as BlockDataImage
       return <Image content={content} onUpdate={_onUpdate} onImageUpdate={_onImageUpdate} id={id} />
+    }
+    case BlockType.BUTTON: {
+      const content: BlockDataButton = payload as BlockDataButton
+      return <ButtonBlock content={content} onUpdate={_onUpdate} />
     }
     case BlockType.DIVIDER:
       return <Divider />

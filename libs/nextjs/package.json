@@ -63,16 +63,18 @@
     "microbundle-crl": "^0.13.10",
     "next": "^10.0.9",
     "prettier": "^2.0.4",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "react-scripts": "^3.4.1",
     "sass": "^1.32.8",
-    "typescript": "^3.7.5",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "typescript": "^3.7.5"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
+    "@types/lodash": "^4.14.168",
+    "cloudinary-react": "^1.7.0",
     "hoist-non-react-statics": "^3.3.2",
     "node-fetch": "^2.6.1"
   }

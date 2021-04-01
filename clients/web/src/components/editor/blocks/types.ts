@@ -13,7 +13,7 @@ export enum BlockType {
   CALLOUT,
   // VIDEO = 'VIDEO',
   CODE,
-
+  BUTTON,
   // TWEET = 'TWEET',
   // GOOGLE_MAPS = 'GOOGLE-MAPS',
 }
@@ -21,6 +21,7 @@ export enum BlockType {
 export type BlockData =
   | BlockDataText
   | BlockDataImage
+  | BlockDataButton
   | BlockDataH1
   | BlockDataH2
   | BlockDataH3
@@ -49,6 +50,11 @@ export type Block = {
 
 export type BlockDataText = {
   value: string
+}
+
+export type BlockDataButton = {
+  text: string
+  url: string
 }
 
 export type BlockDataImage = {

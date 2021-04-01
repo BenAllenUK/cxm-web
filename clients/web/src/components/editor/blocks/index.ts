@@ -1,4 +1,4 @@
-import { BlockDataText, BlockType, BlockDataListBullet, BlockDataImage, Block } from './types'
+import { BlockDataText, BlockType, BlockDataListBullet, BlockDataImage, Block, BlockDataButton } from './types'
 
 export const BLOCK_CONTAINER_VERTICAL_PADDING = 2
 
@@ -43,6 +43,8 @@ export function isBlockEmpty(block: Block) {
       return ((block.payload as BlockDataListBullet).items || []).length == 0
     case BlockType.IMAGE:
       return false
+    case BlockType.BUTTON:
+      return !(block.payload as BlockDataButton).text
     default:
       return true
   }
@@ -199,5 +201,16 @@ export const BlockTypeProperties = {
     initialHeight: 20,
     isEditable: false,
     initialPayload: {},
+  },
+  [BlockType.BUTTON]: {
+    id: BlockType.BUTTON,
+    title: 'Button',
+    subtitle: 'Add a button.',
+    image: '/preview/image.png',
+    initialHeight: 20,
+    isEditable: false,
+    initialPayload: {
+      text: null,
+    },
   },
 }

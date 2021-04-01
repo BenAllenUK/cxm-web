@@ -36,7 +36,6 @@ export const Image = ({ content, onUpdate, onImageUpdate, id }: IProps) => {
 
   useEffect(() => {
     if (pendingUploads[id] && !uploadProgress.uploading) {
-      console.log('uploading...')
       setUploadProgress({ ...uploadProgress, uploading: true })
 
       console.log(uploadProgress)
@@ -73,6 +72,7 @@ export const Image = ({ content, onUpdate, onImageUpdate, id }: IProps) => {
       imgSrc = `${process.env.OMNEA_UPLOAD_URL}/${content.value}`
       break
     case MediaSourceType.LIBRARY:
+    case MediaSourceType.EMBED_LINK:
       imgSrc = content.value
       break
     case MediaSourceType.CLOUDINARY:

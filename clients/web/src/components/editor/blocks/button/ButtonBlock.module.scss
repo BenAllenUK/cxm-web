@@ -1,0 +1,11 @@
+@import 'components/common/button/Button.module.scss';
+
+.button {
+  @extend .buttonBase;
+  width: 25%;
+  background-color: green;
+}
+
+.textInput {
+  color: white;
+}
