@@ -4,11 +4,12 @@ import BlockList from './articles/BlockList'
 import { useEffect } from 'react'
 
 const Content = ({ article }: IProps) => {
-  useEffect(() => {
-    if (article.title) {
-      document.title = article.title
-    }
-  }, [article.title])
+  // TODO: Once hooks are enabled:
+  // useEffect(() => {
+  //   if (article.title) {
+  //     document.title = article.title
+  //   }
+  // }, [article.title])
 
   return (
     <div className={'omnea-content'}>

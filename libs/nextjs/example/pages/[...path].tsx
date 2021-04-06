@@ -55,7 +55,6 @@ export const getStaticPaths = withOmneaStaticPaths(async () => {
   }
 })
 
-export const getStaticProps = withOmneaStaticProps(async (context) => {
-  const path = context.params?.path
+export const getStaticProps = withOmneaStaticProps(async () => {
   return { props: {} }
 })

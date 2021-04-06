@@ -10,7 +10,7 @@ export AUTH0_CLIENT_ID='<CLIENT_ID>'
 export AUTH0_CLIENT_SECRET='<SECRET>'
 
 
-export OMNEA_ROOT_URL=http://localhost:3003/dev
+export OMNEA_ROOT_URL=https://api.omnea.co
 
 # Development
 export AWS_UPLOAD_BUCKET_ID=omnea-upload
