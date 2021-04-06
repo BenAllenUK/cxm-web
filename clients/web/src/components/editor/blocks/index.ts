@@ -1,4 +1,4 @@
-import { BlockDataText, BlockType, BlockDataListBullet, BlockDataImage, Block, BlockDataButton } from './types'
+import { BlockDataText, BlockType, BlockDataListBullet, Block, BlockDataMedia, BlockDataButton } from './types'
 
 export const BLOCK_CONTAINER_VERTICAL_PADDING = 2
 
@@ -45,6 +45,9 @@ export function isBlockEmpty(block: Block) {
       return false
     case BlockType.BUTTON:
       return !(block.payload as BlockDataButton).text
+    case BlockType.VIDEO:
+    case BlockType.FILE:
+      return !(block.payload as BlockDataMedia).value
     default:
       return true
   }
@@ -69,9 +72,9 @@ export const BlockTypeProperties = {
     initialHeight: 20,
     isEditable: true,
     initialPayload: {
-      value: '',
+      value: null,
       comments: [],
-      caption: '',
+      caption: null,
     },
   },
   [BlockType.TEXT]: {
@@ -83,6 +86,17 @@ export const BlockTypeProperties = {
     isEditable: true,
     initialPayload: {
       value: '',
+    },
+  },
+  [BlockType.TEXT_INPUT]: {
+    id: BlockType.TEXT_INPUT,
+    title: 'Text Input',
+    subtitle: 'Add text input for user.',
+    image: '/preview/text.png',
+    initialHeight: 20,
+    isEditable: true,
+    initialPayload: {
+      value: null,
     },
   },
   [BlockType.H1]: {
@@ -211,6 +225,28 @@ export const BlockTypeProperties = {
     isEditable: false,
     initialPayload: {
       text: null,
+    },
+  },
+  [BlockType.FILE]: {
+    id: BlockType.FILE,
+    title: 'File',
+    subtitle: 'Upload or embed with a link.',
+    image: '/preview/file.png',
+    initialHeight: 20,
+    isEditable: true,
+    initialPayload: {
+      value: null,
+    },
+  },
+  [BlockType.VIDEO]: {
+    id: BlockType.VIDEO,
+    title: 'Video',
+    subtitle: 'Upload or embed with a link.',
+    image: '/preview/file.png',
+    initialHeight: 20,
+    isEditable: true,
+    initialPayload: {
+      value: null,
     },
   },
 }

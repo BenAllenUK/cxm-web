@@ -1,15 +1,13 @@
 import { memo, useState } from 'react'
 import styles from './MediaSelector.module.scss'
-import ImageIcon from 'images/icons/image.svg'
-import { default as NextImage } from 'next/image'
-import { BlockData, BlockType, MediaSourceType, MediaSourceObject } from '../../blocks/types'
+import { BlockData, BlockType, MediaSourceType, MediaSourceObject, BlockDataMedia } from '../../blocks/types'
 import SourceTabBar from './SourceTabBar'
 import Source from './Source'
 
-export const MediaSelector = ({ onUpdate }: IProps) => {
+export const MediaSelector = ({ onMediaUpdate, onUpdate, sources, fileFilter, isVideo, isButton }: IProps) => {
   const [selectedSource, setSelectedSource] = useState<MediaSourceObject>({
-    name: MediaSourceType.UPLOAD,
-    type: MediaSourceType.UPLOAD,
+    name: isButton ? 'Embed Link' : 'Upload',
+    type: isButton ? MediaSourceType.EMBED_LINK : MediaSourceType.UPLOAD,
   })
   const [pictures, setPictures] = useState<[]>([])
 
@@ -21,38 +19,32 @@ export const MediaSelector = ({ onUpdate }: IProps) => {
     setPictures(item)
   }
 
-  let sources: MediaSourceObject[] = [
-    { name: MediaSourceType.UPLOAD, type: MediaSourceType.UPLOAD },
-    { name: MediaSourceType.EMBED_LINK, type: MediaSourceType.EMBED_LINK },
-  ]
-  const libraries = [
-    {
-      name: 'Unsplash',
-      accessKey: 'QI73_yAqSaRCT6cz2cpM7HQ-ZXoQNV5eYmrbY7E4vD0',
-      secretKey: 'aLYW8hiVPn1UGubp3NrHLIgu91LhGfxysWvLKgrIppo',
-      type: MediaSourceType.LIBRARY,
-    },
-    {
-      name: 'Cloudinary',
-      accessKey: '',
-      secretKey: '',
-      type: MediaSourceType.CLOUDINARY,
-    },
-  ]
-  sources = sources.concat(libraries)
-
   return (
     <div className={styles.root}>
       <div className={styles.container}>
         <SourceTabBar sources={sources} selectSource={_selectSource} selected={selectedSource.name} setPictures={_setPictures} />
-        <Source selected={selectedSource} onUpdate={onUpdate} pictures={pictures} setPictures={setPictures} />
+        <Source
+          selected={selectedSource}
+          onUpdate={onUpdate}
+          onMediaUpdate={onMediaUpdate}
+          pictures={pictures}
+          setPictures={setPictures}
+          fileFilter={fileFilter}
+          isVideo={isVideo}
+          isButton={isButton}
+        />
       </div>
     </div>
   )
 }
 
 interface IProps {
-  onUpdate: (value: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => void
+  sources: MediaSourceObject[]
+  onMediaUpdate?: (value: BlockDataMedia, pendingUploadFile: File, blockType: BlockType, createNew?: boolean) => void
+  onUpdate: (value: BlockData, type?: BlockType) => void
+  isButton?: boolean
+  fileFilter?: string
+  isVideo?: boolean
 }
 
 export default memo(MediaSelector)

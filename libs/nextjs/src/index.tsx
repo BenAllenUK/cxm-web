@@ -22,5 +22,5 @@ export {
   Block,
   BlockType,
   BlockDataText,
-  BlockDataImage
+  BlockDataMedia
 } from './types'

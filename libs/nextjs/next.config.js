@@ -7,7 +7,27 @@ module.exports = {
       'images.unsplash.com'
     ]
   },
-
+  webpack(config, { buildId, dev, isServer, defaultLoaders, webpack }) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      issuer: {
+        test: /\.(js|ts)x?$/
+      },
+      use: [
+        {
+          loader: '@svgr/webpack',
+          options: {
+            svgoConfig: {
+              plugins: {
+                removeViewBox: false
+              }
+            }
+          }
+        }
+      ]
+    })
+    return config
+  },
   env: {
     OMNEA_UPLOAD_URL: process.env.OMNEA_UPLOAD_URL,
 

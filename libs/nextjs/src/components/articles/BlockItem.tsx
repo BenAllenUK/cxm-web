@@ -1,9 +1,18 @@
 import Text from './blocks/Text'
+import TextInput from './blocks/TextInput'
 import Image from './blocks/Image'
-
+import ButtonBlock from './blocks/ButtonBlock'
 import Divider from './blocks/Divider'
+import File from './blocks/File'
 
-import { Block, BlockType, BlockDataText, BlockDataImage } from '../../types'
+import {
+  Block,
+  BlockType,
+  BlockDataText,
+  BlockDataMedia,
+  BlockDataButton,
+  BlockDataTextInput
+} from '../../types'
 
 interface IBlockProps {
   item: Block
@@ -23,7 +32,13 @@ const BlockItem = ({ item, index }: IBlockProps) => {
     case BlockType.DIVIDER:
       return <Divider />
     case BlockType.IMAGE:
-      return <Image content={item.payload as BlockDataImage} />
+      return <Image content={item.payload as BlockDataMedia} />
+    case BlockType.BUTTON:
+      return <ButtonBlock content={item.payload as BlockDataButton} />
+    case BlockType.TEXT_INPUT:
+      return <TextInput content={item.payload as BlockDataTextInput} />
+    case BlockType.FILE:
+      return <File content={item.payload as BlockDataMedia} />
     default:
       return <div />
   }

@@ -6712,7 +6712,7 @@ export type Users = {
   email: Scalars['String'];
   hasuraUserId: Scalars['String'];
   id: Scalars['Int'];
-  image: Scalars['String'];
+  image?: Maybe<Scalars['String']>;
   lastSignedInAt: Scalars['timestamptz'];
   name: Scalars['String'];
   /** An object relationship */

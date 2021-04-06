@@ -1,4 +1,4 @@
-import { BlockDataImage, MediaSourceType } from '../../../types'
+import { BlockDataMedia, MediaSourceType } from '../../../types'
 import { default as NextImage } from 'next/image'
 import { Image as CloundinaryImage, CloudinaryContext } from 'cloudinary-react'
 import './Image.scss'
@@ -8,7 +8,7 @@ export default function Image({ content }: IProps) {
   if (!value) return <div />
   let imgSrc = ''
 
-  switch (content.type) {
+  switch (content.sourceType) {
     case MediaSourceType.UPLOAD:
       imgSrc = `https://omnea-upload.s3.amazonaws.com//${content.value}`
       break
@@ -18,10 +18,10 @@ export default function Image({ content }: IProps) {
       break
     case MediaSourceType.CLOUDINARY:
       return (
-        <div className={'omnea-image-container'}>
+        <div className={'omnea-content-image-container'}>
           <CloudinaryContext cloudName={'dbiqces70'}>
             <CloundinaryImage
-              className={'omnea-image-fit'}
+              className={'omnea-content-image-fit '}
               publicId={content.value}
               key={content.value}
             />
@@ -31,7 +31,7 @@ export default function Image({ content }: IProps) {
     default:
       imgSrc = `https://omnea-upload.s3.amazonaws.com/${content.value}`
   }
-  console.log('rendeering image', imgSrc)
+
   return (
     <div className={'omnea-content-image'}>
       {value && (
@@ -48,5 +48,5 @@ export default function Image({ content }: IProps) {
 }
 
 interface IProps {
-  content: BlockDataImage
+  content: BlockDataMedia
 }

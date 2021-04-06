@@ -83,16 +83,19 @@ export enum BlockType {
   QUOTE,
   DIVIDER,
   CALLOUT,
-  // VIDEO = 'VIDEO',
-  CODE
-
+  CODE,
+  FILE,
+  VIDEO,
+  BUTTON,
+  TEXT_INPUT
   // TWEET = 'TWEET',
   // GOOGLE_MAPS = 'GOOGLE-MAPS',
 }
 
 export type BlockData =
   | BlockDataText
-  | BlockDataImage
+  | BlockDataButton
+  | BlockDataMedia
   | BlockDataH1
   | BlockDataH2
   | BlockDataH3
@@ -123,30 +126,37 @@ export type BlockDataText = {
   value: string
 }
 
-export type BlockDataImage = {
+export type BlockDataTextInput = {
+  value: string
+}
+
+export type BlockDataButton = {
+  text: string
+  value: string
+}
+
+export type BlockDataMedia = {
   value: string | null
-  type: MediaSourceType
+  fileName: string | null
+  fileSize: number | null
+  sourceType: MediaSourceType
   caption?: string | null
-  comments?: BlockDataImageComment[]
 }
 
-export type BlockDataImageComment = {
-  user: string
-  comment: string
-  time: string
-}
-
-export type BlockDataImageUpload = {
+export type BlockDataMediaUpload = {
   file: File
   id: number
+  progress?: number | null
+  blockType: BlockType
 }
 
 export enum MediaSourceType {
-  UPLOAD = 'Upload',
-  EMBED_LINK = 'Embed link',
+  UPLOAD = 'UPLOAD',
+  EMBED_LINK = 'EMBED_LINK',
   LIBRARY = 'LIBRARY',
   CLOUDINARY = 'CLOUDINARY',
-  LOCAL = 'LOCAL'
+  LOCAL = 'LOCAL',
+  VIDEO = 'VIDEO'
 }
 
 export type MediaSourceObject = {

@@ -1,6 +1,7 @@
 import { useCallback, useState, memo, ReactNode } from 'react'
 import useHover from 'utils/hooks/useHover'
-import { BlockData, BlockType, MediaSourceType } from 'components/editor/blocks/types'
+import fileTypeToBlockType from '../../utils/fileTypeToBlockType'
+import { BlockData, BlockDataMediaUpload, MediaSourceType, BlockDataMedia, BlockType } from 'components/editor/blocks/types'
 import { BLOCK_CONTAINER_VERTICAL_PADDING } from '..'
 import styles from './Container.module.scss'
 import Controls from './Controls'
@@ -13,7 +14,8 @@ const Container = ({
   onClick,
   onAddClick,
   children,
-  onImageUpdate,
+  onMediaUpdate,
+  id,
 }: IProps & IContainerHandlerProps) => {
   const [hoverRef, isHovered] = useHover<HTMLDivElement>()
   const [activeDropzone, setActiveDropzone] = useState(false)
@@ -41,20 +43,36 @@ const Container = ({
     let multipleFileIndex = index
     files.forEach(async (file) => {
       let fileReader = new FileReader()
-
+      const blockType = fileTypeToBlockType(file.type)
       fileReader.onload = async (e) => {
-        onImageUpdate(
-          multipleFileIndex,
-          {
-            value: fileReader.result,
-            type: MediaSourceType.LOCAL,
-          },
-          BlockType.IMAGE,
-          files[0],
+        if (blockType === BlockType.IMAGE) {
+          onMediaUpdate(
+            multipleFileIndex,
+            {
+              value: fileReader.result?.toString() || null,
+              sourceType: MediaSourceType.LOCAL,
+              fileName: file.name,
+              fileSize: file.size,
+            },
+            { file: file, blockType: BlockType.IMAGE, id: id },
+            BlockType.IMAGE,
+            true
+          )
+          multipleFileIndex = multipleFileIndex + 1
+          setActiveDropzone(false)
+        }
+      }
+
+      if (blockType === BlockType.IMAGE) {
+        await fileReader.readAsDataURL(file)
+      } else {
+        onMediaUpdate(
+          index,
+          { value: file.name, sourceType: MediaSourceType.LOCAL, fileName: file.name, fileSize: file.size },
+          { file: file, blockType: blockType, id: id },
+          blockType,
           true
         )
-        setActiveDropzone(false)
-        multipleFileIndex = multipleFileIndex + 1
       }
       await fileReader.readAsDataURL(file)
     })
@@ -98,6 +116,7 @@ interface IProps {
   index: number
   initialHeight: number
   enableHandle?: boolean
+  id: number
 }
 
 export interface IContainerHandlerProps {
@@ -105,7 +124,13 @@ export interface IContainerHandlerProps {
   onDoubleClick: (index: number, pos: { x: number; y: number }) => void
   onAddClick: (index: number) => void
   onUpdate: (index: number, arg0: BlockData) => void
-  onImageUpdate: (index: number, arg0: BlockData, type?: BlockType, file?: File, createNew?: boolean) => void
+  onMediaUpdate: (
+    index: number,
+    arg0: BlockDataMedia,
+    file: BlockDataMediaUpload,
+    blockType: BlockType,
+    createNew?: boolean
+  ) => void
 }
 
 export default memo(Container)

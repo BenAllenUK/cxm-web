@@ -1,17 +1,22 @@
 import { SyntheticEvent } from 'react'
 import Divider from 'components/editor/blocks/divider/Divider'
 import Image from 'components/editor/blocks/image/Image'
+import File from 'components/editor/blocks/file/File'
+import Video from 'components/editor/blocks/video/Video'
 import {
   BlockData,
-  BlockDataImage,
+  BlockDataMedia,
   BlockDataListBullet,
   BlockDataText,
   BlockType,
+  BlockDataMediaUpload,
   BlockDataButton,
+  BlockDataTextInput,
 } from 'components/editor/blocks/types'
 import ControlledList from '../blocks/list/ControlledList'
 import ControlledText from '../blocks/text/ControlledText'
 import ButtonBlock from '../blocks/button/ButtonBlock'
+import TextInputBlock from '../blocks/textInput/TextInputBlock'
 
 const Item = ({
   blockControlOpen,
@@ -22,7 +27,7 @@ const Item = ({
   onTextChange,
   onNew,
   onUpdate,
-  onImageUpdate,
+  onMediaUpdate,
   onDelete,
   onFocus,
   onBlur,
@@ -46,8 +51,8 @@ const Item = ({
     onUpdate(index, value, type)
   }
 
-  const _onImageUpdate = (value: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => {
-    onImageUpdate(index, value, type, pendingUploadFile, createNew)
+  const _onMediaUpdate = (value: BlockDataMedia, pendingUploadFile: File, blockType: BlockType, createNew?: boolean) => {
+    onMediaUpdate(index, value, { file: pendingUploadFile, blockType: type, id: id }, blockType, createNew)
   }
 
   const _onDelete = () => {
@@ -98,12 +103,24 @@ const Item = ({
       )
     }
     case BlockType.IMAGE: {
-      const content: BlockDataImage = payload as BlockDataImage
-      return <Image content={content} onUpdate={_onUpdate} onImageUpdate={_onImageUpdate} id={id} />
+      const content: BlockDataMedia = payload as BlockDataMedia
+      return <Image onDeleteBlock={_onDelete} content={content} onUpdate={_onUpdate} onMediaUpdate={_onMediaUpdate} id={id} />
+    }
+    case BlockType.FILE: {
+      const content: BlockDataMedia = payload as BlockDataMedia
+      return <File onDeleteBlock={_onDelete} content={content} onUpdate={_onUpdate} onMediaUpdate={_onMediaUpdate} id={id} />
+    }
+    case BlockType.VIDEO: {
+      const content: BlockDataMedia = payload as BlockDataMedia
+      return <Video onDeleteBlock={_onDelete} content={content} onUpdate={_onUpdate} onMediaUpdate={_onMediaUpdate} id={id} />
     }
     case BlockType.BUTTON: {
       const content: BlockDataButton = payload as BlockDataButton
-      return <ButtonBlock content={content} onUpdate={_onUpdate} />
+      return <ButtonBlock onDeleteBlock={_onDelete} content={content} onUpdate={_onUpdate} />
+    }
+    case BlockType.TEXT_INPUT: {
+      const content: BlockDataTextInput = payload as BlockDataTextInput
+      return <TextInputBlock onDeleteBlock={_onDelete} content={content} onUpdate={_onUpdate} />
     }
     case BlockType.DIVIDER:
       return <Divider />
@@ -147,7 +164,13 @@ export interface IItemHandlerProps {
   onTextChange: (index: number, value: string) => void
   onNew: (index: number) => void
   onUpdate: (index: number, payload: BlockData, type?: BlockType) => void
-  onImageUpdate: (index: number, payload: BlockData, type?: BlockType, pendingUploadFile?: File, createNew?: boolean) => void
+  onMediaUpdate: (
+    index: number,
+    payload: BlockDataMedia,
+    pendingUploadFile: BlockDataMediaUpload,
+    blockType: BlockType,
+    createNew?: boolean
+  ) => void
   onDelete: (index: number) => void
   onFocus: (index: number) => void
   onBlur: (index: number) => void

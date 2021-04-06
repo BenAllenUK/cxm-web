@@ -1,10 +1,12 @@
 import { forwardRef, HTMLAttributes, RefObject } from 'react'
-import styles from './Button.module.scss'
+import './Button.scss'
 
-const Button = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({ children, ...otherProps }, ref) => (
-  <div className={styles.buttonBase} {...otherProps} ref={ref}>
-    {children}
-  </div>
-))
+const Button = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+  ({ children, ...otherProps }, ref) => (
+    <div className={'omnea-button-base '} {...otherProps} ref={ref}>
+      {children}
+    </div>
+  )
+)
 
 export default Button

@@ -1,0 +1,14 @@
+@import 'components/common/text-input/TextInput.module.scss';
+@import 'styles/variables';
+.textInput {
+  align-items: center;
+  @extend .textInputContainer;
+  display: flex;
+  width: 50%;
+  padding: 3px 6px;
+  cursor: text;
+  color: $text2-color;
+  height: 28px;
+  font-size: 14px;
+  border: 1px $border-color solid;
+}

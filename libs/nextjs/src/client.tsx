@@ -52,19 +52,26 @@ export default function init(config?: Config): Client {
       return null
     }
 
+    // @ts-ignore
     let articles = response || []
 
     _cachedArticles = articles
+
     return articles
   }
 
   function initOmnea(config?: Config) {
     const newConfig = {
-      rootUrl: config?.rootUrl || (process.env.OMNEA_ROOT_URL as string) || '',
+      rootUrl:
+        config?.rootUrl ||
+        (process.env.OMNEA_ROOT_URL as string) ||
+        'https://api.omnea.co',
       projectId:
-        config?.projectId || (process.env.OMNEA_PROJECT_ID as string) || '',
+        config?.projectId || (process.env.OMNEA_PROJECT_ID as string) || '1',
       secretKey:
-        config?.secretKey || (process.env.OMNEA_SECRET_KEY as string) || ''
+        config?.secretKey ||
+        (process.env.OMNEA_SECRET_KEY as string) ||
+        'abc123'
     }
 
     if (!newConfig.rootUrl) {

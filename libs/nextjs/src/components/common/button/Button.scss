@@ -1,4 +1,4 @@
-.buttonBase {
+.omnea-button-base {
   border-radius: 5px;
   display: flex;
   justify-content: center;
@@ -10,6 +10,7 @@
   color: grey;
   user-select: none;
   line-height: 14px;
+  background-color: green;
 
   &:hover {
     background-color: grey;
