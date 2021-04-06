@@ -6,6 +6,7 @@ import VideoIcon from 'images/icons/video.svg'
 import Uploading from '../common/Uploading'
 import TopBar from 'components/editor/modals/media-controls/TopBar'
 import { BlockDataMedia, BlockData, BlockType, MediaSourceType } from '../types'
+import ReactJWPlayer from 'react-jw-player'
 
 const Video = ({ content, onMediaUpdate, onUpdate, id, deleteBlock }: IProps) => {
   const [showSelector, setShowSelector] = useState(false)
@@ -29,15 +30,15 @@ const Video = ({ content, onMediaUpdate, onUpdate, id, deleteBlock }: IProps) =>
     return <Uploading id={id} content={content.value} alwaysDisplay={true} Icon={VideoIcon} />
   }
 
+  const fileUrl =
+    content.sourceType === MediaSourceType.EMBED_LINK ? content.value : `${process.env.OMNEA_UPLOAD_URL}/${content.value}`
   return (
     <div className={styles.outerContainer}>
       <div className={styles.videoContainer}>
         <div className={styles.mediaControls}>
           <TopBar deleteBlock={deleteBlock} setWriteNewCaption={() => null} setCreateComment={() => null} />
         </div>
-        <video width="320" height="240" controls>
-          <source src={`${process.env.OMNEA_UPLOAD_URL}/${content.value}`} type="video/mp4"></source>
-        </video>
+        <ReactJWPlayer playerId={`editor-${id}`} playerScript="https://cdn.jwplayer.com/libraries/M9UOpPcN.js" file={fileUrl} />
       </div>
     </div>
   )

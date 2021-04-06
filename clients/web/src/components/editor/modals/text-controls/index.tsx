@@ -1,11 +1,12 @@
 import createPositionModal from 'components/common/modals/position'
-import { insertSpanWithClassName } from 'components/editor/utils/html'
+import { insertSpanWithClassName } from 'utils/html/html'
 import { createContext, ReactNode, RefObject, useCallback, useContext, useLayoutEffect, useRef, useState } from 'react'
 import { getSelectionMidPosition } from 'utils/modals/getSelectionMidPosition'
 import { updateBoundedPosition } from 'utils/modals/updateBoundedPosition'
 import { useLinkModal } from '../link'
 import { useTextStyleModal } from '../text-style'
 import TextControlUncontrolled from './TextControlUncontrolled'
+import { insertLinkPlaceholder } from 'utils/html/links'
 
 const { Provider, useModal } = createPositionModal()
 
@@ -17,20 +18,22 @@ const Component = (props: IProps) => {
   const { showControls: showLinkModal } = useLinkModal()
 
   const _onShowTextStyleModal = () => {
-    if (!position) {
+    const selectionPosition = getSelectionMidPosition()
+    if (!selectionPosition) {
       return
     }
-    showTextStyleModal(position || { x: 0, y: 0 })
+
+    showTextStyleModal(selectionPosition)
   }
 
   const _onShowLinkModal = () => {
-    if (!position) {
+    const selectionPosition = getSelectionMidPosition()
+    if (!selectionPosition) {
       return
     }
 
-    insertSpanWithClassName('highlight')
-
-    showLinkModal(position)
+    const tag = insertLinkPlaceholder()
+    showLinkModal(selectionPosition)
   }
 
   const _onShowConversionModal = () => {}

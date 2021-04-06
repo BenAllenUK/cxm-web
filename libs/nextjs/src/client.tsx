@@ -37,7 +37,10 @@ export default function init(config?: Config): Client {
       return null
     }
 
-    const response = await fetch(`${config.rootUrl}/${config.projectId}${url}`)
+    const response = await fetch(
+      `${config.rootUrl}/${config.projectSlug}${url}`
+    )
+
     const data = response.json()
     return data
   }
@@ -52,26 +55,18 @@ export default function init(config?: Config): Client {
       return null
     }
 
-    // @ts-ignore
-    let articles = response.articles || []
-    const articlesFormatted = articles.map((item: ArticleRaw) => ({
-      ...item,
-      blocks: item.blocks.map((blockItem) => ({
-        ...blockItem,
-        payload: blockItem.payload ? JSON.parse(blockItem.payload) : null
-      }))
-    }))
+    let articles = response || []
 
-    _cachedArticles = articlesFormatted
+    _cachedArticles = articles
 
-    return articlesFormatted
+    return articles
   }
 
   function initOmnea(config?: Config) {
     const newConfig = {
       rootUrl: config?.rootUrl || (process.env.OMNEA_ROOT_URL as string) || '',
-      projectId:
-        config?.projectId || (process.env.OMNEA_PROJECT_ID as string) || '',
+      projectSlug:
+        config?.projectSlug || (process.env.OMNEA_PROJECT_SLUG as string) || '',
       secretKey:
         config?.secretKey || (process.env.OMNEA_SECRET_KEY as string) || ''
     }
@@ -81,8 +76,8 @@ export default function init(config?: Config): Client {
       return
     }
 
-    if (!newConfig.projectId) {
-      console.error(`[Omnea Error] Missing OMNEA_PROJECT_ID env var`)
+    if (!newConfig.projectSlug) {
+      console.error(`[Omnea Error] Missing OMNEA_PROJECT_SLUG env var`)
       return
     }
 
@@ -150,7 +145,8 @@ export default function init(config?: Config): Client {
       return original
     }
 
-    const fullPath = Array.isArray(path) ? path.join('/') : path
+    const fullPath = (Array.isArray(path) ? path.join('/') : path) || ''
+
     const [article] = articles.filter((item) => item.path === fullPath)
 
     if (!article) {

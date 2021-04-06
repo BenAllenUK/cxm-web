@@ -1,5 +1,5 @@
 import { forwardRef, HTMLProps, RefObject, useLayoutEffect, useRef } from 'react'
-import useOnClickOnOutside from 'utils/hooks/useOnClickOnOutside'
+import useOnDismiss from 'utils/hooks/useOnDismiss'
 import LinkButton from './LinkButton'
 import Button from './Button'
 import styles from './TextControlUncontrolled.module.scss'
@@ -9,7 +9,7 @@ import ExternalLinkIcon from 'images/icons/external-link.svg'
 import CodeIcon from 'images/icons/code.svg'
 import DotsIcon from 'images/icons/dots.svg'
 import useTranslation from 'utils/translations/useTranslation'
-import { insertSpanWithClassName } from 'components/editor/utils/html'
+import { insertSpanWithClassName } from 'utils/html/html'
 import mergeRefs from 'utils/refs/mergeRefs'
 import { updateBoundedPosition } from 'utils/modals/updateBoundedPosition'
 
@@ -31,7 +31,7 @@ const TextControlsUncontrolled = forwardRef<HTMLDivElement, IProps>(
     const ref = useRef<HTMLDivElement>(null)
     const { t } = useTranslation(['editor'])
 
-    useOnClickOnOutside(ref, () => {
+    useOnDismiss(ref, () => {
       onDismiss()
     })
 

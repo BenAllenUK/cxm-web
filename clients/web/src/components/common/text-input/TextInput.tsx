@@ -56,6 +56,7 @@ class TextInput extends React.Component<ITextInputProps, State> {
 
   onKeyUp = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const { onKeyUp } = this.props
+
     onKeyUp && onKeyUp(e)
 
     this.emitChange(e)
@@ -159,7 +160,7 @@ class TextInput extends React.Component<ITextInputProps, State> {
       // "Cannot assign to read only property 'target' of object"
       const evt = Object.assign({}, originalEvt, {
         target: {
-          value: html,
+          value: html.replace('&nbsp;', ' '),
         },
       })
       this.props.onChange(evt)

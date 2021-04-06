@@ -1,4 +1,4 @@
-import { BlockDataImage } from '../../../types'
+import { BlockDataMedia } from '../../../types'
 import './Image.scss'
 
 export default function Image({ content }: IProps) {
@@ -12,5 +12,5 @@ export default function Image({ content }: IProps) {
 }
 
 interface IProps {
-  content: BlockDataImage
+  content: BlockDataMedia
 }

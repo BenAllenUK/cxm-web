@@ -12,9 +12,10 @@ import Content from './components/Content'
 import BlockList from './components/articles/BlockList'
 import BlockItem from './components/articles/BlockItem'
 import Text from './components/articles/blocks/Text'
+import Video from './components/articles/blocks/Video'
 import Image from './components/articles/blocks/Image'
 import Divider from './components/articles/blocks/Divider'
-export { Content, BlockList, BlockItem, Text, Image, Divider }
+export { Content, BlockList, BlockItem, Text, Image, Divider, Video }
 
 export {
   AppPropsWithOmnea,
@@ -22,5 +23,5 @@ export {
   Block,
   BlockType,
   BlockDataText,
-  BlockDataImage
+  BlockDataMedia
 } from './types'

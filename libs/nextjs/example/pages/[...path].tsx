@@ -7,7 +7,7 @@ import {
   Divider,
   Image,
   BlockDataText,
-  BlockDataImage,
+  BlockDataMedia,
   AppPropsWithOmnea
 } from '@omnea-digital/nextjs'
 
@@ -35,7 +35,7 @@ const CustomPage = ({ article }: AppPropsWithOmnea) => {
               case BlockType.DIVIDER:
                 return <Divider />
               case BlockType.IMAGE:
-                return <Image content={item.payload as BlockDataImage} />
+                return <Image content={item.payload as BlockDataMedia} />
               default:
                 return <div />
             }

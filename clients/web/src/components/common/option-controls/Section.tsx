@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, RefObject } from 'react'
 import Button from './Button'
 import Header from './Header'
 import { IOptionElements, OptionType } from './index'
@@ -7,12 +7,12 @@ import Switch from './Switch'
 
 const OptionSection = ({
   id: sectionId,
-  innerRef,
   selectedId,
   iconClassName,
   items,
   title,
   showLine,
+  onInnerRefCallback,
   onItemClick,
   onSwitchClick,
   onItemMouseEnter,
@@ -38,7 +38,7 @@ const OptionSection = ({
             return (
               <Button
                 key={i}
-                innerRef={innerRef}
+                onInnerRefCallback={onInnerRefCallback}
                 iconClassName={iconClassName}
                 selected={item.id === selectedId}
                 onClick={_onItemClick}
@@ -71,12 +71,12 @@ export default memo(OptionSection)
 
 interface ISecProps {
   id: number
-  innerRef: any
   items: IOptionElements[]
   title?: string
   showLine?: boolean
   selectedId?: number
   iconClassName?: string
+  onInnerRefCallback: (ref: HTMLDivElement, id: number) => void
   onItemClick: (sectionId: number, id: number) => void
   onSwitchClick: (sectionId: number, id: number) => void
   onItemMouseEnter: (sectionId: number, id: number) => void

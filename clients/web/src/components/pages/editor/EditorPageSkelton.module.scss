@@ -1,0 +1,28 @@
+@import 'styles/variables';
+
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.navbar {
+  background-color: $tooltip-color;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 100vh;
+  width: $navbar-width;
+}
+
+.sidebar {
+  width: $sidebar-width;
+  height: 100vh;
+  background-color: $primary;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor {
+  flex: 1;
+  height: 100vh;
+  overflow: scroll;
+}

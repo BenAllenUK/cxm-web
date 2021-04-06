@@ -1,37 +1,28 @@
-import { useEffect, useRef } from 'react'
+import { DependencyList, ForwardedRef, MutableRefObject, RefObject, useEffect } from 'react'
 
-function useEventListener(eventName: string, handler: MouseEvent, element = window) {
-  // Create a ref that stores handler
-  const savedHandler = useRef<any>()
+function useEventListener<T extends Element>(
+  type: string,
+  ref: RefObject<T> | ForwardedRef<T>,
+  handler: (e: KeyboardEvent | MouseEvent) => void,
+  dependents: DependencyList
+) {
+  function downHandler(e: Event) {
+    const _e = e as KeyboardEvent | MouseEvent
+    handler(_e)
+  }
 
-  // Update ref.current value if handler changes.
-  // This allows our effect below to always get latest handler ...
-  // ... without us needing to pass it in effect deps array ...
-  // ... and potentially cause effect to re-run every render.
   useEffect(() => {
-    savedHandler.current = handler
-  }, [handler])
+    const r = ref as MutableRefObject<T> | null
+    if (r?.current) {
+      r.current?.addEventListener(type, downHandler)
+    }
 
-  useEffect(
-    () => {
-      // Make sure element supports addEventListener
-      // On
-      const isSupported = element && element.addEventListener
-      if (!isSupported) return
-
-      // Create event listener that calls handler function stored in ref
-      const eventListener = (event: any) => savedHandler.current(event)
-
-      // Add event listener
-      element.addEventListener(eventName, eventListener)
-
-      // Remove event listener on cleanup
-      return () => {
-        element.removeEventListener(eventName, eventListener)
+    return () => {
+      if (r?.current) {
+        r.current?.removeEventListener(type, downHandler)
       }
-    },
-    [eventName, element] // Re-run if eventName or element changes
-  )
+    }
+  }, dependents)
 }
 
 export default useEventListener

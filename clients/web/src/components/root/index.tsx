@@ -1,34 +1,19 @@
-import { ApolloProvider, QueryResult } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client'
 import { useApollo } from 'config/graphql'
-import { createContext, useContext } from 'react'
-import { GetUserOneQuery } from 'generated/graphql'
-import NavigationProvider from 'components/navigation/provider'
+import { ReactNode } from 'react'
 
-type UserResult = QueryResult<GetUserOneQuery>
+export default function Root({ initialApolloState, initialUserData, children }: IProps) {
+  const apolloClient = useApollo(initialApolloState, initialUserData.idToken)
 
-type UserContext = {
-  userId: number | null
-  idToken: string | null
-  email: string | null
-  user: NonNullable<UserResult['data']>['users_by_pk'] | null
+  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
 }
 
-export const UserContext = createContext<UserContext>({
-  userId: null,
-  idToken: null,
-  email: null,
-  user: null,
-})
-
-export const useUser = () => useContext(UserContext)
-
-export default function Root({ initialApolloState, initialReduxState, initialUserContext, children }: any) {
-  const apolloClient = useApollo(initialApolloState, initialUserContext.idToken)
-  return (
-    <ApolloProvider client={apolloClient}>
-      <NavigationProvider>
-        <UserContext.Provider value={initialUserContext}>{children}</UserContext.Provider>
-      </NavigationProvider>
-    </ApolloProvider>
-  )
+interface IProps {
+  initialUserData: {
+    userId: number
+    idToken: string
+    email: string
+  }
+  initialApolloState: any
+  children: ReactNode
 }

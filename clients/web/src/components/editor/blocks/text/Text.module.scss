@@ -1,20 +1,35 @@
 .header1 {
   div {
-    font-size: 2em;
+    font-size: 3em;
     font-weight: bold;
   }
 }
 
 .header2 {
   div {
-    font-size: 1.5em;
+    font-size: 2em;
     font-weight: bold;
   }
 }
 
 .header3 {
   div {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+}
+
+.header4 {
+  div {
     font-size: 1.17em;
+    font-weight: bold;
+  }
+}
+
+.header5 {
+  div {
+    opacity: 0.7;
+    font-size: 20px;
     font-weight: bold;
   }
 }

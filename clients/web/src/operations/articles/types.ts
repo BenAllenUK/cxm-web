@@ -11,4 +11,5 @@ export type Article = {
   position: number
   blocks?: Block[]
   path: string
+  coverImage?: string | null
 }

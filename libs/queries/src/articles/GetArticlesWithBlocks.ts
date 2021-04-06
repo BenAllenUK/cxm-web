@@ -3,12 +3,12 @@ import ArticleFragment from './ArticleFragment'
 import BlockFragment from '../blocks/BlockFragment'
 
 const GetArticlesWithBlocks = gql`
-  query GetArticlesWithBlocks($projectId: Int!) {
+  query GetArticlesWithBlocks($projectSlug: String!) {
     ${ArticleFragment}
     ${BlockFragment}
-    projects_by_pk(id: $projectId) {
+    projects(where: {slug: {_eq: $projectSlug}}) {
       id
-      articles {
+      articles(where: { archived: { _eq: false }, published: { _eq: true } }) {
         ...ArticleFragment
         blocks {
           ...BlockFragment

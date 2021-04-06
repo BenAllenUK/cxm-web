@@ -1,11 +1,11 @@
 import { memo, useCallback, useRef, useState, ReactNode, HTMLProps, forwardRef } from 'react'
 import useWindowKeyDown from 'utils/hooks/useWindowKeyDown'
-import useOnClickOutside from 'utils/hooks/useOnClickOnOutside'
 import styles from './OptionControls.module.scss'
 import findIndex from 'lodash/findIndex'
 import flatten from 'lodash/flatten'
 import Section from './Section'
 import mergeRefs from 'utils/refs/mergeRefs'
+import useOnDismiss from 'utils/hooks/useOnDismiss'
 
 export enum OptionType {
   Button = 1,
@@ -81,8 +81,6 @@ const OptionControls = forwardRef<HTMLDivElement, IProps>(
 
     const _onItemClick = useCallback(
       (sectionId, id) => {
-        console.log(sectionId, id)
-        // not being called?
         onDismiss()
         onItemClick(sectionId, id)
       },
@@ -98,7 +96,6 @@ const OptionControls = forwardRef<HTMLDivElement, IProps>(
 
     useWindowKeyDown(
       'Enter',
-
       (e) => {
         const selectedItem = actionItems[selectedIndex]
         if (!selectedItem) {
@@ -107,37 +104,46 @@ const OptionControls = forwardRef<HTMLDivElement, IProps>(
         onDismiss()
         onItemClick(selectedItem.sectionId, selectedItem.id)
         e.preventDefault()
+        e.stopPropagation()
       },
       [onItemClick, actionItems, selectedIndex]
     )
 
     useWindowKeyDown(
       'ArrowUp',
-      (_) => {
+      (e) => {
         const index = selectedIndex > -1 ? selectedIndex - 1 : -1
         setSelected(index)
         scrollIntoView(index)
+        e.preventDefault()
+        e.stopPropagation()
       },
       [scrollIntoView, selectedIndex]
     )
 
     useWindowKeyDown(
       'ArrowDown',
-      (_) => {
+      (e) => {
         const index = selectedIndex < actionItems.length - 1 ? selectedIndex + 1 : actionItems.length - 1
 
         setSelected(index)
-
         scrollIntoView(index)
+        e.preventDefault()
+        e.stopPropagation()
       },
       [scrollIntoView, actionItems, selectedIndex]
     )
 
     const ref = useRef<HTMLDivElement>(null)
 
-    useOnClickOutside(ref, () => {
+    useOnDismiss(ref, () => {
       onDismiss()
     })
+
+    const onInnerRefCallback = (ref: HTMLDivElement, id: number) => {
+      const index = findIndex(actionItems, (item) => item.id === id)
+      itemRefs.current[index] = ref
+    }
 
     return (
       <div className={styles.defaultContainer} onMouseLeave={_onMouseLeave} {...otherProps} ref={mergeRefs(forwardedRef, ref)}>
@@ -148,11 +154,7 @@ const OptionControls = forwardRef<HTMLDivElement, IProps>(
               key={`${i}`}
               {...section}
               // TODO: Change inner ref
-              innerRef={(ref: any) => {
-                if (ref) {
-                  itemRefs.current[i] = ref
-                }
-              }}
+              onInnerRefCallback={onInnerRefCallback}
               selectedId={actionItems[selectedIndex]?.id}
               iconClassName={iconClassName}
               onItemClick={_onItemClick}

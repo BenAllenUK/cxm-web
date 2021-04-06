@@ -1,4 +1,7 @@
-import { debounce, reverse, uniqBy, ValueIteratee } from 'lodash'
+import debounce from 'lodash/debounce'
+import reverse from 'lodash/reverse'
+import uniqBy from 'lodash/uniqBy'
+import type { ValueIteratee } from 'lodash'
 
 interface DebouncedMergedFunc<T extends unknown> {
   (args: T): void

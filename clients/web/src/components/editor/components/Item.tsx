@@ -28,6 +28,8 @@ const Item = ({
   onFocus,
   onBlur,
   onSelect,
+  onFocusOutStart,
+  onFocusOutEnd,
   id,
 }: IProps & IItemHandlerProps) => {
   const _onNew = () => {
@@ -71,11 +73,21 @@ const Item = ({
     onSelect(index, e)
   }
 
+  const _onFocusOutStart = () => {
+    onFocusOutStart(index)
+  }
+
+  const _onFocusOutEnd = () => {
+    onFocusOutEnd(index)
+  }
+
   switch (type) {
     case BlockType.TEXT:
     case BlockType.H1:
     case BlockType.H2:
     case BlockType.H3:
+    case BlockType.H4:
+    case BlockType.H5:
     case BlockType.CALLOUT:
     case BlockType.CODE:
     case BlockType.QUOTE: {
@@ -95,6 +107,8 @@ const Item = ({
           onFocus={_onFocus}
           onBlur={_onBlur}
           onSelect={_onSelect}
+          onFocusOutStart={_onFocusOutStart}
+          onFocusOutEnd={_onFocusOutEnd}
         />
       )
     }
@@ -163,4 +177,6 @@ export interface IItemHandlerProps {
   onFocus: (index: number) => void
   onBlur: (index: number) => void
   onSelect: (index: number, e: SyntheticEvent<HTMLDivElement>) => void
+  onFocusOutStart: (index: number) => void
+  onFocusOutEnd: (index: number) => void
 }

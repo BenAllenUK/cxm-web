@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { createContext, ReactNode, useContext } from 'react'
 import { Subdomain } from 'navigation/routes'
 import isLocalhost from 'utils/client/isLocalhost'
+import { useAdmin } from 'components/editor/providers/AdminProvider'
 const PROTOCOL = process.env.PROTOCOL
 const ROOT_HOST = process.env.ROOT_HOST
 const API_HOST = process.env.API_HOST
@@ -10,7 +11,7 @@ const ADMIN_HOST = process.env.ADMIN_HOST
 interface ContextActions {
   navigateOrganisation: (organisation: string, module: Subdomain, path: string, variables?: object, options?: Options) => void
   navigate: (module: Subdomain, path: string, variables?: object, options?: Options) => void
-  push: (path: string, fullPath: string, options?: object) => void
+  push: (path: string, variables?: object) => void
 }
 
 const initialState = {
@@ -33,18 +34,12 @@ type Options = { fullPath?: string } & {
 
 const Provider = ({ children }: { children: ReactNode }) => {
   const router = useRouter()
+  const { projectSlug } = useAdmin()
 
-  const push = (path: string, fullPath: string, variables: object = {}) => {
-    const parsedPath = parse(fullPath, variables)
+  const push = (path: string, variables: object = {}) => {
+    const parsedPath = parse(path, { projectSlug, ...variables })
 
-    var fullPath = parsedPath
-
-    // Include first path if in localhost
-    if (isLocalhost()) {
-      fullPath = `/${window.location.pathname.split('/')[1]}${fullPath}`
-    }
-
-    router.push(path, fullPath, { shallow: true })
+    window.history.pushState({}, '', parsedPath)
   }
 
   const navigateOrganisation = (organisation: string, module: Subdomain, path: string, variables: object = {}) => {

@@ -14,9 +14,9 @@ export const DEFAULT_BLOCK = {
 }
 
 export const DEFAULT_BLOCK_START = {
-  type: BlockType.TEXT,
+  type: BlockType.H1,
   payload: {
-    value: 'Start writing...',
+    value: 'Untitled',
   },
   id: -1,
   parentId: null,
@@ -34,6 +34,8 @@ export function isBlockEmpty(block: Block) {
     case BlockType.H1:
     case BlockType.H2:
     case BlockType.H3:
+    case BlockType.H4:
+    case BlockType.H5:
     case BlockType.TEXT:
     case BlockType.CALLOUT:
     case BlockType.CODE:
@@ -90,7 +92,7 @@ export const BlockTypeProperties = {
     title: 'Heading 1',
     subtitle: 'Big section heading.',
     image: '/preview/h1.png',
-    initialHeight: 38,
+    initialHeight: 45,
     isEditable: true,
     initialPayload: {
       value: '',
@@ -101,7 +103,7 @@ export const BlockTypeProperties = {
     title: 'Heading 2',
     subtitle: 'Medium section heading.',
     image: '/preview/h2.png',
-    initialHeight: 29,
+    initialHeight: 38,
     isEditable: true,
     initialPayload: {
       value: '',
@@ -112,7 +114,29 @@ export const BlockTypeProperties = {
     title: 'Heading 3',
     subtitle: 'Small section heading.',
     image: '/preview/h3.png',
+    initialHeight: 29,
+    isEditable: true,
+    initialPayload: {
+      value: '',
+    },
+  },
+  [BlockType.H4]: {
+    id: BlockType.H4,
+    title: 'Heading 4',
+    subtitle: 'Small section heading.',
+    image: '/preview/h3.png',
     initialHeight: 23,
+    isEditable: true,
+    initialPayload: {
+      value: '',
+    },
+  },
+  [BlockType.H5]: {
+    id: BlockType.H5,
+    title: 'Heading 5',
+    subtitle: 'Small section heading.',
+    image: '/preview/h3.png',
+    initialHeight: 20,
     isEditable: true,
     initialPayload: {
       value: '',

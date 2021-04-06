@@ -1,7 +1,15 @@
-const IndexPage = () => (
-  <div>
-    <h1>Home page</h1>
-  </div>
-)
+const FallbackPage = () => {
+  return <div></div>
+}
 
-export default IndexPage
+export function getServerSideProps() {
+  return {
+    props: {},
+    redirect: {
+      destination: '/live',
+      permanent: false
+    }
+  }
+}
+
+export default FallbackPage

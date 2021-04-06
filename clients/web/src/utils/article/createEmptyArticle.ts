@@ -3,7 +3,7 @@ import createEmptyBlock from '../blocks/createEmptyBlock'
 
 function createArticleEmpty(parentId: number | null, basePath: string | null, position: number): Article {
   const newBlock = createEmptyBlock(0)
-  const num = Math.round(Math.random() * 100)
+  const num = Math.round(Math.random() * 100000)
 
   return {
     id: Math.round(Math.random() * -1000000),

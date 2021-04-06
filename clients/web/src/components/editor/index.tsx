@@ -1,28 +1,27 @@
-import { memo, useCallback, useRef, useState } from 'react'
-import { Block, BlockDataText, BlockType } from 'components/editor/blocks/types'
-import { BlockTypeProperties, DEFAULT_BLOCK_START } from './blocks'
-
-import styles from './Editor.module.scss'
-import Modals from './modals'
-import Header from './header'
+import { Block, BlockType } from 'components/editor/blocks/types'
 import { Article } from 'operations/articles/types'
-import List from './components/List'
+import { memo, useState } from 'react'
+import { BlockTypeProperties } from './blocks'
+import EditorArticle from './components/EditorArticle'
+import styles from './Editor.module.scss'
+import Header from './header'
 import EditorEmpty from './misc/EditorEmpty'
-import readPathRoute from 'utils/article/readPathRoute'
+import Modals from './modals'
+import LocalBlocksProvider, { useLocalBlocksProvider } from './providers/LocalBlocksProvider'
 
 function Editor({
   id,
   articles,
   path,
-  blocks: initialBlocks,
+  coverImage,
+  onUpsertArticles: onServerUpsertArticles,
   onBlocksUpsert: onServerBlocksUpsert,
   onBlocksDelete: onServerBlocksDelete,
   onViewArticle,
   loading,
-}: IProps) {
-  const [focusIndex, setFocusIndex] = useState(initialBlocks.length <= 1 ? 0 : -1)
-
-  const [blocks, setBlocks] = useState<Block[]>(initialBlocks)
+}: Omit<IProps, 'blocks'>) {
+  const { blocks, setBlocks } = useLocalBlocksProvider()
+  const [focusIndex, setFocusIndex] = useState(blocks.length <= 1 ? 0 : -1)
 
   const _onModifyBlockType = (id: number, key: BlockType) => {
     const [block] = blocks.filter((item) => item.id === id)
@@ -87,16 +86,33 @@ function Editor({
 
   // ______ TEMP END ________
 
+  const _onCoverImageChange = (image: string | null) => {
+    const [article] = articles.filter((item) => item.id === id)
+    if (!article) {
+      return
+    }
+
+    onServerUpsertArticles([{ ...article, coverImage: image }])
+  }
+
   return (
     <>
-      <Modals articles={articles} onModifyBlockType={_onModifyBlockType}>
+      <Modals
+        onUpsertArticles={onServerUpsertArticles}
+        articles={articles}
+        blocks={blocks}
+        onModifyBlockType={_onModifyBlockType}
+        onBlocksUpsert={onBlocksUpsert}
+      >
         <div className={styles.container}>
           {id && (
             <>
               <Header loading={loading} path={path} onViewArticle={onViewArticle} />
-              <List
+              <EditorArticle
+                coverImage={coverImage}
                 focusIndex={focusIndex}
                 blocks={blocks}
+                onCoverImageChange={_onCoverImageChange}
                 onBlocksUpsert={onBlocksUpsert}
                 onBlocksDelete={onBlocksDelete}
                 setFocusIndex={setFocusIndex}
@@ -110,13 +126,21 @@ function Editor({
   )
 }
 
-export default memo(Editor)
+const ConnectedEditor = ({ blocks, ...otherProps }: IProps) => (
+  <LocalBlocksProvider initialBlocks={blocks}>
+    <Editor {...otherProps} />
+  </LocalBlocksProvider>
+)
+
+export default memo(ConnectedEditor)
 interface IProps {
   id?: number | null
+  coverImage?: string | null
   articles: Article[]
   blocks: Block[]
   loading?: boolean
   path: Article[]
+  onUpsertArticles: (articles: Article[]) => Promise<Article[]>
   onBlocksUpsert: (blocks: Block[]) => void
   onBlocksDelete: (ids: number[]) => void
   onViewArticle: (path: string) => void

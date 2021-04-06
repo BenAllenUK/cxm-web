@@ -106,6 +106,7 @@ export type Articles = {
   blocks_aggregate: BlocksAggregate;
   /** An object relationship */
   children?: Maybe<Articles>;
+  coverImage?: Maybe<Scalars['String']>;
   createdAt: Scalars['timestamptz'];
   id: Scalars['Int'];
   parentId?: Maybe<Scalars['Int']>;
@@ -265,6 +266,7 @@ export type ArticlesBoolExp = {
   articles_user_activities?: Maybe<ArticlesUserActivityBoolExp>;
   blocks?: Maybe<BlocksBoolExp>;
   children?: Maybe<ArticlesBoolExp>;
+  coverImage?: Maybe<StringComparisonExp>;
   createdAt?: Maybe<TimestamptzComparisonExp>;
   id?: Maybe<IntComparisonExp>;
   parentId?: Maybe<IntComparisonExp>;
@@ -305,6 +307,7 @@ export type ArticlesInsertInput = {
   articles_user_activities?: Maybe<ArticlesUserActivityArrRelInsertInput>;
   blocks?: Maybe<BlocksArrRelInsertInput>;
   children?: Maybe<ArticlesObjRelInsertInput>;
+  coverImage?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
@@ -325,6 +328,7 @@ export type ArticlesMaxFields = {
   __typename?: 'articles_max_fields';
   archivedAt?: Maybe<Scalars['timestamptz']>;
   archivedBy?: Maybe<Scalars['Int']>;
+  coverImage?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
@@ -342,6 +346,7 @@ export type ArticlesMaxFields = {
 export type ArticlesMaxOrderBy = {
   archivedAt?: Maybe<OrderBy>;
   archivedBy?: Maybe<OrderBy>;
+  coverImage?: Maybe<OrderBy>;
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
@@ -360,6 +365,7 @@ export type ArticlesMinFields = {
   __typename?: 'articles_min_fields';
   archivedAt?: Maybe<Scalars['timestamptz']>;
   archivedBy?: Maybe<Scalars['Int']>;
+  coverImage?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
@@ -377,6 +383,7 @@ export type ArticlesMinFields = {
 export type ArticlesMinOrderBy = {
   archivedAt?: Maybe<OrderBy>;
   archivedBy?: Maybe<OrderBy>;
+  coverImage?: Maybe<OrderBy>;
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
@@ -422,6 +429,7 @@ export type ArticlesOrderBy = {
   articles_user_activities_aggregate?: Maybe<ArticlesUserActivityAggregateOrderBy>;
   blocks_aggregate?: Maybe<BlocksAggregateOrderBy>;
   children?: Maybe<ArticlesOrderBy>;
+  coverImage?: Maybe<OrderBy>;
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
@@ -450,6 +458,8 @@ export enum ArticlesSelectColumn {
   ArchivedAt = 'archivedAt',
   /** column name */
   ArchivedBy = 'archivedBy',
+  /** column name */
+  CoverImage = 'coverImage',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
@@ -481,6 +491,7 @@ export type ArticlesSetInput = {
   archived?: Maybe<Scalars['Boolean']>;
   archivedAt?: Maybe<Scalars['timestamptz']>;
   archivedBy?: Maybe<Scalars['Int']>;
+  coverImage?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
@@ -579,6 +590,8 @@ export enum ArticlesUpdateColumn {
   ArchivedAt = 'archivedAt',
   /** column name */
   ArchivedBy = 'archivedBy',
+  /** column name */
+  CoverImage = 'coverImage',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
@@ -6699,7 +6712,7 @@ export type Users = {
   email: Scalars['String'];
   hasuraUserId: Scalars['String'];
   id: Scalars['Int'];
-  image: Scalars['String'];
+  image?: Maybe<Scalars['String']>;
   lastSignedInAt: Scalars['timestamptz'];
   name: Scalars['String'];
   /** An object relationship */
@@ -7164,64 +7177,9 @@ export type UsersVarianceOrderBy = {
 };
 
 
-export type GetUserOne1QueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type GetUserOne1Query = (
-  { __typename?: 'query_root' }
-  & { users_by_pk?: Maybe<(
-    { __typename?: 'users' }
-    & Pick<Users, 'id' | 'name'>
-    & { userOrganisations: Array<(
-      { __typename?: 'user_organisation' }
-      & { organisation: (
-        { __typename?: 'organisations' }
-        & Pick<Organisations, 'id' | 'name' | 'slug'>
-        & { projects: Array<(
-          { __typename?: 'projects' }
-          & Pick<Projects, 'id' | 'name' | 'image' | 'slug'>
-        )>, stats: (
-          { __typename?: 'user_organisation_aggregate' }
-          & { aggregate?: Maybe<(
-            { __typename?: 'user_organisation_aggregate_fields' }
-            & Pick<UserOrganisationAggregateFields, 'count'>
-          )> }
-        ) }
-      ) }
-    )> }
-  )> }
-);
-
-export type GetOrganisationOne1QueryVariables = Exact<{
-  slug: Scalars['String'];
-  projectSlug: Scalars['String'];
-}>;
-
-
-export type GetOrganisationOne1Query = (
-  { __typename?: 'query_root' }
-  & { organisations: Array<(
-    { __typename?: 'organisations' }
-    & Pick<Organisations, 'id' | 'name' | 'slug'>
-    & { projects: Array<(
-      { __typename?: 'projects' }
-      & Pick<Projects, 'id' | 'name' | 'image' | 'slug'>
-      & { articles: Array<(
-        { __typename?: 'articles' }
-        & Pick<Articles, 'id' | 'parentId' | 'projectId' | 'title' | 'updatedAt' | 'createdAt' | 'archived' | 'archivedAt' | 'position' | 'path'>
-      )>, archivedArticles: Array<(
-        { __typename?: 'articles' }
-        & Pick<Articles, 'id' | 'parentId' | 'projectId' | 'title' | 'updatedAt' | 'createdAt' | 'archived' | 'archivedAt' | 'position' | 'path'>
-      )> }
-    )> }
-  )> }
-);
-
 export type ArticleFragment = (
   { __typename?: 'articles' }
-  & Pick<Articles, 'id' | 'parentId' | 'projectId' | 'title' | 'updatedAt' | 'createdAt' | 'archived' | 'archivedAt' | 'position' | 'path'>
+  & Pick<Articles, 'id' | 'parentId' | 'projectId' | 'title' | 'updatedAt' | 'createdAt' | 'archived' | 'archivedAt' | 'position' | 'path' | 'coverImage'>
 );
 
 export type CreateArticleMutationVariables = Exact<{
@@ -7259,6 +7217,7 @@ export type GetArticlesQuery = (
 );
 
 export type GetArticleOneQueryVariables = Exact<{
+  projectSlug: Scalars['String'];
   path: Scalars['String'];
 }>;
 
@@ -7561,6 +7520,7 @@ export const ArticleFragmentDoc = gql`
   archivedAt
   position
   path
+  coverImage
 }
     `;
 export const BlockFragmentDoc = gql`
@@ -7592,128 +7552,6 @@ export const ProjectFragmentDoc = gql`
   slug
 }
     `;
-export const GetUserOne1Document = gql`
-    query GetUserOne1($id: Int!) {
-  users_by_pk(id: $id) {
-    id
-    name
-    userOrganisations {
-      organisation {
-        id
-        name
-        slug
-        projects {
-          id
-          name
-          image
-          slug
-        }
-        stats: userOrganisations_aggregate {
-          aggregate {
-            count
-          }
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetUserOne1Query__
- *
- * To run a query within a React component, call `useGetUserOne1Query` and pass it any options that fit your needs.
- * When your component renders, `useGetUserOne1Query` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUserOne1Query({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetUserOne1Query(baseOptions: Apollo.QueryHookOptions<GetUserOne1Query, GetUserOne1QueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUserOne1Query, GetUserOne1QueryVariables>(GetUserOne1Document, options);
-      }
-export function useGetUserOne1LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserOne1Query, GetUserOne1QueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUserOne1Query, GetUserOne1QueryVariables>(GetUserOne1Document, options);
-        }
-export type GetUserOne1QueryHookResult = ReturnType<typeof useGetUserOne1Query>;
-export type GetUserOne1LazyQueryHookResult = ReturnType<typeof useGetUserOne1LazyQuery>;
-export type GetUserOne1QueryResult = Apollo.QueryResult<GetUserOne1Query, GetUserOne1QueryVariables>;
-export const GetOrganisationOne1Document = gql`
-    query GetOrganisationOne1($slug: String!, $projectSlug: String!) {
-  organisations(where: {slug: {_eq: $slug}}) {
-    id
-    name
-    slug
-    projects(where: {slug: {_eq: $projectSlug}}) {
-      id
-      name
-      image
-      slug
-      articles: articles(where: {archived: {_eq: false}}) {
-        id
-        parentId
-        projectId
-        title
-        updatedAt
-        createdAt
-        archived
-        archivedAt
-        position
-        path
-      }
-      archivedArticles: articles(where: {archived: {_eq: true}}) {
-        id
-        parentId
-        projectId
-        title
-        updatedAt
-        createdAt
-        archived
-        archivedAt
-        position
-        path
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetOrganisationOne1Query__
- *
- * To run a query within a React component, call `useGetOrganisationOne1Query` and pass it any options that fit your needs.
- * When your component renders, `useGetOrganisationOne1Query` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetOrganisationOne1Query({
- *   variables: {
- *      slug: // value for 'slug'
- *      projectSlug: // value for 'projectSlug'
- *   },
- * });
- */
-export function useGetOrganisationOne1Query(baseOptions: Apollo.QueryHookOptions<GetOrganisationOne1Query, GetOrganisationOne1QueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOrganisationOne1Query, GetOrganisationOne1QueryVariables>(GetOrganisationOne1Document, options);
-      }
-export function useGetOrganisationOne1LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrganisationOne1Query, GetOrganisationOne1QueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOrganisationOne1Query, GetOrganisationOne1QueryVariables>(GetOrganisationOne1Document, options);
-        }
-export type GetOrganisationOne1QueryHookResult = ReturnType<typeof useGetOrganisationOne1Query>;
-export type GetOrganisationOne1LazyQueryHookResult = ReturnType<typeof useGetOrganisationOne1LazyQuery>;
-export type GetOrganisationOne1QueryResult = Apollo.QueryResult<GetOrganisationOne1Query, GetOrganisationOne1QueryVariables>;
 export const CreateArticleDocument = gql`
     mutation CreateArticle($object: articles_insert_input!) {
   insert_articles_one(object: $object) {
@@ -7791,8 +7629,8 @@ export type GetArticlesQueryHookResult = ReturnType<typeof useGetArticlesQuery>;
 export type GetArticlesLazyQueryHookResult = ReturnType<typeof useGetArticlesLazyQuery>;
 export type GetArticlesQueryResult = Apollo.QueryResult<GetArticlesQuery, GetArticlesQueryVariables>;
 export const GetArticleOneDocument = gql`
-    query GetArticleOne($path: String!) {
-  articles(where: {path: {_eq: $path}}) {
+    query GetArticleOne($projectSlug: String!, $path: String!) {
+  articles(where: {path: {_eq: $path}, project: {slug: {_eq: $projectSlug}}}) {
     ...Article
     blocks {
       ...Block
@@ -7814,6 +7652,7 @@ ${BlockFragmentDoc}`;
  * @example
  * const { data, loading, error } = useGetArticleOneQuery({
  *   variables: {
+ *      projectSlug: // value for 'projectSlug'
  *      path: // value for 'path'
  *   },
  * });
@@ -7899,7 +7738,7 @@ export const UpsertArticlesDocument = gql`
     mutation UpsertArticles($objects: [articles_insert_input!]!) {
   insert_articles(
     objects: $objects
-    on_conflict: {constraint: articles_pkey, update_columns: [parentId, projectId, title, archived, archivedAt, position, path]}
+    on_conflict: {constraint: articles_pkey, update_columns: [parentId, projectId, title, archived, archivedAt, position, path, coverImage]}
   ) {
     returning {
       ...Article

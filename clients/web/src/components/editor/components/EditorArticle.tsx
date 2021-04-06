@@ -1,4 +1,4 @@
-import { useRef, useCallback, SyntheticEvent } from 'react'
+import { useRef, useCallback, SyntheticEvent, MouseEvent } from 'react'
 import { SortEnd } from 'react-sortable-hoc'
 import { isBlockEmpty } from '../blocks'
 import {
@@ -19,8 +19,18 @@ import { useBlockControlsContext } from '../modals/block-controls/BlockControlsC
 import createEmptyBlock from 'utils/blocks/createEmptyBlock'
 import SortableList from './SortableList'
 import { getSelectionMidPosition } from 'utils/modals/getSelectionMidPosition'
+import { useFocusedBlock } from '../modals/text-style'
+import Cover from '../cover'
 
-const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusIndex }: IProps) => {
+const EditorArticle = ({
+  blocks,
+  coverImage,
+  focusIndex,
+  onBlocksUpsert,
+  onBlocksDelete,
+  setFocusIndex,
+  onCoverImageChange,
+}: IProps) => {
   const blockRefs = useRef<HTMLDivElement[]>([])
 
   const {
@@ -34,6 +44,8 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
   const { filterText: modalFilterText, setFilterText } = useBlockControlsContext()
 
   const { showControls: showTextControls } = useTextControlModal()
+
+  const { blockId, setPlaceholderBlockId } = useFocusedBlock()
 
   const _showBlockControls = useCallback(
     (index: number) => {
@@ -99,6 +111,10 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     if (!position) {
       return
     }
+
+    const block = blocks[index]
+    setPlaceholderBlockId(block.id)
+
     showTextControls(position)
   }
 
@@ -110,9 +126,9 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
       setFocusIndex(newPosition)
       return
     }
-
     setFocusIndex(newPosition)
     const newBlock = createEmptyBlock(newPosition)
+
     onBlocksUpsert([newBlock])
   }
 
@@ -202,7 +218,7 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     }
   }
 
-  const _onBodyClick = () => {
+  const _onBodyClick = (e: MouseEvent) => {
     if (blocks.length === 1) {
       const [block] = blocks
       if (block.type === BlockType.TEXT && isBlockEmpty(block)) {
@@ -220,6 +236,13 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     _onCreateBlock(lastItemIndex)
   }
 
+  const _onCoverClick = (e: MouseEvent) => {
+    if (blocks.length > 0) {
+      setFocusIndex(0)
+      return
+    }
+  }
+
   const _onTextChange = (_: number, value: string) => {
     setFilterText(value)
   }
@@ -229,37 +252,52 @@ const List = ({ blocks, onBlocksUpsert, onBlocksDelete, setFocusIndex, focusInde
     onBlocksUpsert([{ ...block, position: newIndex }])
   }
 
+  const _onFocusOutStart = (index: number) => {
+    setFocusIndex(index - 1)
+  }
+
+  const _onFocusOutEnd = (index: number) => {
+    setFocusIndex(index + 1)
+  }
+
   return (
-    <SortableList
-      itemRefFunc={(_ref: HTMLDivElement, position: number) => {
-        blockRefs.current[position] = _ref
-      }}
-      modalBlockEnabled={modalBlockEnabled}
-      focusIndex={focusIndex}
-      blocks={blocks}
-      onBodyClick={_onBodyClick}
-      onSortEnd={_onSortEnd}
-      onBlockClick={_onBlockClick}
-      onBlockAddClick={_onBlockAddClick}
-      onBlockDoubleClick={_onBlockDoubleClick}
-      onTextChange={_onTextChange}
-      onNew={_onCreateBlock}
-      onUpdate={_onUpsertBlock}
-      onMediaUpdate={_onUpsertMediaBlock}
-      onDelete={_onDeleteBlock}
-      onFocus={_onBlockFocus}
-      onBlur={_onBlockBlur}
-      onSelect={_onBlockSelect}
-    />
+    <>
+      <Cover image={coverImage} onClick={_onCoverClick} onCoverImageChange={onCoverImageChange} />
+      <SortableList
+        itemRefFunc={(_ref: HTMLDivElement, position: number) => {
+          blockRefs.current[position] = _ref
+        }}
+        modalBlockEnabled={modalBlockEnabled}
+        focusIndex={focusIndex}
+        blocks={blocks}
+        onBodyClick={_onBodyClick}
+        onSortEnd={_onSortEnd}
+        onBlockClick={_onBlockClick}
+        onBlockAddClick={_onBlockAddClick}
+        onBlockDoubleClick={_onBlockDoubleClick}
+        onTextChange={_onTextChange}
+        onNew={_onCreateBlock}
+        onUpdate={_onUpsertBlock}
+        onMediaUpdate={_onUpsertMediaBlock}
+        onDelete={_onDeleteBlock}
+        onFocus={_onBlockFocus}
+        onBlur={_onBlockBlur}
+        onSelect={_onBlockSelect}
+        onFocusOutStart={_onFocusOutStart}
+        onFocusOutEnd={_onFocusOutEnd}
+      />
+    </>
   )
 }
 
 interface IProps {
+  coverImage?: string | null
   focusIndex: number
   blocks: Block[]
+  onCoverImageChange: (image: string | null) => void
   onBlocksUpsert: (blocks: Block[]) => void
   onBlocksDelete: (ids: number[]) => void
   setFocusIndex: (n: number) => void
 }
 
-export default List
+export default EditorArticle
