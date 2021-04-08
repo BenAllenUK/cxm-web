@@ -2,11 +2,11 @@ import gql from 'graphql-tag'
 import ArticleFragment from './ArticleFragment'
 
 const GetArticles = gql`
-  query GetArticles($projectId: Int!) {
+  query GetArticles($projectSlug: String!) {
     ${ArticleFragment}
-    projects_by_pk(id: $projectId) {
+    projects(where: {slug: {_eq: $projectSlug}}) {
       id
-      articles {
+      articles(where: { archived: { _eq: false }, published: { _eq: true } }) {
         ...ArticleFragment
       }
     }

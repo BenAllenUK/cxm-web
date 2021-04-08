@@ -167,7 +167,7 @@ class TextInput extends Component<ITextInputProps, State> {
     const el = this.ref?.current
     if (!el) return
 
-    const html = el.innerHTML
+    const html = el.innerText
     if (this.props.onChange && html !== this.lastHtml) {
       // Clone event with Object.assign to avoid
       // "Cannot assign to read only property 'target' of object"

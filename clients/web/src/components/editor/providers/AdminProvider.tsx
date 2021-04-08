@@ -13,7 +13,7 @@ interface ContextActions extends Context {
   setArticlePath: (path: string) => void
 }
 
-const EditorContext = createContext<ContextActions>({
+const AdminContext = createContext<ContextActions>({
   organisationSlug: null,
   projectSlug: null,
   articlePath: null,
@@ -22,11 +22,11 @@ const EditorContext = createContext<ContextActions>({
   setArticlePath: () => {},
 })
 
-export const useEditor = () => useContext(EditorContext)
+export const useAdmin = () => useContext(AdminContext)
 
-const KEY = 'editor'
+const KEY = 'admin'
 
-export default function EditorProvider({ initialContext, children }: { initialContext: Context; children: any }) {
+export default function AdminProvider({ initialContext, children }: { initialContext: Context; children: any }) {
   const [context, setContext] = useState<Context>(initialContext)
 
   const setContextData = (data: Context) => {
@@ -50,8 +50,8 @@ export default function EditorProvider({ initialContext, children }: { initialCo
   const localState = context // Storage.getLocalItem(KEY)
 
   return (
-    <EditorContext.Provider value={{ ...localState, setArticlePath, setProject, setOrganisation }}>
+    <AdminContext.Provider value={{ ...localState, setArticlePath, setProject, setOrganisation }}>
       {children}
-    </EditorContext.Provider>
+    </AdminContext.Provider>
   )
 }

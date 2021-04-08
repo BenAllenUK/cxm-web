@@ -14,10 +14,8 @@ const ButtonBlock = ({ content }: IProps) => {
     }
   }
   return (
-    <div>
-      <Button style={{ color: 'black' }} onClick={onClick}>
-        {content.text}
-      </Button>
+    <div className={'omnea-content-button-container'}>
+      <Button onClick={onClick}>{content.text}</Button>
     </div>
   )
 }

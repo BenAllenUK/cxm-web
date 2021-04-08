@@ -52,14 +52,14 @@ functions:
     handler: src/paths/projects/articles/get-one.main
     events:
       - http:
-          path: /{projectId}/articles/{articleId}
+          path: /{projectSlug}/articles/{articlePath+}
           method: get
           cors: true
   projects-articles-get:
     handler: src/paths/projects/articles/get.main
     events:
       - http:
-          path: /{projectId}/articles
+          path: /{projectSlug}/articles
           method: get
           cors: true
   auth-me:

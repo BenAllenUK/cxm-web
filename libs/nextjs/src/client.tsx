@@ -37,7 +37,10 @@ export default function init(config?: Config): Client {
       return null
     }
 
-    const response = await fetch(`${config.rootUrl}/gimme${url}`)
+    const response = await fetch(
+      `${config.rootUrl}/${config.projectSlug}${url}`
+    )
+
     const data = response.json()
     return data
   }
@@ -62,12 +65,9 @@ export default function init(config?: Config): Client {
 
   function initOmnea(config?: Config) {
     const newConfig = {
-      rootUrl:
-        config?.rootUrl ||
-        (process.env.OMNEA_ROOT_URL as string) ||
-        'https://api.omnea.co',
-      projectId:
-        config?.projectId || (process.env.OMNEA_PROJECT_ID as string) || '1',
+      rootUrl: config?.rootUrl || (process.env.OMNEA_ROOT_URL as string) || '',
+      projectSlug:
+        config?.projectSlug || (process.env.OMNEA_PROJECT_SLUG as string) || '',
       secretKey:
         config?.secretKey ||
         (process.env.OMNEA_SECRET_KEY as string) ||
@@ -79,10 +79,10 @@ export default function init(config?: Config): Client {
       return
     }
 
-    // if (!newConfig.projectId) {
-    //   console.error(`[Omnea Error] Missing OMNEA_PROJECT_ID env var`)
-    //   return
-    // }
+    if (!newConfig.projectSlug) {
+      console.error(`[Omnea Error] Missing OMNEA_PROJECT_SLUG env var`)
+      return
+    }
 
     if (!newConfig.secretKey) {
       console.error(`[Omnea Error] Missing OMNEA_SECRET_KEY env var`)
@@ -148,7 +148,8 @@ export default function init(config?: Config): Client {
       return original
     }
 
-    const fullPath = Array.isArray(path) ? path.join('/') : path
+    const fullPath = (Array.isArray(path) ? path.join('/') : path) || ''
+
     const [article] = articles.filter((item) => item.path === fullPath)
 
     if (!article) {

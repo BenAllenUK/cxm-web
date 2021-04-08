@@ -7,6 +7,8 @@ declare module '*.css' {
   export default content
 }
 
+declare module 'react-jw-player'
+
 declare module '*.scss' {
   const content: { [className: string]: string }
   export default content
@@ -14,10 +16,3 @@ declare module '*.scss' {
 
 declare module 'cloudinary-react'
 declare var React: any
-
-declare module '*.svg' {
-  const svgUrl: string
-  const svgComponent: SvgrComponent
-  export default svgUrl
-  export { svgComponent as ReactComponent }
-}

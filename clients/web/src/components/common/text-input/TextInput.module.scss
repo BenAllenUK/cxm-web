@@ -13,6 +13,15 @@
   resize: none;
   cursor: text;
 
+  a {
+    text-decoration: underline;
+
+    &:hover {
+      color: black;
+      cursor: pointer;
+    }
+  }
+
   &:empty:before {
     content: attr(placeholder);
   }

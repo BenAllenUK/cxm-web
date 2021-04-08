@@ -1,13 +1,13 @@
 import TextInput from 'components/common/text-input/TextInput'
 import { useEffect, useRef } from 'react'
-import useOnClickOnOutside from 'utils/hooks/useOnClickOnOutside'
+import useOnDismiss from 'utils/hooks/useOnDismiss'
 import useWindowKeyDown from 'utils/hooks/useWindowKeyDown'
 import styles from './RenameControlsModal.module.scss'
 
 const RenameControlsModal = ({ value, position, onDismiss, onTextChange, onSubmit }: IProps) => {
   const ref = useRef<HTMLDivElement>(null)
 
-  useOnClickOnOutside(ref, () => {
+  useOnDismiss(ref, () => {
     onDismiss()
   })
 

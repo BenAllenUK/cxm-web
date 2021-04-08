@@ -12,7 +12,7 @@ export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPicture
   const EmbedLink = () => {
     const [link, setLink] = useState('')
     const handleClick = () => {
-      onUpdate({ value: link, type: MediaSourceType.EMBED_LINK })
+      onUpdate({ value: link, sourceType: MediaSourceType.EMBED_LINK })
     }
 
     const onChange = (e: any) => {

@@ -6,7 +6,7 @@ const ControlledList = (props: IProps) => {
   const [focusIndex, setFocusIndex] = useState(-1)
 
   const [items, setItems] = useState<{ value: string; selected?: boolean }[]>(
-    props.initialPayload?.items || [{ value: 'Start...' }]
+    props.initialPayload?.value || [{ value: 'Start...' }]
   )
 
   const _onTextChange = (index: number, value: string) => {

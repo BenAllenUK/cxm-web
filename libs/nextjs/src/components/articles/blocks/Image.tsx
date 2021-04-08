@@ -10,7 +10,7 @@ export default function Image({ content }: IProps) {
 
   switch (content.sourceType) {
     case MediaSourceType.UPLOAD:
-      imgSrc = `https://omnea-upload.s3.amazonaws.com//${content.value}`
+      imgSrc = `${process.env.OMNEA_UPLOAD_URL}/${content.value}`
       break
     case MediaSourceType.LIBRARY:
     case MediaSourceType.EMBED_LINK:
@@ -29,20 +29,12 @@ export default function Image({ content }: IProps) {
         </div>
       )
     default:
-      imgSrc = `https://omnea-upload.s3.amazonaws.com/${content.value}`
+      imgSrc = `${process.env.OMNEA_UPLOAD_URL}/${content.value}`
   }
 
   return (
     <div className={'omnea-content-image'}>
-      {value && (
-        <NextImage
-          layout='intrinsic'
-          width={600}
-          height={400}
-          objectFit={'contain'}
-          src={imgSrc}
-        />
-      )}
+      {value && <NextImage layout='fill' objectFit='fill' src={imgSrc} />}
     </div>
   )
 }

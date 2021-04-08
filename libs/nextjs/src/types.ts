@@ -66,7 +66,7 @@ export interface ComponentProps {
 
 export interface Config {
   rootUrl: string
-  projectId: string
+  projectSlug: string
   secretKey: string
 }
 
@@ -76,6 +76,7 @@ export enum BlockType {
   H1,
   H2,
   H3,
+
   LIST_BULLET,
   // TABLE_INLINE = 'TABLE-INLINE',
   LIST_CHECK,
@@ -87,14 +88,18 @@ export enum BlockType {
   FILE,
   VIDEO,
   BUTTON,
-  TEXT_INPUT
+  TEXT_INPUT,
+
   // TWEET = 'TWEET',
   // GOOGLE_MAPS = 'GOOGLE-MAPS',
+  H4,
+  H5
 }
 
 export type BlockData =
   | BlockDataText
   | BlockDataButton
+  | BlockDataTextInput
   | BlockDataMedia
   | BlockDataH1
   | BlockDataH2
@@ -106,10 +111,26 @@ export type BlockData =
   | BlockDataQuote
   | BlockDataDivider
   | BlockDataCallout
-  | BlockDataVideo
   | BlockDataCode
   | BlockDataTweet
   | BlockDataGoogleMaps
+
+export type BlockDataMedia = {
+  value: any
+  fileName: string | null
+  fileSize: number | null
+  sourceType: MediaSourceType
+  caption?: string | null
+}
+
+export enum MediaSourceType {
+  UPLOAD = 'UPLOAD',
+  EMBED_LINK = 'EMBED_LINK',
+  LIBRARY = 'LIBRARY',
+  CLOUDINARY = 'CLOUDINARY',
+  LOCAL = 'LOCAL',
+  VIDEO = 'VIDEO'
+}
 
 export type Block = {
   id: number
@@ -135,30 +156,6 @@ export type BlockDataButton = {
   value: string
 }
 
-export type BlockDataMedia = {
-  value: string | null
-  fileName: string | null
-  fileSize: number | null
-  sourceType: MediaSourceType
-  caption?: string | null
-}
-
-export type BlockDataMediaUpload = {
-  file: File
-  id: number
-  progress?: number | null
-  blockType: BlockType
-}
-
-export enum MediaSourceType {
-  UPLOAD = 'UPLOAD',
-  EMBED_LINK = 'EMBED_LINK',
-  LIBRARY = 'LIBRARY',
-  CLOUDINARY = 'CLOUDINARY',
-  LOCAL = 'LOCAL',
-  VIDEO = 'VIDEO'
-}
-
 export type MediaSourceObject = {
   name: string
   accessKey?: string
@@ -179,11 +176,11 @@ export type BlockDataTableInline = {
 }
 
 export type BlockDataCheckBullet = {
-  items: { value: string; selected: boolean }[]
+  value: { value: string; selected: boolean }[]
 }
 
 export type BlockDataListBullet = {
-  items: { value: string }[]
+  value: { value: string }[]
 }
 
 export type BlockDataNumberBullet = BlockDataListBullet
@@ -193,17 +190,6 @@ export type BlockDataQuote = BlockDataText
 export type BlockDataDivider = {}
 
 export type BlockDataCallout = BlockDataText
-
-export type BlockDataVideo = {
-  url: string
-  alt: string
-  type: string
-}
-
-export enum BlockDataVideoType {
-  CUSTOM = 'CUSTOM',
-  YOUTUBE = 'YOUTUBE'
-}
 
 export type BlockDataCode = BlockDataText
 

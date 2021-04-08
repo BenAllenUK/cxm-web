@@ -4,7 +4,7 @@
   "scripts": {
     "setup": "yarn install",
     "build": "next build",
-    "start": "next dev",
+    "start": "next dev --port 4000",
     "deploy": "echo \"No script yet\"",
     "lint": "echo \"No script yet\"",
     "test": "echo \"No script yet\"",

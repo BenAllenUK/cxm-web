@@ -15,6 +15,7 @@ declare module '*.gql' {
 }
 
 declare module 'cloudinary-react'
+declare module 'react-jw-player'
 
 type ReduxProps<T extends (...args: any) => any, U extends (...args: any) => any> = (T extends (...args: any) => infer R
   ? R
@@ -22,3 +23,5 @@ type ReduxProps<T extends (...args: any) => any, U extends (...args: any) => any
   (U extends (...args: any) => infer R ? R : any)
 
 type Type<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any
+
+declare module 'react-jw-player'

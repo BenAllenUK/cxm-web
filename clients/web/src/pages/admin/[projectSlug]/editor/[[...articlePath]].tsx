@@ -1,7 +1,8 @@
 import ErrorModal from 'components/common/modals/error'
-import EditorProvider, { useEditor } from 'components/editor/components/Provider'
+import AdminProvider, { useAdmin } from 'components/editor/providers/AdminProvider'
 import EditorPage from 'components/pages/editor'
-import Root, { useUser } from 'components/root'
+import Root from 'components/root'
+import { useUser } from 'components/root/UserProvider'
 import { initializeApollo } from 'config/graphql'
 import {
   useDeleteBlocksMutation,
@@ -24,43 +25,39 @@ import getUserSession from 'utils/user/getUserSession'
 import redirect from 'utils/server/redirect'
 import serverSideTranslations from 'utils/translations/serverSideTranslations'
 import { gql } from '@apollo/client'
+import NavigationProvider from 'components/navigation/provider'
+import LocalBlocksProvider from 'components/editor/providers/LocalBlocksProvider'
+import EditorPageSkelton from 'components/pages/editor/EditorPageSkelton'
+import UserProvider from 'components/root/UserProvider'
 
 export default function EditorRoot(props: any) {
-  const { articleSlug, projectSlug, initialEditorContext, ...otherProps } = props
+  const { initialAdminContext, initialUserData, initialApolloState } = props
+
   return (
-    <Root {...otherProps}>
-      <AssetsProvider>
-        <ErrorModal.Provider>
-          <EditorProvider initialContext={initialEditorContext}>
-            <Content />
-            <ErrorModal.Component />
-          </EditorProvider>
-        </ErrorModal.Provider>
-      </AssetsProvider>
+    <Root initialUserData={initialUserData} initialApolloState={initialApolloState}>
+      <UserProvider initialUserData={initialUserData}>
+        <AssetsProvider>
+          <ErrorModal.Provider>
+            <AdminProvider initialContext={initialAdminContext}>
+              <NavigationProvider>
+                <Content />
+                <ErrorModal.Component />
+              </NavigationProvider>
+            </AdminProvider>
+          </ErrorModal.Provider>
+        </AssetsProvider>
+      </UserProvider>
     </Root>
   )
 }
 
 export function Content() {
-  const { userId } = useUser()
-  const { projectSlug, articlePath, organisationSlug } = useEditor()
-
-  // FETCH USER
-
-  const foo = useGetUserOneQuery({
-    variables: {
-      id: userId ?? -1,
-    },
-  })
-
-  const user = foo.data?.users_by_pk
-  if (!user) {
-    console.error(`User not found: ${userId}`)
-  }
+  const { user } = useUser()
+  const { projectSlug, articlePath, organisationSlug } = useAdmin()
 
   // FETCH ORGANISATION
 
-  const { data: organisationsData, ...other } = useGetOrganisationOneQuery({
+  const { data: organisationsData } = useGetOrganisationOneQuery({
     variables: {
       slug: organisationSlug ?? '',
       projectSlug: projectSlug ?? '',
@@ -68,16 +65,15 @@ export function Content() {
   })
 
   const [organisation] = organisationsData?.organisations || []
-
-  // FETCH PROJECT
-
   const [project] = organisation?.projects || []
 
   // FETCH ARTICLE
   const defaultPath = project?.articles.length > 0 ? project?.articles[0].path : ''
   const selectedArticlePath = articlePath ?? defaultPath
+
   let { data: articleData, loading: articleQueryLoading } = useGetArticleOneQuery({
     variables: {
+      projectSlug: project?.slug || '',
       path: selectedArticlePath,
     },
   })
@@ -104,8 +100,8 @@ export function Content() {
   const [deleteBlocksMutation] = useDeleteBlocksMutation()
   const deleteBlocksMutationScoped = useDeleteBlocksMutationScoped(article?.id, deleteBlocksMutation)
 
-  if (!organisation) {
-    return <div />
+  if (!organisation || !user) {
+    return <EditorPageSkelton />
   }
 
   return (
@@ -133,7 +129,7 @@ export async function getServerSideProps({ params, locale, req, res }: GetServer
   } = session
 
   const client = initializeApollo({}, idToken)
-  // https://admin.omnea.co/gimme/editor
+
   const organisationSlug = process.env.ORGANISATION || 'gimme'
 
   const projectSlug = params?.projectSlug
@@ -144,127 +140,20 @@ export async function getServerSideProps({ params, locale, req, res }: GetServer
     return redirect()
   }
 
-  // FETCH USER
-
-  const { data: usersData } = await client.query({
-    query: gql`
-      query GetUserOne1($id: Int!) {
-        users_by_pk(id: $id) {
-          id
-          name
-          userOrganisations {
-            organisation {
-              id
-              name
-              slug
-              projects {
-                id
-                name
-                image
-                slug
-              }
-              stats: userOrganisations_aggregate {
-                aggregate {
-                  count
-                }
-              }
-            }
-          }
-        }
-      }
-    `,
-    variables: { id: userId },
-  })
-
-  const user = usersData?.users_by_pk
-  if (!user) {
-    console.error(`User not found: ${userId}`)
-    return redirect()
-  }
-
-  // // FETCH ORGANISATION
-
-  const { data: organisationsData } = await client.query({
-    query: gql`
-      query GetOrganisationOne1($slug: String!, $projectSlug: String!) {
-        organisations(where: { slug: { _eq: $slug } }) {
-          id
-          name
-          slug
-
-          projects(where: { slug: { _eq: $projectSlug } }) {
-            id
-            name
-            image
-            slug
-            articles: articles(where: { archived: { _eq: false } }) {
-              id
-              parentId
-              projectId
-              title
-              updatedAt
-              createdAt
-              archived
-              archivedAt
-              position
-              path
-            }
-            archivedArticles: articles(where: { archived: { _eq: true } }) {
-              id
-              parentId
-              projectId
-              title
-              updatedAt
-              createdAt
-              archived
-              archivedAt
-              position
-              path
-            }
-          }
-        }
-      }
-    `,
-    variables: { slug: organisationSlug, projectSlug },
-  })
-
-  const [organisation] = organisationsData?.organisations || []
-  if (!organisation) {
-    console.error(`Organisation not found: ${organisationSlug}`)
-    return redirect()
-  }
-
-  // FETCH PROJECT
-  console.log(organisation)
-
-  const [project] = organisation.projects || []
-  if (!project) {
-    console.error(`Project not found: ${projectSlug}`)
-    return redirect()
-  }
-
-  // // FETCH ARTICLES
-
   const articlePath = Array.isArray(articlePathRaw) ? articlePathRaw.join('/') : articlePathRaw
-  const selectedArticlePath = articlePath || project.articles[0].path
-
-  // const { data: articleData } = await client.query({
-  //   query: GET_ARTICLE_ONE,
-  //   variables: { path: selectedArticlePath },
-  // })
 
   return {
     props: {
       initialApolloState: client.cache.extract(),
-      initialUserContext: {
+      initialUserData: {
         userId,
         idToken,
         email,
-        user,
+        user: null,
       },
-      initialEditorContext: {
+      initialAdminContext: {
         projectSlug,
-        articlePath: selectedArticlePath,
+        articlePath: articlePath,
         organisationSlug,
       },
       ...(await serverSideTranslations(locale, ['common', 'editor'])),

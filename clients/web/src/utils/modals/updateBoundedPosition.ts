@@ -1,5 +1,7 @@
 import { RefObject } from 'react'
 
+const VERTICAL_PADDING = 20
+
 export function updateBoundedPosition(
   rootRef: RefObject<HTMLDivElement> | undefined,
   ref: RefObject<HTMLDivElement>,
@@ -25,9 +27,9 @@ export function updateBoundedPosition(
   let positionY = preferredPosition.y
 
   if (relativePosition === 'above') {
-    positionY -= 1.5 * height
+    positionY -= 1 * height + VERTICAL_PADDING
   } else {
-    positionY += 0.5 * height
+    positionY += VERTICAL_PADDING
   }
 
   if (ref.current) {

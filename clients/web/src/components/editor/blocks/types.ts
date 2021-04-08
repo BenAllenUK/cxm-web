@@ -18,6 +18,8 @@ export enum BlockType {
   TEXT_INPUT,
   // TWEET = 'TWEET',
   // GOOGLE_MAPS = 'GOOGLE-MAPS',
+  H4,
+  H5,
 }
 
 export type BlockData =
@@ -107,11 +109,11 @@ export type BlockDataTableInline = {
 }
 
 export type BlockDataCheckBullet = {
-  items: { value: string; selected: boolean }[]
+  value: { value: string; selected: boolean }[]
 }
 
 export type BlockDataListBullet = {
-  items: { value: string }[]
+  value: { value: string }[]
 }
 
 export type BlockDataNumberBullet = BlockDataListBullet

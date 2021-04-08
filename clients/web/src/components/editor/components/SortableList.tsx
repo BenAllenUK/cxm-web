@@ -1,4 +1,4 @@
-import { MutableRefObject } from 'react'
+import { MouseEvent, MutableRefObject } from 'react'
 import { SortableContainer, SortableElement, SortEnd } from 'react-sortable-hoc'
 import { Tooltip } from 'components/common/tooltip'
 
@@ -9,6 +9,7 @@ import SortableItem, { ISortableItemHandlerProps } from './SortableItem'
 
 const SortableList = (props: IProps) => {
   const { itemRefFunc, modalBlockEnabled, focusIndex, blocks, onBodyClick, onSortEnd, ...otherProps } = props
+  console.log('the blocks', blocks)
   return (
     <div className={styles.body} onClick={onBodyClick}>
       <div onClick={(e) => e.stopPropagation()}>
@@ -43,7 +44,7 @@ interface IProps extends ISortableItemHandlerProps {
   modalBlockEnabled: boolean
   focusIndex: number
   blocks: Block[]
-  onBodyClick: () => void
+  onBodyClick: (e: MouseEvent) => void
   onSortEnd: ({ oldIndex, newIndex }: SortEnd) => void
 }
 

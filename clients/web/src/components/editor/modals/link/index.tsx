@@ -1,13 +1,12 @@
 import { IOptionSections, OptionType } from 'components/common/option-controls'
 import useTranslation from 'utils/translations/useTranslation'
-import { createContext, ReactNode, RefObject, useCallback, useContext, useLayoutEffect, useRef, useState } from 'react'
+import { createContext, ReactNode, RefObject, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import LinkUncontrolled from './LinkUncontrolled'
 import ExternalLinkIcon from 'images/icons/external-link.svg'
 import LinkIcon from 'images/icons/link.svg'
-import { isURL } from 'components/editor/utils/links'
+import { isURL } from 'utils/misc/links'
 import createPositionModal from 'components/common/modals/position'
 import { Article } from 'operations/articles/types'
-import { updateBoundedPosition } from 'utils/modals/updateBoundedPosition'
 
 enum LinkSections {
   Results = 0,
@@ -22,7 +21,7 @@ enum LinkActions {
 const { Provider, useModal } = createPositionModal()
 export const useLinkModal = useModal
 
-const Component = ({ articles, ...otherProps }: IProps) => {
+const Component = ({ articles, onClearLinkPlaceholder, onApplyLink, onNewPage, ...otherProps }: IProps) => {
   const { enabled, position, hideControls, rootRef } = useLinkModal()
   const [filterText, setFilterText] = useState<string | null>(null)
 
@@ -34,7 +33,7 @@ const Component = ({ articles, ...otherProps }: IProps) => {
 
   let filteredArticles = articles || []
   if (filterText) {
-    filteredArticles = articles.filter((item) => item.title.indexOf(filterText) > -1)
+    filteredArticles = articles.filter((item) => item.title && item.title.indexOf(filterText) > -1)
   }
 
   const isUrl = isURL(filterText || '')
@@ -75,16 +74,31 @@ const Component = ({ articles, ...otherProps }: IProps) => {
     switch (sectionId) {
       case LinkSections.Actions:
         if (id === LinkActions.NewLink) {
-          // Insert new link
+          if (!filterText) return
+
+          onApplyLink(filterText)
         } else if (id === LinkActions.NewPage) {
-          // insert new page with name
-          // Insert internal link
+          if (!filterText) return
+
+          onNewPage(filterText)
         }
         return
       case LinkSections.Results:
-        // Insert internal link
-        return
+        const [article] = filteredArticles.filter((item) => item.id === id)
+
+        if (!article) {
+          console.error(`Article not found`)
+          return
+        }
+
+        onApplyLink(`/${article.path}`)
     }
+  }
+
+  const _onDismiss = () => {
+    onClearLinkPlaceholder()
+
+    hideControls()
   }
 
   return (
@@ -95,7 +109,7 @@ const Component = ({ articles, ...otherProps }: IProps) => {
           position={position}
           sections={filterText ? sections : []}
           filterText={filterText}
-          onDismiss={hideControls}
+          onDismiss={_onDismiss}
           onValueChange={_onValueChange}
           onItemClick={_onItemClick}
           {...otherProps}
@@ -111,4 +125,7 @@ export default Link
 
 interface IProps {
   articles: Article[]
+  onApplyLink: (link: string) => void
+  onClearLinkPlaceholder: () => void
+  onNewPage: (value: string) => void
 }

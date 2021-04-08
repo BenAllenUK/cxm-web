@@ -1,4 +1,4 @@
-import { Article } from '../types'
+import { Article, Block } from '../types'
 import './Content.scss'
 import BlockList from './articles/BlockList'
 import Breadcrumbs from './common/breadcrumbs'
@@ -7,13 +7,17 @@ import { useNavigation } from './navigation'
 
 const Content = ({ article, articles }: IProps) => {
   // const { push } = useNavigation()
-  console.log('wtf')
   const breadcrumbs = makeBreadCrumbs(articles, article.id)
-
+  // TODO: Once hooks are enabled:
+  // useEffect(() => {
+  //   if (article.title) {
+  //     document.title = article.title
+  //   }
+  // }, [article.title])
   // const onViewArticle = (path: string) => {
   //   push(path, '/blog', { projectSlug: 'gimme', path })
   // }
-  console.log('crumbs', breadcrumbs)
+
   return (
     <div className={'omnea-content'}>
       {/* {breadcrumbs && (
@@ -24,7 +28,13 @@ const Content = ({ article, articles }: IProps) => {
           maxItems={2}
         />
       )} */}
-      <BlockList blocks={article.blocks || []} />
+      <BlockList
+        blocks={
+          article?.blocks?.sort(
+            (a: Block, b: Block) => a.position - b.position
+          ) || []
+        }
+      />
     </div>
   )
 }
