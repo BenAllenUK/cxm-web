@@ -151,10 +151,19 @@ class TextInput extends React.Component<ITextInputProps, State> {
   }
 
   emitChange = (originalEvt: React.SyntheticEvent<any>) => {
+    const { useInnerText } = this.props
     const el = this.ref?.current
     if (!el) return
 
-    const html = el.innerText
+    let html
+    if (useInnerText) {
+      console.log('using inner tezr')
+      html = el.innerText
+    } else {
+      console.log('using inner html', el.innerHTML)
+      html = el.innerHTML
+    }
+
     if (this.props.onChange && html !== this.lastHtml) {
       // Clone event with Object.assign to avoid
       // "Cannot assign to read only property 'target' of object"
@@ -181,6 +190,7 @@ export interface IBaseProps extends DivProps {
   className?: string
   style?: Object
   tabIndex?: number
+  useInnerText?: boolean
 }
 
 interface ITextInputProps extends IBaseProps {

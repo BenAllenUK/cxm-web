@@ -31,16 +31,19 @@ const Item = forwardRef<HTMLDivElement, IItemProps>(
       <li className={'omnea-content-list-item'}>
         <div className={'omnea-content-list-item-container'}>
           {type === BlockType.LIST_CHECK && (
-            <div className={'itemCheckbox'} onClick={_onSelectedToggle}>
+            <div
+              className={'omnea-content-item-checkbox'}
+              onClick={_onSelectedToggle}
+            >
               <div
-                className={`${'itemCheckboxInner'} ${
-                  selected ? 'itemCheckboxInnerFilled' : ''
+                className={`${'omnea-content-item-checkbox-inner'} ${
+                  selected ? 'omnea-content-item-checkbox-inner-filled' : ''
                 }`}
               >
                 {/* {selected ? (
-                  <CheckboxFilled className={styles.itemCheckboxFilled} />
+                  <CheckboxFilled className={'omnea-content-item-checkbox-filled'} />
                 ) : (
-                  <CheckboxEmpty className={styles.itemCheckboxUnfilled} />
+                  <CheckboxEmpty className={'omnea-content-item-checkbox-unfilled'} />
                 )} */}
               </div>
               {/* {selected && <FontAwesomeIcon style={{ fontSize: 13, paddingTop: 1 }} icon={faCheck} />} */}
@@ -71,8 +74,8 @@ const List = ({ items, type }: IProps) => {
     return null
   }
   return (
-    <div className={'container'}>
-      <ul className={'list'}>
+    <div className={'omnea-content-list-container'}>
+      <ul className={'omnea-content-list'}>
         {items?.map(
           (item: { value: string; selected?: boolean }, i: number) => {
             return (

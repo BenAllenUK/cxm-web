@@ -28,7 +28,7 @@ export const ImageComponent = ({ content, id }: IProps) => {
     default:
       imgSrc = `${process.env.OMNEA_UPLOAD_URL}/${content.value}`
   }
-  return <div>{imgSrc && <NextImage layout="intrinsic" width={600} height={400} objectFit={'contain'} src={imgSrc} />}</div>
+  return <div className={styles.image}>{imgSrc && <NextImage layout="fill" objectFit="fill" src={imgSrc} />}</div>
 }
 
 interface IProps {

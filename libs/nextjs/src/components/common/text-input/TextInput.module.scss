@@ -1,4 +1,4 @@
-.textInputContainer {
+.omnea-content-text-input-container {
   display: inline-block;
   color: rgb(55, 53, 47);
   font-size: 16px;
@@ -17,18 +17,4 @@
   &[placeholder]:empty:before {
     color: #c0c0be;
   }
-}
-
-.borderedTextInput {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  font-size: 14px;
-  line-height: 20px;
-  padding: 3px 6px;
-  position: relative;
-  border-radius: 3px;
-  background: rgba(242, 241, 238, 0.6);
-  cursor: text;
-  height: 28px;
 }

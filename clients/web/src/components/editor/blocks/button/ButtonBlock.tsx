@@ -40,6 +40,7 @@ const ButtonBlock = ({ content, onUpdate, onDeleteBlock }: IProps) => {
           html={buttonText}
           onChange={onTextChange}
           className={styles.textInput}
+          useInnerText
         />
       </Button>
       {showSelector && <MediaSelector onUpdate={_onUpdate} sources={sources} isButton />}

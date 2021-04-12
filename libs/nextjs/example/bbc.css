@@ -6,9 +6,26 @@
   color: rgb(63, 63, 66);
 }
 
+.omnea-content-text-h1 {
+  font-size: 3em;
+  font-weight: bold;
+  font-family: ReithSans, Helvetica, Arial, freesans, sans-serif;
+  color: rgb(63, 63, 66);
+}
+
 .omnea-content-video {
   margin-top: 1rem;
   margin-bottom: 1rem;
+}
+
+.omnea-content-caption {
+  background-color: rgb(63, 63, 66);
+  font-family: ReithSans, Helvetica, Arial, freesans, sans-serif;
+  font-size: 1rem;
+  line-height: 1.375rem;
+  align-self: flex-end;
+  color: white;
+  padding: 1rem;
 }
 
 .omnea-content-divider {
@@ -47,6 +64,9 @@
   position: relative;
   width: 100%;
   height: 450px;
+}
+
+.omnea-content-image-container {
   margin-bottom: 1.5rem;
 }
 

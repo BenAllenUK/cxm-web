@@ -5,34 +5,40 @@ export default function Text({ content, type }: IProps) {
   const { value } = content
   switch (type) {
     case BlockType.H1:
+      console.log('header 1', value)
       return (
-        <div className={'omnea-content-text'}>
-          <h1 dangerouslySetInnerHTML={{ __html: value }} />
-        </div>
+        <div
+          className={'omnea-content-text-h1'}
+          dangerouslySetInnerHTML={{ __html: value }}
+        />
       )
     case BlockType.H2:
       return (
-        <div className={'omnea-content-text'}>
-          <h2 dangerouslySetInnerHTML={{ __html: value }} />
-        </div>
+        <div
+          className={'omnea-content-text-h2'}
+          dangerouslySetInnerHTML={{ __html: value }}
+        />
       )
     case BlockType.H3:
       return (
-        <div className={'omnea-content-text'}>
-          <h3 dangerouslySetInnerHTML={{ __html: value }} />
-        </div>
+        <div
+          className={'omnea-content-text-h3'}
+          dangerouslySetInnerHTML={{ __html: value }}
+        />
       )
     case BlockType.H4:
       return (
-        <div className={'omnea-content-text'}>
-          <h4 dangerouslySetInnerHTML={{ __html: value }} />
-        </div>
+        <div
+          className={'omnea-content-text-h4'}
+          dangerouslySetInnerHTML={{ __html: value }}
+        />
       )
     case BlockType.H5:
       return (
-        <div className={'omnea-content-text'}>
-          <h5 dangerouslySetInnerHTML={{ __html: value }} />
-        </div>
+        <div
+          className={'omnea-content-text-h5'}
+          dangerouslySetInnerHTML={{ __html: value }}
+        />
       )
     case BlockType.TEXT:
       return (

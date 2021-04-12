@@ -15,6 +15,9 @@ export default function Video({ content, id }: IProps) {
         playerScript='https://cdn.jwplayer.com/libraries/ogA7IZvl.js'
         file={fileUrl}
       />
+      {content.caption && (
+        <div className={'omnea-content-caption'}>{content.caption}</div>
+      )}
     </div>
   )
 }

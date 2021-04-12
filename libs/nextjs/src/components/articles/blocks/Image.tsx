@@ -33,8 +33,13 @@ export default function Image({ content }: IProps) {
   }
 
   return (
-    <div className={'omnea-content-image'}>
-      {value && <NextImage layout='fill' objectFit='fill' src={imgSrc} />}
+    <div className={'omnea-content-image-container'}>
+      <div className={'omnea-content-image'}>
+        {value && <NextImage layout='fill' objectFit='fill' src={imgSrc} />}
+      </div>
+      {content.caption && (
+        <div className={'omnea-content-caption'}>{content.caption}</div>
+      )}
     </div>
   )
 }

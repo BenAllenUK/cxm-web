@@ -1,19 +1,10 @@
 .omnea-button-base {
-  border-radius: 5px;
   display: flex;
-  justify-content: center;
+  color: rgb(63, 63, 66);
+  border: 1px solid rgb(219, 127, 127);
+  font-weight: bold;
+  padding: 0px 1rem;
+  min-height: calc(2.75rem - 2px);
   align-items: center;
-  cursor: pointer;
-  font-size: 14px;
-  padding: 5px;
-  align-self: flex-start;
-  color: grey;
-  user-select: none;
-  line-height: 14px;
-  background-color: green;
-
-  &:hover {
-    background-color: grey;
-    color: grey;
-  }
+  font-family: Arial, Helvetica, sans-serif;
 }

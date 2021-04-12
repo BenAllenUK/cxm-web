@@ -29,6 +29,7 @@ const Header = ({ filterText, onValueChange, onResetValue }: IHeaderProps) => {
           blurredPlaceholder={'Start search...'}
           html={filterText || ''}
           onChange={(e: any) => onValueChange(e.target.value)}
+          useInnerText
         />
       </div>
 

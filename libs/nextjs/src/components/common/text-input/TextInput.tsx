@@ -1,6 +1,6 @@
 import React, { Component, createRef, forwardRef } from 'react'
 import sanitize from '../../../utils/html/sanitize'
-import styles from './TextInput.module.scss'
+import './TextInput.module.scss'
 import mergeRefs from '../../../utils/refs/mergeRefs'
 
 function normalizeHtml(str: string): string {
@@ -98,7 +98,7 @@ class TextInput extends Component<ITextInputProps, State> {
 
     return (
       <div
-        className={styles.textInputContainer}
+        className={'omnea-content-text-input-container '}
         {...props}
         placeholder={
           isFocused ? focusedPlaceholderText : blurredPlaceholderText

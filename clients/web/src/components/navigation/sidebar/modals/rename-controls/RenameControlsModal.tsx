@@ -46,6 +46,7 @@ const RenameControlsModal = ({ value, position, onDismiss, onTextChange, onSubmi
         html={value || ''}
         ref={inputRef}
         onChange={(e: any) => onTextChange(e.target.value)}
+        useInnerText
       />
     </div>
   )

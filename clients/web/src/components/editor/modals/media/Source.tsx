@@ -26,6 +26,7 @@ export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPicture
           html={link}
           onChange={onChange}
           className={styles.linkInput}
+          useInnerText
         />
         <Button onClick={handleClick} className={styles.button}>
           {`Embed ${mediaString}`}

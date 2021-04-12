@@ -94,13 +94,17 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, onDeleteBlock }: I
       </div>
       <div>
         {(writeNewCaption || caption) && (
-          <TextInput
-            focusedPlaceholder={'Write a caption...'}
-            blurredPlaceholder={'Write a caption...'}
-            html={caption}
-            onChange={onCaptionChange}
-            className={styles.linkInput}
-          />
+          <div>
+            {console.log('ehhhh')}
+            <TextInput
+              focusedPlaceholder={'Write a caption...'}
+              blurredPlaceholder={'Write a caption...'}
+              html={caption}
+              onChange={onCaptionChange}
+              className={styles.linkInput}
+              useInnerText
+            />
+          </div>
         )}
         {createComment && <AddComment onClick={() => null} />}
       </div>
