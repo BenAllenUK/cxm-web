@@ -5,7 +5,6 @@ export default function Text({ content, type }: IProps) {
   const { value } = content
   switch (type) {
     case BlockType.H1:
-      console.log('header 1', value)
       return (
         <div
           className={'omnea-content-text-h1'}

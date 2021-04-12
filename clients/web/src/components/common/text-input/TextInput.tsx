@@ -157,10 +157,8 @@ class TextInput extends React.Component<ITextInputProps, State> {
 
     let html
     if (useInnerText) {
-      console.log('using inner tezr')
       html = el.innerText
     } else {
-      console.log('using inner html', el.innerHTML)
       html = el.innerHTML
     }
 
