@@ -7,26 +7,19 @@ import { initializeApollo } from 'config/graphql'
 import {
   useDeleteBlocksMutation,
   useGetArticleOneQuery,
-  useGetProjectOneQuery,
   useUpsertArticlesMutation,
   useUpsertBlocksMutation,
   useGetOrganisationOneQuery,
-  useGetUserOneQuery,
 } from 'generated/graphql'
 import { GetServerSidePropsContext } from 'next'
 import useUpsertArticlesMutationScoped from 'operations/articles/upsert'
 import useDeleteBlocksMutationScoped from 'operations/blocks/delete'
 import useUpsertBlocksMutationScoped from 'operations/blocks/upsert'
-import GET_ARTICLE_ONE from 'queries/articles/GET_ARTICLE_ONE.gql'
-import GET_ORGANISATION_ONE from 'queries/organisations/GET_ORGANISATION_ONE.gql'
-import GET_USER_ONE from 'queries/users/GET_USER_ONE.gql'
 import AssetsProvider from 'components/providers/assets'
 import getUserSession from 'utils/user/getUserSession'
 import redirect from 'utils/server/redirect'
 import serverSideTranslations from 'utils/translations/serverSideTranslations'
-import { gql } from '@apollo/client'
 import NavigationProvider from 'components/navigation/provider'
-import LocalBlocksProvider from 'components/editor/providers/LocalBlocksProvider'
 import EditorPageSkelton from 'components/pages/editor/EditorPageSkelton'
 import UserProvider from 'components/root/UserProvider'
 
@@ -71,7 +64,7 @@ export function Content() {
   const defaultPath = project?.articles.length > 0 ? project?.articles[0].path : ''
   const selectedArticlePath = articlePath ?? defaultPath
 
-  let { data: articleData, loading: articleQueryLoading } = useGetArticleOneQuery({
+  const { data: articleData, loading: articleQueryLoading } = useGetArticleOneQuery({
     variables: {
       projectSlug: project?.slug || '',
       path: selectedArticlePath,

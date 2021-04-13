@@ -4,7 +4,7 @@ import Footer from './Footer'
 import { CSSProperties } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faStar, faEdit } from '@fortawesome/free-regular-svg-icons'
+import { faTrashAlt, faStar } from '@fortawesome/free-regular-svg-icons'
 import { faLink, faLock, faLevelUpAlt, faDownload, faUndo } from '@fortawesome/free-solid-svg-icons'
 
 const sections: IOptionSections[] = [

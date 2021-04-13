@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, useRef } from 'react'
+import { memo, useState, useCallback } from 'react'
 import { BlockDataMedia, BlockData, BlockType, MediaSourceType, MediaSourceObject } from '../types'
 import { useAsset } from 'components/providers/assets'
 import styles from './Image.module.scss'
@@ -16,7 +16,7 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, onDeleteBlock }: I
   const [caption, setCaption] = useState(content.caption || '')
   const [writeNewCaption, setWriteNewCaption] = useState(false)
   const { localImages } = useAsset()
-  let sources: MediaSourceObject[] = [
+  const sources: MediaSourceObject[] = [
     { name: 'Upload', type: MediaSourceType.UPLOAD },
     { name: 'Embed Link', type: MediaSourceType.EMBED_LINK },
     {

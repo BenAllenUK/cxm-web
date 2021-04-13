@@ -1,4 +1,3 @@
-import createPositionModal from 'components/common/modals/position'
 import styles from './MediaControls.module.scss'
 import MoreIcon from 'images/icons/more.svg'
 import { useRef, ReactNode } from 'react'

@@ -26,7 +26,7 @@ const ButtonBlock = ({ content, onUpdate, onDeleteBlock }: IProps) => {
     onUpdate({ ...content, ...value }, BlockType.BUTTON)
   }
 
-  let sources: MediaSourceObject[] = [{ name: 'Embed Link', type: MediaSourceType.EMBED_LINK }]
+  const sources: MediaSourceObject[] = [{ name: 'Embed Link', type: MediaSourceType.EMBED_LINK }]
 
   return (
     <div className={styles.container}>

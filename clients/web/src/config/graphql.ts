@@ -1,10 +1,8 @@
-import { ApolloClient, gql, InMemoryCache, makeVar, NormalizedCacheObject } from '@apollo/client'
+import { ApolloClient, InMemoryCache, makeVar, NormalizedCacheObject } from '@apollo/client'
 
 import { HttpLink } from '@apollo/client/link/http'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { useMemo } from 'react'
-
-import { ApolloProvider } from '@apollo/client'
 
 export let apolloClient: any
 

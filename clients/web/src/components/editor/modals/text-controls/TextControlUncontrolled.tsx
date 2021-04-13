@@ -1,6 +1,5 @@
 import { forwardRef, HTMLProps, RefObject, useLayoutEffect, useRef } from 'react'
 import useOnDismiss from 'utils/hooks/useOnDismiss'
-import LinkButton from './LinkButton'
 import Button from './Button'
 import styles from './TextControlUncontrolled.module.scss'
 import ChevronDownIcon from 'images/icons/chevron-down.svg'
@@ -89,6 +88,8 @@ const TextControlsUncontrolled = forwardRef<HTMLDivElement, IProps>(
     )
   }
 )
+
+TextControlsUncontrolled.displayName = 'TextControlsUncontrolled'
 
 export default TextControlsUncontrolled
 

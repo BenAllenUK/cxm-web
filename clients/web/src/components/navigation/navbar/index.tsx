@@ -1,7 +1,7 @@
 import styles from './Navbar.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile, faEnvelope, faThumbsUp } from '@fortawesome/free-regular-svg-icons'
-import { faUsers, faHome, faDatabase, faChartLine, faCogs } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faDatabase, faChartLine, faCogs } from '@fortawesome/free-solid-svg-icons'
 
 import { Tooltip } from 'components/common/tooltip'
 

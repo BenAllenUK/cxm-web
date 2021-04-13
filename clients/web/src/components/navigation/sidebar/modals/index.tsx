@@ -1,4 +1,4 @@
-import PageControls, { PageControlOptions, usePageControlModals } from 'components/navigation/sidebar/modals/page-controls'
+import PageControls, { PageControlOptions } from 'components/navigation/sidebar/modals/page-controls'
 import RenameControls, { useRenameControlModals } from 'components/navigation/sidebar/modals/rename-controls'
 import { ReactNode, useState } from 'react'
 import { Article } from 'operations/articles/types'

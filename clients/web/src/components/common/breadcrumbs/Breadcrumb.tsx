@@ -1,6 +1,6 @@
 import styles from './Breadcrumbs.module.scss'
 import Button from 'components/common/button/Button'
-import { forwardRef, HTMLAttributes, RefObject, ReactNode, Children, useState } from 'react'
+import { ReactNode, Children, useState } from 'react'
 
 function insertSeparators(items: any[], className: string | undefined, separator: ReactNode) {
   return items.reduce((acc: any[], current: any, index: number) => {
@@ -20,6 +20,8 @@ function insertSeparators(items: any[], className: string | undefined, separator
 
 const Breadcrumb = ({ children, itemsAfterCollapse = 1, itemsBeforeCollapse = 1, maxItems = 2, separator }: IProps) => {
   const [expanded, setExpanded] = useState(false)
+
+  const foo = 'asd'
 
   const renderItemsBeforeAndAfter = (allItems: any) => {
     const handleClickExpand = (event: any) => {

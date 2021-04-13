@@ -14,7 +14,7 @@ const File = ({ content, onUpdate, id, onMediaUpdate }: IProps) => {
 
   const ref = useRef<HTMLDivElement>(null)
 
-  let sources: MediaSourceObject[] = [{ name: 'Upload', type: MediaSourceType.UPLOAD }]
+  const sources: MediaSourceObject[] = [{ name: 'Upload', type: MediaSourceType.UPLOAD }]
   const _onPageControlsClick = (e: any) => {
     if (ref.current) {
       const { top: blockTop, left: blockLeft } = ref.current.getBoundingClientRect()

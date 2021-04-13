@@ -1,4 +1,4 @@
-import OptionControls, { OptionType, IOptionElements, IOptionSections } from 'components/common/option-controls'
+import OptionControls, { OptionType, IOptionSections } from 'components/common/option-controls'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faClone, faEdit } from '@fortawesome/free-regular-svg-icons'
 import { faLink, faLevelUpAlt } from '@fortawesome/free-solid-svg-icons'

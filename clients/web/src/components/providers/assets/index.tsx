@@ -2,7 +2,7 @@ import { useGenerateUploadAssetUrlMutation, useGenerateReadAssetUrlMutation } fr
 import { createContext, ReactNode, useContext, useState } from 'react'
 import uploadFile from 'operations/assets/upload'
 
-import { BlockDataMediaUpload, BlockDataMedia } from 'components/editor/blocks/types'
+import { BlockDataMediaUpload } from 'components/editor/blocks/types'
 
 const initialState = {
   upload: () => new Promise<null>(() => null),

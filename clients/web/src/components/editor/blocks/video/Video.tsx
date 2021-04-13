@@ -1,7 +1,6 @@
 import { memo, useState, useCallback } from 'react'
 import styles from './Video.module.scss'
 import MediaSelector from 'components/editor/modals/media/MediaSelector'
-import ImageIcon from 'images/icons/image.svg'
 import VideoIcon from 'images/icons/video.svg'
 import Uploading from '../common/Uploading'
 import TopBar from 'components/editor/modals/media-controls/TopBar'
@@ -18,7 +17,7 @@ const Video = ({ content, onMediaUpdate, onUpdate, id, onDeleteBlock }: IProps) 
     setShowSelector(!showSelector)
   }, [setShowSelector, showSelector])
 
-  let sources: MediaSourceObject[] = [
+  const sources: MediaSourceObject[] = [
     { name: 'Upload', type: MediaSourceType.UPLOAD },
     { name: 'Embed Link', type: MediaSourceType.EMBED_LINK },
   ]

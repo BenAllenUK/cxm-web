@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "setup": "run-s setup:*:*",
+    "setup": "run-s setup:*:*; husky install",
     "build": "DEPLOY_ENVIRONMENT=/prod/ yarn envars; . ./dev/env/.envars; run-s build:*:*",
     "start": "run-p start:*:*",
     "deploy": "DEPLOY_ENVIRONMENT=/prod/ yarn envars; . ./dev/env/.envars; run-s build:libs:*; run-s deploy:*:*",
@@ -68,5 +68,9 @@
   },
   "homepage": "https://github.com/BenAllenUK/cxm-web#readme",
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^7.24.0",
+    "eslint-plugin-unused-imports": "^1.1.1",
+    "husky": "^6.0.0"
+  }
 }

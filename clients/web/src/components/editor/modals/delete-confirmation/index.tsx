@@ -1,5 +1,4 @@
 import createModal from 'components/common/modals/simple'
-import { Article } from 'operations/articles/types'
 import DeleteConfirmationUncontrolled from './DeleteConfirmationUncontrolled'
 
 const { Provider, useModal } = createModal()

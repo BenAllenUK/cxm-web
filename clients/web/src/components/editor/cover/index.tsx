@@ -1,5 +1,5 @@
 import Button from 'components/common/button/Button'
-import { MouseEvent, useState } from 'react'
+import { MouseEvent } from 'react'
 import styles from './Cover.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'

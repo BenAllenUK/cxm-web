@@ -1,6 +1,5 @@
-import { ApolloProvider, QueryResult } from '@apollo/client'
-import { useApollo } from 'config/graphql'
-import { createContext, ReactNode, useContext, useState } from 'react'
+import { QueryResult } from '@apollo/client'
+import { createContext, ReactNode, useContext } from 'react'
 import { GetUserOneQuery, useGetUserOneQuery } from 'generated/graphql'
 
 type UserResult = QueryResult<GetUserOneQuery>

@@ -39,10 +39,10 @@ const Container = ({
   const _onDrop = async (event: any) => {
     event.stopPropagation()
     event.preventDefault()
-    let files = [...event.dataTransfer.files]
+    const files = [...event.dataTransfer.files]
     let multipleFileIndex = index
     files.forEach(async (file) => {
-      let fileReader = new FileReader()
+      const fileReader = new FileReader()
       const blockType = fileTypeToBlockType(file.type)
       fileReader.onload = async (e) => {
         if (blockType === BlockType.IMAGE) {

@@ -1,5 +1,5 @@
-import { MouseEvent, MutableRefObject } from 'react'
-import { SortableContainer, SortableElement, SortEnd } from 'react-sortable-hoc'
+import { MouseEvent } from 'react'
+import { SortableContainer, SortEnd } from 'react-sortable-hoc'
 import { Tooltip } from 'components/common/tooltip'
 
 import { Block } from '../blocks/types'
