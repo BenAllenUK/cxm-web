@@ -1,9 +1,9 @@
 import { memo, useCallback, useRef, useState, ReactNode, HTMLProps, forwardRef } from 'react'
 import useWindowKeyDown from 'utils/hooks/useWindowKeyDown'
-import styles from './OptionControls.module.scss'
+import styles from './SettingsControls.module.scss'
 import findIndex from 'lodash/findIndex'
 import flatten from 'lodash/flatten'
-import Section from './Section'
+// import Section from './Section'
 import mergeRefs from 'utils/refs/mergeRefs'
 import useOnDismiss from 'utils/hooks/useOnDismiss'
 
@@ -27,7 +27,6 @@ export interface IOptionButton {
   subtitle?: string
   hint?: string
   iconSize?: 'large' | 'normal'
-  onClick?: () => void
 }
 
 interface IOptionLine {
@@ -48,10 +47,67 @@ export type IOptionSections = {
   title?: string
   items: IOptionElements[]
   showLine?: boolean
-  onClick?: any
 }
 
-const OptionControls = forwardRef<HTMLDivElement, IProps>(
+const sections_ = {
+  id: 1,
+  title: 'OPTIONS', // Corresponds to the "OPTIONS" text in the screenshot
+  children: [
+    {
+      id: 1,
+      title: 'General', // Corresponds to the "General" text in the screenshot
+      icon: 'blblblab',
+      children: [
+        {
+          id: 1,
+          title: 'General Title', // Corresponds to the "General Title" text in the screenshot
+          showTitleLine: true, // Corresponds to the line under the title
+          children: [
+            {
+              id: 1,
+              label: 'Title',
+              placeholder: 'Article Title',
+              type: 'TEXT',
+            },
+            {
+              id: 1,
+              label: 'URL Path',
+              placeholder: 'new-page-1',
+              type: 'TEXT_URL',
+            },
+            {
+              id: 1,
+              text: 'Sample Deeper options',
+              type: 'BUTTON',
+              children: [
+                {
+                  id: 1,
+                  title: 'General',
+                  children: [
+                    {
+                      id: 1,
+                      label: 'more settings',
+                      type: 'TEXT',
+                      hint: 'This is a hint',
+                    },
+                    {
+                      id: 1,
+                      label: 'more more settings',
+                      placeholder: 'Article Title',
+                      type: 'TEXT_URL',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
+
+const SettingsControls = forwardRef<HTMLDivElement, IProps>(
   ({ header, footer, sections, iconClassName, onItemClick, onDismiss, ...otherProps }, forwardedRef) => {
     const [selectedIndex, setSelected] = useState<number>(0)
 
@@ -150,7 +206,7 @@ const OptionControls = forwardRef<HTMLDivElement, IProps>(
     return (
       <div className={styles.defaultContainer} onMouseLeave={_onMouseLeave} {...otherProps} ref={mergeRefs(forwardedRef, ref)}>
         {header}
-        {sections.map((section, i) => {
+        {/* {sections.map((section, i) => {
           return (
             <Section
               key={`${i}`}
@@ -159,19 +215,19 @@ const OptionControls = forwardRef<HTMLDivElement, IProps>(
               onInnerRefCallback={onInnerRefCallback}
               selectedId={actionItems[selectedIndex]?.id}
               iconClassName={iconClassName}
-              onItemClick={section.onClick ? section.onClick : _onItemClick}
+              onItemClick={_onItemClick}
               onItemMouseEnter={_onItemMouseEnter}
               onSwitchClick={_onSwitchClick}
             />
           )
-        })}
+        })} */}
         {footer}
       </div>
     )
   }
 )
 
-export default OptionControls
+export default SettingsControls
 
 interface IProps extends HTMLProps<HTMLDivElement> {
   sections: IOptionSections[]

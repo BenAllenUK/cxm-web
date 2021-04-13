@@ -14,7 +14,9 @@ interface ContextActions extends State {
 const initialState = {
   enabled: false,
   position: null,
-  showControls: () => {},
+  showControls: () => {
+    console.log('fucking init stat')
+  },
   hideControls: () => {},
   rootRef: undefined,
 }
@@ -28,6 +30,7 @@ const createPositionModal = () => {
       const [state, setState] = useState<State>(initialState)
 
       const showControls = (position: { x: number; y: number }) => {
+        console.log('IN THE MODAL SHOWCONTROLS')
         const x = rootRef?.current ? position.x - rootRef.current.getBoundingClientRect().left : position.x
         const y = rootRef?.current ? position.y - rootRef.current.getBoundingClientRect().top : position.y
 

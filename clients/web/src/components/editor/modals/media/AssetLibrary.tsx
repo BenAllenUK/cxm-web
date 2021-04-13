@@ -45,6 +45,7 @@ export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps
         html={query.toString()}
         onChange={onChange}
         className={styles.linkInput}
+        useInnerText
       />
       <div className={styles.grid}>
         {source.type === MediaSourceType.CLOUDINARY ? (

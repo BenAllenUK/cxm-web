@@ -95,7 +95,6 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, onDeleteBlock }: I
       <div>
         {(writeNewCaption || caption) && (
           <div>
-            {console.log('ehhhh')}
             <TextInput
               focusedPlaceholder={'Write a caption...'}
               blurredPlaceholder={'Write a caption...'}

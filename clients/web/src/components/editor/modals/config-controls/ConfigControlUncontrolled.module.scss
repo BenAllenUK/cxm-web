@@ -1,0 +1,11 @@
+@import 'styles/variables';
+
+.image {
+  border-radius: 5px;
+  border: 1px solid $border-color !important;
+  display: flex;
+}
+
+.icon {
+  padding: 0;
+}

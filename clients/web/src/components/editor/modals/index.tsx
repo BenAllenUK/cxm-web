@@ -4,6 +4,7 @@ import { useState, useContext, memo, useCallback, createContext, ReactNode, RefO
 import BlockControls from './block-controls'
 import TextControls from './text-controls'
 import PageControls from './page-controls'
+import ConfigControls from './config-controls'
 import TextStyle, { useFocusedBlock } from './text-style'
 import MediaControls from './media-controls'
 import Link from './link'
@@ -73,6 +74,7 @@ const ControlledModals = ({ blocks, articles, children, onUpsertArticles, onBloc
     <>
       <BlockControls.Component filterText={filterText} id={id} onBlockItemClick={_onModifyBlockType} />
       <PageControls.Component onClick={() => {}} />
+      <ConfigControls.Component />
       <MediaControls.Component onClick={() => {}} />
       <TextControls.Component />
       <TextStyle.Component />
@@ -97,17 +99,19 @@ const Modals = (props: IProps) => {
         <TextControls.Provider rootRef={bodyRef}>
           <PageControls.Provider rootRef={bodyRef}>
             <PageControlsTargetContext.Provider>
-              <BlockControls.Provider rootRef={bodyRef}>
-                <BlockControlsContext.Provider>
-                  <TextStyle.Provider rootRef={bodyRef}>
-                    <Link.Provider rootRef={bodyRef}>
-                      <MediaControls.Provider rootRef={bodyRef}>
-                        <ControlledModals {...props} />
-                      </MediaControls.Provider>
-                    </Link.Provider>
-                  </TextStyle.Provider>
-                </BlockControlsContext.Provider>
-              </BlockControls.Provider>
+              <ConfigControls.Provider rootRef={bodyRef}>
+                <BlockControls.Provider rootRef={bodyRef}>
+                  <BlockControlsContext.Provider>
+                    <TextStyle.Provider rootRef={bodyRef}>
+                      <Link.Provider rootRef={bodyRef}>
+                        <MediaControls.Provider rootRef={bodyRef}>
+                          <ControlledModals {...props} />
+                        </MediaControls.Provider>
+                      </Link.Provider>
+                    </TextStyle.Provider>
+                  </BlockControlsContext.Provider>
+                </BlockControls.Provider>
+              </ConfigControls.Provider>
             </PageControlsTargetContext.Provider>
           </PageControls.Provider>
         </TextControls.Provider>
