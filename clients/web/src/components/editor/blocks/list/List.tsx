@@ -70,7 +70,6 @@ const Item = forwardRef<HTMLDivElement, IItemProps>(
                   <CheckboxEmpty className={styles.itemCheckboxUnfilled} />
                 )}
               </div>
-              {/* {selected && <FontAwesomeIcon style={{ fontSize: 13, paddingTop: 1 }} icon={faCheck} />} */}
             </div>
           )}
           {type === BlockType.LIST_NUMBER && (

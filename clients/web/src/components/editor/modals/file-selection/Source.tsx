@@ -1,5 +1,5 @@
 import { memo, useRef, useState } from 'react'
-import styles from './MediaSelector.module.scss'
+import styles from './FileSelectionUncontrolled.module.scss'
 import { MediaSourceObject, MediaSourceType } from 'components/editor/blocks/types'
 import { BlockDataMedia, BlockData, BlockType } from '../../blocks/types'
 import fileTypeToBlockType from '../../utils/fileTypeToBlockType'
@@ -7,8 +7,8 @@ import Button from 'components/common/button/Button'
 import AssetLibrary from './AssetLibrary'
 import TextInput from 'components/common/text-input/TextInput'
 
-export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPictures, fileFilter, isVideo, isButton }: IProps) => {
-  const mediaString = isVideo ? 'video' : isButton ? '' : !fileFilter ? 'file' : 'image'
+export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, onSetPictures, fileFilter, isVideo }: IProps) => {
+  const mediaString = isVideo ? 'video' : !fileFilter ? 'file' : 'image'
   const EmbedLink = () => {
     const [link, setLink] = useState('')
     const handleClick = () => {
@@ -106,7 +106,7 @@ export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPicture
       return <EmbedLink />
     }
     default:
-      return <AssetLibrary onUpdate={onUpdate} source={selected} pictures={pictures} setPictures={setPictures} />
+      return <AssetLibrary onUpdate={onUpdate} source={selected} pictures={pictures} onSetPictures={onSetPictures} />
   }
 }
 
@@ -115,9 +115,8 @@ interface IProps {
   selected: MediaSourceObject
   onMediaUpdate?: (value: BlockDataMedia, pendingUploadFile: File, blockType: BlockType, createNew?: boolean) => void
   onUpdate: (value: BlockData, type?: BlockType) => void
-  setPictures: any
+  onSetPictures: any
   isVideo?: boolean
-  isButton?: boolean
   fileFilter?: string
 }
 

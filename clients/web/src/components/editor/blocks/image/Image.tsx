@@ -3,19 +3,19 @@ import { BlockDataMedia, BlockData, BlockType, MediaSourceType, MediaSourceObjec
 import { useAsset } from 'components/providers/assets'
 import styles from './Image.module.scss'
 import ImageIcon from 'images/icons/image.svg'
-import MediaSelector from 'components/editor/modals/media/MediaSelector'
-import TopBar from 'components/editor/modals/media-controls/TopBar'
-import AddComment from 'components/editor/modals/media/AddComment'
+import FileSelection, { useFileSelectionModal } from 'components/editor/modals/file-selection'
+import TopBar from 'components/editor/modals/file-controls/FileControlsUncontrolled'
 import TextInput from 'components/common/text-input/TextInput'
 import Progress from '../progress/Progress'
 import ImageComponent from './ImageComponent'
 
-export const Image = ({ content, onUpdate, onMediaUpdate, id, onDeleteBlock }: IProps) => {
-  const [showSelector, setShowSelector] = useState(false)
-  const [createComment, setCreateComment] = useState(false)
+export const Image = ({ id, content, onUpdate, onDeleteBlock }: IProps) => {
   const [caption, setCaption] = useState(content.caption || '')
-  const [writeNewCaption, setWriteNewCaption] = useState(false)
+  const [shouldWriteNewCaption, onWriteNewCaption] = useState(false)
+
   const { localImages } = useAsset()
+  const { showControls, ref } = useFileSelectionModal()
+
   const sources: MediaSourceObject[] = [
     { name: 'Upload', type: MediaSourceType.UPLOAD },
     { name: 'Embed Link', type: MediaSourceType.EMBED_LINK },
@@ -33,17 +33,9 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, onDeleteBlock }: I
     },
   ]
 
-  const _setShowSelector = useCallback(() => {
-    setShowSelector(!showSelector)
-  }, [setShowSelector, showSelector])
-
-  const _writeNewCaption = useCallback(() => {
-    setWriteNewCaption(true)
-  }, [setWriteNewCaption])
-
-  const _setCreateComment = useCallback(() => {
-    setCreateComment(true)
-  }, [setCreateComment])
+  const _onWriteNewCaption = useCallback(() => {
+    onWriteNewCaption(true)
+  }, [onWriteNewCaption])
 
   const onCaptionChange = useCallback(
     (e: any) => {
@@ -56,25 +48,14 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, onDeleteBlock }: I
   if (!content.value && !localImages[id]) {
     return (
       <div>
-        <div className={styles.container} onClick={_setShowSelector}>
+        <div className={styles.container} onClick={() => showControls({ id, sources })}>
           <ImageIcon className={styles.icon} width={25} height={25} />
           <div className={styles.text}>Add an image</div>
         </div>
-        {showSelector && (
-          <MediaSelector onUpdate={onUpdate} onMediaUpdate={onMediaUpdate} sources={sources} fileFilter={'image/*'} />
-        )}
+        <div ref={ref}></div>
       </div>
     )
   }
-
-  // const onSendComment = (comment: string) => {
-  //   const commentObj = {
-  //     comment: comment,
-  //     user: 'G',
-  //     time: Date.now().toString(),
-  //   }
-  //   // onUpdate({ ...content, comments: content.comments.push(commentObj) })
-  // }
 
   return (
     <div className={styles.box}>
@@ -88,14 +69,13 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, onDeleteBlock }: I
           id={id}
         />
         <div className={styles.mediaControls}>
-          <TopBar onDeleteBlock={onDeleteBlock} setWriteNewCaption={_writeNewCaption} setCreateComment={() => null} />
+          <TopBar onDeleteBlock={onDeleteBlock} onWriteNewCaption={_onWriteNewCaption} />
         </div>
         <Progress id={id} />
       </div>
       <div>
-        {(writeNewCaption || caption) && (
+        {(shouldWriteNewCaption || caption) && (
           <div>
-            {console.log('ehhhh')}
             <TextInput
               focusedPlaceholder={'Write a caption...'}
               blurredPlaceholder={'Write a caption...'}
@@ -106,18 +86,16 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, onDeleteBlock }: I
             />
           </div>
         )}
-        {createComment && <AddComment onClick={() => null} />}
       </div>
     </div>
   )
 }
 
 interface IProps {
+  id: number
   content: BlockDataMedia
   onUpdate: (value: BlockData, type?: BlockType) => void
-  onMediaUpdate: (value: BlockDataMedia, pendingUploadFile: File, blockType: BlockType, createNew?: boolean) => void
   onDeleteBlock: () => void
-  id: number
 }
 
 export default memo(Image)

@@ -1,11 +1,11 @@
-import { Block, BlockDataText, BlockType } from 'components/editor/blocks/types'
+import { Block, BlockData, BlockDataText, BlockType, MediaSourceType } from 'components/editor/blocks/types'
 import { memo, ReactNode, useRef } from 'react'
 
 import BlockControls from './block-controls'
 import TextControls from './text-controls'
 import PageControls from './page-controls'
 import TextStyle, { useFocusedBlock } from './text-style'
-import MediaControls from './media-controls'
+import MediaControls, { useFileControlModal } from './file-more-controls'
 import Link from './link'
 import BlockControlsContext, { useBlockControlsContext } from './block-controls/BlockControlsContext'
 import PageControlsTargetContext from 'components/navigation/sidebar/modals/page-controls/PageControlsTargetContext'
@@ -15,10 +15,13 @@ import DeleteConfirmation from './delete-confirmation'
 import { BlockTypeProperties } from '../blocks'
 import { removeLinkPlaceholders, applyLinkToPlaceholder } from 'utils/html/links'
 import createArticleEmpty from 'utils/article/createEmptyArticle'
+import FileSelection from './file-selection'
+import FileMoreControls from './file-more-controls'
 
 const ControlledModals = ({ blocks, articles, children, onUpsertArticles, onBlocksUpsert, onModifyBlockType }: IProps) => {
   const { id, filterText } = useBlockControlsContext()
   const { blockId } = useFocusedBlock()
+  const { hideControls: fileControlModalHide, payload: fileControlModalPayload } = useFileControlModal()
 
   const _onModifyBlockType = (key: BlockType) => {
     onModifyBlockType(id, key)
@@ -69,6 +72,19 @@ const ControlledModals = ({ blocks, articles, children, onUpsertArticles, onBloc
     onBlocksUpsert([newBlock])
   }
 
+  const _onUpdateFile = (value: BlockData) => {
+    const blockId = (fileControlModalPayload as { blockId: number }).blockId
+    const [block] = blocks.filter((item) => item.id === blockId)
+    if (!block) {
+      console.error(`No block found`)
+      return
+    }
+
+    fileControlModalHide()
+
+    onBlocksUpsert([{ ...block, payload: { ...block.payload, ...value } }])
+  }
+
   return (
     <>
       <BlockControls.Component filterText={filterText} id={id} onBlockItemClick={_onModifyBlockType} />
@@ -83,6 +99,8 @@ const ControlledModals = ({ blocks, articles, children, onUpsertArticles, onBloc
         onApplyLink={_onApplyLink}
         articles={articles}
       />
+      <FileSelection.Component onUpdate={_onUpdateFile} onD />
+      <FileMoreControls.Component onClick={() => {}} />
       {children}
     </>
   )
@@ -101,9 +119,11 @@ const Modals = (props: IProps) => {
                 <BlockControlsContext.Provider>
                   <TextStyle.Provider rootRef={bodyRef}>
                     <Link.Provider rootRef={bodyRef}>
-                      <MediaControls.Provider rootRef={bodyRef}>
-                        <ControlledModals {...props} />
-                      </MediaControls.Provider>
+                      <FileSelection.Provider>
+                        <FileMoreControls.Provider rootRef={bodyRef}>
+                          <ControlledModals {...props} />
+                        </FileMoreControls.Provider>
+                      </FileSelection.Provider>
                     </Link.Provider>
                   </TextStyle.Provider>
                 </BlockControlsContext.Provider>

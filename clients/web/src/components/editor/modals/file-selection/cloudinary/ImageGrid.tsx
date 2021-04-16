@@ -1,4 +1,4 @@
-import styles from '../MediaSelector.module.scss'
+import styles from '../FileSelectionUncontrolled.module.scss'
 import { Image, CloudinaryContext } from 'cloudinary-react'
 
 const ImageGrid = ({ pictures, handleClick }: IProps) => {

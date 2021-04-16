@@ -1,4 +1,5 @@
 @import 'styles/variables';
+@import 'components/common/button/Button.module.scss';
 
 .historyBreadcrumbs {
   margin: 5px;
@@ -7,4 +8,9 @@
 .container {
   display: flex;
   flex-direction: row;
+}
+
+.button {
+  @extend .buttonBase;
+  color: $text2-color;
 }

@@ -1,12 +1,12 @@
 import { memo } from 'react'
-import styles from './MediaSelector.module.scss'
+import styles from './FileSelectionUncontrolled.module.scss'
 import { MediaSourceObject } from 'components/editor/blocks/types'
 
-export const SourceTabBar = ({ sources, selectSource, selected, setPictures }: IProps) => {
+export const SourceTabBar = ({ sources, onSelectSource, selected, onSetPictures }: IProps) => {
   const Source = ({ source }: any) => {
     const _onClick = () => {
-      selectSource(source)
-      setPictures([])
+      onSelectSource(source)
+      onSetPictures([])
     }
     return (
       <div className={selected == source.name ? styles.selectedSource : styles.source} onClick={_onClick}>
@@ -25,8 +25,8 @@ export const SourceTabBar = ({ sources, selectSource, selected, setPictures }: I
 }
 
 interface IProps {
-  selectSource: (item: MediaSourceObject) => void
-  setPictures: (item: any) => void
+  onSelectSource: (item: MediaSourceObject) => void
+  onSetPictures: (item: any) => void
   selected: string
   sources: MediaSourceObject[]
 }

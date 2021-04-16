@@ -1,12 +1,12 @@
 import { memo, useState } from 'react'
-import styles from './MediaSelector.module.scss'
+import styles from './FileSelectionUncontrolled.module.scss'
 import TextInput from 'components/common/text-input/TextInput'
 import { BlockData, BlockType, MediaSourceType, MediaSourceObject } from '../../blocks/types'
 import { createApi } from 'unsplash-js'
 import ImageGrid from './cloudinary/ImageGrid'
 import { fetchPhotos } from './cloudinary/index'
 
-export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps) => {
+export const AssetLibrary = ({ source, onUpdate, onSetPictures, pictures }: IProps) => {
   const [query, setQuery] = useState('')
   const handleClick = (url: string) => {
     onUpdate({ value: url, type: source.type })
@@ -23,10 +23,10 @@ export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps
     setQuery(e.target.value)
     if (source.type === MediaSourceType.CLOUDINARY) {
       const result = await fetchPhotos(e.target.value)
-      setPictures(result)
+      onSetPictures(result)
     } else {
       const result = await unsplash.search.getPhotos({ query: e.target.value, orderBy: 'relevant', page: 1, perPage: 10 })
-      setPictures(result.response?.results)
+      onSetPictures(result.response?.results)
     }
   }
 
@@ -63,7 +63,7 @@ interface IProps {
   onUpdate: (value: BlockData, type?: BlockType) => void
   source: MediaSourceObject
   pictures: any[]
-  setPictures: any
+  onSetPictures: any
 }
 
 export default memo(AssetLibrary)

@@ -37,7 +37,6 @@ const ControlledText = forwardRef<HTMLDivElement, IProps>(
 
     return (
       <>
-        {/* <div className={styles.debug}>{debugPosition}</div> */}
         <Text
           {...otherProps}
           value={initialValue}

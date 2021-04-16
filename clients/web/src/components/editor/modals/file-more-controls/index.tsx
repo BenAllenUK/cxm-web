@@ -1,21 +1,22 @@
 import createPositionModal from 'components/common/modals/position'
 import { useCallback } from 'react'
-import MediaControlUncontrolled from './MediaControlUncontrolled'
+import FileMoreControlUncontrolled from './FileMoreControlUncontrolled'
 
 const { Provider, useModal } = createPositionModal()
 
-export const useMediaControlModal = useModal
+export const useFileControlModal = useModal
 
 const Component = ({ onClick, ...props }: IProps) => {
-  const { enabled, position, hideControls } = useMediaControlModal()
+  const { enabled, position, hideControls } = useFileControlModal()
 
   const _onClick = useCallback(() => {
     onClick()
   }, [onClick])
+
   return (
     <>
       {enabled && position && (
-        <MediaControlUncontrolled
+        <FileMoreControlUncontrolled
           style={{ left: position.x, top: position.y }}
           onDismiss={hideControls}
           onClick={_onClick}
@@ -26,9 +27,9 @@ const Component = ({ onClick, ...props }: IProps) => {
   )
 }
 
-const MediaControl = { Provider, Component }
+const FileMoreControls = { Provider, Component }
 
-export default MediaControl
+export default FileMoreControls
 
 interface IProps {
   onClick: () => void

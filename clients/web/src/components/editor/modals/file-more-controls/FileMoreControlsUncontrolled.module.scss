@@ -1,0 +1,7 @@
+@import 'styles/variables';
+@import 'components/common/option-controls/OptionControls.module.scss';
+
+.container {
+  @extend .defaultContainer;
+  max-height: 80vh;
+}

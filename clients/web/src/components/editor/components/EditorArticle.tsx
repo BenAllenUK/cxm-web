@@ -215,6 +215,7 @@ const EditorArticle = ({
     if (index === focusIndex) {
       setFocusIndex(-1)
     }
+    hideBlockControls()
   }
 
   const _onBodyClick = (e: MouseEvent) => {

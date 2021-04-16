@@ -1,5 +1,5 @@
 import OptionControls, { OptionType, IOptionSections } from 'components/common/option-controls'
-import styles from './MediaControls.module.scss'
+import styles from './FileMoreControlsUncontrolled.module.scss'
 import { CSSProperties } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

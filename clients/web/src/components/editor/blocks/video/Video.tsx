@@ -1,30 +1,27 @@
 import { memo, useState, useCallback } from 'react'
 import styles from './Video.module.scss'
-import MediaSelector from 'components/editor/modals/media/MediaSelector'
+import FileSelection, { useFileSelectionModal } from 'components/editor/modals/file-selection'
 import VideoIcon from 'images/icons/video.svg'
 import Uploading from '../common/Uploading'
-import TopBar from 'components/editor/modals/media-controls/TopBar'
+import TopBar from 'components/editor/modals/file-controls/FileControlsUncontrolled'
 import TextInput from 'components/common/text-input/TextInput'
 import { BlockDataMedia, BlockData, BlockType, MediaSourceType, MediaSourceObject } from '../types'
 import ReactJWPlayer from 'react-jw-player'
 
-const Video = ({ content, onMediaUpdate, onUpdate, id, onDeleteBlock }: IProps) => {
-  const [showSelector, setShowSelector] = useState(false)
+const Video = ({ content, onUpdate, id, onDeleteBlock }: IProps) => {
   const [caption, setCaption] = useState(content.caption || '')
-  const [writeNewCaption, setWriteNewCaption] = useState(false)
+  const [shouldWriteNewCaption, onWriteNewCaption] = useState(false)
 
-  const _setShowSelector = useCallback(() => {
-    setShowSelector(!showSelector)
-  }, [setShowSelector, showSelector])
+  const { ref, showControls } = useFileSelectionModal()
 
   const sources: MediaSourceObject[] = [
     { name: 'Upload', type: MediaSourceType.UPLOAD },
     { name: 'Embed Link', type: MediaSourceType.EMBED_LINK },
   ]
 
-  const _writeNewCaption = useCallback(() => {
-    setWriteNewCaption(true)
-  }, [setWriteNewCaption])
+  const _onWriteNewCaption = useCallback(() => {
+    onWriteNewCaption(true)
+  }, [onWriteNewCaption])
 
   const onCaptionChange = useCallback(
     (e: any) => {
@@ -37,19 +34,11 @@ const Video = ({ content, onMediaUpdate, onUpdate, id, onDeleteBlock }: IProps) 
   if (!content.value) {
     return (
       <div>
-        <div className={styles.container} onClick={_setShowSelector}>
+        <div className={styles.container} onClick={() => showControls({ id, sources })}>
           <VideoIcon className={styles.icon} width={25} height={25} />
           <div className={styles.text}>Upload or embed a file</div>
         </div>
-        {showSelector && (
-          <MediaSelector
-            isVideo={true}
-            onMediaUpdate={onMediaUpdate}
-            onUpdate={onUpdate}
-            fileFilter={'video/*'}
-            sources={sources}
-          />
-        )}
+        <div ref={ref}></div>
       </div>
     )
   }
@@ -61,19 +50,16 @@ const Video = ({ content, onMediaUpdate, onUpdate, id, onDeleteBlock }: IProps) 
   const fileUrl =
     content.sourceType === MediaSourceType.EMBED_LINK ? content.value : `${process.env.OMNEA_UPLOAD_URL}/${content.value}`
 
-  if (writeNewCaption) {
-    console.log('should let write caption')
-  }
   return (
     <div className={styles.outerContainer}>
       <div className={styles.videoContainer}>
         <div className={styles.mediaControls}>
-          <TopBar onDeleteBlock={onDeleteBlock} setWriteNewCaption={_writeNewCaption} setCreateComment={() => null} />
+          <TopBar onDeleteBlock={onDeleteBlock} onWriteNewCaption={_onWriteNewCaption} />
         </div>
         <ReactJWPlayer playerId={`editor-${id}`} playerScript="https://cdn.jwplayer.com/libraries/M9UOpPcN.js" file={fileUrl} />
       </div>
       <div>
-        {(writeNewCaption || caption) && (
+        {(shouldWriteNewCaption || caption) && (
           <TextInput
             focusedPlaceholder={'Write a caption...'}
             blurredPlaceholder={'Write a caption...'}
@@ -94,6 +80,5 @@ interface IProps {
   id: number
   content: BlockDataMedia
   onUpdate: (value: BlockData, type?: BlockType) => void
-  onMediaUpdate: (value: BlockDataMedia, pendingUploadFile: File, type: BlockType, createNew?: boolean) => void
   onDeleteBlock: () => void
 }

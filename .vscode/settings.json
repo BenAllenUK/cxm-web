@@ -11,13 +11,15 @@
   "search.exclude": {
     "src/generated/**.*": true,
     "public/docs/api.json": true,
-    "services/api/.webpack/*": true,
     "clients/web/serverless.yml": true,
-    "clients/web/.next/*": true,
-    "clients/web/.serverless/*": true,
-    "clients/web/.serverless_nextjs/*": true,
     "clients/web/pages": true,
-    "libs/nextjs/dist": true,
-    "libs/nextjs/example/.next": true
+    "**/.webpack/*": true,
+    "**/.next": true,
+    "**/.serverless": true,
+    "**/.serverless_nextjs": true,
+    "**/dist": true,
+    "**/node_modules": true,
+    "**/yarn.lock": true,
+    "**/package-lock.json": true
   }
 }

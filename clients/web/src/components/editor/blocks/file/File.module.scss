@@ -1,5 +1,6 @@
 @import 'styles/variables';
 @import 'components/common/text-input/TextInput.module.scss';
+@import 'components/common/button/Button.module.scss';
 
 .container {
   background-color: $primary;
@@ -28,7 +29,7 @@
 }
 
 .icon {
-  margin-right: 12px;
+  margin-right: 6px;
   fill: $text2-color;
 }
 
@@ -37,23 +38,24 @@
   flex-direction: row;
   align-items: center;
   width: 100%;
-  padding: 6px 6px 6px 2px;
+  padding: 8px 8px 8px 12px;
+  color: $text2-color;
 
   cursor: pointer;
 
   &:hover {
     background-color: $primary;
   }
-  &:hover > .more {
+  .more {
     display: block;
   }
 }
 
 .more {
+  @extend .buttonBase;
   display: none;
-  position: absolute;
-  right: 10px;
-  z-index: 10;
+  height: 30px;
+
   &:hover {
     background-color: $primary-highlight;
   }

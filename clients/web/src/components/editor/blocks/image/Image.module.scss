@@ -56,9 +56,10 @@
 
 .mediaControls {
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: 10px;
+  right: 10px;
   display: none;
+
   &:hover {
     display: flex;
   }

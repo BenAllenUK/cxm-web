@@ -98,5 +98,7 @@
   list-style: none;
   display: flex;
   flex-wrap: wrap;
+  margin-top: 1rem;
   margin-bottom: 1rem;
+  cursor: pointer;
 }

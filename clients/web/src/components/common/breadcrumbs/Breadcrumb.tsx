@@ -21,8 +21,6 @@ function insertSeparators(items: any[], className: string | undefined, separator
 const Breadcrumb = ({ children, itemsAfterCollapse = 1, itemsBeforeCollapse = 1, maxItems = 2, separator }: IProps) => {
   const [expanded, setExpanded] = useState(false)
 
-  const foo = 'asd'
-
   const renderItemsBeforeAndAfter = (allItems: any) => {
     const handleClickExpand = (event: any) => {
       setExpanded(true)

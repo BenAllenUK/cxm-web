@@ -3,12 +3,14 @@ import { createContext, ReactNode, RefObject, useCallback, useContext, useState 
 interface State {
   enabled: boolean
   position: { x: number; y: number } | null
+  payload: object
 }
 
 interface ContextActions extends State {
-  showControls: (position: { x: number; y: number }) => void
+  showControls: (position: { x: number; y: number }, payload?: object) => void
   hideControls: () => void
   rootRef: RefObject<HTMLDivElement> | undefined
+  payload: object
 }
 
 const initialState = {
@@ -17,6 +19,7 @@ const initialState = {
   showControls: () => {},
   hideControls: () => {},
   rootRef: undefined,
+  payload: {},
 }
 
 const createPositionModal = () => {
@@ -27,13 +30,14 @@ const createPositionModal = () => {
     Provider: ({ children, rootRef }: { children: ReactNode; rootRef?: RefObject<HTMLDivElement> }) => {
       const [state, setState] = useState<State>(initialState)
 
-      const showControls = (position: { x: number; y: number }) => {
+      const showControls = (position: { x: number; y: number }, payload: object = {}) => {
         const x = rootRef?.current ? position.x - rootRef.current.getBoundingClientRect().left : position.x
         const y = rootRef?.current ? position.y - rootRef.current.getBoundingClientRect().top : position.y
 
         setState({
           enabled: true,
           position: { x, y },
+          payload,
         })
       }
 
