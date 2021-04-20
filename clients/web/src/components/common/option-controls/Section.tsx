@@ -1,4 +1,4 @@
-import { memo, RefObject } from 'react'
+import { memo } from 'react'
 import Button from './Button'
 import Header from './Header'
 import { IOptionElements, OptionType } from './index'

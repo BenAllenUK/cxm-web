@@ -1,15 +1,12 @@
-import { forwardRef, memo, RefObject, SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react'
+import { forwardRef, memo, SyntheticEvent, useCallback, useRef } from 'react'
 
 import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
-import { BlockData, BlockDataText, BlockType, Block } from '../types'
+import { BlockType } from '../types'
 
 import { BlockTypeProperties } from '..'
 import styles from './Text.module.scss'
 import useKeyDown from 'utils/hooks/useKeyDown'
 import mergeRefs from 'utils/refs/mergeRefs'
-import useKeyUp from 'utils/hooks/useKeyUp'
-import isFirstLine from 'utils/text/isFirstLine'
-import isLastLine from 'utils/text/isLastLine'
 
 const Text = forwardRef<HTMLDivElement, IProps>(
   (
@@ -127,7 +124,7 @@ const getClassName = (type: BlockType) => {
   }
 }
 
-const getFocusedPlaceholder = (type: BlockType, filteringMode: boolean = false) => {
+const getFocusedPlaceholder = (type: BlockType, filteringMode = false) => {
   switch (type) {
     case BlockType.H1:
       return `Heading 1`

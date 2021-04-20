@@ -50,9 +50,9 @@ export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPicture
         return
       }
       const fileUploaded = event.target.files[0]
-      let fileReader = new FileReader()
+      const fileReader = new FileReader()
       fileReader.onload = async function (e) {
-        var file = fileReader.result
+        const file = fileReader.result
         if (onMediaUpdate) {
           onMediaUpdate(
             {

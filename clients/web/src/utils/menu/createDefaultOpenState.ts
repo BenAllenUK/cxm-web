@@ -1,7 +1,7 @@
 import { Article } from 'operations/articles/types'
 
 function createDefaultOpenState(path: Article[]) {
-  var state = {}
+  let state = {}
   path.forEach((item, i) => {
     state = { ...state, [item.id]: true }
   })

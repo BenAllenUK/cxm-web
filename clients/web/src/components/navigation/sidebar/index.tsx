@@ -1,7 +1,6 @@
-import { useState, useContext, MouseEvent, memo, useRef } from 'react'
+import { useState, MouseEvent, useRef } from 'react'
 import MenuIcon from 'images/icons/menu.svg'
 import SearchIcon from 'images/icons/search.svg'
-import { Organisation } from 'operations/organisations/types'
 
 import Title from './Title'
 
@@ -18,8 +17,6 @@ import parseMenu from 'utils/menu/parseMenu'
 
 import AddButton from './AddButton'
 import { useSearchModal } from './modals/search'
-import { DEFAULT_ARTICLE } from 'components/editor/blocks'
-import { BlockType } from 'components/editor/blocks/types'
 import createArticleEmpty from 'utils/article/createEmptyArticle'
 import { useSidebarPageControlsContext } from './modals/page-controls/PageControlsTargetContext'
 import { Article } from 'operations/articles/types'

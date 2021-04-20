@@ -10,7 +10,6 @@ import {
   BlockDataMediaUpload,
   MediaSourceType,
 } from '../blocks/types'
-import { BlockTypeProperties } from 'components/editor/blocks'
 import { useAsset } from 'components/providers/assets'
 import useWindowKeyUp from 'utils/hooks/useWindowKeyUp'
 import { calculateBlockControlsPosition, useBlockControlModal } from '../modals/block-controls'

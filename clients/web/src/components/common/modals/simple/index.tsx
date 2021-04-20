@@ -1,4 +1,4 @@
-import { Context, createContext, ReactNode, useCallback, useContext, useState } from 'react'
+import { createContext, ReactNode, useCallback, useContext, useState } from 'react'
 
 interface State {
   enabled: boolean

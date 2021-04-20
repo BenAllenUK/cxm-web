@@ -1,6 +1,6 @@
 import createPositionModal from 'components/common/modals/position'
 import { insertSpanWithStyle } from 'utils/html/html'
-import { createContext, useContext, useLayoutEffect, useRef, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import TextStyleUncontrolled, { backgroundColorOptions, StyleSections, textColorOptions } from './TextStyleUncontrolled'
 
 const { Provider: ModalProvider, useModal } = createPositionModal()

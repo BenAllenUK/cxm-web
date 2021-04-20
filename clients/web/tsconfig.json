@@ -13,11 +13,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "noUnusedLocals": false,
     "baseUrl": "src",
-    "noUnusedParameters": false,
-    "noImplicitAny": true,
-    "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true
   },
   "include": ["clients/web/next-env.d.ts", "**/*.ts", "**/*.tsx"],

@@ -1,5 +1,5 @@
 import * as Storage from 'config/storage'
-import { createContext, useState, useContext, useEffect, cloneElement } from 'react'
+import { createContext, useState, useContext } from 'react'
 
 interface Context {
   organisationSlug: string | null

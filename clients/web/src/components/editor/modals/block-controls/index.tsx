@@ -1,7 +1,6 @@
 import createPositionModal from 'components/common/modals/position'
 import { BlockTypeProperties, BLOCK_CONTAINER_VERTICAL_PADDING } from 'components/editor/blocks'
 import { Block, BlockType } from 'components/editor/blocks/types'
-import { MutableRefObject } from 'react'
 import BlockControlUncontrolled from './BlockControlUncontrolled'
 
 const { Provider, useModal } = createPositionModal()

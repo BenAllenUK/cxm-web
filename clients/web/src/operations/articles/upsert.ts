@@ -1,4 +1,4 @@
-import { ArticleFragment, useUpsertArticlesMutation } from 'generated/graphql'
+import { useUpsertArticlesMutation } from 'generated/graphql'
 
 import ARTICLE_FRAGMENT from 'queries/articles/ARTICLE_FRAGMENT.gql'
 import { ArticleBlocksFragment } from 'types/types'

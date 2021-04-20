@@ -30,7 +30,7 @@ const ButtonBlock = ({ content, onUpdate, onDeleteBlock }: IProps) => {
     setShowSelector(!showSelector)
   }
 
-  let sources: MediaSourceObject[] = [{ name: 'Embed Link', type: MediaSourceType.EMBED_LINK }]
+  const sources: MediaSourceObject[] = [{ name: 'Embed Link', type: MediaSourceType.EMBED_LINK }]
 
   return (
     <div className={styles.container}>

@@ -46,7 +46,7 @@ function Editor({
   const onBlocksUpsert = (newBlocks: Block[]) => {
     const newBlockIds = newBlocks.map((item) => item.id)
     setBlocks((prevBlocks) => {
-      var prevBlocksFiltered = prevBlocks
+      let prevBlocksFiltered = prevBlocks
         .filter((item) => newBlockIds.indexOf(item.id) === -1)
         .sort((a: Block, b: Block) => a.position - b.position)
 
@@ -66,7 +66,7 @@ function Editor({
 
   const onBlocksDelete = (ids: number[]) => {
     setBlocks((prevBlocks) => {
-      var newBlocks = prevBlocks
+      let newBlocks = prevBlocks
         .filter((item) => ids.indexOf(item.id) === -1)
         .sort((a: Block, b: Block) => a.position - b.position)
 

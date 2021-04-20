@@ -81,3 +81,9 @@ Deployment is handled by build servers. You should use the build servers to depl
 - `yarn deploy:root`
 
 
+
+
+## Linting
+
+https://eslint.org/docs/rules/
+

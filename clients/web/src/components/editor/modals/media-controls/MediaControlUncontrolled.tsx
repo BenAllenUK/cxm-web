@@ -3,8 +3,8 @@ import styles from './MediaControls.module.scss'
 import { CSSProperties } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faStar, faEdit } from '@fortawesome/free-regular-svg-icons'
-import { faLink, faLock, faLevelUpAlt, faDownload, faUndo } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
+import { faLink, faLevelUpAlt, faDownload } from '@fortawesome/free-solid-svg-icons'
 
 const sections: IOptionSections[] = [
   {
