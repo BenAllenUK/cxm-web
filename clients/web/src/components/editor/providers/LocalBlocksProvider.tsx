@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce'
-import { createContext, useState, useContext, useEffect, cloneElement, useCallback } from 'react'
+import { createContext, useState, useContext, useCallback } from 'react'
 import useWindowKeyDown from 'utils/hooks/useWindowKeyDown'
 import { Block } from '../blocks/types'
 

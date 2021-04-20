@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState, memo, useCallback, SyntheticEvent, forwardRef } from 'react'
+import { useEffect, useRef, useState, useCallback, SyntheticEvent, forwardRef } from 'react'
 import Text from 'components/editor/blocks/text/Text'
 import { BlockType } from 'components/editor/blocks/types'
-import styles from './Text.module.scss'
 import mergeRefs from 'utils/refs/mergeRefs'
 
 const ControlledText = forwardRef<HTMLDivElement, IProps>(

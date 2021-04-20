@@ -8,8 +8,8 @@ type Node = {
 
 // https://typeofnan.dev/an-easy-way-to-build-a-tree-with-object-references/
 function tree<T extends Node>(list: T[]) {
-  let root: Node[] = []
-  var tree = [...list]
+  const root: Node[] = []
+  const tree = [...list]
 
   const idMapping: KeyedItem = tree.reduce((prevValue, el, i) => {
     // @ts-ignore

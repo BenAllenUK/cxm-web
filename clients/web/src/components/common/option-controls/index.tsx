@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef, useState, ReactNode, HTMLProps, forwardRef } from 'react'
+import { useCallback, useRef, useState, ReactNode, HTMLProps, forwardRef } from 'react'
 import useWindowKeyDown from 'utils/hooks/useWindowKeyDown'
 import styles from './OptionControls.module.scss'
 import findIndex from 'lodash/findIndex'

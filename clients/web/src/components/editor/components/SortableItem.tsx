@@ -1,4 +1,3 @@
-import { forwardRef } from 'react'
 import { SortableElement } from 'react-sortable-hoc'
 import { BlockTypeProperties } from '../blocks'
 import { Block } from '../blocks/types'

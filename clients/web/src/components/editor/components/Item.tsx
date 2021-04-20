@@ -10,9 +10,13 @@ import {
   BlockDataText,
   BlockType,
   BlockDataMediaUpload,
+  BlockDataButton,
+  BlockDataTextInput,
 } from 'components/editor/blocks/types'
 import ControlledList from '../blocks/list/ControlledList'
 import ControlledText from '../blocks/text/ControlledText'
+import ButtonBlock from '../blocks/button/ButtonBlock'
+import TextInputBlock from '../blocks/textInput/TextInputBlock'
 
 const Item = ({
   blockControlOpen,
@@ -42,7 +46,7 @@ const Item = ({
   }
 
   const _onListUpdate = (value: { value: string; selected?: boolean }[]) => {
-    onUpdate(index, value)
+    onUpdate(index, { value: value })
   }
 
   const _onUpdate = (value: BlockData, type?: BlockType) => {
@@ -114,15 +118,23 @@ const Item = ({
     }
     case BlockType.IMAGE: {
       const content: BlockDataMedia = payload as BlockDataMedia
-      return <Image deleteBlock={_onDelete} content={content} onUpdate={_onUpdate} onMediaUpdate={_onMediaUpdate} id={id} />
+      return <Image onDeleteBlock={_onDelete} content={content} onUpdate={_onUpdate} onMediaUpdate={_onMediaUpdate} id={id} />
     }
     case BlockType.FILE: {
       const content: BlockDataMedia = payload as BlockDataMedia
-      return <File deleteBlock={_onDelete} content={content} onUpdate={_onUpdate} onMediaUpdate={_onMediaUpdate} id={id} />
+      return <File onDeleteBlock={_onDelete} content={content} onUpdate={_onUpdate} onMediaUpdate={_onMediaUpdate} id={id} />
     }
     case BlockType.VIDEO: {
       const content: BlockDataMedia = payload as BlockDataMedia
-      return <Video deleteBlock={_onDelete} content={content} onUpdate={_onUpdate} onMediaUpdate={_onMediaUpdate} id={id} />
+      return <Video onDeleteBlock={_onDelete} content={content} onUpdate={_onUpdate} onMediaUpdate={_onMediaUpdate} id={id} />
+    }
+    case BlockType.BUTTON: {
+      const content: BlockDataButton = payload as BlockDataButton
+      return <ButtonBlock onDeleteBlock={_onDelete} content={content} onUpdate={_onUpdate} />
+    }
+    case BlockType.TEXT_INPUT: {
+      const content: BlockDataTextInput = payload as BlockDataTextInput
+      return <TextInputBlock onDeleteBlock={_onDelete} content={content} onUpdate={_onUpdate} />
     }
     case BlockType.DIVIDER:
       return <Divider />

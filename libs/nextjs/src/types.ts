@@ -15,11 +15,17 @@ export interface BlockRaw {
   payload: string
 }
 
-export interface Article {
-  title: string
-  path: string
+export type Article = {
   id: number
-  blocks: Block[]
+  parentId?: number | null
+  title: string
+  updatedAt: string
+  createdAt: string
+  archived: boolean
+  archivedAt?: string
+  position: number
+  blocks?: Block[]
+  path: string
 }
 
 export type AppPropsWithOmnea = NextJsAppProps & ComponentProps
@@ -55,6 +61,7 @@ export interface Client {
 
 export interface ComponentProps {
   article?: Article | null
+  articles?: Article[]
 }
 
 export interface Config {
@@ -80,6 +87,9 @@ export enum BlockType {
   CODE,
   FILE,
   VIDEO,
+  BUTTON,
+  TEXT_INPUT,
+
   // TWEET = 'TWEET',
   // GOOGLE_MAPS = 'GOOGLE-MAPS',
   H4,
@@ -88,10 +98,14 @@ export enum BlockType {
 
 export type BlockData =
   | BlockDataText
+  | BlockDataButton
+  | BlockDataTextInput
   | BlockDataMedia
   | BlockDataH1
   | BlockDataH2
   | BlockDataH3
+  | BlockDataH4
+  | BlockDataH5
   | BlockDataTableInline
   | BlockDataCheckBullet
   | BlockDataListBullet
@@ -135,6 +149,15 @@ export type BlockDataText = {
   value: string
 }
 
+export type BlockDataTextInput = {
+  value: string
+}
+
+export type BlockDataButton = {
+  text: string
+  value: string
+}
+
 export type MediaSourceObject = {
   name: string
   accessKey?: string
@@ -148,6 +171,10 @@ export type BlockDataH2 = BlockDataText
 
 export type BlockDataH3 = BlockDataText
 
+export type BlockDataH4 = BlockDataText
+
+export type BlockDataH5 = BlockDataText
+
 export type BlockDataTableInline = {
   title: string
   colNames: string[]
@@ -155,11 +182,11 @@ export type BlockDataTableInline = {
 }
 
 export type BlockDataCheckBullet = {
-  items: { value: string; selected: boolean }[]
+  value: { value: string; selected: boolean }[]
 }
 
 export type BlockDataListBullet = {
-  items: { value: string }[]
+  value: { value: string }[]
 }
 
 export type BlockDataNumberBullet = BlockDataListBullet

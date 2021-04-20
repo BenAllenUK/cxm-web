@@ -1,7 +1,7 @@
-import OptionControls, { IOptionElements, IOptionSections, OptionType } from 'components/common/option-controls'
-import TextInput from 'components/common/text-input/TextInput'
+import OptionControls, { IOptionSections } from 'components/common/option-controls'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import useTranslation from 'utils/translations/useTranslation'
-import { CSSProperties, forwardRef, RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { forwardRef, RefObject, useEffect, useLayoutEffect, useRef } from 'react'
 import { updateBoundedPosition } from 'utils/modals/updateBoundedPosition'
 import mergeRefs from 'utils/refs/mergeRefs'
 import styles from './LinkUncontrolled.module.scss'
@@ -26,7 +26,8 @@ const Header = ({ filterText, onValueChange }: IHeaderProps) => {
         focusedPlaceholder={t('link.placeholder')}
         blurredPlaceholder={t('link.placeholder')}
         ref={inputRef}
-        onChange={(e: any) => onValueChange(e.target.value)}
+        onChange={(e: TextInputEvent) => onValueChange(e.target.value)}
+        useInnerHtml
       />
     </div>
   )

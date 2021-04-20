@@ -1,20 +1,20 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faArrowRight, faEllipsisH } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import MoreIcon from 'images/icons/more.svg'
 import styles from './Header.module.scss'
 import { usePageControlModal } from '../modals/page-controls'
-import { useRef } from 'react'
-import { Article } from 'operations/articles/types'
+import { useRef, MouseEvent } from 'react'
 import Breadcrumbs from 'components/common/breadcrumbs'
+import { BreadcrumbItem } from 'components/common/breadcrumbs/types'
 import Button from 'components/common/button/Button'
 
-export const Header = ({ loading, path, onViewArticle }: IProps) => {
+export const Header = ({ loading, breadcrumbs, onViewArticle }: IProps) => {
   const { showControls } = usePageControlModal()
 
   const ref = useRef<HTMLDivElement>(null)
 
-  const _onPageControlsClick = (e: any) => {
+  const _onPageControlsClick = (e: MouseEvent) => {
     showControls({
       x: ref.current?.offsetLeft || 0,
       y: (ref.current?.offsetTop || 0) + (ref.current?.offsetHeight || 0) + 10,
@@ -45,7 +45,7 @@ export const Header = ({ loading, path, onViewArticle }: IProps) => {
               </Button>
             </div>
           </div>
-          {path && <Breadcrumbs path={path} onViewArticle={onViewArticle} />}
+          {breadcrumbs && <Breadcrumbs breadcrumbs={breadcrumbs} onViewArticle={onViewArticle} maxItems={2} />}
         </div>
         <div className={styles.headerRight}>
           <Button onClick={_onPublishClick} style={{ alignSelf: 'center' }} className={styles.button}>
@@ -63,7 +63,7 @@ export const Header = ({ loading, path, onViewArticle }: IProps) => {
 
 interface IProps {
   loading?: boolean
-  path: Article[]
+  breadcrumbs: BreadcrumbItem[]
   onViewArticle: (path: string) => void
 }
 

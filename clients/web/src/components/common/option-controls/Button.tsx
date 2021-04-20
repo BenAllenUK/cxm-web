@@ -1,5 +1,5 @@
 import Colors from 'config/colors'
-import { ReactNode, RefObject, useCallback } from 'react'
+import { ReactNode, useCallback } from 'react'
 import styles from './OptionControls.module.scss'
 
 export const Button = ({

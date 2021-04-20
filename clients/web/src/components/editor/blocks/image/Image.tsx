@@ -1,23 +1,24 @@
 import { memo, useState, useCallback } from 'react'
-import { BlockDataMedia, BlockData, BlockType, MediaSourceType } from '../types'
+import { BlockDataMedia, BlockData, BlockType, MediaSourceType, MediaSourceObject } from '../types'
 import { useAsset } from 'components/providers/assets'
 import styles from './Image.module.scss'
 import ImageIcon from 'images/icons/image.svg'
 import MediaSelector from 'components/editor/modals/media/MediaSelector'
 import TopBar from 'components/editor/modals/media-controls/TopBar'
 import AddComment from 'components/editor/modals/media/AddComment'
-import TextInput from 'components/common/text-input/TextInput'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import Progress from '../progress/Progress'
 import ImageComponent from './ImageComponent'
 
-export const Image = ({ content, onUpdate, onMediaUpdate, id, deleteBlock }: IProps) => {
+export const Image = ({ content, onUpdate, onMediaUpdate, id, onDeleteBlock }: IProps) => {
   const [showSelector, setShowSelector] = useState(false)
   const [createComment, setCreateComment] = useState(false)
   const [caption, setCaption] = useState(content.caption || '')
   const [writeNewCaption, setWriteNewCaption] = useState(false)
   const { localImages } = useAsset()
-
-  const libraries = [
+  const sources: MediaSourceObject[] = [
+    { name: 'Upload', type: MediaSourceType.UPLOAD },
+    { name: 'Embed Link', type: MediaSourceType.EMBED_LINK },
     {
       name: 'Unsplash',
       accessKey: 'QI73_yAqSaRCT6cz2cpM7HQ-ZXoQNV5eYmrbY7E4vD0',
@@ -45,7 +46,7 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, deleteBlock }: IPr
   }, [setCreateComment])
 
   const onCaptionChange = useCallback(
-    (e: any) => {
+    (e: TextInputEvent) => {
       setCaption(e.target.value)
       onUpdate({ ...content, caption: e.target.value }, BlockType.IMAGE)
     },
@@ -60,7 +61,7 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, deleteBlock }: IPr
           <div className={styles.text}>Add an image</div>
         </div>
         {showSelector && (
-          <MediaSelector onUpdate={onUpdate} onMediaUpdate={onMediaUpdate} id={id} libraries={libraries} fileFilter={'image/*'} />
+          <MediaSelector onUpdate={onUpdate} onMediaUpdate={onMediaUpdate} sources={sources} fileFilter={'image/*'} />
         )}
       </div>
     )
@@ -87,19 +88,21 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, deleteBlock }: IPr
           id={id}
         />
         <div className={styles.mediaControls}>
-          <TopBar deleteBlock={deleteBlock} setWriteNewCaption={_writeNewCaption} setCreateComment={() => null} />
+          <TopBar onDeleteBlock={onDeleteBlock} onWriteNewCaption={_writeNewCaption} />
         </div>
         <Progress id={id} />
       </div>
       <div>
         {(writeNewCaption || caption) && (
-          <TextInput
-            focusedPlaceholder={'Write a caption...'}
-            blurredPlaceholder={'Write a caption...'}
-            html={caption}
-            onChange={onCaptionChange}
-            className={styles.linkInput}
-          />
+          <div>
+            <TextInput
+              focusedPlaceholder={'Write a caption...'}
+              blurredPlaceholder={'Write a caption...'}
+              html={caption}
+              onChange={onCaptionChange}
+              className={styles.linkInput}
+            />
+          </div>
         )}
         {createComment && <AddComment onClick={() => null} />}
       </div>
@@ -111,7 +114,7 @@ interface IProps {
   content: BlockDataMedia
   onUpdate: (value: BlockData, type?: BlockType) => void
   onMediaUpdate: (value: BlockDataMedia, pendingUploadFile: File, blockType: BlockType, createNew?: boolean) => void
-  deleteBlock: () => void
+  onDeleteBlock: () => void
   id: number
 }
 

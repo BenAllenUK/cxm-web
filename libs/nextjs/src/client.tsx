@@ -55,6 +55,7 @@ export default function init(config?: Config): Client {
       return null
     }
 
+    // @ts-ignore
     let articles = response || []
 
     _cachedArticles = articles
@@ -68,7 +69,9 @@ export default function init(config?: Config): Client {
       projectSlug:
         config?.projectSlug || (process.env.OMNEA_PROJECT_SLUG as string) || '',
       secretKey:
-        config?.secretKey || (process.env.OMNEA_SECRET_KEY as string) || ''
+        config?.secretKey ||
+        (process.env.OMNEA_SECRET_KEY as string) ||
+        'abc123'
     }
 
     if (!newConfig.rootUrl) {
@@ -97,7 +100,7 @@ export default function init(config?: Config): Client {
         return FallbackPage ? <FallbackPage {...props} /> : <Loading />
       }
 
-      return <Content article={article} />
+      return <Content article={article} articles={props.articles || []} />
     }
 
     return hoistNonReactStatics(AppWithStaticPages, FallbackPage)
@@ -157,7 +160,8 @@ export default function init(config?: Config): Client {
       ...original,
       props: {
         ...original['props'],
-        article
+        article,
+        articles
       }
     }
   }

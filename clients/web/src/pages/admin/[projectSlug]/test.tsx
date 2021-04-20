@@ -1,5 +1,4 @@
 import ControlledText from 'components/editor/blocks/text/ControlledText'
-import Text from 'components/editor/blocks/text/Text'
 import { useRef, useState } from 'react'
 import useKeyDown from 'utils/hooks/useKeyDown'
 import useKeyUp from 'utils/hooks/useKeyUp'

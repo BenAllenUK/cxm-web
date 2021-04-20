@@ -5,6 +5,7 @@ import './BlockList.scss'
 import BlockItem from './BlockItem'
 
 const BlockList = ({ blocks }: IProps) => {
+  console.log('blocks', blocks)
   return (
     <div className={'omnea-content-block-list'}>
       {blocks.map((item, i) => (

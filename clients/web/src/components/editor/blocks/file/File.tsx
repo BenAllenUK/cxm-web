@@ -1,6 +1,6 @@
-import { memo, useState, useCallback, useRef } from 'react'
+import { memo, useState, useCallback, useRef, MouseEvent } from 'react'
 import MediaSelector from 'components/editor/modals/media/MediaSelector'
-import { BlockDataMedia, BlockData, BlockType, MediaSourceType } from '../types'
+import { BlockDataMedia, BlockData, BlockType, MediaSourceType, MediaSourceObject } from '../types'
 import AttachmentIcon from 'images/icons/paperclip.svg'
 import MoreIcon from 'images/icons/more.svg'
 import Uploading from '../common/Uploading'
@@ -14,7 +14,8 @@ const File = ({ content, onUpdate, id, onMediaUpdate }: IProps) => {
 
   const ref = useRef<HTMLDivElement>(null)
 
-  const _onPageControlsClick = (e: any) => {
+  const sources: MediaSourceObject[] = [{ name: 'Upload', type: MediaSourceType.UPLOAD }]
+  const _onPageControlsClick = (e: MouseEvent) => {
     if (ref.current) {
       const { top: blockTop, left: blockLeft } = ref.current.getBoundingClientRect()
       showControls({
@@ -36,7 +37,7 @@ const File = ({ content, onUpdate, id, onMediaUpdate }: IProps) => {
           <AttachmentIcon className={styles.icon} width={25} height={25} />
           <div className={styles.text}>Upload or embed a file</div>
         </div>
-        {showSelector && <MediaSelector onMediaUpdate={onMediaUpdate} onUpdate={onUpdate} id={id} />}
+        {showSelector && <MediaSelector onMediaUpdate={onMediaUpdate} onUpdate={onUpdate} sources={sources} />}
       </div>
     )
   }
@@ -64,5 +65,5 @@ interface IProps {
   content: BlockDataMedia
   onUpdate: (value: BlockData, type?: BlockType) => void
   onMediaUpdate: (value: BlockDataMedia, pendingUploadFile: File, type: BlockType, createNew?: boolean) => void
-  deleteBlock: () => void
+  onDeleteBlock: () => void
 }

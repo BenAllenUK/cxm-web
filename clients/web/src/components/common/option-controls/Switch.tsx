@@ -1,5 +1,4 @@
 import Colors from 'config/colors'
-import Image from 'next/image'
 import { ReactNode, useCallback } from 'react'
 import styles from './OptionControls.module.scss'
 import MUISwitch from '@material-ui/core/Switch'

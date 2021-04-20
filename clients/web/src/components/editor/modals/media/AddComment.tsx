@@ -1,12 +1,12 @@
 import { memo, useState } from 'react'
 import styles from './AddComment.module.scss'
-import TextInput from 'components/common/text-input/TextInput'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import Button from 'components/common/button/Button'
 
 export const AddComment = ({ onClick }: IProps) => {
   const [comment, setComment] = useState('')
 
-  const onChange = (e: any) => {
+  const onChange = (e: TextInputEvent) => {
     setComment(e.target.value)
   }
 
@@ -21,6 +21,7 @@ export const AddComment = ({ onClick }: IProps) => {
         html={comment}
         onChange={onChange}
         className={styles.comment}
+        useInnerHtml
       />
       <Button onClick={_onClick} className={styles.button}>
         Send

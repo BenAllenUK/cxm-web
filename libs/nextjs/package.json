@@ -73,8 +73,12 @@
     "dist"
   ],
   "dependencies": {
+    "@svgr/webpack": "^5.5.0",
+    "@types/lodash": "^4.14.168",
+    "cloudinary-react": "^1.7.0",
     "hoist-non-react-statics": "^3.3.2",
     "node-fetch": "^2.6.1",
+    "xss": "^1.0.8",
     "react-jw-player": "^1.19.1"
   }
 }

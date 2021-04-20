@@ -14,4 +14,5 @@ declare module '*.scss' {
   export default content
 }
 
+declare module 'cloudinary-react'
 declare var React: any

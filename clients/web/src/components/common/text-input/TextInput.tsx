@@ -14,9 +14,9 @@ function replaceCaret(el: HTMLElement) {
   // do not move caret if element was not focused
   const isTargetFocused = document.activeElement === el
   if (target !== null && target.nodeValue !== null && isTargetFocused) {
-    var sel = window.getSelection()
+    const sel = window.getSelection()
     if (sel !== null) {
-      var range = document.createRange()
+      const range = document.createRange()
       range.setStart(target, target.nodeValue.length)
       range.collapse(true)
       sel.removeAllRanges()
@@ -151,10 +151,17 @@ class TextInput extends React.Component<ITextInputProps, State> {
   }
 
   emitChange = (originalEvt: React.SyntheticEvent<any>) => {
+    const { useInnerHtml } = this.props
     const el = this.ref?.current
     if (!el) return
 
-    const html = el.innerHTML
+    let html
+    if (useInnerHtml) {
+      html = el.innerHTML
+    } else {
+      html = el.innerText
+    }
+
     if (this.props.onChange && html !== this.lastHtml) {
       // Clone event with Object.assign to avoid
       // "Cannot assign to read only property 'target' of object"
@@ -179,8 +186,9 @@ export interface IBaseProps extends DivProps {
   html: string
   disabled?: boolean
   className?: string
-  style?: Object
+  style?: Record<string, unknown>
   tabIndex?: number
+  useInnerHtml?: boolean
 }
 
 interface ITextInputProps extends IBaseProps {

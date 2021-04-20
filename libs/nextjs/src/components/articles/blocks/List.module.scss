@@ -1,0 +1,109 @@
+.omnea-content-list-container {
+}
+
+.omnea-content-list {
+  margin: 0;
+  padding: 0;
+  margin-left: 20px;
+}
+
+.omnea-content-list-item {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+.omnea-content-list-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.omnea-content-item-checkbox {
+  margin-left: 8px;
+  margin-right: 8px;
+  user-select: none;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  flex-shrink: 0;
+  flex-grow: 0;
+  cursor: pointer;
+}
+
+.omnea-content-item-checkbox-inner {
+  user-select: none;
+
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.omnea-content-item-checkbox-inner-filled {
+  background-color: rgb(55, 53, 47);
+}
+
+.omnea-content-item-checkbox-filled {
+  width: 12px;
+  height: 12px;
+  display: block;
+  fill: white;
+}
+
+.omnea-content-item-checkbox-unfilled {
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: inherit;
+  flex-shrink: 0;
+  backface-visibility: hidden;
+}
+
+.b {
+  width: 12px;
+  height: 12px;
+  display: block;
+  fill: white;
+  flex-shrink: 0;
+  backface-visibility: hidden;
+}
+
+.a {
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: inherit;
+  flex-shrink: 0;
+  backface-visibility: hidden;
+}
+
+.omnea-content-item-bullet {
+  width: 20px;
+  margin: 0 7px;
+  display: flex;
+  justify-content: center;
+  user-select: none;
+
+  span {
+    text-align: center;
+
+    font-size: 8px;
+  }
+}
+
+.omnea-content-item-number {
+  margin: 0 8px;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+  user-select: none;
+
+  span {
+    text-align: center;
+  }
+}

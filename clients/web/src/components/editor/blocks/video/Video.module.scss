@@ -14,7 +14,15 @@
   }
 }
 
-.outerContainer {
+.linkInput {
+  align-items: center;
+  @extend .textInputContainer;
+  display: flex;
+  width: 100%;
+  padding: 3px 6px;
+  cursor: text;
+  height: 28px;
+  font-size: 14px;
 }
 
 .videoContainer {
@@ -29,7 +37,7 @@
 .mediaControls {
   display: none;
   position: absolute;
-  top: 32px;
+  top: 0px;
   right: 0px;
   z-index: 2;
   &:hover > {

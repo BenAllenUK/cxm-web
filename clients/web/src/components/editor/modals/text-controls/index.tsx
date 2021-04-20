@@ -1,8 +1,5 @@
 import createPositionModal from 'components/common/modals/position'
-import { insertSpanWithClassName } from 'utils/html/html'
-import { createContext, ReactNode, RefObject, useCallback, useContext, useLayoutEffect, useRef, useState } from 'react'
 import { getSelectionMidPosition } from 'utils/modals/getSelectionMidPosition'
-import { updateBoundedPosition } from 'utils/modals/updateBoundedPosition'
 import { useLinkModal } from '../link'
 import { useTextStyleModal } from '../text-style'
 import TextControlUncontrolled from './TextControlUncontrolled'

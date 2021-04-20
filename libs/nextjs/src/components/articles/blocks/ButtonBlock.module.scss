@@ -1,0 +1,23 @@
+.omnea-button-base {
+  display: flex;
+  color: rgb(63, 63, 66);
+  border: 1px solid rgb(219, 127, 127);
+  font-weight: bold;
+  padding: 0px 1rem;
+  min-height: calc(2.75rem - 2px);
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.omnea-button-base:hover {
+  background-color: rgb(184, 0, 0);
+  color: white;
+}
+
+.omnea-content-button-container {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}

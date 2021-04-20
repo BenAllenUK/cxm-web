@@ -1,16 +1,20 @@
 import Button from 'components/common/button/Button'
+import { BreadcrumbItem } from './types'
 
-const BreadcrumbButton = ({ onClick, title, position }: IProps) => {
+const BreadcrumbButton = ({ onClick, crumb }: IProps) => {
   const _onClick = () => {
-    onClick(position)
+    onClick(crumb.link)
   }
-  return <Button onClick={_onClick}>{title}</Button>
+  return (
+    <Button style={{ color: 'black' }} onClick={_onClick}>
+      {crumb.title}
+    </Button>
+  )
 }
 
 interface IProps {
-  onClick: (pos: number) => void
-  title: string
-  position: number
+  onClick: (link: string) => void
+  crumb: BreadcrumbItem
 }
 
 export default BreadcrumbButton

@@ -1,7 +1,7 @@
 import { faSearch, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import OptionControls, { IOptionSections, OptionType } from 'components/common/option-controls'
-import TextInput from 'components/common/text-input/TextInput'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import { Article } from 'operations/articles/types'
 import { useEffect, useRef, useState } from 'react'
 import styles from './Search.module.scss'
@@ -28,7 +28,7 @@ const Header = ({ filterText, onValueChange, onResetValue }: IHeaderProps) => {
           className={styles.inputAreaText}
           blurredPlaceholder={'Start search...'}
           html={filterText || ''}
-          onChange={(e: any) => onValueChange(e.target.value)}
+          onChange={(e: TextInputEvent) => onValueChange(e.target.value)}
         />
       </div>
 

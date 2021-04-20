@@ -1,5 +1,5 @@
 import OptionControls, { IOptionSections, OptionType } from 'components/common/option-controls'
-import { CSSProperties, forwardRef, RefObject, useLayoutEffect, useRef } from 'react'
+import { forwardRef, RefObject, useLayoutEffect, useRef } from 'react'
 import { updateBoundedPosition } from 'utils/modals/updateBoundedPosition'
 import useTranslation from 'utils/translations/useTranslation'
 import styles from './TextStyle.module.scss'

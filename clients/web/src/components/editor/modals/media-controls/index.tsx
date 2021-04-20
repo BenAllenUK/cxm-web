@@ -1,5 +1,5 @@
 import createPositionModal from 'components/common/modals/position'
-import { createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
+import { useCallback } from 'react'
 import MediaControlUncontrolled from './MediaControlUncontrolled'
 
 const { Provider, useModal } = createPositionModal()

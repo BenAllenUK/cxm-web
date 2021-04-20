@@ -1,4 +1,3 @@
-import { ProjectFragment } from 'generated/graphql'
 import { Organisation } from 'operations/organisations/types'
 import { OrganisationProjectFragment } from 'types/types'
 import { fromProjectFragments, toProjectFragments } from '../project/parse'

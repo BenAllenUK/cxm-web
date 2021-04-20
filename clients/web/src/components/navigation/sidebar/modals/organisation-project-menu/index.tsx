@@ -1,7 +1,4 @@
 import OptionControls, { OptionType, IOptionSections } from 'components/common/option-controls'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faClone, faEdit } from '@fortawesome/free-regular-svg-icons'
-import { faLink, faLevelUpAlt } from '@fortawesome/free-solid-svg-icons'
 import createPositionModal from 'components/common/modals/position'
 import { Organisation } from 'operations/organisations/types'
 import Header from './Header'
@@ -10,7 +7,6 @@ import styles from './OrganisationProjectMenu.module.scss'
 import ProjectIcon from 'components/common/project-icon/ProjectIcon'
 import useTranslation from 'utils/translations/useTranslation'
 import Routes, { Subdomain } from 'navigation/routes'
-import { useRouter } from 'next/router'
 import { useNavigation } from 'components/navigation/provider'
 
 export enum PageControlOptions {

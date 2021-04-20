@@ -1,8 +1,8 @@
 import styles from './List.module.scss'
-import { BlockDataCheckBullet, BlockDataListBullet, BlockDataNumberBullet, BlockType } from '../types'
-import TextInput from 'components/common/text-input/TextInput'
+import { BlockType } from '../types'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import useKeyDown from 'utils/hooks/useKeyDown'
-import { forwardRef, MutableRefObject, RefObject, useEffect, useRef } from 'react'
+import { forwardRef, MouseEvent, useEffect, useRef } from 'react'
 import mergeRefs from 'utils/refs/mergeRefs'
 import CheckboxEmpty from 'images/icons/checkbox.svg'
 import CheckboxFilled from 'images/icons/checkbox-filled.svg'
@@ -35,19 +35,19 @@ const Item = forwardRef<HTMLDivElement, IItemProps>(
       [onNew, index]
     )
 
-    const _onTextChange = (e: any) => {
+    const _onTextChange = (e: TextInputEvent) => {
       onTextChange(index, e.target.value)
     }
 
-    const _onFocus = (e: any) => {
+    const _onFocus = () => {
       onFocus(index)
     }
 
-    const _onBlur = (e: any) => {
+    const _onBlur = () => {
       onBlur(index)
     }
 
-    const _onSelectedToggle = (e: any) => {
+    const _onSelectedToggle = (e: MouseEvent) => {
       onSelectedToggle(index)
       e.stopPropagation()
     }
@@ -93,6 +93,7 @@ const Item = forwardRef<HTMLDivElement, IItemProps>(
             onChange={_onTextChange}
             onFocus={_onFocus}
             onBlur={_onBlur}
+            useInnerHtml
           />
         </div>
       </li>

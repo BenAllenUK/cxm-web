@@ -1,11 +1,6 @@
 import ControlledText from 'components/editor/blocks/text/ControlledText'
-import Text from 'components/editor/blocks/text/Text'
 import { useRef, useState } from 'react'
 import useEventListener from 'utils/hooks/useEventListener'
-import useKeyDown from 'utils/hooks/useKeyDown'
-import useKeyUp from 'utils/hooks/useKeyUp'
-import isFirstLine from 'utils/text/isFirstLine'
-import isLastLine from 'utils/text/isLastLine'
 
 const Test = () => {
   const [focusIndex, setFocus] = useState<number>(0)

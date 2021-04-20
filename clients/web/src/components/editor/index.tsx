@@ -6,13 +6,14 @@ import EditorArticle from './components/EditorArticle'
 import styles from './Editor.module.scss'
 import Header from './header'
 import EditorEmpty from './misc/EditorEmpty'
+import { BreadcrumbItem } from 'components/common/breadcrumbs/types'
 import Modals from './modals'
 import LocalBlocksProvider, { useLocalBlocksProvider } from './providers/LocalBlocksProvider'
 
 function Editor({
   id,
   articles,
-  path,
+  breadcrumbs,
   coverImage,
   onUpsertArticles: onServerUpsertArticles,
   onBlocksUpsert: onServerBlocksUpsert,
@@ -45,7 +46,7 @@ function Editor({
   const onBlocksUpsert = (newBlocks: Block[]) => {
     const newBlockIds = newBlocks.map((item) => item.id)
     setBlocks((prevBlocks) => {
-      var prevBlocksFiltered = prevBlocks
+      let prevBlocksFiltered = prevBlocks
         .filter((item) => newBlockIds.indexOf(item.id) === -1)
         .sort((a: Block, b: Block) => a.position - b.position)
 
@@ -65,7 +66,7 @@ function Editor({
 
   const onBlocksDelete = (ids: number[]) => {
     setBlocks((prevBlocks) => {
-      var newBlocks = prevBlocks
+      let newBlocks = prevBlocks
         .filter((item) => ids.indexOf(item.id) === -1)
         .sort((a: Block, b: Block) => a.position - b.position)
 
@@ -107,7 +108,7 @@ function Editor({
         <div className={styles.container}>
           {id && (
             <>
-              <Header loading={loading} path={path} onViewArticle={onViewArticle} />
+              <Header loading={loading} breadcrumbs={breadcrumbs} onViewArticle={onViewArticle} />
               <EditorArticle
                 coverImage={coverImage}
                 focusIndex={focusIndex}
@@ -139,7 +140,7 @@ interface IProps {
   articles: Article[]
   blocks: Block[]
   loading?: boolean
-  path: Article[]
+  breadcrumbs: BreadcrumbItem[]
   onUpsertArticles: (articles: Article[]) => Promise<Article[]>
   onBlocksUpsert: (blocks: Block[]) => void
   onBlocksDelete: (ids: number[]) => void

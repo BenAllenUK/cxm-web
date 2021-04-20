@@ -1,4 +1,4 @@
-import { useCallback, useState, memo, ReactNode } from 'react'
+import { useCallback, useState, memo, ReactNode, DragEvent } from 'react'
 import useHover from 'utils/hooks/useHover'
 import fileTypeToBlockType from '../../utils/fileTypeToBlockType'
 import { BlockData, BlockDataMediaUpload, MediaSourceType, BlockDataMedia, BlockType } from 'components/editor/blocks/types'
@@ -39,17 +39,17 @@ const Container = ({
   const _onDrop = async (event: any) => {
     event.stopPropagation()
     event.preventDefault()
-    let files = [...event.dataTransfer.files]
+    const files = [...event.dataTransfer.files]
     let multipleFileIndex = index
     files.forEach(async (file) => {
-      let fileReader = new FileReader()
+      const fileReader = new FileReader()
       const blockType = fileTypeToBlockType(file.type)
       fileReader.onload = async (e) => {
         if (blockType === BlockType.IMAGE) {
           onMediaUpdate(
             multipleFileIndex,
             {
-              value: fileReader.result || null,
+              value: fileReader.result?.toString() || null,
               sourceType: MediaSourceType.LOCAL,
               fileName: file.name,
               fileSize: file.size,

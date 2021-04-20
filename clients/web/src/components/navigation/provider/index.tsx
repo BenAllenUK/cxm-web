@@ -58,7 +58,7 @@ const Provider = ({ children }: { children: ReactNode }) => {
     const hostname = getHost(module)
 
     if (module === getModule()) {
-      var fullPath = parsedPath
+      let fullPath = parsedPath
 
       // Include first path if in localhost
       if (isLocalhost()) {
@@ -77,7 +77,7 @@ const Provider = ({ children }: { children: ReactNode }) => {
 }
 
 export function getModule() {
-  var host = window.location.host
+  let host = window.location.host
 
   // Include first path if in localhost
   if (isLocalhost()) {

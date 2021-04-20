@@ -1,17 +1,23 @@
-import { BlockDataMedia } from '../../../types'
+import { BlockDataMedia, MediaSourceType } from '../../../types'
 import './Video.scss'
 import ReactJWPlayer from 'react-jw-player'
 
 export default function Video({ content, id }: IProps) {
-  const { value } = content
+  const fileUrl =
+    content.sourceType === MediaSourceType.EMBED_LINK
+      ? content.value
+      : `${process.env.OMNEA_UPLOAD_URL}/${content.value}`
 
   return (
     <div className={'omnea-content-video'}>
       <ReactJWPlayer
         playerId={`player-${id}`}
         playerScript='https://cdn.jwplayer.com/libraries/ogA7IZvl.js'
-        file={value}
+        file={fileUrl}
       />
+      {content.caption && (
+        <div className={'omnea-content-caption'}>{content.caption}</div>
+      )}
     </div>
   )
 }

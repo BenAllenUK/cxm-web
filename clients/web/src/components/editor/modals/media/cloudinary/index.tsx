@@ -1,4 +1,3 @@
-import { CloudinaryContext } from 'cloudinary-react'
 import { Cloudinary as CoreCloudinary, Util } from 'cloudinary-core'
 
 export const url = (publicId: any, options: any) => {

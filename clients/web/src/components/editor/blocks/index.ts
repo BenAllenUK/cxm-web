@@ -1,4 +1,4 @@
-import { BlockDataText, BlockType, BlockDataListBullet, Block, BlockDataMedia } from './types'
+import { BlockDataText, BlockType, BlockDataListBullet, Block, BlockDataMedia, BlockDataButton } from './types'
 
 export const BLOCK_CONTAINER_VERTICAL_PADDING = 2
 
@@ -42,8 +42,11 @@ export function isBlockEmpty(block: Block) {
     case BlockType.QUOTE:
       return !(block.payload as BlockDataText).value
     case BlockType.LIST_BULLET:
-      return ((block.payload as BlockDataListBullet).items || []).length == 0
+      return ((block.payload as BlockDataListBullet).value || []).length == 0
     case BlockType.IMAGE:
+      return false
+    case BlockType.BUTTON:
+      return !(block.payload as BlockDataButton).text
     case BlockType.VIDEO:
     case BlockType.FILE:
       return !(block.payload as BlockDataMedia).value
@@ -85,6 +88,17 @@ export const BlockTypeProperties = {
     isEditable: true,
     initialPayload: {
       value: '',
+    },
+  },
+  [BlockType.TEXT_INPUT]: {
+    id: BlockType.TEXT_INPUT,
+    title: 'Text Input',
+    subtitle: 'Add text input for user.',
+    image: '/preview/text.png',
+    initialHeight: 20,
+    isEditable: true,
+    initialPayload: {
+      value: null,
     },
   },
   [BlockType.H1]: {
@@ -225,6 +239,17 @@ export const BlockTypeProperties = {
     initialHeight: 20,
     isEditable: false,
     initialPayload: {},
+  },
+  [BlockType.BUTTON]: {
+    id: BlockType.BUTTON,
+    title: 'Button',
+    subtitle: 'Add a button.',
+    image: '/preview/image.png',
+    initialHeight: 20,
+    isEditable: false,
+    initialPayload: {
+      text: null,
+    },
   },
   [BlockType.FILE]: {
     id: BlockType.FILE,

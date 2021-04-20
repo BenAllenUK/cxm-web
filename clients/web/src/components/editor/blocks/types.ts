@@ -4,7 +4,6 @@ export enum BlockType {
   H1,
   H2,
   H3,
-
   LIST_BULLET,
   // TABLE_INLINE = 'TABLE-INLINE',
   LIST_CHECK,
@@ -15,6 +14,8 @@ export enum BlockType {
   CODE,
   FILE,
   VIDEO,
+  BUTTON,
+  TEXT_INPUT,
   // TWEET = 'TWEET',
   // GOOGLE_MAPS = 'GOOGLE-MAPS',
   H4,
@@ -23,6 +24,7 @@ export enum BlockType {
 
 export type BlockData =
   | BlockDataText
+  | BlockDataButton
   | BlockDataMedia
   | BlockDataH1
   | BlockDataH2
@@ -36,6 +38,7 @@ export type BlockData =
   | BlockDataQuote
   | BlockDataDivider
   | BlockDataCallout
+  | BlockDataVideo
   | BlockDataCode
   | BlockDataTweet
   | BlockDataGoogleMaps
@@ -55,8 +58,17 @@ export type BlockDataText = {
   value: string
 }
 
+export type BlockDataTextInput = {
+  value: string
+}
+
+export type BlockDataButton = {
+  text: string
+  value: string
+}
+
 export type BlockDataMedia = {
-  value: any
+  value: string | null
   fileName: string | null
   fileSize: number | null
   sourceType: MediaSourceType
@@ -103,11 +115,11 @@ export type BlockDataTableInline = {
 }
 
 export type BlockDataCheckBullet = {
-  items: { value: string; selected: boolean }[]
+  value: { value: string; selected: boolean }[]
 }
 
 export type BlockDataListBullet = {
-  items: { value: string }[]
+  value: { value: string }[]
 }
 
 export type BlockDataNumberBullet = BlockDataListBullet
@@ -117,6 +129,17 @@ export type BlockDataQuote = BlockDataText
 export type BlockDataDivider = {}
 
 export type BlockDataCallout = BlockDataText
+
+export type BlockDataVideo = {
+  url: string
+  alt: string
+  type: string
+}
+
+export enum BlockDataVideoType {
+  CUSTOM = 'CUSTOM',
+  YOUTUBE = 'YOUTUBE',
+}
 
 export type BlockDataCode = BlockDataText
 

@@ -1,6 +1,6 @@
 import { IOptionSections, OptionType } from 'components/common/option-controls'
 import useTranslation from 'utils/translations/useTranslation'
-import { createContext, ReactNode, RefObject, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import LinkUncontrolled from './LinkUncontrolled'
 import ExternalLinkIcon from 'images/icons/external-link.svg'
 import LinkIcon from 'images/icons/link.svg'

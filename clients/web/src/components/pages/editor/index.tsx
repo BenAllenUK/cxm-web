@@ -5,7 +5,6 @@ import Navbar from 'components/navigation/navbar'
 import Sidebar from 'components/navigation/sidebar'
 import debounce from 'lodash/debounce'
 import Routes, { Subdomain } from 'navigation/routes'
-import { navigate } from 'navigation/utils'
 import { Article } from 'operations/articles/types'
 import { fromArticleFragments, toArticleFragments } from 'utils/article/parse'
 import { fromBlockFragments, toBlockFragments } from 'utils/blocks/parse'
@@ -17,15 +16,13 @@ import { ArticleBlocksFragment, OrganisationProjectFragment } from 'types/types'
 import { UpsertArticlesMutationScopedFunc } from 'operations/articles/upsert'
 import { UpsertBlocksMutationScopedFunc } from 'operations/blocks/upsert'
 import { DeleteBlocksMutationScopedFunc } from 'operations/blocks/delete'
-import { ProjectFragment } from 'generated/graphql'
 import { useErrorModal } from 'components/common/modals/error'
 import TitleBar from 'components/common/title-bar'
 import isElectron from 'is-electron'
 import readPathRoute from 'utils/article/readPathRoute'
+import createBreadcrumbs from 'utils/article/createBreadcrumbs'
 import { fromOrganisationFragments } from 'utils/organisation/parse'
-import { useRouter } from 'next/router'
 import { useNavigation } from 'components/navigation/provider'
-import LocalBlocksProvider from 'components/editor/providers/LocalBlocksProvider'
 
 const EditorPage = ({
   article: articleRaw,
@@ -103,6 +100,7 @@ const EditorPage = ({
 
   const onDebouncedBlockUpsert = useCallback(debounce(onBlocksUpsert, 500), [onBlocksUpsert])
   const path = article?.id ? readPathRoute(articles, article.id) : []
+  const breadcrumbs = article?.id ? createBreadcrumbs(articles, article.id) : []
 
   return (
     <div className={styles.root}>
@@ -122,8 +120,8 @@ const EditorPage = ({
 
         <div className={styles.editor}>
           <Editor
+            breadcrumbs={breadcrumbs}
             coverImage={article?.coverImage}
-            path={path}
             key={article?.id}
             id={article?.id}
             loading={loading}

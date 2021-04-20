@@ -4,10 +4,10 @@ import { BlockData, BlockType, MediaSourceType, MediaSourceObject, BlockDataMedi
 import SourceTabBar from './SourceTabBar'
 import Source from './Source'
 
-export const MediaSelector = ({ onMediaUpdate, onUpdate, id, libraries, fileFilter }: IProps) => {
+export const MediaSelector = ({ onMediaUpdate, onUpdate, sources, fileFilter, isVideo, isButton }: IProps) => {
   const [selectedSource, setSelectedSource] = useState<MediaSourceObject>({
-    name: 'Upload',
-    type: MediaSourceType.UPLOAD,
+    name: isButton ? 'Embed Link' : 'Upload',
+    type: isButton ? MediaSourceType.EMBED_LINK : MediaSourceType.UPLOAD,
   })
   const [pictures, setPictures] = useState<[]>([])
 
@@ -17,14 +17,6 @@ export const MediaSelector = ({ onMediaUpdate, onUpdate, id, libraries, fileFilt
 
   const _setPictures = (item: any) => {
     setPictures(item)
-  }
-
-  let sources: MediaSourceObject[] = [
-    { name: 'Upload', type: MediaSourceType.UPLOAD },
-    { name: 'Embed Link', type: MediaSourceType.EMBED_LINK },
-  ]
-  if (libraries) {
-    sources = sources.concat(libraries)
   }
 
   return (
@@ -37,8 +29,9 @@ export const MediaSelector = ({ onMediaUpdate, onUpdate, id, libraries, fileFilt
           onMediaUpdate={onMediaUpdate}
           pictures={pictures}
           setPictures={setPictures}
-          id={id}
           fileFilter={fileFilter}
+          isVideo={isVideo}
+          isButton={isButton}
         />
       </div>
     </div>
@@ -46,11 +39,12 @@ export const MediaSelector = ({ onMediaUpdate, onUpdate, id, libraries, fileFilt
 }
 
 interface IProps {
-  onMediaUpdate: (value: BlockDataMedia, pendingUploadFile: File, blockType: BlockType, createNew?: boolean) => void
+  sources: MediaSourceObject[]
+  onMediaUpdate?: (value: BlockDataMedia, pendingUploadFile: File, blockType: BlockType, createNew?: boolean) => void
   onUpdate: (value: BlockData, type?: BlockType) => void
-  id: number
+  isButton?: boolean
   fileFilter?: string
-  libraries?: MediaSourceObject[]
+  isVideo?: boolean
 }
 
 export default memo(MediaSelector)

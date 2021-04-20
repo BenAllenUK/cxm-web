@@ -1,5 +1,5 @@
-import { MouseEvent, MutableRefObject } from 'react'
-import { SortableContainer, SortableElement, SortEnd } from 'react-sortable-hoc'
+import { MouseEvent } from 'react'
+import { SortableContainer, SortEnd } from 'react-sortable-hoc'
 import { Tooltip } from 'components/common/tooltip'
 
 import { Block } from '../blocks/types'
@@ -9,6 +9,7 @@ import SortableItem, { ISortableItemHandlerProps } from './SortableItem'
 
 const SortableList = (props: IProps) => {
   const { itemRefFunc, modalBlockEnabled, focusIndex, blocks, onBodyClick, onSortEnd, ...otherProps } = props
+
   return (
     <div className={styles.body} onClick={onBodyClick}>
       <div onClick={(e) => e.stopPropagation()}>

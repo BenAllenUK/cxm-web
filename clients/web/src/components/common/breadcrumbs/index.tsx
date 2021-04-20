@@ -1,20 +1,21 @@
-import MUIBreadcrumbs from '@material-ui/core/Breadcrumbs'
 import styles from './Breadcrumbs.module.scss'
-import { Article } from 'operations/articles/types'
+import { BreadcrumbItem } from './types'
 import BreadcrumbButton from './BreadcrumbButton'
+import Breadcrumb from './Breadcrumb'
+import { ReactNode } from 'react'
 
-const Breadcrumbs = ({ path, onViewArticle }: IProps) => {
-  const _onNavigateClick = (position: number) => {
-    onViewArticle(path[position].path)
+const Breadcrumbs = ({ breadcrumbs, onViewArticle, separator, maxItems }: IProps) => {
+  const _onNavigateClick = (link: string) => {
+    onViewArticle(link)
   }
 
   return (
     <div className={styles.historyBreadcrumbs}>
-      <MUIBreadcrumbs maxItems={4}>
-        {path.map((item, i) => (
-          <BreadcrumbButton key={i} position={i} onClick={_onNavigateClick} title={item.title} />
+      <Breadcrumb maxItems={maxItems} separator={separator}>
+        {breadcrumbs.map((item, i) => (
+          <BreadcrumbButton key={i} onClick={_onNavigateClick} crumb={item} />
         ))}
-      </MUIBreadcrumbs>
+      </Breadcrumb>
     </div>
   )
 }
@@ -22,6 +23,8 @@ const Breadcrumbs = ({ path, onViewArticle }: IProps) => {
 export default Breadcrumbs
 
 interface IProps {
-  path: Article[]
+  breadcrumbs: BreadcrumbItem[]
   onViewArticle: (path: string) => void
+  separator?: ReactNode
+  maxItems: number
 }

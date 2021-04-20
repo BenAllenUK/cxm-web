@@ -32,7 +32,8 @@
 .linkInput {
   align-items: center;
   @extend .textInputContainer;
-  display: flex;
+  display: block;
+  resize: none;
   width: 100%;
   padding: 3px 6px;
   border-radius: 3px;
@@ -41,6 +42,8 @@
   cursor: text;
   height: 28px;
   font-size: 14px;
+  white-space: nowrap;
+  overflow: scroll;
 }
 
 .source {
