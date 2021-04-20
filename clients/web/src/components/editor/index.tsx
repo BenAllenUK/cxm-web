@@ -108,7 +108,7 @@ function Editor({
         <div className={styles.container}>
           {id && (
             <>
-              <Header loading={loading} breadcrumbs={breadcrumbs} onViewArticle={onViewArticle} />
+              <Header articleId={id} loading={loading} breadcrumbs={breadcrumbs} onViewArticle={onViewArticle} />
               <EditorArticle
                 coverImage={coverImage}
                 focusIndex={focusIndex}

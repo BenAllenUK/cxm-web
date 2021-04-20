@@ -1,16 +1,21 @@
-import { memo, useCallback, useRef, useState, ReactNode, HTMLProps, forwardRef } from 'react'
-import useWindowKeyDown from 'utils/hooks/useWindowKeyDown'
+import { useCallback, useRef, useState, ReactNode, HTMLProps, forwardRef } from 'react'
 import styles from './SettingsControls.module.scss'
 import findIndex from 'lodash/findIndex'
 import flatten from 'lodash/flatten'
-// import Section from './Section'
+import SideBar from './SideBar'
+import Fields from './Fields'
 import mergeRefs from 'utils/refs/mergeRefs'
 import useOnDismiss from 'utils/hooks/useOnDismiss'
+import Breadcrumbs from 'components/common/breadcrumbs'
+import { BreadcrumbItem } from 'components/common/breadcrumbs/types'
+import { Article } from 'operations/articles/types'
 
 export enum OptionType {
   Button = 1,
   Line,
   Switch,
+  TextInput,
+  Date,
   Header,
 }
 
@@ -19,177 +24,137 @@ export interface IOptionHeader {
   title: string
 }
 
-export interface IOptionButton {
+export interface ISettingsButton {
   id: number
   type: OptionType.Button
-  title: string
+  label?: string
+  text: string
+  children?: ISettingsSubSections
   icon?: ReactNode
-  subtitle?: string
   hint?: string
+  isImportant?: boolean
   iconSize?: 'large' | 'normal'
+  onClick?: () => void
 }
 
-interface IOptionLine {
-  type: OptionType.Line
-}
-
-interface IOptionSwitch {
+export interface ISettingsSwitch {
   id: number
-  title: string
+  label: string
   state: boolean
   type: OptionType.Switch
+  hint?: string
+  onUpdate: (value: boolean) => void
 }
 
-export type IOptionElements = IOptionButton | IOptionSwitch
+export interface ISettingsDate {
+  id: number
+  label: string
+  date: string
+  type: OptionType.Date
+  onUpdate: (value: string) => void
+}
 
-export type IOptionSections = {
+export interface ISettingsTextInput {
+  id: number
+  value: string
+  label: string
+  placeholder: string
+  type: OptionType.TextInput
+  disabled?: boolean
+  isSnakeCase?: boolean
+  hint?: string
+  onUpdate: (value: string) => void
+}
+
+export type ISettingsElements = ISettingsTextInput | ISettingsButton | ISettingsSwitch | ISettingsDate
+
+export type IInnerSection = {
+  id: number
+  label: string
+  showTitleLine: boolean
+  children: ISettingsElements[]
+}
+
+export type ISettingsSubSections = {
   id: number
   title?: string
-  items: IOptionElements[]
+  children?: IInnerSection[]
+  icon?: ReactNode
+}
+
+export type ISettingsSections = {
+  id: number
+  title?: string
+  children: ISettingsSubSections[]
   showLine?: boolean
 }
 
-const sections_ = {
-  id: 1,
-  title: 'OPTIONS', // Corresponds to the "OPTIONS" text in the screenshot
-  children: [
-    {
-      id: 1,
-      title: 'General', // Corresponds to the "General" text in the screenshot
-      icon: 'blblblab',
-      children: [
-        {
-          id: 1,
-          title: 'General Title', // Corresponds to the "General Title" text in the screenshot
-          showTitleLine: true, // Corresponds to the line under the title
-          children: [
-            {
-              id: 1,
-              label: 'Title',
-              placeholder: 'Article Title',
-              type: 'TEXT',
-            },
-            {
-              id: 1,
-              label: 'URL Path',
-              placeholder: 'new-page-1',
-              type: 'TEXT_URL',
-            },
-            {
-              id: 1,
-              text: 'Sample Deeper options',
-              type: 'BUTTON',
-              children: [
-                {
-                  id: 1,
-                  title: 'General',
-                  children: [
-                    {
-                      id: 1,
-                      label: 'more settings',
-                      type: 'TEXT',
-                      hint: 'This is a hint',
-                    },
-                    {
-                      id: 1,
-                      label: 'more more settings',
-                      placeholder: 'Article Title',
-                      type: 'TEXT_URL',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ],
-}
-
 const SettingsControls = forwardRef<HTMLDivElement, IProps>(
-  ({ header, footer, sections, iconClassName, onItemClick, onDismiss, ...otherProps }, forwardedRef) => {
+  (
+    {
+      article,
+      sections,
+      header,
+      footer,
+      iconClassName,
+      onUpsertArticles,
+      onArticleUpdatePath,
+      onItemClick,
+      onDismiss,
+      ...otherProps
+    },
+    forwardedRef
+  ) => {
     const [selectedIndex, setSelected] = useState<number>(0)
-
-    const itemRefs = useRef<HTMLDivElement[]>([])
-    const actionItems = flatten(sections.map((section) => section.items.map((item) => ({ ...item, sectionId: section.id }))))
-
-    const scrollIntoView = useCallback(
-      (index: number) => {
-        const ref = itemRefs.current[index]
-        if (!ref) {
-          return
-        }
-        ref.scrollIntoView(false)
-      },
-      [itemRefs.current]
-    )
+    const actionItems = flatten(sections.map((section) => section.children.map((item) => ({ ...item, sectionId: section.id }))))
+    const [focusedOptions, setFocusedOptions] = useState<IInnerSection[] | undefined>(actionItems[selectedIndex].children)
+    const [breadcrumb, setBreadcrumb] = useState<BreadcrumbItem[]>([
+      { link: actionItems[selectedIndex].id.toString(), title: actionItems[selectedIndex].title || '' },
+    ])
 
     const _onItemMouseEnter = useCallback(
-      (sectionId: number, id: number) => {
+      (id: number) => {
         const index = findIndex(actionItems, (item) => item.id === id)
         setSelected(index)
+        setFocusedOptions(actionItems[index].children)
       },
       [actionItems]
     )
 
-    const _onMouseLeave = useCallback((id) => {
-      setSelected(-1)
-    }, [])
+    const findSelectedOption = (id: number, section: ISettingsSubSections) => {
+      if (section.id === id) {
+        return section
+      } else if (section.children) {
+        section.children.forEach((child) => {
+          child.children.forEach((grandchild) => {
+            if (grandchild.type === OptionType.Button && grandchild.children) {
+              findSelectedOption(id, grandchild.children)
+            }
+          })
+        })
+      }
+    }
 
-    const _onItemClick = useCallback(
-      (sectionId, id) => {
-        onDismiss()
-        onItemClick(sectionId, id)
-      },
-      [onItemClick, onDismiss]
-    )
-
-    const _onSwitchClick = useCallback(
-      (sectionId, id) => {
-        onItemClick(sectionId, id)
-      },
-      [onItemClick]
-    )
-
-    useWindowKeyDown(
-      'Enter',
-      (e) => {
-        const selectedItem = actionItems[selectedIndex]
-        if (!selectedItem) {
+    const _onNestedButtonClick = useCallback(
+      (options: ISettingsSubSections | undefined) => {
+        if (!options) {
           return
         }
-        onDismiss()
-        onItemClick(selectedItem.sectionId, selectedItem.id)
-        e.preventDefault()
-        e.stopPropagation()
+        setFocusedOptions(options.children)
+        const newBreadcrumb = breadcrumb
+        newBreadcrumb.push({ link: options.id.toString(), title: options.title || '' })
+        setBreadcrumb(newBreadcrumb)
       },
-      [onItemClick, actionItems, selectedIndex]
+      [setFocusedOptions, breadcrumb, setBreadcrumb]
     )
 
-    useWindowKeyDown(
-      'ArrowUp',
-      (e) => {
-        const index = selectedIndex > -1 ? selectedIndex - 1 : -1
-        setSelected(index)
-        scrollIntoView(index)
-        e.preventDefault()
-        e.stopPropagation()
+    const _onBreadcrumbClick = useCallback(
+      (id: string) => {
+        const newBreadcrumb = breadcrumb
+        setBreadcrumb(newBreadcrumb.slice(0, findIndex(newBreadcrumb, (item) => item.link === id) + 1))
+        setFocusedOptions(findSelectedOption(parseInt(id), actionItems[selectedIndex])?.children)
       },
-      [scrollIntoView, selectedIndex]
-    )
-
-    useWindowKeyDown(
-      'ArrowDown',
-      (e) => {
-        const index = selectedIndex < actionItems.length - 1 ? selectedIndex + 1 : actionItems.length - 1
-
-        setSelected(index)
-        scrollIntoView(index)
-        e.preventDefault()
-        e.stopPropagation()
-      },
-      [scrollIntoView, actionItems, selectedIndex]
+      [setBreadcrumb, setFocusedOptions, findSelectedOption, breadcrumb, actionItems]
     )
 
     const ref = useRef<HTMLDivElement>(null)
@@ -198,30 +163,19 @@ const SettingsControls = forwardRef<HTMLDivElement, IProps>(
       onDismiss()
     })
 
-    const onInnerRefCallback = (ref: HTMLDivElement, id: number) => {
-      const index = findIndex(actionItems, (item) => item.id === id)
-      itemRefs.current[index] = ref
-    }
-
     return (
-      <div className={styles.defaultContainer} onMouseLeave={_onMouseLeave} {...otherProps} ref={mergeRefs(forwardedRef, ref)}>
-        {header}
-        {/* {sections.map((section, i) => {
-          return (
-            <Section
-              key={`${i}`}
-              {...section}
-              // TODO: Change inner ref
-              onInnerRefCallback={onInnerRefCallback}
-              selectedId={actionItems[selectedIndex]?.id}
-              iconClassName={iconClassName}
-              onItemClick={_onItemClick}
-              onItemMouseEnter={_onItemMouseEnter}
-              onSwitchClick={_onSwitchClick}
-            />
-          )
-        })} */}
-        {footer}
+      <div className={styles.defaultContainer} {...otherProps} ref={mergeRefs(forwardedRef, ref)}>
+        <SideBar sections={sections} onClick={_onItemMouseEnter} />
+        <div className={styles.innerContainer}>
+          <Breadcrumbs
+            breadcrumbs={breadcrumb}
+            onViewArticle={_onBreadcrumbClick}
+            separator={<div className={styles.separator}>/</div>}
+            maxItems={2}
+            isModal={true}
+          />
+          <Fields fields={focusedOptions || []} onButtonClick={_onNestedButtonClick} />
+        </div>
       </div>
     )
   }
@@ -230,10 +184,13 @@ const SettingsControls = forwardRef<HTMLDivElement, IProps>(
 export default SettingsControls
 
 interface IProps extends HTMLProps<HTMLDivElement> {
-  sections: IOptionSections[]
+  article: Article
+  sections: ISettingsSections[]
   header?: ReactNode
   footer?: ReactNode
   iconClassName?: string
   onItemClick: (sectionId: number, id: number) => void
+  onArticleUpdatePath: (renameValue: string) => void
+  onUpsertArticles: (value: Article) => void
   onDismiss: () => void
 }

@@ -45,7 +45,6 @@ const EditorPage = ({
 
   const [project] = fromProjectFragments(projectRaw)
   const articles = project.articles || []
-
   const [article] = articleRaw ? fromArticleFragments([articleRaw]) : [null]
   const blocks = article?.blocks || []
 

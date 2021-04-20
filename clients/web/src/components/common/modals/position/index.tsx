@@ -1,12 +1,13 @@
 import { Context, createContext, ReactNode, RefObject, useCallback, useContext, useState } from 'react'
 
 interface State {
+  articleId: number | null
   enabled: boolean
   position: { x: number; y: number } | null
 }
 
 interface ContextActions extends State {
-  showControls: (position: { x: number; y: number }) => void
+  showControls: (position: { x: number; y: number }, articleId?: number | null) => void
   hideControls: () => void
   rootRef: RefObject<HTMLDivElement> | undefined
 }
@@ -14,9 +15,8 @@ interface ContextActions extends State {
 const initialState = {
   enabled: false,
   position: null,
-  showControls: () => {
-    console.log('fucking init stat')
-  },
+  articleId: null,
+  showControls: () => {},
   hideControls: () => {},
   rootRef: undefined,
 }
@@ -29,14 +29,15 @@ const createPositionModal = () => {
     Provider: ({ children, rootRef }: { children: ReactNode; rootRef?: RefObject<HTMLDivElement> }) => {
       const [state, setState] = useState<State>(initialState)
 
-      const showControls = (position: { x: number; y: number }) => {
-        console.log('IN THE MODAL SHOWCONTROLS')
+      const showControls = (position: { x: number; y: number }, articleId?: number | null) => {
         const x = rootRef?.current ? position.x - rootRef.current.getBoundingClientRect().left : position.x
         const y = rootRef?.current ? position.y - rootRef.current.getBoundingClientRect().top : position.y
 
         setState({
+          ...state,
           enabled: true,
           position: { x, y },
+          articleId: articleId || null,
         })
       }
 

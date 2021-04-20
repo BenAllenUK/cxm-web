@@ -54,7 +54,6 @@ export default function EditorRoot(props: any) {
 export function Content() {
   const { user } = useUser()
   const { projectSlug, articlePath, organisationSlug } = useAdmin()
-
   // FETCH ORGANISATION
 
   const { data: organisationsData } = useGetOrganisationOneQuery({
@@ -99,7 +98,7 @@ export function Content() {
 
   const [deleteBlocksMutation] = useDeleteBlocksMutation()
   const deleteBlocksMutationScoped = useDeleteBlocksMutationScoped(article?.id, deleteBlocksMutation)
-
+  console.log('oragnisation', organisation, 'user', user)
   if (!organisation || !user) {
     return <EditorPageSkelton />
   }

@@ -2,18 +2,21 @@ import styles from './Breadcrumbs.module.scss'
 import { BreadcrumbItem } from './types'
 import BreadcrumbButton from './BreadcrumbButton'
 import Breadcrumb from './Breadcrumb'
-import { ReactNode } from 'react'
+import { ReactNode, useCallback } from 'react'
 
-const Breadcrumbs = ({ breadcrumbs, onViewArticle, separator, maxItems }: IProps) => {
-  const _onNavigateClick = (link: string) => {
-    onViewArticle(link)
-  }
+const Breadcrumbs = ({ breadcrumbs, onViewArticle, separator, maxItems, isModal }: IProps) => {
+  const _onNavigateClick = useCallback(
+    (link: string) => {
+      onViewArticle(link)
+    },
+    [onViewArticle]
+  )
 
   return (
     <div className={styles.historyBreadcrumbs}>
       <Breadcrumb maxItems={maxItems} separator={separator}>
         {breadcrumbs.map((item, i) => (
-          <BreadcrumbButton key={i} onClick={_onNavigateClick} crumb={item} />
+          <BreadcrumbButton key={i} onClick={_onNavigateClick} crumb={item} isModal={isModal} />
         ))}
       </Breadcrumb>
     </div>
@@ -27,4 +30,5 @@ interface IProps {
   onViewArticle: (path: string) => void
   separator: ReactNode
   maxItems: number
+  isModal?: boolean
 }

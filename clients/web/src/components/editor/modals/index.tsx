@@ -16,6 +16,8 @@ import DeleteConfirmation from './delete-confirmation'
 import { BlockTypeProperties } from '../blocks'
 import { removeLinkPlaceholders, applyLinkToPlaceholder } from 'utils/html/links'
 import createArticleEmpty from 'utils/article/createEmptyArticle'
+import { createSlug } from 'utils/article/createSlug'
+import updateChildPaths from 'utils/article/updateChildPaths'
 
 const ControlledModals = ({ blocks, articles, children, onUpsertArticles, onBlocksUpsert, onModifyBlockType }: IProps) => {
   const { id, filterText } = useBlockControlsContext()
@@ -70,11 +72,65 @@ const ControlledModals = ({ blocks, articles, children, onUpsertArticles, onBloc
     onBlocksUpsert([newBlock])
   }
 
+  const _onArticleRenameSubmit = async (articleId: number | null, renameValue: string) => {
+    if (!renameValue || !articleId) {
+      return
+    }
+
+    const [article] = articles.filter((item) => item.id === articleId)
+    if (!article) {
+      console.error(`Article not found: ${articleId}`)
+      return
+    }
+
+    return await onUpsertArticles([{ ...article, title: renameValue }])
+  }
+
+  const _onUpsertArticles = async (articleId: number | null, value: Article) => {
+    if (!articleId) {
+      return
+    }
+    const [article] = articles.filter((item) => item.id === articleId)
+    if (!article) {
+      console.error(`Article not found: ${articleId}`)
+      return
+    }
+
+    return await onUpsertArticles([{ ...value }])
+  }
+
+  const _onArticleUpdatePath = async (articleId: number | null, renameValue: string) => {
+    if (!renameValue || !articleId) {
+      return
+    }
+
+    const [article] = articles.filter((item) => item.id === articleId)
+    if (!article) {
+      console.error(`Article not found: ${articleId}`)
+      return
+    }
+    const basePathItems = article.path.split('/').slice(0, -1)
+    const newSlug = createSlug(renameValue)
+    const path = basePathItems.length > 0 ? [...basePathItems, newSlug].join('/') : newSlug
+    const oldPath = article.path
+    const newPath = path
+
+    // WARNING - Recursive loop for path editing
+    const modifiedChildrenArticles = updateChildPaths(articles, oldPath, newPath, articleId)
+
+    return await onUpsertArticles([{ ...article, path: renameValue }, ...modifiedChildrenArticles])
+  }
+
   return (
     <>
       <BlockControls.Component filterText={filterText} id={id} onBlockItemClick={_onModifyBlockType} />
       <PageControls.Component onClick={() => {}} />
-      <ConfigControls.Component />
+      <ConfigControls.Component
+        articles={articles}
+        onArticleRenameSubmit={_onArticleRenameSubmit}
+        onArticleUpdatePath={_onArticleUpdatePath}
+        onUpsertArticles={_onUpsertArticles}
+      />
       <MediaControls.Component onClick={() => {}} />
       <TextControls.Component />
       <TextStyle.Component />

@@ -7,12 +7,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faStar, faEdit } from '@fortawesome/free-regular-svg-icons'
 import { faLink, faLock, faLevelUpAlt, faDownload, faUndo, faCog } from '@fortawesome/free-solid-svg-icons'
 
-const PageControlUncontrolled = ({ style, onClick, onDismiss }: IProps) => {
+const PageControlUncontrolled = ({ style, onClick, onDismiss, articleId }: IProps) => {
   const { showControls } = useConfigControlModal()
 
   const showConfigControls = () => {
-    console.log('in showConfigControls function', showControls)
-    showControls({ x: 500, y: 500 })
+    showControls({ x: 500, y: 500 }, articleId)
   }
   const sections: IOptionSections[] = [
     {
@@ -130,6 +129,7 @@ const PageControlUncontrolled = ({ style, onClick, onDismiss }: IProps) => {
 export default PageControlUncontrolled
 
 interface IProps {
+  articleId: number | null
   style: CSSProperties
   onClick: () => void
   onDismiss: () => void

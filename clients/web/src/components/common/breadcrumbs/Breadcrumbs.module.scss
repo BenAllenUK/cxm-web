@@ -1,10 +1,36 @@
 @import 'styles/variables';
 
 .historyBreadcrumbs {
-  margin: 5px;
 }
 
 .container {
   display: flex;
   flex-direction: row;
+}
+
+.buttonBase {
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  align-self: flex-start;
+  user-select: none;
+  &:hover {
+    background-color: $line-color;
+    color: $text2-color;
+  }
+}
+
+.buttonModal {
+  @extend .buttonBase;
+  font-size: 12px;
+}
+
+.button {
+  @extend .buttonBase;
+  font-size: 14px;
+  padding: 5px;
+  color: $text2-color;
+  line-height: 14px;
 }

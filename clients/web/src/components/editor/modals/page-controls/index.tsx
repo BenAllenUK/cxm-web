@@ -7,7 +7,7 @@ const { Provider, useModal } = createPositionModal()
 export const usePageControlModal = useModal
 
 const Component = ({ onClick, ...props }: IProps) => {
-  const { enabled, position, hideControls } = usePageControlModal()
+  const { enabled, position, hideControls, articleId } = usePageControlModal()
 
   const _onClick = useCallback(() => {
     onClick()
@@ -17,6 +17,7 @@ const Component = ({ onClick, ...props }: IProps) => {
     <>
       {enabled && position && (
         <PageControlUncontrolled
+          articleId={articleId}
           style={{ left: position.x, top: position.y }}
           onDismiss={hideControls}
           onClick={_onClick}

@@ -7,6 +7,9 @@ export type Article = {
   updatedAt: string
   createdAt: string
   archived: boolean
+  published?: boolean
+  publishAt: string
+  publishedByName: string
   archivedAt?: string
   position: number
   blocks?: Block[]

@@ -10,16 +10,19 @@ import Breadcrumbs from 'components/common/breadcrumbs'
 import { BreadcrumbItem } from 'components/common/breadcrumbs/types'
 import Button from 'components/common/button/Button'
 
-export const Header = ({ loading, breadcrumbs, onViewArticle }: IProps) => {
+export const Header = ({ articleId, loading, breadcrumbs, onViewArticle }: IProps) => {
   const { showControls } = usePageControlModal()
 
   const ref = useRef<HTMLDivElement>(null)
 
   const _onPageControlsClick = (e: any) => {
-    showControls({
-      x: ref.current?.offsetLeft || 0,
-      y: (ref.current?.offsetTop || 0) + (ref.current?.offsetHeight || 0) + 10,
-    })
+    showControls(
+      {
+        x: ref.current?.offsetLeft || 0,
+        y: (ref.current?.offsetTop || 0) + (ref.current?.offsetHeight || 0) + 10,
+      },
+      articleId
+    )
   }
 
   const _onPublishClick = () => {}
@@ -70,6 +73,7 @@ export const Header = ({ loading, breadcrumbs, onViewArticle }: IProps) => {
 }
 
 interface IProps {
+  articleId: number
   loading?: boolean
   breadcrumbs: BreadcrumbItem[]
   onViewArticle: (path: string) => void

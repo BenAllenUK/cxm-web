@@ -10,6 +10,8 @@ fragment Article on articles {
   position
   path
   coverImage
+  published
+  publishedAt
   # archivedUser {
   #   id
   #   name
