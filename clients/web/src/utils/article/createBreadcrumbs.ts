@@ -2,7 +2,7 @@ import { Article } from 'operations/articles/types'
 import flatten from 'lodash/flatten'
 import { BreadcrumbItem } from 'components/common/breadcrumbs/types'
 
-const makeBreadcrumb = (articles: Article[], id: number): BreadcrumbItem[] => {
+const createBreadcrumbs = (articles: Article[], id: number): BreadcrumbItem[] => {
   const [article] = articles.filter((item) => item.id === id)
   if (!article) {
     return []
@@ -12,9 +12,9 @@ const makeBreadcrumb = (articles: Article[], id: number): BreadcrumbItem[] => {
   if (!article.parentId) {
     return breadcrumb
   }
-  const parentArticle = makeBreadcrumb(articles, article.parentId)
+  const parentArticle = createBreadcrumbs(articles, article.parentId)
   const breadcrumbs = flatten([...parentArticle, breadcrumb])
   return breadcrumbs
 }
 
-export default makeBreadcrumb
+export default createBreadcrumbs

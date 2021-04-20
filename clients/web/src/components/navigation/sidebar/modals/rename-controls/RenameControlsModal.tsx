@@ -1,4 +1,4 @@
-import TextInput from 'components/common/text-input/TextInput'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import { useEffect, useRef } from 'react'
 import useOnDismiss from 'utils/hooks/useOnDismiss'
 import useWindowKeyDown from 'utils/hooks/useWindowKeyDown'
@@ -45,8 +45,7 @@ const RenameControlsModal = ({ value, position, onDismiss, onTextChange, onSubmi
         className={styles.textInput}
         html={value || ''}
         ref={inputRef}
-        onChange={(e: any) => onTextChange(e.target.value)}
-        useInnerText
+        onChange={(e: TextInputEvent) => onTextChange(e.target.value)}
       />
     </div>
   )

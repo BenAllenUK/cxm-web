@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import styles from './MediaSelector.module.scss'
-import TextInput from 'components/common/text-input/TextInput'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import { BlockData, BlockType, MediaSourceType, MediaSourceObject } from '../../blocks/types'
 import { createApi } from 'unsplash-js'
 import ImageGrid from './cloudinary/ImageGrid'
@@ -19,7 +19,7 @@ export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps
     apiUrl?: undefined
   })
 
-  const onChange = async (e: any) => {
+  const onChange = async (e: TextInputEvent) => {
     setQuery(e.target.value)
     if (source.type === MediaSourceType.CLOUDINARY) {
       const result = await fetchPhotos(e.target.value)
@@ -45,6 +45,7 @@ export const AssetLibrary = ({ source, onUpdate, setPictures, pictures }: IProps
         html={query.toString()}
         onChange={onChange}
         className={styles.linkInput}
+        useInnerHtml
       />
       <div className={styles.grid}>
         {source.type === MediaSourceType.CLOUDINARY ? (

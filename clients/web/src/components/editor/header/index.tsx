@@ -4,7 +4,7 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import MoreIcon from 'images/icons/more.svg'
 import styles from './Header.module.scss'
 import { usePageControlModal } from '../modals/page-controls'
-import { useRef } from 'react'
+import { useRef, MouseEvent } from 'react'
 import { Article } from 'operations/articles/types'
 import Breadcrumbs from 'components/common/breadcrumbs'
 import { BreadcrumbItem } from 'components/common/breadcrumbs/types'
@@ -15,7 +15,7 @@ export const Header = ({ loading, breadcrumbs, onViewArticle }: IProps) => {
 
   const ref = useRef<HTMLDivElement>(null)
 
-  const _onPageControlsClick = (e: any) => {
+  const _onPageControlsClick = (e: MouseEvent) => {
     showControls({
       x: ref.current?.offsetLeft || 0,
       y: (ref.current?.offsetTop || 0) + (ref.current?.offsetHeight || 0) + 10,
@@ -46,14 +46,7 @@ export const Header = ({ loading, breadcrumbs, onViewArticle }: IProps) => {
               </Button>
             </div>
           </div>
-          {breadcrumbs && (
-            <Breadcrumbs
-              breadcrumbs={breadcrumbs}
-              onViewArticle={onViewArticle}
-              separator={<div className={styles.separator}>/</div>}
-              maxItems={2}
-            />
-          )}
+          {breadcrumbs && <Breadcrumbs breadcrumbs={breadcrumbs} onViewArticle={onViewArticle} maxItems={2} />}
         </div>
         <div className={styles.headerRight}>
           <Button onClick={_onPublishClick} style={{ alignSelf: 'center' }} className={styles.button}>

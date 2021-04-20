@@ -97,6 +97,7 @@ const Text = forwardRef<HTMLDivElement, IProps>(
           onFocus={onFocus}
           onBlur={onBlur}
           onSelect={onSelect}
+          useInnerHtml
         />
       </div>
     )

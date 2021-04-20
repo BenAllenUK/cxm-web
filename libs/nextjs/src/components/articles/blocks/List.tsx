@@ -7,7 +7,8 @@ import {
   MutableRefObject,
   RefObject,
   useEffect,
-  useRef
+  useRef,
+  MouseEvent
 } from 'react'
 //import CheckboxEmpty from 'images/icons/checkbox.svg'
 //import CheckboxFilled from 'images/icons/checkbox-filled.svg'
@@ -16,7 +17,7 @@ const Item = forwardRef<HTMLDivElement, IItemProps>(
   ({ selected, type, focus, index, value, onSelectedToggle }, parentRef) => {
     // const ref = useRef<HTMLDivElement>(null)
 
-    const _onSelectedToggle = (e: any) => {
+    const _onSelectedToggle = (e: MouseEvent) => {
       onSelectedToggle(index)
       e.stopPropagation()
     }

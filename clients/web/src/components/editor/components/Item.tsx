@@ -46,7 +46,6 @@ const Item = ({
   }
 
   const _onListUpdate = (value: { value: string; selected?: boolean }[]) => {
-    console.log('_onListUpdate', index, value)
     onUpdate(index, { value: value })
   }
 

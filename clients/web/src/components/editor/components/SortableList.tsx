@@ -9,7 +9,7 @@ import SortableItem, { ISortableItemHandlerProps } from './SortableItem'
 
 const SortableList = (props: IProps) => {
   const { itemRefFunc, modalBlockEnabled, focusIndex, blocks, onBodyClick, onSortEnd, ...otherProps } = props
-  console.log('the blocks', blocks)
+
   return (
     <div className={styles.body} onClick={onBodyClick}>
       <div onClick={(e) => e.stopPropagation()}>

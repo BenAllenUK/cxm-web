@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, useRef } from 'react'
+import { memo, useState, useCallback, useRef, MouseEvent } from 'react'
 import MediaSelector from 'components/editor/modals/media/MediaSelector'
 import { BlockDataMedia, BlockData, BlockType, MediaSourceType, MediaSourceObject } from '../types'
 import AttachmentIcon from 'images/icons/paperclip.svg'
@@ -15,7 +15,7 @@ const File = ({ content, onUpdate, id, onMediaUpdate }: IProps) => {
   const ref = useRef<HTMLDivElement>(null)
 
   let sources: MediaSourceObject[] = [{ name: 'Upload', type: MediaSourceType.UPLOAD }]
-  const _onPageControlsClick = (e: any) => {
+  const _onPageControlsClick = (e: MouseEvent) => {
     if (ref.current) {
       const { top: blockTop, left: blockLeft } = ref.current.getBoundingClientRect()
       showControls({

@@ -22,7 +22,7 @@ import { useErrorModal } from 'components/common/modals/error'
 import TitleBar from 'components/common/title-bar'
 import isElectron from 'is-electron'
 import readPathRoute from 'utils/article/readPathRoute'
-import makeBreadCrumbs from 'utils/article/makeBreadcrumb'
+import createBreadcrumbs from 'utils/article/createBreadcrumbs'
 import { fromOrganisationFragments } from 'utils/organisation/parse'
 import { useRouter } from 'next/router'
 import { useNavigation } from 'components/navigation/provider'
@@ -104,7 +104,7 @@ const EditorPage = ({
 
   const onDebouncedBlockUpsert = useCallback(debounce(onBlocksUpsert, 500), [onBlocksUpsert])
   const path = article?.id ? readPathRoute(articles, article.id) : []
-  const breadcrumbs = article?.id ? makeBreadCrumbs(articles, article.id) : []
+  const breadcrumbs = article?.id ? createBreadcrumbs(articles, article.id) : []
 
   return (
     <div className={styles.root}>

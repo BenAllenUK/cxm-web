@@ -1,11 +1,11 @@
-import { memo, useRef, useState } from 'react'
+import { memo, useRef, useState, ChangeEvent } from 'react'
 import styles from './MediaSelector.module.scss'
 import { MediaSourceObject, MediaSourceType } from 'components/editor/blocks/types'
 import { BlockDataMedia, BlockData, BlockType } from '../../blocks/types'
 import fileTypeToBlockType from '../../utils/fileTypeToBlockType'
 import Button from 'components/common/button/Button'
 import AssetLibrary from './AssetLibrary'
-import TextInput from 'components/common/text-input/TextInput'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 
 export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPictures, fileFilter, isVideo, isButton }: IProps) => {
   const mediaString = isVideo ? 'video' : isButton ? '' : !fileFilter ? 'file' : 'image'
@@ -15,7 +15,7 @@ export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPicture
       onUpdate({ value: link, sourceType: MediaSourceType.EMBED_LINK })
     }
 
-    const onChange = (e: any) => {
+    const onChange = (e: TextInputEvent) => {
       setLink(e.target.value.replace(/[\n\r]/g, ''))
     }
     return (
@@ -26,7 +26,6 @@ export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPicture
           html={link}
           onChange={onChange}
           className={styles.linkInput}
-          useInnerText
         />
         <Button onClick={handleClick} className={styles.button}>
           {`Embed ${mediaString}`}
@@ -46,7 +45,10 @@ export const Source = ({ selected, onMediaUpdate, onUpdate, pictures, setPicture
       }
     }
 
-    const handleChange = async (event: any) => {
+    const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
+      if (!event.target.files) {
+        return
+      }
       const fileUploaded = event.target.files[0]
       let fileReader = new FileReader()
       fileReader.onload = async function (e) {

@@ -6,7 +6,7 @@ import ImageIcon from 'images/icons/image.svg'
 import MediaSelector from 'components/editor/modals/media/MediaSelector'
 import TopBar from 'components/editor/modals/media-controls/TopBar'
 import AddComment from 'components/editor/modals/media/AddComment'
-import TextInput from 'components/common/text-input/TextInput'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import Progress from '../progress/Progress'
 import ImageComponent from './ImageComponent'
 
@@ -46,7 +46,7 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, onDeleteBlock }: I
   }, [setCreateComment])
 
   const onCaptionChange = useCallback(
-    (e: any) => {
+    (e: TextInputEvent) => {
       setCaption(e.target.value)
       onUpdate({ ...content, caption: e.target.value }, BlockType.IMAGE)
     },
@@ -88,21 +88,19 @@ export const Image = ({ content, onUpdate, onMediaUpdate, id, onDeleteBlock }: I
           id={id}
         />
         <div className={styles.mediaControls}>
-          <TopBar onDeleteBlock={onDeleteBlock} setWriteNewCaption={_writeNewCaption} setCreateComment={() => null} />
+          <TopBar onDeleteBlock={onDeleteBlock} onWriteNewCaption={_writeNewCaption} />
         </div>
         <Progress id={id} />
       </div>
       <div>
         {(writeNewCaption || caption) && (
           <div>
-            {console.log('ehhhh')}
             <TextInput
               focusedPlaceholder={'Write a caption...'}
               blurredPlaceholder={'Write a caption...'}
               html={caption}
               onChange={onCaptionChange}
               className={styles.linkInput}
-              useInnerText
             />
           </div>
         )}

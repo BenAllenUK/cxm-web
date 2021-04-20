@@ -1,24 +1,25 @@
-import createPositionModal from 'components/common/modals/position'
 import styles from './MediaControls.module.scss'
 import MoreIcon from 'images/icons/more.svg'
-import { useRef, ReactNode } from 'react'
+import { useRef, ReactNode, MouseEvent } from 'react'
 import { useMediaControlModal } from 'components/editor/modals/media-controls'
 
-const TopBar = ({ setWriteNewCaption, setCreateComment, onDeleteBlock, isButton, addLink }: IProps) => {
+const TopBar = ({ onWriteNewCaption, onCreateComment, onDeleteBlock, isButton, addLink }: IProps) => {
   const { showControls } = useMediaControlModal()
 
-  const ref = useRef<HTMLDivElement>(HTMLDivElement.prototype)
+  const ref = useRef<HTMLDivElement>(null)
 
-  const onClick = (e: any) => {
-    const { top: blockTop, left: blockLeft } = ref.current.getBoundingClientRect()
-    showControls({
-      x: blockLeft,
-      y: blockTop + 30,
-    })
+  const onClick = (e: MouseEvent) => {
+    if (ref.current) {
+      const { top: blockTop, left: blockLeft } = ref.current.getBoundingClientRect()
+      showControls({
+        x: blockLeft,
+        y: blockTop + 30,
+      })
+    }
     e.stopPropagation()
   }
   const Option = ({ option, icon, onClick }: IOptionProps) => {
-    const node = option ? option : icon
+    const node = option ?? icon
     return (
       <div className={option ? styles.option : styles.icon} onClick={onClick}>
         {node}
@@ -30,8 +31,8 @@ const TopBar = ({ setWriteNewCaption, setCreateComment, onDeleteBlock, isButton,
     <div>
       {!isButton && (
         <div className={styles.bar} ref={ref}>
-          <Option onClick={setWriteNewCaption} option={'caption'} />
-          <Option onClick={setCreateComment} option={'comment'} />
+          <Option onClick={onWriteNewCaption} option={'caption'} />
+          <Option onClick={onCreateComment} option={'comment'} />
           <Option onClick={onDeleteBlock} option={'delete'} />
           <Option onClick={onClick} icon={<MoreIcon className={styles.moreIcon} width={14} height={14} fill={'#FFFFFF'} />} />
         </div>
@@ -51,13 +52,13 @@ export default TopBar
 interface IOptionProps {
   icon?: ReactNode
   option?: string
-  onClick?: any
+  onClick?: (event: MouseEvent) => void
 }
 
 interface IProps {
-  setWriteNewCaption?: () => void
-  setCreateComment?: () => void
+  isButton?: boolean
+  onWriteNewCaption?: () => void
+  onCreateComment?: () => void
   addLink?: () => void
   onDeleteBlock: () => void
-  isButton?: boolean
 }

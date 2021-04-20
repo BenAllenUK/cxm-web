@@ -1,19 +1,8 @@
 import styles from './Breadcrumbs.module.scss'
 import Button from '../button/Button'
-import {
-  forwardRef,
-  HTMLAttributes,
-  RefObject,
-  ReactNode,
-  Children,
-  useState
-} from 'react'
+import { MouseEvent, ReactNode, Children, useState } from 'react'
 
-function insertSeparators(
-  items: any[],
-  className: string | undefined,
-  separator: ReactNode
-) {
+function insertSeparators(items: ReactNode[], separator: ReactNode) {
   return items.reduce((acc: any[], current: any, index: number) => {
     if (index < items.length - 1) {
       acc = acc.concat(
@@ -38,15 +27,18 @@ const Breadcrumb = ({
 }: IProps) => {
   const [expanded, setExpanded] = useState(false)
 
-  const renderItemsBeforeAndAfter = (allItems: any) => {
-    const handleClickExpand = (event: any) => {
+  const renderItemsBeforeAndAfter = (allItems: ReactNode[]) => {
+    const handleClickExpand = (event: MouseEvent) => {
+      if (!event.currentTarget.parentNode) {
+        return
+      }
       setExpanded(true)
 
       const focusable = event.currentTarget.parentNode.querySelector(
         'a[href],button,[tabindex]'
       )
       if (focusable) {
-        focusable.focus()
+        ;(focusable as HTMLElement)?.focus()
       }
     }
 
@@ -81,7 +73,6 @@ const Breadcrumb = ({
         expanded || (maxItems && allItems.length <= maxItems)
           ? allItems
           : renderItemsBeforeAndAfter(allItems),
-        '',
         separator
       )}
     </div>

@@ -1,4 +1,4 @@
-import { useCallback, useState, memo, ReactNode } from 'react'
+import { useCallback, useState, memo, ReactNode, DragEvent } from 'react'
 import useHover from 'utils/hooks/useHover'
 import fileTypeToBlockType from '../../utils/fileTypeToBlockType'
 import { BlockData, BlockDataMediaUpload, MediaSourceType, BlockDataMedia, BlockType } from 'components/editor/blocks/types'

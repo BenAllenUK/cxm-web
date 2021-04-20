@@ -151,15 +151,15 @@ class TextInput extends React.Component<ITextInputProps, State> {
   }
 
   emitChange = (originalEvt: React.SyntheticEvent<any>) => {
-    const { useInnerText } = this.props
+    const { useInnerHtml } = this.props
     const el = this.ref?.current
     if (!el) return
 
     let html
-    if (useInnerText) {
-      html = el.innerText
-    } else {
+    if (useInnerHtml) {
       html = el.innerHTML
+    } else {
+      html = el.innerText
     }
 
     if (this.props.onChange && html !== this.lastHtml) {
@@ -188,7 +188,7 @@ export interface IBaseProps extends DivProps {
   className?: string
   style?: Object
   tabIndex?: number
-  useInnerText?: boolean
+  useInnerHtml?: boolean
 }
 
 interface ITextInputProps extends IBaseProps {

@@ -5,14 +5,14 @@ import ImageIcon from 'images/icons/image.svg'
 import VideoIcon from 'images/icons/video.svg'
 import Uploading from '../common/Uploading'
 import TopBar from 'components/editor/modals/media-controls/TopBar'
-import TextInput from 'components/common/text-input/TextInput'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import { BlockDataMedia, BlockData, BlockType, MediaSourceType, MediaSourceObject } from '../types'
 import ReactJWPlayer from 'react-jw-player'
 
 const Video = ({ content, onMediaUpdate, onUpdate, id, onDeleteBlock }: IProps) => {
   const [showSelector, setShowSelector] = useState(false)
   const [caption, setCaption] = useState(content.caption || '')
-  const [writeNewCaption, setWriteNewCaption] = useState(false)
+  const [shouldWriteNewCaption, setShouldWriteNewCaption] = useState(false)
 
   const _setShowSelector = useCallback(() => {
     setShowSelector(!showSelector)
@@ -23,12 +23,12 @@ const Video = ({ content, onMediaUpdate, onUpdate, id, onDeleteBlock }: IProps) 
     { name: 'Embed Link', type: MediaSourceType.EMBED_LINK },
   ]
 
-  const _writeNewCaption = useCallback(() => {
-    setWriteNewCaption(true)
-  }, [setWriteNewCaption])
+  const _onWriteNewCaption = useCallback(() => {
+    setShouldWriteNewCaption(true)
+  }, [setShouldWriteNewCaption])
 
   const onCaptionChange = useCallback(
-    (e: any) => {
+    (e: TextInputEvent) => {
       setCaption(e.target.value)
       onUpdate({ ...content, caption: e.target.value }, BlockType.VIDEO)
     },
@@ -62,26 +62,22 @@ const Video = ({ content, onMediaUpdate, onUpdate, id, onDeleteBlock }: IProps) 
   const fileUrl =
     content.sourceType === MediaSourceType.EMBED_LINK ? content.value : `${process.env.OMNEA_UPLOAD_URL}/${content.value}`
 
-  if (writeNewCaption) {
-    console.log('should let write caption')
-  }
   return (
     <div className={styles.outerContainer}>
       <div className={styles.videoContainer}>
         <div className={styles.mediaControls}>
-          <TopBar onDeleteBlock={onDeleteBlock} setWriteNewCaption={_writeNewCaption} setCreateComment={() => null} />
+          <TopBar onDeleteBlock={onDeleteBlock} onWriteNewCaption={_onWriteNewCaption} />
         </div>
         <ReactJWPlayer playerId={`editor-${id}`} playerScript="https://cdn.jwplayer.com/libraries/M9UOpPcN.js" file={fileUrl} />
       </div>
       <div>
-        {(writeNewCaption || caption) && (
+        {(shouldWriteNewCaption || caption) && (
           <TextInput
             focusedPlaceholder={'Write a caption...'}
             blurredPlaceholder={'Write a caption...'}
             html={caption}
             onChange={onCaptionChange}
             className={styles.linkInput}
-            useInnerText
           />
         )}
       </div>

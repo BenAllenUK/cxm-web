@@ -25,6 +25,6 @@ export default Breadcrumbs
 interface IProps {
   breadcrumbs: BreadcrumbItem[]
   onViewArticle: (path: string) => void
-  separator: ReactNode
+  separator?: ReactNode
   maxItems: number
 }

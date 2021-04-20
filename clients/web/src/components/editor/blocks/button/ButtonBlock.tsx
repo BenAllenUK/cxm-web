@@ -1,6 +1,6 @@
 import styles from './ButtonBlock.module.scss'
 import Button from 'components/common/button/Button'
-import TextInput from 'components/common/text-input/TextInput'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import { useState } from 'react'
 import MediaSelector from 'components/editor/modals/media/MediaSelector'
 import TopBar from 'components/editor/modals/media-controls/TopBar'
@@ -9,12 +9,12 @@ import { BlockDataButton, BlockData, BlockType, MediaSourceType, MediaSourceObje
 const ButtonBlock = ({ content, onUpdate, onDeleteBlock }: IProps) => {
   const [buttonText, setButtonText] = useState(content.text)
   const [showSelector, setShowSelector] = useState(false)
-  const onTextChange = (e: any) => {
+  const onTextChange = (e: TextInputEvent) => {
     setButtonText(e.target.value)
     onUpdate({ ...content, text: e.target.value }, BlockType.BUTTON)
   }
 
-  const openUrl = () => {
+  const onOpenUrl = () => {
     if (content.value) {
       const newWindow = window.open(content.value, '_blank', 'noopener,noreferrer')
       if (newWindow) newWindow.opener = null
@@ -26,21 +26,24 @@ const ButtonBlock = ({ content, onUpdate, onDeleteBlock }: IProps) => {
     onUpdate({ ...content, ...value }, BlockType.BUTTON)
   }
 
+  const _onAddLink = () => {
+    setShowSelector(!showSelector)
+  }
+
   let sources: MediaSourceObject[] = [{ name: 'Embed Link', type: MediaSourceType.EMBED_LINK }]
 
   return (
     <div className={styles.container}>
       <div className={styles.mediaControls}>
-        <TopBar addLink={() => setShowSelector(!showSelector)} onDeleteBlock={onDeleteBlock} isButton />
+        <TopBar addLink={_onAddLink} onDeleteBlock={onDeleteBlock} isButton />
       </div>
-      <Button className={styles.button} onClick={() => openUrl()}>
+      <Button className={styles.button} onClick={onOpenUrl}>
         <TextInput
           focusedPlaceholder={''}
           blurredPlaceholder={''}
           html={buttonText}
           onChange={onTextChange}
           className={styles.textInput}
-          useInnerText
         />
       </Button>
       {showSelector && <MediaSelector onUpdate={_onUpdate} sources={sources} isButton />}

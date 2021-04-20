@@ -2,12 +2,12 @@ import { Article, Block } from '../types'
 import './Content.scss'
 import BlockList from './articles/BlockList'
 import Breadcrumbs from './common/breadcrumbs'
-import makeBreadCrumbs from '../utils/makeBreadcrumb'
+import createBreadcrumbs from '../utils/createBreadcrumbs'
 import { useNavigation } from './navigation'
 
 const Content = ({ article, articles }: IProps) => {
   // const { push } = useNavigation()
-  const breadcrumbs = makeBreadCrumbs(articles, article.id)
+  const breadcrumbs = createBreadcrumbs(articles, article.id)
   // TODO: Once hooks are enabled:
   // useEffect(() => {
   //   if (article.title) {

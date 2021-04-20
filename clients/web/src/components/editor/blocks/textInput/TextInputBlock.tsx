@@ -1,12 +1,12 @@
 import styles from './TextInputBlock.module.scss'
 import { BlockDataTextInput, BlockData, BlockType } from '../types'
-import TextInput from 'components/common/text-input/TextInput'
+import TextInput, { TextInputEvent } from 'components/common/text-input/TextInput'
 import { useState } from 'react'
 
 const TextInputBlock = ({ content, onUpdate }: IProps) => {
   const [placeholderText, setPlaceholderText] = useState(content.value)
 
-  const onTextChange = (e: any) => {
+  const onTextChange = (e: TextInputEvent) => {
     setPlaceholderText(e.target.value)
     onUpdate({ ...content, value: e.target.value }, BlockType.TEXT_INPUT)
   }
@@ -19,6 +19,7 @@ const TextInputBlock = ({ content, onUpdate }: IProps) => {
         html={placeholderText}
         onChange={onTextChange}
         className={styles.textInput}
+        useInnerHtml
       />
     </div>
   )
