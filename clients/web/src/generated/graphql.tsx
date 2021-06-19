@@ -109,6 +109,8 @@ export type Articles = {
   coverImage?: Maybe<Scalars['String']>;
   createdAt: Scalars['timestamptz'];
   id: Scalars['Int'];
+  metadataDescription?: Maybe<Scalars['String']>;
+  metadataTitle?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['Int']>;
   path: Scalars['String'];
   position: Scalars['Int'];
@@ -118,6 +120,7 @@ export type Articles = {
   published: Scalars['Boolean'];
   publishedAt?: Maybe<Scalars['timestamptz']>;
   publishedBy?: Maybe<Scalars['timestamptz']>;
+  publishedByName?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   updatedAt: Scalars['timestamptz'];
@@ -269,6 +272,8 @@ export type ArticlesBoolExp = {
   coverImage?: Maybe<StringComparisonExp>;
   createdAt?: Maybe<TimestamptzComparisonExp>;
   id?: Maybe<IntComparisonExp>;
+  metadataDescription?: Maybe<StringComparisonExp>;
+  metadataTitle?: Maybe<StringComparisonExp>;
   parentId?: Maybe<IntComparisonExp>;
   path?: Maybe<StringComparisonExp>;
   position?: Maybe<IntComparisonExp>;
@@ -277,6 +282,7 @@ export type ArticlesBoolExp = {
   published?: Maybe<BooleanComparisonExp>;
   publishedAt?: Maybe<TimestamptzComparisonExp>;
   publishedBy?: Maybe<TimestamptzComparisonExp>;
+  publishedByName?: Maybe<StringComparisonExp>;
   slug?: Maybe<StringComparisonExp>;
   title?: Maybe<StringComparisonExp>;
   updatedAt?: Maybe<TimestamptzComparisonExp>;
@@ -310,6 +316,8 @@ export type ArticlesInsertInput = {
   coverImage?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
+  metadataDescription?: Maybe<Scalars['String']>;
+  metadataTitle?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['Int']>;
   path?: Maybe<Scalars['String']>;
   position?: Maybe<Scalars['Int']>;
@@ -318,6 +326,7 @@ export type ArticlesInsertInput = {
   published?: Maybe<Scalars['Boolean']>;
   publishedAt?: Maybe<Scalars['timestamptz']>;
   publishedBy?: Maybe<Scalars['timestamptz']>;
+  publishedByName?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -331,12 +340,15 @@ export type ArticlesMaxFields = {
   coverImage?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
+  metadataDescription?: Maybe<Scalars['String']>;
+  metadataTitle?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['Int']>;
   path?: Maybe<Scalars['String']>;
   position?: Maybe<Scalars['Int']>;
   projectId?: Maybe<Scalars['Int']>;
   publishedAt?: Maybe<Scalars['timestamptz']>;
   publishedBy?: Maybe<Scalars['timestamptz']>;
+  publishedByName?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -349,12 +361,15 @@ export type ArticlesMaxOrderBy = {
   coverImage?: Maybe<OrderBy>;
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
+  metadataDescription?: Maybe<OrderBy>;
+  metadataTitle?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   path?: Maybe<OrderBy>;
   position?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
   publishedAt?: Maybe<OrderBy>;
   publishedBy?: Maybe<OrderBy>;
+  publishedByName?: Maybe<OrderBy>;
   slug?: Maybe<OrderBy>;
   title?: Maybe<OrderBy>;
   updatedAt?: Maybe<OrderBy>;
@@ -368,12 +383,15 @@ export type ArticlesMinFields = {
   coverImage?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
+  metadataDescription?: Maybe<Scalars['String']>;
+  metadataTitle?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['Int']>;
   path?: Maybe<Scalars['String']>;
   position?: Maybe<Scalars['Int']>;
   projectId?: Maybe<Scalars['Int']>;
   publishedAt?: Maybe<Scalars['timestamptz']>;
   publishedBy?: Maybe<Scalars['timestamptz']>;
+  publishedByName?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -386,12 +404,15 @@ export type ArticlesMinOrderBy = {
   coverImage?: Maybe<OrderBy>;
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
+  metadataDescription?: Maybe<OrderBy>;
+  metadataTitle?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   path?: Maybe<OrderBy>;
   position?: Maybe<OrderBy>;
   projectId?: Maybe<OrderBy>;
   publishedAt?: Maybe<OrderBy>;
   publishedBy?: Maybe<OrderBy>;
+  publishedByName?: Maybe<OrderBy>;
   slug?: Maybe<OrderBy>;
   title?: Maybe<OrderBy>;
   updatedAt?: Maybe<OrderBy>;
@@ -432,6 +453,8 @@ export type ArticlesOrderBy = {
   coverImage?: Maybe<OrderBy>;
   createdAt?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
+  metadataDescription?: Maybe<OrderBy>;
+  metadataTitle?: Maybe<OrderBy>;
   parentId?: Maybe<OrderBy>;
   path?: Maybe<OrderBy>;
   position?: Maybe<OrderBy>;
@@ -440,6 +463,7 @@ export type ArticlesOrderBy = {
   published?: Maybe<OrderBy>;
   publishedAt?: Maybe<OrderBy>;
   publishedBy?: Maybe<OrderBy>;
+  publishedByName?: Maybe<OrderBy>;
   slug?: Maybe<OrderBy>;
   title?: Maybe<OrderBy>;
   updatedAt?: Maybe<OrderBy>;
@@ -465,6 +489,10 @@ export enum ArticlesSelectColumn {
   /** column name */
   Id = 'id',
   /** column name */
+  MetadataDescription = 'metadataDescription',
+  /** column name */
+  MetadataTitle = 'metadataTitle',
+  /** column name */
   ParentId = 'parentId',
   /** column name */
   Path = 'path',
@@ -478,6 +506,8 @@ export enum ArticlesSelectColumn {
   PublishedAt = 'publishedAt',
   /** column name */
   PublishedBy = 'publishedBy',
+  /** column name */
+  PublishedByName = 'publishedByName',
   /** column name */
   Slug = 'slug',
   /** column name */
@@ -494,6 +524,8 @@ export type ArticlesSetInput = {
   coverImage?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
+  metadataDescription?: Maybe<Scalars['String']>;
+  metadataTitle?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['Int']>;
   path?: Maybe<Scalars['String']>;
   position?: Maybe<Scalars['Int']>;
@@ -501,6 +533,7 @@ export type ArticlesSetInput = {
   published?: Maybe<Scalars['Boolean']>;
   publishedAt?: Maybe<Scalars['timestamptz']>;
   publishedBy?: Maybe<Scalars['timestamptz']>;
+  publishedByName?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -597,6 +630,10 @@ export enum ArticlesUpdateColumn {
   /** column name */
   Id = 'id',
   /** column name */
+  MetadataDescription = 'metadataDescription',
+  /** column name */
+  MetadataTitle = 'metadataTitle',
+  /** column name */
   ParentId = 'parentId',
   /** column name */
   Path = 'path',
@@ -610,6 +647,8 @@ export enum ArticlesUpdateColumn {
   PublishedAt = 'publishedAt',
   /** column name */
   PublishedBy = 'publishedBy',
+  /** column name */
+  PublishedByName = 'publishedByName',
   /** column name */
   Slug = 'slug',
   /** column name */
@@ -1024,6 +1063,7 @@ export type Blocks = {
   /** An object relationship */
   children?: Maybe<Blocks>;
   createdAt: Scalars['timestamptz'];
+  editable?: Maybe<Scalars['Boolean']>;
   editingUserId?: Maybe<Scalars['Int']>;
   /** An object relationship */
   editing_user?: Maybe<Users>;
@@ -1148,6 +1188,7 @@ export type BlocksBoolExp = {
   blocks?: Maybe<BlocksBoolExp>;
   children?: Maybe<BlocksBoolExp>;
   createdAt?: Maybe<TimestamptzComparisonExp>;
+  editable?: Maybe<BooleanComparisonExp>;
   editingUserId?: Maybe<IntComparisonExp>;
   editing_user?: Maybe<UsersBoolExp>;
   id?: Maybe<IntComparisonExp>;
@@ -1196,6 +1237,7 @@ export type BlocksInsertInput = {
   blocks?: Maybe<BlocksArrRelInsertInput>;
   children?: Maybe<BlocksObjRelInsertInput>;
   createdAt?: Maybe<Scalars['timestamptz']>;
+  editable?: Maybe<Scalars['Boolean']>;
   editingUserId?: Maybe<Scalars['Int']>;
   editing_user?: Maybe<UsersObjRelInsertInput>;
   id?: Maybe<Scalars['Int']>;
@@ -1285,6 +1327,7 @@ export type BlocksOrderBy = {
   blocks_aggregate?: Maybe<BlocksAggregateOrderBy>;
   children?: Maybe<BlocksOrderBy>;
   createdAt?: Maybe<OrderBy>;
+  editable?: Maybe<OrderBy>;
   editingUserId?: Maybe<OrderBy>;
   editing_user?: Maybe<UsersOrderBy>;
   id?: Maybe<OrderBy>;
@@ -1312,6 +1355,8 @@ export enum BlocksSelectColumn {
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
+  Editable = 'editable',
+  /** column name */
   EditingUserId = 'editingUserId',
   /** column name */
   Id = 'id',
@@ -1331,6 +1376,7 @@ export enum BlocksSelectColumn {
 export type BlocksSetInput = {
   articleId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
+  editable?: Maybe<Scalars['Boolean']>;
   editingUserId?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   parentId?: Maybe<Scalars['Int']>;
@@ -1430,6 +1476,8 @@ export enum BlocksUpdateColumn {
   ArticleId = 'articleId',
   /** column name */
   CreatedAt = 'createdAt',
+  /** column name */
+  Editable = 'editable',
   /** column name */
   EditingUserId = 'editingUserId',
   /** column name */
@@ -4105,8 +4153,8 @@ export type Projects = {
   image?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   /** An object relationship */
-  organisation?: Maybe<Organisations>;
-  organisationId?: Maybe<Scalars['Int']>;
+  organisation: Organisations;
+  organisationId: Scalars['Int'];
   /** An array relationship */
   permissions: Array<Permissions>;
   /** An aggregated array relationship */

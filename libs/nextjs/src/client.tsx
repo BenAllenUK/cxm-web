@@ -123,7 +123,7 @@ export default function init(config?: Config): Client {
     }
 
     const newPaths = articles.map((item) => ({
-      params: { path: item.path.split('/') }
+      params: { path: item.path }
     }))
 
     return {

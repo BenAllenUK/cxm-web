@@ -20,6 +20,8 @@ export interface Article {
   path: string
   id: number
   blocks: Block[]
+  metadataTitle?: string
+  metadataDescription?: string
 }
 
 export type AppPropsWithOmnea = NextJsAppProps & ComponentProps

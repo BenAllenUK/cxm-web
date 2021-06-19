@@ -1226,10 +1226,22 @@ react-dom@^17.0.1:
     object-assign "^4.1.1"
     scheduler "^0.20.1"
 
+react-fast-compare@^2.0.1:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
+  integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
+
 react-is@16.13.1, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-jw-player@^1.19.1:
+  version "1.19.1"
+  resolved "https://registry.yarnpkg.com/react-jw-player/-/react-jw-player-1.19.1.tgz#1d4ff99d3a5850ed4a628dbc6c473149c5490e1c"
+  integrity sha512-LC/v3mAjJrH6pUWKevDt1txsga+YWutdtHNChV7nfIcSANddrP8k7akAQAKGDhsI2/2xzkBZrqvaP1qSs7XvPg==
+  dependencies:
+    react-fast-compare "^2.0.1"
 
 react-refresh@0.8.3:
   version "0.8.3"

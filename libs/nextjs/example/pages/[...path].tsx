@@ -50,7 +50,7 @@ export default withOmneaCustomPage(CustomPage)
 
 export const getStaticPaths = withOmneaStaticPaths(async () => {
   return {
-    paths: [{ params: { path: ['other'] } }],
+    paths: [{ params: { path: 'other' } }],
     fallback: true
   }
 })

@@ -7,7 +7,7 @@ export default function Text({ content, type }: IProps) {
     case BlockType.H1:
       return (
         <h1
-          className={'omnea-content-text'}
+          className={'omnea-content-text-h1'}
           dangerouslySetInnerHTML={{ __html: value }}
         ></h1>
       )

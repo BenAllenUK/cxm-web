@@ -13,6 +13,8 @@ const ArticleFragment = gql`
     position
     path
     coverImage
+    metadataTitle
+    metadataDescription
     # archivedUser {
     #   id
     #   name
